@@ -8,6 +8,15 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 
 # Mistakes
 
+## 2026-09-19 — Discovery, feed and reporting drift (S226)
+
+| What | Why | Fix |
+|---|---|---|
+| GSC aggregates stayed hardcoded STALE after access became available | Historical service-account UI failure was treated as a permanent architecture constraint | Re-probe read-only access; collect final-period totals and explicit error markers with the existing credentials |
+| English event discovery led to dormant categories; IndexNow omitted English hubs | Consumers guessed paths independently and compared configured slugs with slash-terminated URLs | Pass actual eligible English hubs to link emitters; normalize only for IndexNow matching |
+| HTML advertised missing JSON endpoints; empty/duplicate sitemap entries survived | URL conventions and category configuration were mistaken for emitted artifacts | Explicit metadata API URLs, emitted-category membership and sitemap deduplication |
+| Feed included cooling/noindex events and guessed all descriptions were Greek | Feed bypassed lifecycle gating and treated the requested route locale as evidence of source-text language | Shared lifecycle predicate, eligible English feed and language only from explicit description provenance |
+
 ## 2026-09-19 — HTML, search, calendar and metric boundary failures
 
 | What | Why | Fix |
@@ -1318,6 +1327,10 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 ---
 
 # Patterns
+
+## 2026-09-19 — Verify discovery against emitted files (S226)
+
+Audit sitemap targets, JSON alternates, English discovery links and feed targets against the generated artifact, including robots eligibility and stable IDs. Build in a disposable source copy with an SQLite online backup. Preserve a recovery commit before changing another session's uncommitted work; verify source hashes and existing stashes. Separate Search Console property totals from the incomplete observed-query population and record final-period boundaries with each snapshot. Evidence: `docs/2026-09-19-seo-geo-presence.md`.
 
 ## 2026-09-19 — Check emitted behavior at the boundary
 
@@ -7079,6 +7092,10 @@ First manual deploy exited 0 through a pipe while the platform recorded state=er
 ---
 
 # Decisions
+
+## 2026-09-19 — Existing-surface SEO/GEO repair and measurement (S226)
+
+The user's ten-item implementation request is fulfilled on top of the independently saved Astra recovery commit. Prioritize broken discovery paths, measurable search reporting, accurate feed/source metadata and stable public identity. Preserve dormant-language and hreflang gates; add only the English counterpart of the existing machine-readable feed. Reuse the existing scheduled monitor and service account, with read-only API scope, instead of a new auth or scheduling system. Leave unknown description language unspecified. Technical before/after results establish correctness, not ranking or AI-citation lift. Release remains pending review/deployment.
 
 ## 2026-09-19 — Bounded reliability and action-layer improvements
 

@@ -7,7 +7,8 @@
  * to an append-only CSV. Automated metrics run unattended; manual metrics
  * (GSC indexed, Bing indexed) are provided via CLI flags. Bing 7d aggregates
  * read from logs/bing-latest.json (written by scripts/fetch-bing-metrics.ts).
- * GSC 7d aggregates hardcoded to STALE pending S138 OAuth fallback.
+ * GSC final-period aggregates are refreshed automatically on every daily run.
+ * The observed-query top10 count is not a complete keyword or indexed-page count.
  *
  * Usage:
  *   bun run scripts/monitor-search-visibility.ts
@@ -17,6 +18,8 @@
 import { readFileSync, writeFileSync, existsSync, appendFileSync, renameSync } from 'fs';
 import { join } from 'path';
 import { Database } from 'bun:sqlite';
+import { DateTime } from 'luxon';
+import { collectGscMetrics, gscMetricsRow, type GscOptions, type GscMetricsRow } from './fetch-gsc-metrics';
 
 const PROJECT_DIR = join(import.meta.dir, '..');
 const DIST_DIR = join(PROJECT_DIR, 'dist');
@@ -341,6 +344,24 @@ export function getBingMetrics(jsonPath: string = join(PROJECT_DIR, 'logs/bing-l
   }
 }
 
+// The existing scheduled monitor owns collection: no additional cron/launchd job.
+// A failed collection still allows all other metrics to be written with markers.
+export async function refreshGscMetrics(options: GscOptions = {}): Promise<{
+  metrics: GscMetricsRow; notes: string; status: string;
+}> {
+  try {
+    const result = await collectGscMetrics(options);
+    const period = result.period ? `${result.period.start_date}..${result.period.end_date}` : 'unavailable';
+    return {
+      metrics: gscMetricsRow(result, options.now ?? DateTime.now()),
+      status: result.status,
+      notes: `gsc_status=${result.status};gsc_period=${period};gsc_dates=America/Los_Angeles;gsc_top10=observed_queries;gsc_query_rows=${result.query_coverage?.rows_returned ?? 'unavailable'};gsc_query_truncated=${result.query_coverage?.truncated ?? 'unavailable'};gsc_reason=${result.reason}`,
+    };
+  } catch {
+    return { metrics: gscMetricsRow(undefined), status: 'stale', notes: 'gsc_status=stale;gsc_reason=snapshot_write_failed' };
+  }
+}
+
 // ── Endpoint reachability ────────────────────────────────────
 
 async function headCheck(url: string): Promise<number> {
@@ -444,6 +465,14 @@ async function main() {
     console.log(`Manual: gsc=${manual.gscIndexed || '-'}, bing=${manual.bingIndexed || '-'}`);
   }
 
+  const gscReport = await refreshGscMetrics();
+  const gsc = gscReport.metrics;
+  console.log(`GSC 7d: impressions=${gsc.impressions}, clicks=${gsc.clicks}, avgPos=${gsc.avgPosition}, observedTop10Queries=${gsc.top10}`);
+  console.log(gscReport.notes);
+  if (gscReport.status !== 'ok' && gscReport.status !== 'empty') {
+    console.error('GSC collection failed; check credentials/property access, network and logs directory permissions, then retry.');
+  }
+
   const bing = getBingMetrics();
   console.log(`Bing 7d: impressions=${bing.impressions}, clicks=${bing.clicks}, avgPos=${bing.avgPosition}, top10=${bing.top10}`);
 
@@ -465,13 +494,11 @@ async function main() {
     sample.sampleSize,
     manual.gscIndexed,
     manual.bingIndexed,
-    // GSC 7d (idx 16-19): S138-pending — service-account add-user silent fail blocks
-    // the GSC API path. See docs/known-issues.md "GSC Service Account Add-User Silent Fail"
-    // and specs/s138-gsc-oauth-fallback.md. These flip to real values when S138 lands.
-    'STALE',
-    'STALE',
-    'STALE',
-    'STALE',
+    // GSC 7d (idx 16-19): final-period property totals + observed query rankings.
+    gsc.impressions,
+    gsc.clicks,
+    gsc.avgPosition,
+    gsc.top10,
     // Bing 7d (idx 20-23): populated from logs/bing-latest.json
     bing.impressions,
     bing.clicks,
@@ -479,11 +506,12 @@ async function main() {
     bing.top10,
     enrichment.enrichedLast24h,
     wrapperStats.wrapperDiscrepancyLast24h,
-    '',
+    gscReport.notes,
   ].join(',');
 
   appendFileSync(CSV_PATH, row + '\n');
   console.log(`✅ Row appended to ${CSV_PATH}`);
+  if (gscReport.status !== 'ok' && gscReport.status !== 'empty') process.exitCode = 1;
 }
 
 if (import.meta.main) {

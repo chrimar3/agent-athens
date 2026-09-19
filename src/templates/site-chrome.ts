@@ -55,8 +55,7 @@ export function renderSiteNav(locale: Locale = 'el'): string {
       </button>
     </div>
   </div>
-</header>
-${renderColophonDialog()}`;
+</header>`;
 }
 
 export function renderHamburgerMenu(locale: Locale = 'el'): string {
@@ -120,7 +119,8 @@ export function renderSiteFooter(locale: Locale = 'el'): string {
       <span class="footer-copyright">&copy; 2026 agent athens</span>
     </div>
   </div>
-</footer>`;
+</footer>
+${renderColophonDialog()}`;
 }
 
 /**

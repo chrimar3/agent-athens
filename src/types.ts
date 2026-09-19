@@ -128,6 +128,8 @@ export type TimeRange = 'today' | 'tomorrow' | 'this-week' | 'this-weekend' | 't
 export type PriceFilter = 'open' | 'with-ticket' | 'all';
 
 export interface PageMetadata {
+  /** Supplied only by a generator that writes this JSON representation. */
+  apiUrl?: string;
   url: string;
   title: string;
   description: string;

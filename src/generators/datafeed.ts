@@ -16,6 +16,7 @@ import { existsSync, readFileSync } from 'fs';
 import type { Event } from '../types';
 import type { Locale } from '../i18n/strings';
 import { buildEventSchemaObject } from './event-page';
+import { shouldNoindexEvent } from '../utils/event-lifecycle';
 import { writeJsonApiIfChangedSync } from '../utils/write-if-changed';
 
 export interface DataFeedDocument {
@@ -39,7 +40,10 @@ export function buildDataFeed(events: Event[], locale: Locale = 'el'): DataFeedD
     name: 'Agent Athens — Cultural Events',
     description: 'Cultural events in Athens, Greece. Updated daily.',
     dateModified: now,
-    dataFeedElement: events.map(event => buildEventSchemaObject(event, locale)),
+    // Match HTML lifecycle suppression and English-page generation eligibility.
+    dataFeedElement: events
+      .filter(event => !shouldNoindexEvent(event) && (locale !== 'en' || Boolean(event.fullDescriptionEn)))
+      .map(event => buildEventSchemaObject(event, locale)),
     meta: { lastUpdate: now },
   };
 }

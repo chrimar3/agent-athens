@@ -1,13 +1,20 @@
 import { describe, test, expect } from 'bun:test';
 import { buildDataFeed } from '../datafeed';
-import { buildEventSchemaObject } from '../event-page';
+import { DateTime } from 'luxon';
 import {
-  sampleConcert,
+  sampleConcert as historicalConcert,
   sampleConcertWithTicket,
-  sampleFreeExhibition,
-  sampleTheaterPerformance,
+  sampleFreeExhibition as historicalExhibition,
+  sampleTheaterPerformance as historicalTheater,
 } from '../../../tests/fixtures/events';
 import type { Event } from '../../types';
+
+// Feed membership now follows lifecycle eligibility; historical examples must
+// explicitly be upcoming for tests that exercise their emitted fields.
+const startDate = DateTime.now().setZone('Europe/Athens').plus({ days: 14 }).toISODate()!;
+const sampleConcert: Event = { ...historicalConcert, startDate, endDate: undefined, fullDescriptionEn: historicalConcert.fullDescription };
+const sampleFreeExhibition: Event = { ...historicalExhibition, startDate, endDate: undefined };
+const sampleTheaterPerformance: Event = { ...historicalTheater, startDate, endDate: undefined };
 
 describe('buildDataFeed', () => {
   test('empty input returns valid DataFeed with empty dataFeedElement', () => {
@@ -31,17 +38,22 @@ describe('buildDataFeed', () => {
     expect(Array.isArray(feed.dataFeedElement)).toBe(true);
   });
 
-  test('dataFeedElement length equals input events length', () => {
+  test('dataFeedElement includes each eligible upcoming event', () => {
     const events = [sampleConcert, sampleFreeExhibition, sampleTheaterPerformance];
     const feed = buildDataFeed(events, 'el');
     expect(feed.dataFeedElement).toHaveLength(3);
   });
 
-  test('each dataFeedElement equals buildEventSchemaObject for that event', () => {
+  test('feed entries retain their Event fields and stable public identifiers', () => {
     const events = [sampleConcert, sampleFreeExhibition];
     const feed = buildDataFeed(events, 'el');
-    expect(feed.dataFeedElement[0]).toEqual(buildEventSchemaObject(sampleConcert, 'el'));
-    expect(feed.dataFeedElement[1]).toEqual(buildEventSchemaObject(sampleFreeExhibition, 'el'));
+    expect(feed.dataFeedElement[0]).toMatchObject({
+      '@id': 'https://agentathens.com/events/jazz-nig-half-note-jazz-club-jazz-night-at-half-note/#event',
+      name: 'Jazz Night at Half Note', '@type': 'MusicEvent', inLanguage: 'en',
+    });
+    expect(feed.dataFeedElement[1]).toMatchObject({
+      name: 'Contemporary Art at Gagosian', '@type': 'ExhibitionEvent', isAccessibleForFree: true,
+    });
     // Spot-check that the wrapped Event carries the canonical fields
     expect(feed.dataFeedElement[0]).toHaveProperty('@type');
     expect(feed.dataFeedElement[0]).toHaveProperty('name');
@@ -90,11 +102,12 @@ describe('buildDataFeed', () => {
     expect(feed.meta.lastUpdate).toBe(feed.dateModified);
   });
 
-  test('locale defaults to el (canonical Greek-primary per pre-flight §9)', () => {
+  test('default feed retains root URLs without relabelling English prose as Greek', () => {
     const feedDefault = buildDataFeed([sampleConcert]);
     const feedExplicit = buildDataFeed([sampleConcert], 'el');
     expect(feedDefault.dataFeedElement[0]).toEqual(feedExplicit.dataFeedElement[0]);
-    expect(feedDefault.dataFeedElement[0].inLanguage).toBe('el');
+    expect(feedDefault.dataFeedElement[0].inLanguage).toBe('en');
+    expect(feedDefault.dataFeedElement[0].url).toContain('https://agentathens.com/events/');
   });
 
   test('locale=en propagates into wrapped events', () => {

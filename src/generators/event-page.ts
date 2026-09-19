@@ -169,6 +169,36 @@ export function generateEventSlug(event: Event): string {
   return `${idPrefix}-${venueSlug}-${titleSlug}`;
 }
 
+/** Pair selected prose with its known language; a page locale is not a translation. */
+function schemaDescription(event: Event, locale: Locale): { description: string; inLanguage?: string } {
+  // Keep the same enrichment precedence as the visible page. fullDescriptionGr
+  // can contain legacy English prose, so only hasNativeGreek establishes Greek.
+  const description = locale === 'en'
+    ? event.fullDescriptionEn || event.description || event.title
+    : event.fullDescriptionGr || event.fullDescription || event.description || event.title;
+  // Event.language is derived from enrichment availability in database.ts;
+  // it does not establish the language of raw or legacy source prose.
+  let inLanguage: Locale | undefined;
+  if (locale === 'el' && event.hasNativeGreek && event.fullDescriptionGr) {
+    inLanguage = 'el';
+  } else if (event.fullDescriptionEn && description === event.fullDescriptionEn) {
+    inLanguage = 'en';
+  }
+  return { description, ...(inLanguage ? { inLanguage } : {}) };
+}
+
+/** Source attribution accepts HTTP(S) URLs without credentials or control characters. */
+function sourceListingUrl(value?: string): string | undefined {
+  if (!value || /[\u0000-\u0020\u007f]/.test(value)) return undefined;
+  try {
+    const url = new URL(value);
+    if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) return undefined;
+    return url.href;
+  } catch {
+    return undefined;
+  }
+}
+
 /**
  * Build the Schema.org JSON-LD object for an individual event.
  *
@@ -189,12 +219,10 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     '@context': 'https://schema.org',
     '@type': schemaType,
     'name': event.title,
-    'description': locale === 'en'
-      ? (event.fullDescriptionEn || event.description || event.title)
-      : (event.fullDescriptionGr || event.fullDescription || event.description || event.title),
+    ...schemaDescription(event, locale),
     'startDate': startDate,
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
-    'inLanguage': locale === 'en' ? 'en' : 'el',
+    '@id': `${BASE_URL}${locale === 'en' ? '/en' : ''}/events/${eventSlug}/#event`,
     'url': `${BASE_URL}${locale === 'en' ? '/en' : ''}/events/${eventSlug}/`,
     'location': {
       '@type': VENUE_TYPE_MAP[schemaType] || 'EventVenue',
@@ -279,7 +307,7 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     ticketUrlResolved: event.ticketUrlResolved,
     venue: { name: event.venue.name, website: event.venue.website },
     eventStatus: schema.eventStatus,
-    selfCanonicalUrl: `${BASE_URL}/events/${eventSlug}/`,
+    selfCanonicalUrl: schema.url,
   });
 
   if ('offer' in offerDecision) {
@@ -335,17 +363,14 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
  * the @graph envelope around that entity for HTML emission only.
  */
 function buildEventGraphEnvelope(event: Event, locale: Locale = 'el', pagedVenueSlugs?: Set<string>): Record<string, any> {
-  const eventSlug = generateEventSlug(event);
-  const eventCanonicalUrl = `${BASE_URL}/events/${eventSlug}/`;
-
-  // Shallow-copy the flat Event entity so we can replace @context with @id
+  // Shallow-copy the flat Event entity so we can remove its local @context
   // without mutating buildEventSchemaObject's return value (DataFeed reads it
   // via a separate call, so cross-call safety is intact regardless; this is
   // just defensive against future intra-call reuse).
   const flatEvent = buildEventSchemaObject(event, locale);
+  const eventCanonicalUrl = flatEvent.url as string;
   const eventEntity: Record<string, any> = { ...flatEvent };
   delete eventEntity['@context'];
-  eventEntity['@id'] = `${eventCanonicalUrl}#event`;
 
   const graph: Record<string, any>[] = [eventEntity];
 
@@ -440,7 +465,20 @@ function buildEventGraphEnvelope(event: Event, locale: Locale = 'el', pagedVenue
     }
   }
 
-  // Member 6 (LAST): site-publisher Organization. Singleton per page; identity
+  // The page is the published work; provenance belongs here, not on the Event.
+  const sourceUrl = sourceListingUrl(event.url);
+  graph.push({
+    '@type': 'WebPage',
+    '@id': eventCanonicalUrl + '#webpage',
+    url: eventCanonicalUrl,
+    name: event.title,
+    inLanguage: locale,
+    mainEntity: { '@id': eventEntity['@id'] },
+    publisher: { '@id': BASE_URL + '/#organization' },
+    ...(sourceUrl ? { isBasedOn: sourceUrl } : {}),
+  });
+
+  // LAST: site-publisher Organization. Singleton per page; identity
   // fixed at `${BASE_URL}/#organization` so cross-page resolution converges.
   graph.push(buildSiteOrganizationGraphMember());
 
@@ -474,7 +512,11 @@ function generateEventSchema(
     envelope['@graph'] = envelope['@graph'].filter(
       (node: Record<string, any>) =>
         !(typeof node['@id'] === 'string' && (node['@id'] as string).endsWith('#event'))
-    );
+    ).map((node: Record<string, any>) => {
+      if (node['@type'] !== 'WebPage') return node;
+      const { mainEntity, ...page } = node;
+      return page;
+    });
   }
   return JSON.stringify(envelope, null, 2);
 }
@@ -485,7 +527,7 @@ function generateEventSchema(
  * Structure: full-bleed hero with type-colored gradient, 800px content column,
  * card-grid related events, mobile sticky CTA bar.
  */
-export function renderEventDetailPage(event: Event, relatedEvents: Event[], locale: Locale = 'el', pagedVenueSlugs?: Set<string>): string {
+export function renderEventDetailPage(event: Event, relatedEvents: Event[], locale: Locale = 'el', pagedVenueSlugs?: Set<string>, englishHubSlugs?: ReadonlySet<string>): string {
   const t = STRINGS[locale];
   const slug = generateEventSlug(event);
   // S144 (GEO 2026-05-21): canonical is locale-aware self.
@@ -526,6 +568,8 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   // Type styling
   const typeLabel = t.typeLabels[event.type] || event.type;
   const categorySlug = TYPE_TO_CATEGORY[event.type] || '';
+  const categoryHref = `${locale === 'en' && englishHubSlugs?.has(categorySlug) ? '/en' : ''}/${categorySlug}/`;
+  const homeHref = locale === 'en' && englishHubSlugs?.has('today') ? '/en/today/' : '/';
   const typeColorVar = `var(--color-${event.type.replace('_', '-')})`;
   const lightText = LIGHT_TEXT_BADGES.has(event.type);
 
@@ -571,7 +615,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const venueLinkable = venueHasPage && !isPlaceholderVenue;
 
   const navLinks = [
-    categorySlug ? `<a href="/${categorySlug}/">${t.typeDiscoveryLabels[event.type] || typeLabel}</a>` : '',
+    categorySlug ? `<a href="${categoryHref}">${t.typeDiscoveryLabels[event.type] || typeLabel}</a>` : '',
     venueLinkable ? `<a href="/venues/${venueSlug}/">${t.moreEventsAt} ${escapeHtml(venueDisplayName)}</a>` : ''
   ].filter(Boolean);
 
@@ -602,9 +646,10 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   // link text never contradicts the destination (cross-listed events carry a
   // source id whose merchant differs from the URL host); mapped display name
   // only for URL-less attributions.
-  const sourceDisplayName = (event.url && hostOf(event.url)) || sourceAttributionMap[event.source] || event.source;
-  const sourceHtml = event.url
-    ? `<div class="edp-source">${t.source}: <a href="${event.url}" rel="noopener" target="_blank">${escapeHtml(sourceDisplayName)}</a></div>`
+  const sourceUrl = sourceListingUrl(event.url);
+  const sourceDisplayName = (sourceUrl && hostOf(sourceUrl)) || sourceAttributionMap[event.source] || event.source;
+  const sourceHtml = sourceUrl
+    ? `<div class="edp-source">${t.source}: <a href="${escapeAttr(sourceUrl)}" rel="noopener" target="_blank">${escapeHtml(sourceDisplayName)}</a></div>`
     : `<div class="edp-source">${t.source}: ${escapeHtml(sourceDisplayName)}</div>`;
 
   // Related events as cards
@@ -696,8 +741,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   <meta name="geo.placename" content="Athens">
   ${bingVerification ? `<meta name="msvalidate.01" content="${bingVerification}">` : ''}
 
-  <!-- Freshness signals -->
-  <meta name="date" content="${new Date().toISOString().split('T')[0]}">
+  ${locale === 'en' ? '<link rel="alternate" type="application/ld+json" href="/api/en/events.json">' : ''}
 
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
@@ -716,8 +760,8 @@ ${renderAnalytics()}
       <div class="edp-hero-bg" style="background-image: url('${ogImage.startsWith('http') ? ogImage : ogImage}')"></div>
       <div class="edp-hero-inner">
         <nav class="edp-breadcrumb">
-          <a href="/">agent-athens</a>
-          ${categorySlug ? ` › <a href="/${categorySlug}/">${typeLabel}</a>` : ''}
+          <a href="${homeHref}">agent-athens</a>
+          ${categorySlug ? ` › <a href="${categoryHref}">${typeLabel}</a>` : ''}
           › ${escapeHtml(venueDisplayName)}
         </nav>
         <span class="edp-type-badge${lightText ? ' edp-type-badge--light-text' : ''}">${typeLabel}</span>
@@ -783,7 +827,7 @@ ${renderAnalytics()}
       <nav class="edp-connections" aria-label="${locale === 'en' ? 'Related pages' : 'Σχετικές σελίδες'}">
         <h2>${t.exploreMore}</h2>
         ${navLinks.join('\n        ')}
-        ${renderCornerstoneLinksHtml(locale)}
+        ${renderCornerstoneLinksHtml(locale, englishHubSlugs)}
       </nav>
 
       ${relatedHtml}

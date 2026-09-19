@@ -57,13 +57,13 @@ export function getCornerstoneLinks(): CornerstoneLink[] {
  * Render cornerstone links HTML for a given locale.
  * Used in event pages inside edp-connections nav.
  */
-export function renderCornerstoneLinksHtml(locale: Locale): string {
+export function renderCornerstoneLinksHtml(locale: Locale, englishHubSlugs?: ReadonlySet<string>): string {
   const links = getCornerstoneLinks();
-  const prefix = locale === 'en' ? '/en' : '';
   const heading = locale === 'en' ? 'Popular collections' : 'Δημοφιλείς συλλογές';
 
   const anchors = links.map(l => {
     const label = locale === 'en' ? l.labelEn : l.labelEl;
+    const prefix = locale === 'en' && englishHubSlugs?.has(l.slug) ? '/en' : '';
     return `<a href="${prefix}${l.href}">${label}</a>`;
   }).join('\n        ');
 

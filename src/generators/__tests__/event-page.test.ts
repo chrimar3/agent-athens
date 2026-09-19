@@ -850,7 +850,7 @@ describe("Event schema — @graph envelope contract (S139)", () => {
       expect(eventEntity['@type']).toBe(flatEvent['@type']);
       expect(eventEntity.name).toBe(flatEvent.name);
       expect(eventEntity.startDate).toBe(flatEvent.startDate);
-      expect(eventEntity['@id']).toBe(`${BASE_URL}/events/${generateEventSlug(event)}/#event`);
+      expect(eventEntity['@id']).toBe(`${BASE_URL}${locale === 'en' ? '/en' : ''}/events/${generateEventSlug(event)}/#event`);
       // @context lives at the envelope root, not on inner members.
       expect(eventEntity['@context']).toBeUndefined();
     });

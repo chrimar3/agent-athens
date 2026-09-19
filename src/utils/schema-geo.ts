@@ -235,11 +235,19 @@ const ORG_AREA_SERVED = {
 export const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': `${BASE_URL}/#organization`,
   'name': ORG_NAME,
   'url': BASE_URL,
   'description': ORG_DESCRIPTION,
   'areaServed': ORG_AREA_SERVED,
-  'knowsLanguage': [...ORG_LANGUAGES]
+  'knowsLanguage': [...ORG_LANGUAGES],
+  'email': 'cmarag8@gmail.com',
+  'subjectOf': {
+    '@type': 'SoftwareSourceCode',
+    'name': 'Agent Athens source code',
+    'url': 'https://github.com/chrimar3/agent-athens',
+    'codeRepository': 'https://github.com/chrimar3/agent-athens'
+  }
 };
 
 /**
@@ -251,13 +259,6 @@ export const ORGANIZATION_SCHEMA = {
  * dereference to the same entity.
  */
 export function buildSiteOrganizationGraphMember(): Record<string, any> {
-  return {
-    '@type': 'Organization',
-    '@id': `${BASE_URL}/#organization`,
-    'name': ORG_NAME,
-    'url': BASE_URL,
-    'description': ORG_DESCRIPTION,
-    'areaServed': ORG_AREA_SERVED,
-    'knowsLanguage': [...ORG_LANGUAGES]
-  };
+  const { '@context': _context, ...organization } = ORGANIZATION_SCHEMA;
+  return { ...organization, knowsLanguage: [...ORG_LANGUAGES], subjectOf: { ...organization.subjectOf } };
 }

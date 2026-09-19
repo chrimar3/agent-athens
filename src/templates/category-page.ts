@@ -67,6 +67,9 @@ export function renderCategoryPage(
     ),
     keywords: `${category.titleEn}, Athens events, ${category.slug}, Αθήνα`,
     url: category.slug,
+    apiUrl: `/api/categories/${category.slug}.json`,
+    // Match the empty-filter policy; generateCategoryPages excludes these URLs.
+    noindex: filteredEvents.length === 0,
     eventCount: filteredEvents.length,
     lastUpdate: new Date().toISOString(),
     filters: { type: category.filter.type as any }

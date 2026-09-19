@@ -7476,3 +7476,16 @@ constant feeding both surfaces.
 **Learnings:** Locale labels do not establish that localized destination pages exist. Search and saved links must carry or derive page availability. JSON-LD needs HTML-safe serialization even when JSON itself is valid. All-day calendar end dates are exclusive.
 
 **Open items:** GitHub plugin installation/account authorization; deployed Netlify click-persistence verification (the local blob package is unavailable); remaining schema/data warnings. The user's `--sandbox workspace-write --ask-for-approval never` flags were verified against local CLI help; they apply when launching a session and do not alter this running session.
+
+
+### Session 226 — Astra recovery and ten SEO/GEO presence improvements — 2026-09-19
+
+**Plan:** Preserve Astra's uncommitted work, connect to GitHub, research and present the ten highest-leverage SEO/GEO/online-presence changes, then implement and verify them.
+
+**What happened:** Searched 11 local branches, six worktrees, reflogs/stashes and the source task. Saved Astra's 28 files byte-for-byte in `79ba6cda4`, pushed `codex/save-astra-2026-09-19`, and continued in an isolated worktree on `codex/seo-geo-presence-2026-09-19`. GitHub connector/CLI access verified. Implemented GSC collection, English hub discovery, IndexNow matching, sitemap hygiene, real JSON alternates, lifecycle/language-aligned feeds, event/source identity, accurate freshness, publisher/creator identity and content-first dialog placement. Ranked evidence and primary sources: `docs/2026-09-19-seo-geo-presence.md`.
+
+**Verified:** Read-only GSC returned 1,050 impressions / 20 clicks for the final 2026-09-10–16 period. Isolated build passed with zero schema errors / 23 warnings; canonical, locale and location gates passed; five Chrome flows passed. Generated-artifact audit: 16 sitemap duplicate rows → 0; 25 broken JSON alternates → 0; 442 English links into dormant categories → 0; 196 noindex feed targets → 0. Full regression: 3,398 passed, 14 skipped, zero failed; fixture and process-access requirements are recorded in the report. Original checkout and existing stashes were preserved during recovery; production DB and protected paths were not modified.
+
+**Learnings:** Recheck historical auth blockers before changing the auth architecture: the retained GSC service account now works. Generated page eligibility must drive links, feeds and machine-readable directories. An Event's default locale field does not establish the language of legacy description text. API aggregates and observed query rankings are different populations.
+
+**Open items:** Merge/deploy the reviewed branch, verify live endpoints and collect comparable post-release periods before attributing traffic or citation gains. Existing 23 schema warnings and manual indexed-page counts remain. No deployment was performed.

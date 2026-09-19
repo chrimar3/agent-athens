@@ -118,6 +118,19 @@ async function main() {
     console.log('⚠️  Could not load categories.json, continuing without category filter');
   }
 
+  // Hubs such as open, nightlife and kids are not all category slugs. Only
+  // select their URLs when the current sitemap actually publishes them.
+  let hubSlugs: string[] = [];
+  try {
+    const hubsConfig = JSON.parse(
+      readFileSync(join(PROJECT_DIR, 'config/hub-pages.json'), 'utf-8')
+    );
+    hubSlugs = hubsConfig.hubs.map((hub: { slug: string }) => hub.slug);
+  } catch {
+    console.log('⚠️  Could not load hub-pages.json, continuing without configured hub filter');
+  }
+  const landingSlugs = new Set([...categorySlugs, ...hubSlugs]);
+
   const baseUrl = `https://${config.host}`;
   const highValueUrls = new Set<string>();
 
@@ -130,8 +143,9 @@ async function main() {
       continue;
     }
 
-    // Normalize: strip /en/ prefix for matching (English pages mirror Greek structure)
-    const normalizedPath = path.replace(/^\/en\//, '/');
+    // Normalize only for selection: English directory pages have trailing
+    // slashes, while Greek flat-file hubs do not. Submit the original URL.
+    const normalizedPath = path.replace(/^\/en\//, '/').replace(/\/$/, '');
 
     // Core time pages
     const coreTimePages = ['/today', '/tomorrow', '/this-week', '/this-weekend', '/this-month', '/next-month', '/all-events'];
@@ -140,8 +154,8 @@ async function main() {
       continue;
     }
 
-    // Category pages
-    if (categorySlugs.some(slug => normalizedPath === `/${slug}`)) {
+    // Published category and configured hub pages
+    if (landingSlugs.has(normalizedPath.replace(/^\//, ''))) {
       highValueUrls.add(url);
       continue;
     }

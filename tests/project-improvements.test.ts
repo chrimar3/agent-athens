@@ -137,12 +137,13 @@ describe('calendar files preserve dates and UTF-8', () => {
 test('unchanged DataFeed preserves both freshness timestamps and file bytes', () => {
   const path = join(temp(), 'events.json');
   setSystemTime(new Date('2026-09-18T10:00:00Z'));
-  writeDataFeed(buildDataFeed([sampleConcert]), path);
+  const upcoming = { ...sampleConcert, startDate: '2026-09-20', endDate: undefined };
+  writeDataFeed(buildDataFeed([upcoming]), path);
   const before = readFileSync(path, 'utf8');
   setSystemTime(new Date('2026-09-18T11:00:00Z'));
-  expect(writeDataFeed(buildDataFeed([sampleConcert]), path)).toBe(false);
+  expect(writeDataFeed(buildDataFeed([upcoming]), path)).toBe(false);
   expect(readFileSync(path, 'utf8')).toBe(before);
-  expect(writeDataFeed(buildDataFeed([{ ...sampleConcert, title: 'Changed' }]), path)).toBe(true);
+  expect(writeDataFeed(buildDataFeed([{ ...upcoming, title: 'Changed' }]), path)).toBe(true);
   const changed = JSON.parse(readFileSync(path, 'utf8'));
   expect(changed.dateModified).toBe(changed.meta.lastUpdate);
   expect(changed.dateModified).toBe('2026-09-18T11:00:00.000Z');

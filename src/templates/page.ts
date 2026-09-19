@@ -108,7 +108,6 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
        published+indexable+quality-gated product. See decisions.md 2026-05-21. -->
 
   <!-- GEO: Freshness signals -->
-  <meta name="date" content="${new Date().toISOString().split('T')[0]}">
   <meta name="last-modified" content="${lastUpdate}">
 
   <!-- GEO: Author/source -->
@@ -137,8 +136,8 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <meta name="geo.position" content="37.9838;23.7276">
 
   <!-- For AI agents: alternate formats -->
-  <link rel="alternate" type="application/json" href="/api/${url.replace(/\/$/, '')}.json">
-  ${url === 'index' ? `<link rel="alternate" type="application/ld+json" href="/api/events.json">` : ''}
+  ${metadata.apiUrl ? `<link rel="alternate" type="application/json" href="${escapeHtml(metadata.apiUrl)}">` : ''}
+  ${locale === 'en' ? '<link rel="alternate" type="application/ld+json" href="/api/en/events.json">' : url === 'index' ? '<link rel="alternate" type="application/ld+json" href="/api/events.json">' : ''}
 
   <!-- Schema.org JSON-LD -->
   ${schemaMarkup ? `<script type="application/ld+json">
