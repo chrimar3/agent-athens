@@ -72,3 +72,12 @@ Read-only GSC verification returned **1,050 impressions, 20 clicks and average p
 The changes are prepared for GitHub review, not deployed. After merge and deployment, verify the published endpoints and allow the existing monitor to collect comparable complete periods. Then compare impressions, clicks, discovery/indexing coverage and independently observed AI referrals or citations. No ranking, rich-result or AI-citation improvement has yet been measured.
 
 The 23 schema warnings remain data-quality follow-ups. Absolute Google/Bing indexed-page counters still require their existing separate workflow. Greece is not currently listed for Google's [Event rich-result experience](https://developers.google.com/search/docs/appearance/structured-data/event); valid Event schema alone does not promise that presentation.
+
+
+## Release update — 2026-09-19, 17:26 Europe/Athens
+
+The user authorized production release. [PR #14](https://github.com/chrimar3/agent-athens/pull/14) is merged as `84eb367dc6bbedfc4505bbb88c763226c8898046`, and [Netlify deploy 6aae99da7a3d3d94a6bf813b](https://app.netlify.com/projects/agentathens/deploys/6aae99da7a3d3d94a6bf813b) was published at 17:25:10 Europe/Athens. Netlify confirmed state=ready.
+
+A fresh build from the merged commit passed the unchanged clean-source deployment gate. All 23 live checks passed, including root/English feeds (659/285 entries), sitemap/robots/LLM-directory content matching the release artifact, trust-page headings, main-content/dialog order, canonical Event identities, empty-category noindex and rejection of an unapproved ticket redirect.
+
+Local main now contains the new collector for the existing scheduled visibility monitor. No new schedule was installed. Astra's original 28 files also remain preserved in named stash `e9b9c5345` and the independent recovery branch; unrelated local work was retained. These release checks confirm deployed behavior, not search or AI-citation gains.

@@ -1328,6 +1328,10 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 
 # Patterns
 
+## 2026-09-19 — Release without sweeping unrelated work (S227)
+
+For an approved deployment with recovered WIP already committed, verify the original file hashes, preserve only those paths in a named stash, and fast-forward local main so scheduled jobs use the released code. Build a separate committed clone with an SQLite online backup and retained image inputs; require sourceDirty=0 and matching HEAD through the existing deploy gate. Confirm platform-side ready state and live artifact/endpoint behavior. Probe the actual ARIA dialog selector rather than assuming native dialog markup. The recovery ref and pre-existing stashes remain available.
+
 ## 2026-09-19 — Verify discovery against emitted files (S226)
 
 Audit sitemap targets, JSON alternates, English discovery links and feed targets against the generated artifact, including robots eligibility and stable IDs. Build in a disposable source copy with an SQLite online backup. Preserve a recovery commit before changing another session's uncommitted work; verify source hashes and existing stashes. Separate Search Console property totals from the incomplete observed-query population and record final-period boundaries with each snapshot. Evidence: `docs/2026-09-19-seo-geo-presence.md`.
