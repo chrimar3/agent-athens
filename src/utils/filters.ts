@@ -25,13 +25,23 @@ export function filterEvents(events: Event[], filters: Filters): Event[] {
       if (filters.price === 'with-ticket' && event.price.type === 'open') return false;
     }
 
-    // Genre filter
-    if (filters.genre && !event.genres.includes(filters.genre)) {
-      return false;
+    // Match display labels against both scraper genres and enrichment tags.
+    // Exact normalized tokens keep "Acid-jazz" off the plain Jazz page.
+    if (filters.genre) {
+      const wanted = normalizeGenreToken(filters.genre);
+      const hasGenre =
+        event.genres.some(g => normalizeGenreToken(g) === wanted) ||
+        (event.tags ?? []).some(t => normalizeGenreToken(t) === wanted);
+      if (!hasGenre) return false;
     }
 
     return true;
   });
+}
+
+/** Normalize genre labels across case, surrounding whitespace and separators. */
+export function normalizeGenreToken(value: string): string {
+  return value.trim().toLowerCase().replace(/[\s_]+/g, '-');
 }
 
 interface DateWindow { start: string; end: string }

@@ -325,6 +325,82 @@ describe("Exhibition Tier 1: running exhibitions in time filters", () => {
   });
 });
 
+describe("D1: genre filter consults the living tag taxonomy", () => {
+  // The `genres` column is scraper-era (lowercase, usually empty); the
+  // enrichment taxonomy lives in `tags` (Capitalized, hyphenated). Genre
+  // pages are generated with display names like "Jazz" / "Drum and Bass",
+  // so the filter must match across BOTH fields, case-insensitively, with
+  // space/hyphen normalization — or genre pages render empty (D1).
+  function makeConcert(overrides: Partial<Event>): Event {
+    return {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      id: "genre-filter-fixture",
+      title: "D1 Test Concert",
+      description: "A concert",
+      startDate: "2026-09-19T21:00:00+03:00",
+      type: "concert",
+      genres: [],
+      tags: [],
+      venue: { name: "Test Venue", address: "Athens" },
+      price: { type: "with-ticket" },
+      source: "test",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      language: "el",
+      hasNativeGreek: false,
+      ticketUrlResolved: null,
+      ...overrides,
+    };
+  }
+
+  test("capitalized page genre matches lowercase scraper genres", () => {
+    const event = makeConcert({ genres: ["jazz"], tags: [] });
+    // Fixture precondition: the mismatch under test actually exists
+    expect(event.genres).toEqual(["jazz"]);
+    expect(event.genres).not.toContain("Jazz");
+
+    const result = filterEvents([event], { genre: "Jazz" });
+    expect(result.length).toBe(1);
+  });
+
+  test("genre matches enrichment tags when genres is empty", () => {
+    const event = makeConcert({ genres: [], tags: ["Jazz", "Intimate", "Listening-room"] });
+    expect(event.genres.length).toBe(0); // precondition: genres carries nothing
+
+    const result = filterEvents([event], { genre: "Jazz" });
+    expect(result.length).toBe(1);
+  });
+
+  test("multi-word page genre matches hyphenated tag form", () => {
+    const event = makeConcert({ type: "dj_set", genres: [], tags: ["Drum-and-Bass", "Late-night"] });
+    const result = filterEvents([event], { genre: "Drum and Bass" });
+    expect(result.length).toBe(1);
+  });
+
+  test("normalizes surrounding whitespace and underscore runs in either field", () => {
+    const events = [
+      makeConcert({ id: "scraper", genres: ["  Drum__and Bass  "], tags: undefined }),
+      makeConcert({ id: "enriched", tags: ["  Drum-and-Bass  "] }),
+    ];
+    expect(filterEvents(events, { genre: "  drum and bass  " }).map(event => event.id))
+      .toEqual(["scraper", "enriched"]);
+  });
+
+  test("unrelated vibe tags do not satisfy a genre filter", () => {
+    const event = makeConcert({ genres: [], tags: ["Intimate", "Seated", "Metro-accessible"] });
+    const result = filterEvents([event], { genre: "Jazz" });
+    expect(result.length).toBe(0);
+  });
+
+  test("genre token match is exact, not substring", () => {
+    const event = makeConcert({ genres: [], tags: ["Acid-jazz"] });
+    // "Acid jazz" has its own genre page; it must not leak onto plain "Jazz"
+    const result = filterEvents([event], { genre: "Jazz" });
+    expect(result.length).toBe(0);
+  });
+});
+
 describe("getFilteredEventCount", () => {
   let testEvents: Event[];
 
