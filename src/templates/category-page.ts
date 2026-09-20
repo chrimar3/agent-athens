@@ -10,6 +10,7 @@
 import type { Event } from '../types';
 import { renderPage } from './page';
 import { generateHubMetaDescription } from '../utils/meta-descriptions';
+import { normalizeGenreToken } from '../utils/filters';
 
 export interface CategoryConfig {
   slug: string;
@@ -36,12 +37,22 @@ export function filterEventsByCategory(events: Event[], category: CategoryConfig
       return false;
     }
 
-    // Check genre filter (if any genre matches)
+    // Check genre filter (if any genre matches). Genre signal lives in both
+    // the scraper-era `genres` column and the enrichment `tags` taxonomy (D1).
+    // `genres` keeps its historical substring semantics; `tags` are matched
+    // as exact normalized tokens — the taxonomy mixes genre tags with
+    // atmosphere/crowd tags ("Warehouse", "Date-night"), so substring
+    // matching there would leak unrelated events into categories.
     if (category.filter.genresInclude && category.filter.genresInclude.length > 0) {
       const eventGenres = event.genres.map(g => g.toLowerCase());
-      const hasMatchingGenre = category.filter.genresInclude.some(genre =>
-        eventGenres.some(eg => eg.includes(genre.toLowerCase()))
-      );
+      const eventTags = (event.tags ?? []).map(normalizeGenreToken);
+      const hasMatchingGenre = category.filter.genresInclude.some(genre => {
+        const wanted = genre.toLowerCase();
+        return (
+          eventGenres.some(eg => eg.includes(wanted)) ||
+          eventTags.includes(normalizeGenreToken(genre))
+        );
+      });
       if (!hasMatchingGenre) return false;
     }
 

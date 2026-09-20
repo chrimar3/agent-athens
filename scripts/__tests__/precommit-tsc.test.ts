@@ -92,13 +92,19 @@ describe('precommit-tsc.sh', () => {
     teardownRepo(repo);
   });
 
+  // Each test shells out to `bunx tsc --noEmit` in a temp repo; tsc cold-start
+  // exceeds bun's default 5s per-test timeout when the full suite runs in
+  // parallel (observed 6–20s under load, 2026-08-11), which made these flake
+  // by timeout. The hook has no latency SLA — only behavior is under test.
+  const TSC_TEST_TIMEOUT_MS = 60_000;
+
   test('A — clean commit (importer + util both staged) passes', () => {
     writeFileSync(join(repo.dir, 'util.ts'), UTIL_TS);
     writeFileSync(join(repo.dir, 'importer.ts'), IMPORTER_TS);
     git(repo, 'add', 'util.ts', 'importer.ts');
     const r = runHook(repo);
     expect(r.status).toBe(0);
-  });
+  }, TSC_TEST_TIMEOUT_MS);
 
   test('B — strand blocked (importer staged, util unstaged on disk) with TS2307', () => {
     writeFileSync(join(repo.dir, 'util.ts'), UTIL_TS);
@@ -108,7 +114,7 @@ describe('precommit-tsc.sh', () => {
     expect(r.status).not.toBe(0);
     expect(r.stdout + r.stderr).toMatch(/TS2307/);
     expect(r.stdout + r.stderr).toMatch(/Cannot find module/);
-  });
+  }, TSC_TEST_TIMEOUT_MS);
 
   test('C — working-tree preservation after a failing run (no orphan stash, no missing files)', () => {
     writeFileSync(join(repo.dir, 'util.ts'), UTIL_TS);
@@ -121,7 +127,7 @@ describe('precommit-tsc.sh', () => {
     const status = git(repo, 'status', '--porcelain');
     expect(status).toContain('A  importer.ts');
     expect(status).toContain('?? util.ts');
-  });
+  }, TSC_TEST_TIMEOUT_MS);
 
   test('D — clean WT (everything staged, nothing to stash) runs without error', () => {
     writeFileSync(join(repo.dir, 'util.ts'), UTIL_TS);
@@ -131,7 +137,7 @@ describe('precommit-tsc.sh', () => {
     const r = runHook(repo);
     expect(r.status).toBe(0);
     expect(git(repo, 'stash', 'list').trim()).toBe('');
-  });
+  }, TSC_TEST_TIMEOUT_MS);
 
   test('E — no HEAD (brand-new repo, first commit ever) still type-checks', () => {
     teardownRepo(repo);
@@ -141,5 +147,5 @@ describe('precommit-tsc.sh', () => {
     git(repo, 'add', 'tsconfig.json', 'util.ts', 'importer.ts');
     const r = runHook(repo);
     expect(r.status).toBe(0);
-  });
+  }, TSC_TEST_TIMEOUT_MS);
 });
