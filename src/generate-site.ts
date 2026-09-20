@@ -1846,7 +1846,7 @@ ${renderAnalytics()}
   ${renderHamburgerMenu('el')}
   ${renderSearchOverlay()}
 
-  <main class="error-page">
+  <main id="main-content" class="error-page" tabindex="-1">
     <div class="error-code">410</div>
     <h1>Η εκδήλωση έχει ολοκληρωθεί</h1>
     <p>Αυτή η εκδήλωση έχει παρέλθει και η σελίδα της δεν είναι πλέον διαθέσιμη. Το ημερολόγιο ενημερώνεται καθημερινά — δείτε τι παίζει τώρα στην Αθήνα.</p>
@@ -1882,7 +1882,7 @@ ${renderAnalytics()}
   ${renderHamburgerMenu('el')}
   ${renderSearchOverlay()}
 
-  <main class="error-page">
+  <main id="main-content" class="error-page" tabindex="-1">
     <div class="error-code">404</div>
     <h1>Η σελίδα δεν βρέθηκε</h1>
     <p>Η σελίδα που ψάχνετε δεν υπάρχει ή έχει μετακινηθεί. Το ημερολόγιο ενημερώνεται καθημερινά — ίσως η εκδήλωση έχει παρέλθει.</p>
