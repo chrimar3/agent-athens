@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-18T05:15:39.009Z",
-  "total_events": 5558,
-  "upcoming_events": 1170,
+  "generated_at": "2026-09-20T05:07:44.168Z",
+  "total_events": 5622,
+  "upcoming_events": 1131,
   "per_source": {
-    "athinorama.gr": 1947,
+    "athinorama.gr": 1962,
     "benaki": 5,
     "clubber.gr": 197,
-    "cometogether": 259,
+    "cometogether": 260,
     "devoxx.gr": 1,
     "eventbrite": 4,
     "greeksin.ai": 1,
@@ -14,23 +14,23 @@
     "halfnote": 82,
     "manual": 2,
     "meetup": 12,
-    "megaron.gr": 186,
-    "more.com": 1199,
-    "onassis": 24,
-    "residentadvisor": 982,
-    "snfcc": 298,
-    "ticketservices": 358
+    "megaron.gr": 187,
+    "more.com": 1209,
+    "onassis": 33,
+    "residentadvisor": 986,
+    "snfcc": 309,
+    "ticketservices": 371
   },
   "health_report": {
-    "report_date": "2026-09-18",
-    "report_file": "2026-09-18.txt",
+    "report_date": "2026-09-20",
+    "report_file": "2026-09-20.txt",
     "report_age_days": 0,
     "stale": false,
     "scraping": {
       "athinorama": {
         "status": "ok",
-        "events": 187,
-        "delta": 4
+        "events": 180,
+        "delta": -13
       },
       "benaki": {
         "status": "ok",
@@ -39,8 +39,8 @@
       },
       "cometogether": {
         "status": "ok",
-        "events": 204,
-        "delta": 8
+        "events": 194,
+        "delta": -10
       },
       "halfnote": {
         "status": "ok",
@@ -49,58 +49,53 @@
       },
       "megaron": {
         "status": "ok",
-        "events": 107,
-        "delta": 0
+        "events": 105,
+        "delta": -1
       },
       "more": {
         "status": "ok",
-        "events": 40,
-        "delta": 0
+        "events": 39,
+        "delta": -1
       },
       "onassis": {
         "status": "ok",
-        "events": 7,
+        "events": 16,
         "delta": 0
       },
       "ra": {
         "status": "ok",
-        "events": 96,
-        "delta": 11
+        "events": 71,
+        "delta": -17
       },
       "snfcc": {
         "status": "ok",
-        "events": 30,
-        "delta": 0
+        "events": 23,
+        "delta": -7
       },
       "ticketservices": {
-        "status": "warning",
-        "events": 0,
-        "delta": -102
+        "status": "ok",
+        "events": 108,
+        "delta": -3
       }
     },
     "database": {
-      "total": 19476,
-      "visible": 649,
-      "hidden": 18827,
-      "new_unverified_venues": 9
+      "total": 19543,
+      "visible": 714,
+      "hidden": 18829,
+      "new_unverified_venues": 5
     },
     "build": {
-      "duration_s": 14.5,
-      "pages": 2494,
-      "schema_valid": 650,
-      "schema_total": 650
+      "duration_s": 16,
+      "pages": 2508,
+      "schema_valid": 714,
+      "schema_total": 714
     },
     "enrichment": {
-      "enriched": 408,
-      "total": 650,
-      "pct": 62.8
+      "enriched": 445,
+      "total": 714,
+      "pct": 62.3
     },
-    "alerts": [
-      {
-        "level": "CRITICAL",
-        "message": "ticketservices returned 0 events"
-      }
-    ]
+    "alerts": []
   },
   "sensor_status": {
     "health_report": "fresh"
