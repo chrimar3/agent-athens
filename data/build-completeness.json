@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-09-20T05:07:43.856Z"
+    "lastUpdate": "2026-09-21T05:07:06.324Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,17 +13,17 @@
     "byType": [
       {
         "type": "concert",
-        "total": 365,
-        "pass": 363,
+        "total": 363,
+        "pass": 361,
         "warn": 2,
         "fail": 0,
-        "info": 333,
+        "info": 330,
         "passRate": 99
       },
       {
         "type": "dj_set",
-        "total": 233,
-        "pass": 233,
+        "total": 230,
+        "pass": 230,
         "warn": 0,
         "fail": 0,
         "info": 144,
@@ -31,11 +31,11 @@
       },
       {
         "type": "exhibition",
-        "total": 160,
-        "pass": 160,
+        "total": 161,
+        "pass": 161,
         "warn": 0,
         "fail": 0,
-        "info": 83,
+        "info": 81,
         "passRate": 100
       },
       {
@@ -49,11 +49,11 @@
       },
       {
         "type": "theater",
-        "total": 282,
-        "pass": 282,
+        "total": 281,
+        "pass": 281,
         "warn": 0,
         "fail": 0,
-        "info": 235,
+        "info": 230,
         "passRate": 100
       },
       {
@@ -94,20 +94,20 @@
       },
       {
         "type": "other",
-        "total": 61,
-        "pass": 61,
+        "total": 62,
+        "pass": 62,
         "warn": 0,
         "fail": 0,
-        "info": 53,
+        "info": 54,
         "passRate": 100
       }
     ],
     "totals": {
-      "total": 1250,
-      "pass": 1248,
+      "total": 1246,
+      "pass": 1244,
       "warn": 2,
       "fail": 0,
-      "info": 944,
+      "info": 935,
       "passRate": 100
     },
     "orphanSlugs": [
@@ -115,18 +115,18 @@
     ]
   },
   "hubs": {
-    "total": 31,
+    "total": 30,
     "pass": 10,
-    "warn": 21,
+    "warn": 20,
     "fail": 0,
     "info": 0
   },
   "venues": {
-    "total": 48,
-    "pass": 48,
+    "total": 47,
+    "pass": 47,
     "warn": 0,
     "fail": 0,
-    "info": 45
+    "info": 44
   },
   "datafeed": {
     "total": 1,
@@ -156,18 +156,18 @@
   },
   "place": {
     "venue_template": {
-      "total": 48,
-      "pass": 48,
+      "total": 47,
+      "pass": 47,
       "warn": 0,
       "fail": 0,
-      "info": 45
+      "info": 44
     },
     "event_template": {
-      "total": 1250,
-      "pass": 1248,
+      "total": 1246,
+      "pass": 1244,
       "warn": 2,
       "fail": 0,
-      "info": 944
+      "info": 935
     },
     "byVenue": [
       {
@@ -252,8 +252,8 @@
       },
       {
         "venue": "astron",
-        "total": 18,
-        "pass": 18,
+        "total": 16,
+        "pass": 16,
         "warn": 0,
         "fail": 0,
         "info": 8,
@@ -282,8 +282,8 @@
       },
       {
         "venue": "b side athens",
-        "total": 11,
-        "pass": 11,
+        "total": 10,
+        "pass": 10,
         "warn": 0,
         "fail": 0,
         "info": 2,
@@ -302,8 +302,8 @@
       },
       {
         "venue": "bolivar",
-        "total": 25,
-        "pass": 25,
+        "total": 22,
+        "pass": 22,
         "warn": 0,
         "fail": 0,
         "info": 4,
@@ -332,8 +332,8 @@
       },
       {
         "venue": "cantina social",
-        "total": 23,
-        "pass": 23,
+        "total": 24,
+        "pass": 24,
         "warn": 0,
         "fail": 0,
         "info": 2,
@@ -556,7 +556,7 @@
         "pass": 18,
         "warn": 0,
         "fail": 0,
-        "info": 6,
+        "info": 5,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -577,16 +577,6 @@
         "warn": 0,
         "fail": 0,
         "info": 2,
-        "passRate": 100,
-        "sameAsState": "missing"
-      },
-      {
-        "venue": "live music space",
-        "total": 1,
-        "pass": 1,
-        "warn": 0,
-        "fail": 0,
-        "info": 1,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -647,6 +637,16 @@
         "warn": 0,
         "fail": 0,
         "info": 3,
+        "passRate": 100,
+        "sameAsState": "missing"
+      },
+      {
+        "venue": "piree",
+        "total": 1,
+        "pass": 1,
+        "warn": 0,
+        "fail": 0,
+        "info": 1,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -896,14 +896,14 @@
         "pass": 12,
         "warn": 0,
         "fail": 0,
-        "info": 12,
+        "info": 6,
         "passRate": 100,
         "sameAsState": "missing"
       },
       {
         "venue": "δημοτικο κηποθεατρο παπαγου",
-        "total": 20,
-        "pass": 20,
+        "total": 18,
+        "pass": 18,
         "warn": 0,
         "fail": 0,
         "info": 8,
@@ -912,11 +912,11 @@
       },
       {
         "venue": "διανα",
-        "total": 3,
-        "pass": 3,
+        "total": 4,
+        "pass": 4,
         "warn": 0,
         "fail": 0,
-        "info": 3,
+        "info": 4,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -949,6 +949,16 @@
         "info": 4,
         "passRate": 100,
         "sameAsState": "present"
+      },
+      {
+        "venue": "εκατη",
+        "total": 1,
+        "pass": 1,
+        "warn": 0,
+        "fail": 0,
+        "info": 1,
+        "passRate": 100,
+        "sameAsState": "missing"
       },
       {
         "venue": "εν αθηναις",
@@ -1222,11 +1232,11 @@
       },
       {
         "venue": "κπισν",
-        "total": 261,
-        "pass": 261,
+        "total": 262,
+        "pass": 262,
         "warn": 0,
         "fail": 0,
-        "info": 166,
+        "info": 162,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1483,9 +1493,9 @@
     ],
     "ratchet": {
       "venueSameAs": {
-        "coverage": 0.038461538461538464,
+        "coverage": 0.03816793893129771,
         "populated": 5,
-        "total": 130,
+        "total": 131,
         "threshold": 0.5,
         "currentSeverity": "info"
       }
