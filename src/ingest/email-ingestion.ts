@@ -25,6 +25,7 @@ import {
   type ProcessedEmail,
 } from '../db/processed-emails';
 import type { Database } from 'bun:sqlite';
+import { fromHeaderDomain, verifySender } from './allowed-senders';
 
 // ============================================================================
 // Types
@@ -46,6 +47,8 @@ export interface EmailMessage {
   date: Date;
   text: string;
   html: string;
+  /** Set only by the gated ingest path: the allowlisted domain that passed DKIM. */
+  authenticatedSenderDomain?: string;
 }
 
 export interface IngestionResult {
@@ -78,7 +81,6 @@ const DEFAULT_OUTPUT_DIR = './data/emails-to-parse';
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 const IMAP_HOST = process.env.IMAP_HOST || 'imap.gmail.com';
-const IMAP_PORT = parseInt(process.env.IMAP_PORT || '993');
 
 // ============================================================================
 // Configuration Validation
@@ -172,6 +174,7 @@ export function saveEmailToFile(
     date: email.date.toISOString(),
     text: email.text,
     html: email.html,
+    ...(email.authenticatedSenderDomain ? { authenticatedSenderDomain: email.authenticatedSenderDomain } : {}),
   }, null, 2);
 
   writeFileSync(filepath, content, 'utf-8');
@@ -248,59 +251,228 @@ export function updateEmailStatus(
 }
 
 // ============================================================================
-// Email Processing
+// Gated Mailbox Ingestion
 // ============================================================================
 
+/** Header-only view of one unseen message (no body downloaded yet). */
+export interface MailboxHeaderInfo {
+  uid: number;
+  /** RFC822.SIZE reported by the server; undefined when the server did not report it. */
+  size: number | undefined;
+  /** Lowercased header name -> values, in message order (topmost first). */
+  headers: Record<string, string[]>;
+}
+
+/** The mailbox operations the ingest gate needs; imapSimpleMailbox() adapts imap-simple. */
+export interface MailboxClient {
+  listUnseenUids(): Promise<number[]>;
+  fetchHeaders(uids: number[]): Promise<MailboxHeaderInfo[]>;
+  fetchRaw(uid: number): Promise<string | Buffer>;
+  markSeen(uid: number): Promise<void>;
+}
+
+export interface IngestLimits {
+  /** Messages larger than this (RFC822.SIZE and downloaded bytes) are rejected. */
+  maxMessageBytes: number;
+  /** Unseen messages examined per run; the remainder stay unseen for the next run. */
+  maxMessagesPerRun: number;
+}
+
+export const INGEST_LIMITS: Readonly<IngestLimits> = Object.freeze({
+  maxMessageBytes: 10 * 1024 * 1024,
+  maxMessagesPerRun: 50,
+});
+
+export interface IngestDeps {
+  outputDir?: string;
+  limits?: Partial<IngestLimits>;
+  /** Pause after each saved message (rate limit). */
+  delayMs?: number;
+  log?: (line: string) => void;
+  parse?: (raw: string | Buffer) => Promise<any>;
+}
+
+export interface GatedIngestionResult extends IngestionResult {
+  rejected: number;
+  deferred: number;
+}
+
+function byteLength(raw: string | Buffer): number {
+  return typeof raw === 'string' ? Buffer.byteLength(raw, 'utf-8') : raw.length;
+}
+
 /**
- * Process emails from IMAP connection
+ * Ingest unseen messages through the sender gate.
  *
- * Fetches emails, saves to files, and records in database.
- * Skips already processed emails.
- *
- * @param connection - IMAP connection (or mock for testing)
- * @param db - Database instance
- * @param outputDir - Directory to save email files
- * @returns Processing result with counts
+ * Per message, in order: size cap (from RFC822.SIZE, before download) ->
+ * allowlisted From + aligned dkim=pass in the topmost Authentication-Results
+ * (header only, before download) -> download with byte cap -> parsed From must
+ * match the authenticated header -> save. Rejected messages are marked seen and
+ * logged as counts per sender domain and reason (no subject, no body).
  */
-export async function processEmails(
-  connection: any,
+export async function ingestFromMailbox(
+  client: MailboxClient,
   db: Database,
-  outputDir: string = DEFAULT_OUTPUT_DIR
-): Promise<IngestionResult> {
-  const result: IngestionResult = {
-    fetched: 0,
-    saved: 0,
-    skipped: 0,
-    errors: [],
+  deps: IngestDeps = {}
+): Promise<GatedIngestionResult> {
+  const limits: IngestLimits = { ...INGEST_LIMITS, ...(deps.limits ?? {}) };
+  const log = deps.log ?? ((line: string) => console.log(line));
+  const parse = deps.parse ?? simpleParser;
+  const outputDir = deps.outputDir ?? DEFAULT_OUTPUT_DIR;
+  const delayMs = deps.delayMs ?? 2000;
+
+  const result: GatedIngestionResult = { fetched: 0, saved: 0, skipped: 0, errors: [], rejected: 0, deferred: 0 };
+  const rejectedByDomain = new Map<string, number>();
+  const rejectedByReason = new Map<string, number>();
+  const reject = async (uid: number, domain: string | null, reason: string) => {
+    result.rejected++;
+    const d = domain ?? '(unparseable)';
+    rejectedByDomain.set(d, (rejectedByDomain.get(d) ?? 0) + 1);
+    rejectedByReason.set(reason, (rejectedByReason.get(reason) ?? 0) + 1);
+    await client.markSeen(uid);
   };
 
-  await connection.openBox('INBOX');
-  const seqNos = await connection.search(['UNSEEN']);
-  const emails = await connection.fetch(seqNos);
+  const unseen = [...(await client.listUnseenUids())].sort((a, b) => a - b);
+  const batch = unseen.slice(0, Math.max(0, limits.maxMessagesPerRun));
+  result.deferred = unseen.length - batch.length;
+  result.fetched = batch.length;
+  log(`📧 Found ${unseen.length} unread emails (examining ${batch.length}, deferring ${result.deferred})`);
+  if (batch.length === 0) return result;
 
-  result.fetched = emails.length;
+  const headerInfos = await client.fetchHeaders(batch);
 
-  for (const email of emails) {
-    // Skip if already processed
-    if (isEmailProcessed(email.messageId, db)) {
-      result.skipped++;
-      continue;
-    }
-
+  for (const info of headerInfos) {
+    const uid = info.uid;
     try {
-      // Save email to file
-      const rawPath = saveEmailToFile(email, outputDir);
+      if (typeof info.size !== 'number' || !Number.isFinite(info.size)) {
+        result.errors.push(`uid ${uid}: server did not report message size; left unseen`);
+        continue;
+      }
+      const verdict = verifySender({
+        fromHeaders: info.headers['from'] ?? [],
+        authenticationResults: info.headers['authentication-results'] ?? [],
+      });
+      if (info.size > limits.maxMessageBytes) {
+        await reject(uid, verdict.senderDomain, 'too-large');
+        continue;
+      }
+      if (!verdict.ok) {
+        await reject(uid, verdict.senderDomain, verdict.reason);
+        continue;
+      }
 
-      // Record in database
-      recordProcessedEmail(db, email, rawPath);
+      const raw = await client.fetchRaw(uid);
+      if (byteLength(raw) > limits.maxMessageBytes) {
+        await reject(uid, verdict.senderDomain, 'too-large');
+        continue;
+      }
 
+      const mail = await parse(raw);
+      const parsedFrom: Array<{ address?: string }> = mail.from?.value ?? [];
+      const parsedDomain =
+        parsedFrom.length === 1 && typeof parsedFrom[0].address === 'string'
+          ? fromHeaderDomain(parsedFrom[0].address)
+          : null;
+      if (parsedDomain !== verdict.senderDomain) {
+        await reject(uid, verdict.senderDomain, 'from-mismatch');
+        continue;
+      }
+
+      const messageId: string = mail.messageId || '';
+      if (!messageId || isEmailProcessed(messageId, db)) {
+        if (messageId) result.skipped++;
+        else result.errors.push(`uid ${uid}: message has no Message-ID`);
+        await client.markSeen(uid);
+        continue;
+      }
+
+      const email: EmailMessage = {
+        messageId,
+        subject: mail.subject || '',
+        from: mail.from?.text || '',
+        date: mail.date || new Date(),
+        text: mail.text || '',
+        html: mail.html || '',
+        authenticatedSenderDomain: verdict.domain,
+      };
+
+      const filepath = saveEmailToFile(email, outputDir);
+      recordProcessedEmail(db, email, filepath);
+      await client.markSeen(uid);
       result.saved++;
+      log(`   💾 Saved message from ${verdict.domain} (uid ${uid})`);
+
+      if (delayMs > 0) await new Promise((resolve) => setTimeout(resolve, delayMs));
     } catch (error) {
-      result.errors.push(`Failed to process ${email.messageId}: ${(error as Error).message}`);
+      result.errors.push(`uid ${uid}: ${(error as Error).message}`);
     }
   }
 
+  if (result.rejected > 0) {
+    const byDomain = [...rejectedByDomain].map(([d, n]) => `${d}=${n}`).join(', ');
+    const byReason = [...rejectedByReason].map(([r, n]) => `${r}=${n}`).join(', ');
+    log(`email-gate: skipped ${result.rejected} message(s) — by sender domain: ${byDomain} — by reason: ${byReason}`);
+  }
+
   return result;
+}
+
+/** Adapt an imap-simple connection (INBOX already open) to MailboxClient. */
+export function imapSimpleMailbox(connection: any): MailboxClient {
+  return {
+    listUnseenUids: () =>
+      new Promise<number[]>((resolve, reject) => {
+        connection.imap.search(['UNSEEN'], (err: Error | null, uids: number[]) =>
+          err ? reject(err) : resolve(uids ?? []));
+      }),
+    fetchHeaders: async (uids: number[]) => {
+      if (uids.length === 0) return [];
+      const messages = await connection.search([['UID', uids.join(',')]], {
+        bodies: ['HEADER'],
+        size: true,
+        markSeen: false,
+      });
+      return messages.map((m: any) => ({
+        uid: m.attributes?.uid,
+        size: m.attributes?.size,
+        headers: m.parts?.find((p: any) => p.which === 'HEADER')?.body ?? {},
+      }));
+    },
+    fetchRaw: async (uid: number) => {
+      const messages = await connection.search([['UID', String(uid)]], { bodies: [''], markSeen: false });
+      const part = messages[0]?.parts?.find((p: any) => p.which === '');
+      if (!part) throw new Error('message body not returned by server');
+      return part.body;
+    },
+    markSeen: (uid: number) => connection.addFlags(uid, ['\\Seen']),
+  };
+}
+
+/**
+ * Build the imap-simple config. TLS certificate verification is explicit, and
+ * the run refuses to start if verification has been disabled process-wide.
+ */
+export function buildImapConfig(env: Record<string, string | undefined> = process.env) {
+  if (env.NODE_TLS_REJECT_UNAUTHORIZED === '0') {
+    throw new Error('NODE_TLS_REJECT_UNAUTHORIZED=0 disables certificate verification; unset it before ingesting email');
+  }
+  const host = env.IMAP_HOST || 'imap.gmail.com';
+  return {
+    imap: {
+      user: env.EMAIL_USER ?? '',
+      password: env.EMAIL_PASSWORD ?? '',
+      host,
+      port: parseInt(env.IMAP_PORT || '993', 10),
+      tls: true,
+      tlsOptions: {
+        rejectUnauthorized: true,
+        servername: host,
+        minVersion: 'TLSv1.2',
+      },
+      autotls: 'never',
+      authTimeout: 10000,
+    },
+  };
 }
 
 // ============================================================================
@@ -372,7 +544,7 @@ export function upsertEvent(event: ParsedEvent): void {
  * Main entry point for email ingestion. Connects to IMAP server,
  * fetches unread emails, saves them for parsing, and tracks in database.
  */
-export async function fetchEmails(): Promise<IngestionResult> {
+export async function fetchEmails(): Promise<GatedIngestionResult> {
   console.log('📥 Connecting to Gmail...');
 
   // Validate configuration
@@ -386,26 +558,10 @@ export async function fetchEmails(): Promise<IngestionResult> {
     throw new Error(configValidation.errors.join(', '));
   }
 
-  const config = {
-    imap: {
-      user: EMAIL_USER!,
-      password: EMAIL_PASSWORD!,
-      host: IMAP_HOST,
-      port: IMAP_PORT,
-      tls: true,
-      authTimeout: 10000,
-    },
-  };
+  const config = buildImapConfig(process.env);
 
   let connection: any;
   const db = getDatabase();
-
-  const result: IngestionResult = {
-    fetched: 0,
-    saved: 0,
-    skipped: 0,
-    errors: [],
-  };
 
   try {
     // Connect with retry
@@ -419,80 +575,20 @@ export async function fetchEmails(): Promise<IngestionResult> {
     await connection.openBox('INBOX');
     console.log('📬 Opened INBOX');
 
-    // Search for unread emails
-    const searchCriteria = ['UNSEEN'];
-    const fetchOptions = {
-      bodies: ['HEADER', 'TEXT', ''],
-      markSeen: false,
-    };
-
-    const messages = await connection.search(searchCriteria, fetchOptions);
-    console.log(`📧 Found ${messages.length} unread emails`);
-    result.fetched = messages.length;
-
-    if (messages.length === 0) {
-      console.log('✅ No new emails to process');
-      return result;
-    }
-
-    for (const message of messages) {
-      const all = message.parts.find((part: any) => part.which === '');
-      if (!all) continue;
-
-      const mail = await simpleParser(all.body);
-      const messageId = mail.messageId || '';
-
-      // Skip if already processed
-      if (isEmailProcessed(messageId, db)) {
-        console.log(`⏭️  Skipping already processed: ${mail.subject}`);
-        result.skipped++;
-        continue;
-      }
-
-      console.log(`\n📨 Processing: ${mail.subject}`);
-      console.log(`   From: ${mail.from?.text}`);
-      console.log(`   Date: ${mail.date}`);
-
-      try {
-        // Create email object
-        const email: EmailMessage = {
-          messageId,
-          subject: mail.subject || '',
-          from: mail.from?.text || '',
-          date: mail.date || new Date(),
-          text: mail.text || '',
-          html: mail.html || '',
-        };
-
-        // Save email to file
-        const filepath = saveEmailToFile(email);
-        console.log(`   💾 Saved to: ${filepath}`);
-
-        // Record in database
-        recordProcessedEmail(db, email, filepath);
-
-        // Archive email (mark as seen)
-        await connection.addFlags(message.attributes.uid, ['\\Seen']);
-        console.log('   📦 Archived email');
-
-        result.saved++;
-
-        // Rate limit
-        await new Promise(resolve => setTimeout(resolve, 2000));
-      } catch (error) {
-        const errorMessage = (error as Error).message;
-        console.error(`   ❌ Error: ${errorMessage}`);
-        result.errors.push(`${mail.subject}: ${errorMessage}`);
-      }
-    }
+    const result = await ingestFromMailbox(imapSimpleMailbox(connection), db);
 
     console.log('\n📊 Summary:');
     console.log(`   📧 ${result.saved} emails saved for parsing`);
     console.log(`   ⏭️  ${result.skipped} emails skipped (already processed)`);
+    console.log(`   🚫 ${result.rejected} emails rejected by the sender gate`);
+    if (result.deferred > 0) {
+      console.log(`   ⏳ ${result.deferred} emails deferred to the next run (per-run cap)`);
+    }
     if (result.errors.length > 0) {
       console.log(`   ❌ ${result.errors.length} errors`);
+      for (const e of result.errors) console.error(`   ❌ ${e}`);
     }
-
+    return result;
   } catch (error) {
     console.error('❌ Email ingestion failed:', error);
     throw error;
@@ -502,8 +598,6 @@ export async function fetchEmails(): Promise<IngestionResult> {
       console.log('🔌 Disconnected from Gmail');
     }
   }
-
-  return result;
 }
 
 // ============================================================================
@@ -525,3 +619,4 @@ if (import.meta.main) {
       process.exit(1);
     });
 }
+

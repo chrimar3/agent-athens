@@ -1,0 +1,410 @@
+/**
+ * Outbound URL guard.
+ *
+ * Use for every request whose URL (or redirect target) came from scraped
+ * pages, newsletters or the events DB: image downloads, detail-page and
+ * ticket-URL checks. It
+ *   - allows only http: and https: without embedded credentials,
+ *   - resolves the host and rejects loopback, private, link-local, CGNAT,
+ *     multicast, reserved and cloud-metadata addresses (IPv4 and IPv6,
+ *     including IPv4-mapped / NAT64 / 6to4 forms),
+ *   - follows redirects manually, re-validating every hop, up to a limit,
+ *   - caps response bytes (declared Content-Length and streamed body),
+ *   - enforces one timeout across all hops and the body read.
+ *
+ * Residual risk: fetch() resolves the host again after the check, so a DNS
+ * answer that changes between the two lookups is not caught on the fetch()
+ * path. The curl path pins the checked address with --resolve.
+ */
+
+import { isIP, isIPv4, isIPv6 } from 'node:net';
+import { lookup } from 'node:dns/promises';
+
+export type Resolver = (hostname: string) => Promise<string[]>;
+
+export type OutboundErrorCode =
+  | 'invalid-url'
+  | 'scheme'
+  | 'credentials'
+  | 'blocked-address'
+  | 'dns'
+  | 'redirect-limit'
+  | 'redirect-invalid'
+  | 'too-large'
+  | 'timeout'
+  | 'network';
+
+export class OutboundUrlError extends Error {
+  constructor(public readonly code: OutboundErrorCode, message: string) {
+    super(message);
+    this.name = 'OutboundUrlError';
+  }
+}
+
+export const OUTBOUND_DEFAULTS = Object.freeze({
+  maxBytes: 5 * 1024 * 1024,
+  timeoutMs: 15_000,
+  maxRedirects: 5,
+});
+
+export interface OutboundOptions {
+  method?: 'GET' | 'HEAD';
+  headers?: Record<string, string>;
+  /** Response body byte cap. Default 5 MiB. */
+  maxBytes?: number;
+  /** Total time budget across DNS, all redirect hops and the body read. Default 15 s. */
+  timeoutMs?: number;
+  /** Maximum redirects followed. Default 5. */
+  maxRedirects?: number;
+  /** When false, a 3xx response is returned as-is instead of followed. Default true. */
+  followRedirects?: boolean;
+  /** Injected for tests; defaults to the system resolver. */
+  resolver?: Resolver;
+  /** Injected for tests; defaults to global fetch. */
+  fetchImpl?: typeof fetch;
+}
+
+export interface SafeResponse {
+  status: number;
+  ok: boolean;
+  headers: Headers;
+  /** Final URL after redirects. */
+  url: string;
+  redirected: boolean;
+  body: Uint8Array;
+  text(): string;
+}
+
+// ---------------------------------------------------------------------------
+// Address classification
+// ---------------------------------------------------------------------------
+
+/** [network, prefixLength] */
+const BLOCKED_V4: Array<[string, number]> = [
+  ['0.0.0.0', 8],        // "this network"
+  ['10.0.0.0', 8],       // private
+  ['100.64.0.0', 10],    // CGNAT (also some cloud metadata endpoints)
+  ['127.0.0.0', 8],      // loopback
+  ['169.254.0.0', 16],   // link-local (cloud metadata 169.254.169.254)
+  ['172.16.0.0', 12],    // private
+  ['192.0.0.0', 24],     // IETF protocol assignments
+  ['192.0.2.0', 24],     // documentation
+  ['192.88.99.0', 24],   // 6to4 relay anycast
+  ['192.168.0.0', 16],   // private
+  ['198.18.0.0', 15],    // benchmarking
+  ['198.51.100.0', 24],  // documentation
+  ['203.0.113.0', 24],   // documentation
+  ['224.0.0.0', 4],      // multicast
+  ['240.0.0.0', 4],      // reserved + broadcast
+];
+
+function v4ToInt(ip: string): number {
+  return ip.split('.').reduce((acc, o) => ((acc << 8) | Number(o)) >>> 0, 0);
+}
+
+const BLOCKED_V4_INT = BLOCKED_V4.map(([net, len]) => {
+  const mask = len === 0 ? 0 : (0xffffffff << (32 - len)) >>> 0;
+  return { net: (v4ToInt(net) & mask) >>> 0, mask };
+});
+
+function isBlockedV4(ip: string): boolean {
+  const n = v4ToInt(ip);
+  return BLOCKED_V4_INT.some(({ net, mask }) => ((n & mask) >>> 0) === net);
+}
+
+/** Expand an IPv6 literal to 8 16-bit groups, or null if malformed. */
+function parseV6(ip: string): number[] | null {
+  let s = ip.toLowerCase();
+  const zone = s.indexOf('%');
+  if (zone >= 0) s = s.slice(0, zone);
+  const lastColon = s.lastIndexOf(':');
+  const tail = s.slice(lastColon + 1);
+  if (tail.includes('.')) {
+    if (!isIPv4(tail)) return null;
+    const o = tail.split('.').map(Number);
+    s = s.slice(0, lastColon + 1) + ((o[0] << 8) | o[1]).toString(16) + ':' + ((o[2] << 8) | o[3]).toString(16);
+  }
+  const halves = s.split('::');
+  if (halves.length > 2) return null;
+  const head = halves[0] ? halves[0].split(':') : [];
+  const rest = halves.length === 2 && halves[1] ? halves[1].split(':') : [];
+  const groups = [...head, ...rest];
+  if (!groups.every((g) => /^[0-9a-f]{1,4}$/.test(g))) return null;
+  const fill = 8 - groups.length;
+  if (halves.length === 1 ? fill !== 0 : fill < 1) return null;
+  return [...head, ...Array(halves.length === 2 ? fill : 0).fill('0'), ...rest].map((g) => parseInt(g, 16));
+}
+
+function v4FromGroups(hi: number, lo: number): string {
+  return [hi >> 8, hi & 0xff, lo >> 8, lo & 0xff].join('.');
+}
+
+function isBlockedV6(ip: string): boolean {
+  const g = parseV6(ip);
+  if (!g) return true;
+  const zeros = (from: number, to: number) => g.slice(from, to).every((x) => x === 0);
+
+  // IPv4-mapped ::ffff:a.b.c.d and NAT64 64:ff9b::a.b.c.d carry an IPv4 target.
+  if (zeros(0, 5) && g[5] === 0xffff) return isBlockedV4(v4FromGroups(g[6], g[7]));
+  if (g[0] === 0x64 && g[1] === 0xff9b && zeros(2, 6)) return isBlockedV4(v4FromGroups(g[6], g[7]));
+  // 6to4 2002:aabb:ccdd::/48 embeds an IPv4 address.
+  if (g[0] === 0x2002) return isBlockedV4(v4FromGroups(g[1], g[2]));
+
+  // Only global unicast 2000::/3 is public. This excludes ::, ::1, IPv4-compatible,
+  // 100::/64 discard, fc00::/7 unique-local (incl. fd00:ec2::254), fe80::/10
+  // link-local, fec0::/10 site-local and ff00::/8 multicast.
+  if ((g[0] & 0xe000) !== 0x2000) return true;
+  if (g[0] === 0x2001 && g[1] === 0x0000) return true;            // Teredo 2001::/32
+  if (g[0] === 0x2001 && g[1] === 0x0db8) return true;            // documentation 2001:db8::/32
+  if (g[0] === 0x2001 && (g[1] & 0xfff0) === 0x0010) return true; // ORCHID 2001:10::/28
+  return false;
+}
+
+/** True when `ip` must not be contacted. Non-IP input is treated as blocked. */
+export function isBlockedAddress(ip: string): boolean {
+  const bare = ip.replace(/^\[|\]$/g, '');
+  const plain = bare.split('%')[0];
+  if (isIPv4(plain)) return isBlockedV4(plain);
+  if (isIPv6(plain)) return isBlockedV6(bare);
+  return true;
+}
+
+// ---------------------------------------------------------------------------
+// URL validation
+// ---------------------------------------------------------------------------
+
+const systemResolver: Resolver = async (hostname) => {
+  const records = await lookup(hostname, { all: true, verbatim: true });
+  return records.map((r) => r.address);
+};
+
+/**
+ * Parse and validate a URL, resolve its host, and reject it unless every
+ * resolved address is public. Returns the parsed URL and the checked addresses.
+ */
+export async function assertPublicUrl(
+  input: string | URL,
+  opts: { resolver?: Resolver } = {},
+): Promise<{ url: URL; addresses: string[] }> {
+  let url: URL;
+  try {
+    url = new URL(String(input));
+  } catch {
+    throw new OutboundUrlError('invalid-url', 'not a valid absolute URL');
+  }
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    throw new OutboundUrlError('scheme', `scheme ${url.protocol} not allowed (http/https only)`);
+  }
+  if (url.username || url.password) {
+    throw new OutboundUrlError('credentials', 'URLs with embedded credentials are not allowed');
+  }
+  const host = url.hostname.replace(/^\[|\]$/g, '').toLowerCase().replace(/\.$/, '');
+  if (!host) throw new OutboundUrlError('invalid-url', 'URL has no host');
+
+  let addresses: string[];
+  if (isIP(host)) {
+    addresses = [host];
+  } else {
+    if (host === 'localhost' || host.endsWith('.localhost')) {
+      throw new OutboundUrlError('blocked-address', `host ${host} is local`);
+    }
+    try {
+      addresses = await (opts.resolver ?? systemResolver)(host);
+    } catch (e) {
+      throw new OutboundUrlError('dns', `could not resolve ${host}: ${(e as Error).message}`);
+    }
+    if (addresses.length === 0) throw new OutboundUrlError('dns', `no addresses for ${host}`);
+  }
+  const bad = addresses.find((a) => isBlockedAddress(a));
+  if (bad !== undefined) {
+    throw new OutboundUrlError('blocked-address', `host ${host} resolves to a non-public address`);
+  }
+  return { url, addresses };
+}
+
+// ---------------------------------------------------------------------------
+// fetch path
+// ---------------------------------------------------------------------------
+
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
+
+function abortable<T>(p: Promise<T>, signal: AbortSignal): Promise<T> {
+  if (signal.aborted) return Promise.reject(new OutboundUrlError('timeout', 'request timed out'));
+  return new Promise<T>((resolve, reject) => {
+    const onAbort = () => reject(new OutboundUrlError('timeout', 'request timed out'));
+    signal.addEventListener('abort', onAbort, { once: true });
+    p.then(
+      (v) => { signal.removeEventListener('abort', onAbort); resolve(v); },
+      (e) => { signal.removeEventListener('abort', onAbort); reject(e); },
+    );
+  });
+}
+
+async function readCapped(res: Response, maxBytes: number, signal: AbortSignal): Promise<Uint8Array> {
+  if (!res.body) return new Uint8Array(0);
+  const reader = res.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for (;;) {
+    const { done, value } = await abortable(reader.read(), signal);
+    if (done) break;
+    total += value.byteLength;
+    if (total > maxBytes) {
+      await reader.cancel().catch(() => {});
+      throw new OutboundUrlError('too-large', `response exceeded ${maxBytes} bytes`);
+    }
+    chunks.push(value);
+  }
+  const out = new Uint8Array(total);
+  let off = 0;
+  for (const c of chunks) { out.set(c, off); off += c.byteLength; }
+  return out;
+}
+
+/**
+ * Fetch a URL from untrusted data with SSRF, redirect, size and time limits.
+ * Throws OutboundUrlError; never follows a redirect it has not validated.
+ */
+export async function safeFetch(input: string | URL, opts: OutboundOptions = {}): Promise<SafeResponse> {
+  const method = opts.method ?? 'GET';
+  const maxBytes = opts.maxBytes ?? OUTBOUND_DEFAULTS.maxBytes;
+  const timeoutMs = opts.timeoutMs ?? OUTBOUND_DEFAULTS.timeoutMs;
+  const maxRedirects = opts.maxRedirects ?? OUTBOUND_DEFAULTS.maxRedirects;
+  const follow = opts.followRedirects ?? true;
+  const fetchImpl = opts.fetchImpl ?? fetch;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  const signal = controller.signal;
+
+  let current = String(input);
+  let redirects = 0;
+  try {
+    for (;;) {
+      const { url } = await abortable(assertPublicUrl(current, { resolver: opts.resolver }), signal);
+      let res: Response;
+      try {
+        res = await abortable(
+          fetchImpl(url.href, { method, headers: opts.headers, redirect: 'manual', signal }),
+          signal,
+        );
+      } catch (e) {
+        if (e instanceof OutboundUrlError) throw e;
+        if (signal.aborted || (e as Error)?.name === 'AbortError') {
+          throw new OutboundUrlError('timeout', 'request timed out');
+        }
+        throw new OutboundUrlError('network', (e as Error)?.message ?? String(e));
+      }
+
+      const location = res.headers.get('location');
+      if (follow && REDIRECT_STATUSES.has(res.status) && location) {
+        await res.body?.cancel().catch(() => {});
+        if (redirects >= maxRedirects) {
+          throw new OutboundUrlError('redirect-limit', `more than ${maxRedirects} redirects`);
+        }
+        redirects++;
+        try {
+          current = new URL(location, url).href;
+        } catch {
+          throw new OutboundUrlError('redirect-invalid', 'redirect Location is not a valid URL');
+        }
+        continue;
+      }
+
+      const declared = Number(res.headers.get('content-length'));
+      if (Number.isFinite(declared) && declared > maxBytes) {
+        await res.body?.cancel().catch(() => {});
+        throw new OutboundUrlError('too-large', `declared Content-Length ${declared} exceeds ${maxBytes} bytes`);
+      }
+
+      const body = method === 'HEAD' ? new Uint8Array(0) : await readCapped(res, maxBytes, signal);
+      return {
+        status: res.status,
+        ok: res.ok,
+        headers: res.headers,
+        url: url.href,
+        redirected: redirects > 0,
+        body,
+        text: () => new TextDecoder().decode(body),
+      };
+    }
+  } catch (e) {
+    if (e instanceof OutboundUrlError) throw e;
+    if (signal.aborted) throw new OutboundUrlError('timeout', 'request timed out');
+    throw new OutboundUrlError('network', (e as Error)?.message ?? String(e));
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// curl path (for hosts where Bun's fetch has HTTP/2 problems)
+// ---------------------------------------------------------------------------
+
+export interface CurlOptions {
+  headers?: Record<string, string>;
+  maxBytes?: number;
+  timeoutMs?: number;
+}
+
+/**
+ * curl argv that connects only to `pinnedAddress` (already validated), speaks
+ * only http/https, does not follow redirects, and bounds size and time.
+ */
+export function buildCurlArgs(url: URL, pinnedAddress: string, opts: CurlOptions = {}): string[] {
+  const port = url.port || (url.protocol === 'https:' ? '443' : '80');
+  const host = url.hostname.replace(/^\[|\]$/g, '');
+  const pinned = isIPv6(pinnedAddress) ? `[${pinnedAddress}]` : pinnedAddress;
+  const maxBytes = opts.maxBytes ?? OUTBOUND_DEFAULTS.maxBytes;
+  const seconds = Math.max(1, Math.ceil((opts.timeoutMs ?? OUTBOUND_DEFAULTS.timeoutMs) / 1000));
+  const args = [
+    'curl', '-s', '--http1.1',
+    '--proto', '=http,https',
+    '--max-redirs', '0',
+    '--max-filesize', String(maxBytes),
+    '--max-time', String(seconds),
+  ];
+  if (!isIP(host)) args.push('--resolve', `${host}:${port}:${pinned}`);
+  for (const [k, v] of Object.entries(opts.headers ?? {})) args.push('-H', `${k}: ${v}`);
+  args.push('--', url.href);
+  return args;
+}
+
+export interface SpawnedProcess {
+  stdout: ReadableStream<Uint8Array>;
+  exited: Promise<number>;
+  kill(): void;
+}
+
+/**
+ * Fetch a page body with curl after validating the URL. Throws
+ * OutboundUrlError on a blocked target, oversize output, timeout or non-zero
+ * curl exit.
+ */
+export async function safeCurlText(
+  input: string,
+  opts: CurlOptions & { resolver?: Resolver; spawn?: (args: string[]) => SpawnedProcess } = {},
+): Promise<string> {
+  const { url, addresses } = await assertPublicUrl(input, { resolver: opts.resolver });
+  const maxBytes = opts.maxBytes ?? OUTBOUND_DEFAULTS.maxBytes;
+  const timeoutMs = opts.timeoutMs ?? OUTBOUND_DEFAULTS.timeoutMs;
+  const spawn = opts.spawn ?? ((args: string[]) => Bun.spawn(args, { stdout: 'pipe', stderr: 'ignore' }) as unknown as SpawnedProcess);
+  const proc = spawn(buildCurlArgs(url, addresses[0], { ...opts, maxBytes, timeoutMs }));
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => { controller.abort(); proc.kill(); }, timeoutMs + 1000);
+  try {
+    let body: Uint8Array;
+    try {
+      body = await readCapped(new Response(proc.stdout), maxBytes, controller.signal);
+    } catch (e) {
+      proc.kill();
+      throw e;
+    }
+    const code = await abortable(proc.exited, controller.signal);
+    if (code !== 0) throw new OutboundUrlError('network', `curl exited with code ${code}`);
+    return new TextDecoder().decode(body);
+  } finally {
+    clearTimeout(timer);
+  }
+}

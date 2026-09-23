@@ -11,6 +11,7 @@
 
 import { Database } from 'bun:sqlite';
 import { join } from 'path';
+import { safeFetch } from '../src/utils/outbound-url';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 
@@ -44,25 +45,22 @@ interface EventRow {
 
 async function fetchPage(url: string): Promise<string | null> {
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
-
-    const response = await fetch(url, {
+    // Event URLs come from scraped data: outbound guard (public hosts only,
+    // redirects re-validated, size and time caps).
+    const response = await safeFetch(url, {
+      timeoutMs: 10000,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
         'Accept': 'text/html,application/xhtml+xml',
         'Accept-Language': 'el,en;q=0.9',
       },
-      signal: controller.signal,
     });
-
-    clearTimeout(timeout);
 
     if (!response.ok) {
       return null;
     }
 
-    return await response.text();
+    return response.text();
   } catch (error) {
     return null;
   }

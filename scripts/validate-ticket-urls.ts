@@ -24,6 +24,7 @@
 import Database from 'bun:sqlite';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { safeFetch, OutboundUrlError } from '../src/utils/outbound-url';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 
@@ -89,19 +90,15 @@ async function validateUrl(url: string): Promise<{
   error?: string;
 }> {
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
-
-    const response = await fetch(url, {
+    // Ticket URLs come from scraped data: outbound guard (public hosts only,
+    // every redirect hop re-validated, time cap).
+    const response = await safeFetch(url, {
       method: 'HEAD',
-      redirect: 'follow',
-      signal: controller.signal,
+      timeoutMs: 10000,
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; AgentAthens/1.0)',
       },
     });
-
-    clearTimeout(timeout);
 
     const finalUrl = response.url;
 
@@ -131,7 +128,7 @@ async function validateUrl(url: string): Promise<{
     const errorMessage = error instanceof Error ? error.message : String(error);
 
     // Timeout or network error
-    if (errorMessage.includes('abort') || errorMessage.includes('timeout')) {
+    if ((error instanceof OutboundUrlError && error.code === 'timeout') || errorMessage.includes('abort')) {
       return { status: 'unverified', finalUrl: null, error: 'Timeout' };
     }
 
