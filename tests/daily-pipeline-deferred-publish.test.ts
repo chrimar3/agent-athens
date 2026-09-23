@@ -557,9 +557,16 @@ describe('check-published-artifacts CLI', () => {
   const cli = join(ROOT, 'scripts/check-published-artifacts.ts');
   const run = (dist: string) => spawnSync('bun', ['run', cli, dist], { encoding: 'utf-8' });
 
-  test('clean dist → exit 0', () => {
+  test('clean dist → exit 0', async () => {
     const d = tmp('aa-artifacts-');
     writeFileSync(join(d, 'index.html'), '<html><body><p>Concert tonight</p></body></html>');
+    // A real build always emits dist/_headers (the enforced CSP), and the
+    // artifact gate requires it where the renderer exists (regular branch).
+    const headersModule = join(ROOT, 'src/generators/security-headers.ts');
+    if (existsSync(headersModule)) {
+      const { renderHeadersFile } = await import(headersModule);
+      writeFileSync(join(d, '_headers'), renderHeadersFile());
+    }
     const r = run(d);
     expect(r.status).toBe(0);
     expect(r.stdout).toContain('PASS — 1 pages');
