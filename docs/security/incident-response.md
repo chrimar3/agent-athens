@@ -24,7 +24,7 @@ each step says how to confirm it worked. Credential details:
    `credentials.md`): GitHub → Settings → Developer settings → Fine-grained
    tokens; Netlify → User settings → Applications; Gmail → Security → App
    passwords; Claude → claude.ai settings; Google Cloud → Credentials.
-2. Put the new value in `~/.config/agentathens/docker.env` or `.env`, then run
+2. Put the new value in `~/.config/agentathens-docker/docker.env` or `.env`, then run
    `docker/aa-run.sh doctor`.
 3. Check what the old token did:
    - GitHub: the repo's commit list and Settings → Security log for pushes you
@@ -49,12 +49,32 @@ each step says how to confirm it worked. Credential details:
 ## The database looks tampered with
 
 1. Stop the automation (first five minutes).
-2. Copy the current file aside for evidence:
-   `cp data/events.db ~/agent-athens-backups/events-suspect-$(date +%F).db`
-3. Pick the newest backup from before the problem in `~/agent-athens-backups/`
-   and check it: `sqlite3 -readonly <backup> 'PRAGMA integrity_check; SELECT COUNT(*) FROM events;'`
-4. Restore it: `cp <backup> data/events.db`, then build and review the site
-   locally (`bun run build && bun run serve`) before deploying.
+2. Restore the newest good backup. The script checks it inside the container
+   (integrity + non-empty events table) before swapping it in, and keeps the
+   current file in `~/.config/agentathens-docker/replaced/` as evidence:
+   ```bash
+   ls -lt ~/agent-athens-backups | head          # pick one from before the problem
+   docker/restore-backup.sh ~/agent-athens-backups/events-YYYY-MM-DD-HHMM.db.gz
+   ```
+3. Build and review the site locally (`docker/aa-run.sh site`, then
+   `bun run serve`) before re-enabling publishing.
+
+## A job was quarantined
+
+`docker/integrity-check.sh` pauses every job and alerts you when a container
+run changed git's config or hooks, committed non-data files, or planted a file
+at the repo root.
+
+1. Read `~/.config/agentathens-docker/QUARANTINE` and the evidence folder it
+   names (`REASON`, `new-commits.txt`, `planted/`). Bad commits are kept on a
+   `quarantine/<time>` branch; HEAD was reset to the pre-run commit.
+2. If `.git/config` or `.git/hooks` changed, do **not** run git in the repo
+   until you have compared them by hand with a fresh clone.
+3. Treat it as a compromise of whatever that run could reach (see the token
+   table in `docker/README.md`): rotate those tokens, then rebuild the image
+   (`docker/aa-run.sh image --pull`).
+4. When you are satisfied, remove `~/.config/agentathens-docker/QUARANTINE`.
+   If it was your own new root file, move it back from `planted/`.
 
 ## You suspect the Mac itself is compromised
 

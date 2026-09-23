@@ -30,8 +30,7 @@ remote="$(git remote get-url origin 2>/dev/null || true)"
 
 [[ -f .netlify/state.json ]] && ok ".netlify/state.json present" || bad ".netlify/state.json missing" "run 'netlify link' once on the Mac in the repo"
 
-touch "$HOME/agent-athens-backups/.aa-write-test" 2>/dev/null && rm -f "$HOME/agent-athens-backups/.aa-write-test" \
-    && ok "backups dir writable" || bad "~/agent-athens-backups not writable" "check AA_BACKUPS_DIR in docker/aa-run.sh"
+[[ ! -e "$HOME/agent-athens-backups" ]] && ok "backups folder not visible to the container" || bad "backups folder is mounted into the container" "remove that mount; aa-run.sh backs up on the Mac"
 [[ -d "$HOME/.config/agentathens" ]] && ok "secrets dir mounted read-only" || warn "~/.config/agentathens not mounted" "GSC/Bing metrics will report missing credentials"
 
 for var in GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN; do

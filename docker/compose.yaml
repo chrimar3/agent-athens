@@ -1,11 +1,12 @@
 # Agent Athens hardened pipeline container. Run it through docker/aa-run.sh,
 # which sets the AA_* paths below and prevents overlapping runs.
 #
-# What the container can reach on the Mac: the repo (read-write — the pipeline
-# writes data/, dist/, logs/ and commits), ~/agent-athens-backups (read-write)
-# and, only for jobs that need it, ~/.config/agentathens (read-only API keys;
-# other jobs get an empty folder). Nothing else from the home folder; no ports
-# are published. Tokens are passed per job by aa-run.sh, never all at once.
+# What the container can reach on the Mac: the repo, with every code path and
+# .git/config/.git/hooks mounted read-only on top by aa-run.sh (the pipeline
+# writes only data/, dist/, logs/ and temp folders), and, only for runs that
+# need it, ~/.config/agentathens (read-only API keys; other runs get an empty
+# folder). Not the backups, not the token file, nothing else from the home
+# folder; no ports are published. Tokens are passed per run by aa-run.sh.
 # Guarded by tests/docker-hardening.test.ts.
 name: agent-athens
 
@@ -36,6 +37,10 @@ services:
       - /home/pwuser/.config:size=64m,uid=1001,gid=1001,mode=0700
     environment:
       TZ: Europe/Athens
+      # The pipeline's own backup step writes here (throwaway tmpfs). The real
+      # backup is a plain copy made on the Mac by aa-run.sh, out of reach of
+      # every container.
+      BACKUP_DIR: /tmp/aa-backups
     working_dir: /workspace
     volumes:
       - type: bind
@@ -44,9 +49,6 @@ services:
       # Linux node_modules from the image, recreated every run; the Mac's
       # darwin node_modules underneath stay untouched.
       - /workspace/node_modules
-      - type: bind
-        source: ${AA_BACKUPS_DIR:?run through docker/aa-run.sh}
-        target: /home/pwuser/agent-athens-backups
       - type: bind
         source: ${AA_SECRETS_DIR:?run through docker/aa-run.sh}
         target: /home/pwuser/.config/agentathens

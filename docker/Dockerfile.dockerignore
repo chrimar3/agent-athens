@@ -8,3 +8,5 @@
 !docker/gitconfig
 !docker/entrypoint.sh
 !docker/doctor.sh
+!docker/cli/package.json
+!docker/cli/package-lock.json

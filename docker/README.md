@@ -8,22 +8,36 @@ container and can reach only:
 
 | Reaches | Why |
 |---|---|
-| The repo folder (read-write) | The pipeline writes `data/`, `dist/`, `logs/` and commits |
-| `~/agent-athens-backups` (read-write) | Daily database backup |
-| `~/.config/agentathens` (read-only, **freshness/visibility only**) | GSC/Bing API keys |
-| The tokens its job needs, and no others | See the table below |
+| The repo's data folders (read-write) | The pipeline writes `data/`, `dist/`, `logs/`, `temp-*` |
+| The repo's code, `.git/config`, `.git/hooks` (**read-only**) | So nothing it does can change code your Mac later runs |
+| `~/.config/agentathens` (read-only, **only runs that need it**) | GSC/Bing API keys |
+| The tokens its run needs, and no others | See the table below |
 
 It cannot reach the rest of your home folder, the keychain, SSH keys, browser
-profiles, other projects or the Mac's system files. The container runs as a
-non-root user with every Linux capability dropped, a read-only system
-filesystem, a fresh empty home folder on every run and no open ports.
-`tests/docker-hardening.test.ts` fails if any of that is weakened.
+profiles, other projects, the backups, the token file or the Mac's system
+files. The container runs as a non-root user with every Linux capability
+dropped, a read-only system filesystem, a fresh empty home folder on every run
+and no open ports. After every run, `docker/integrity-check.sh` checks on the
+Mac that git's config and hooks are unchanged, that new commits touch only
+data, and that no file was planted at the repo root; if not, it quarantines
+the change, pauses every job and alerts you.
+`tests/docker-hardening.test.ts` and `tests/docker-integrity-check.test.ts`
+fail if any of that is weakened.
 
-| Job | Schedule | Tokens it receives |
+| Run | Schedule | Tokens it receives |
 |---|---|---|
 | `visibility` | 07:30 | none (reads the API-key folder) |
-| `freshness` | 08:00 | GitHub, Netlify, git identity |
-| `enrichment` | 10:00, 13:00, 16:30, 19:00 | Claude only — no GitHub/Netlify token, no API-key folder, `.env` hidden |
+| `freshness`, scrape and build | 08:00 | git identity only: no GitHub/Netlify token; loads web pages |
+| `freshness`, publish | right after, only if the integrity check passes | GitHub, Netlify: never loads a web page |
+| `enrichment` | 10:00, 13:00, 16:30, 19:00 | Claude only: no API-key folder, `.env*` hidden, `.git` read-only |
+
+(The two-step freshness needs the pipeline's deferred-publish mode from the
+protected-paths PR; until that is merged, freshness runs as one step holding
+both tokens.)
+
+Backups are taken **on the Mac** before each freshness/enrichment run: a plain
+copy of `data/events.db` into `~/agent-athens-backups` (newest 60 kept), which
+no container can see or change. Restore with `docker/restore-backup.sh`.
 
 Stays on the Mac: the deadman watchdog (it must not depend on Docker),
 deploy-cadence and enrichment-check (macOS notifications, local logs only), the
@@ -43,12 +57,15 @@ weekly digest and phase3-weekly.
      read/write, Issues read/write, Metadata read; 90-day expiry.
    - Netlify personal access token with an expiry.
    - Claude: run `claude setup-token` on the Mac.
-3. **Env file**, kept outside the repo:
+3. **Env file**, in a folder no container mounts:
    ```bash
-   cp docker/docker.env.example ~/.config/agentathens/docker.env
-   chmod 600 ~/.config/agentathens/docker.env
-   open -e ~/.config/agentathens/docker.env   # fill in the tokens
+   mkdir -p ~/.config/agentathens-docker && chmod 700 ~/.config/agentathens-docker
+   cp docker/docker.env.example ~/.config/agentathens-docker/docker.env
+   chmod 600 ~/.config/agentathens-docker/docker.env
+   open -e ~/.config/agentathens-docker/docker.env   # fill in the tokens
    ```
+   If you created `~/.config/agentathens/docker.env` earlier, move it: that
+   folder is mounted into some runs.
 4. **Build and check**:
    ```bash
    docker/aa-run.sh image     # ~5 min, ~5 GB
@@ -69,6 +86,13 @@ host jobs exactly as they were.
 ## Day to day
 
 - Logs: `logs/docker-<job>.log` (wrapper) plus the pipeline's usual logs.
+- **Quarantine:** if a run trips the integrity check, every job stops and you
+  get a notification. The evidence is in `~/.config/agentathens-docker/quarantine/`;
+  follow `docs/security/incident-response.md`, then remove
+  `~/.config/agentathens-docker/QUARANTINE` to resume. Creating a new file at
+  the top of the repo while a job runs also trips it (it can't tell you apart
+  from a planted file); move yours back from the evidence folder.
+- Restore the database: `docker/restore-backup.sh` (newest) or pass a file.
 - Update the image after dependency or Dockerfile changes: `docker/aa-run.sh image`.
 - Poke around inside: `docker/aa-run.sh shell` (no tokens).
 - Rotate a token: edit the env file; the next run picks it up.
@@ -77,8 +101,11 @@ host jobs exactly as they were.
 
 - The container can still reach the internet and your local network (it has
   to fetch websites). Treat anything else on your LAN as reachable from it.
-- A job with the GitHub and Netlify tokens (freshness) can still publish. The
-  deploy gate and the published-artifact gate decide *what* it may publish.
+- The publish run holds the GitHub and Netlify tokens. It runs no browser and
+  reads no outside input; the deploy and push gates decide *what* it may
+  publish.
+- The wrapper warns when the image is over 30 days old; rebuild with
+  `docker/aa-run.sh image --pull` to pick up Chromium and system fixes.
 - Chrome's own sandbox is off inside the container (Docker's default security
   profile blocks it); the container is the boundary. On the Mac, outside the
   container, the sandbox is now on.

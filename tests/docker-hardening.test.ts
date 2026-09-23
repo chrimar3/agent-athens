@@ -32,11 +32,10 @@ describe('docker/compose.yaml hardening', () => {
     expect(svc.env_file).toBeUndefined();
   });
 
-  test('mounts only the repo, backups and the read-only secrets folder', () => {
+  test('mounts only the repo and the read-only secrets folder — never the backups', () => {
     const targets = svc.volumes.map((v: string | { target: string }) => (typeof v === 'string' ? v : v.target));
     expect(targets.sort()).toEqual([
       '/home/pwuser/.config/agentathens',
-      '/home/pwuser/agent-athens-backups',
       '/workspace',
       '/workspace/node_modules',
     ]);
@@ -72,19 +71,48 @@ describe('docker/Dockerfile', () => {
 
 describe('docker/aa-run.sh least privilege', () => {
   const wrapper = read('docker/aa-run.sh');
-  const jobLine = (job: string) => wrapper.split('\n').find((l) => l.trim().startsWith(`${job})`)) ?? '';
+  const policy = (name: string) => wrapper.split('\n').find((l) => l.trim().startsWith(`${name})`)) ?? '';
 
-  test('enrichment job gets only the Claude token, no secrets folder, masked .env', () => {
-    const line = jobLine('enrichment');
+  test('enrichment gets only the Claude token, no secrets folder, no .env, read-only .git', () => {
+    const line = policy('enrichment');
     expect(line).toContain('TOKENS="CLAUDE_CODE_OAUTH_TOKEN"');
     expect(line).toContain('SECRETS=no');
     expect(line).toContain('DOTENV=no');
+    expect(line).toContain('GITRW=no');
   });
 
-  test('only publishing jobs get deploy/push tokens', () => {
-    for (const job of ['enrichment', 'visibility', 'site', 'test|shell']) {
-      expect(jobLine(job)).not.toMatch(/GH_TOKEN|NETLIFY_AUTH_TOKEN/);
+  test('the scrape run holds no publishing token; the publish run sees no secrets or .env', () => {
+    expect(policy('scrape')).not.toMatch(/GH_TOKEN|NETLIFY_AUTH_TOKEN|CLAUDE_CODE_OAUTH_TOKEN/);
+    for (const name of ['enrichment', 'visibility', 'site', 'test|shell']) {
+      expect(policy(name)).not.toMatch(/GH_TOKEN|NETLIFY_AUTH_TOKEN/);
     }
+    expect(policy('publish')).toContain('SECRETS=no');
+    expect(policy('publish')).toContain('DOTENV=no');
+  });
+
+  test('freshness defers publishing to a separate run when the pipeline supports it', () => {
+    expect(wrapper).toMatch(/export AA_DEFER_PUBLISH=1[\s\S]*run_container scrape[\s\S]*run_container publish/);
+  });
+
+  test('the token file lives outside every folder a container mounts', () => {
+    expect(wrapper).toContain('ENV_FILE="${AA_ENV_FILE:-$STATE_DIR/docker.env}"');
+    expect(wrapper).toContain('STATE_DIR="${AA_STATE_DIR:-$HOME/.config/agentathens-docker}"');
+    expect(wrapper).toContain('inside "$ENV_FILE" "$REPO" || inside "$ENV_FILE" "$SECRETS_DIR"');
+  });
+
+  test('code paths, .git/config and .git/hooks are mounted read-only', () => {
+    const codePaths = (wrapper.match(/CODE_PATHS="([^"]*)"/) ?? ['', ''])[1].split(/\s+/);
+    for (const p of ['scripts', 'src', 'config', 'docker', '.claude', '.github', 'package.json', 'bun.lock', 'bunfig.toml']) {
+      expect(codePaths).toContain(p);
+    }
+    expect(wrapper).toContain('$REPO/$p:/workspace/$p:ro');
+    expect(wrapper).toContain('.git/config:/workspace/.git/config:ro');
+    expect(wrapper).toContain('.git/hooks:/workspace/.git/hooks:ro');
+    expect(wrapper).toContain('$REPO/.git:/workspace/.git:ro');
+  });
+
+  test('every .env* file is masked for runs without DOTENV', () => {
+    expect(wrapper).toContain('for f in "$REPO"/.env*');
   });
 
   test('env file is parsed, never sourced', () => {
@@ -93,7 +121,7 @@ describe('docker/aa-run.sh least privilege', () => {
 
   test('help succeeds and unknown jobs are refused', () => {
     expect(Bun.spawnSync(['bash', join(ROOT, 'docker/aa-run.sh'), 'help']).exitCode).toBe(0);
-    expect(Bun.spawnSync(['bash', join(ROOT, 'docker/aa-run.sh'), 'rm-rf']).exitCode).toBe(2);
+    expect(Bun.spawnSync(['bash', join(ROOT, 'docker/aa-run.sh'), 'bogus-job']).exitCode).toBe(2);
   });
 });
 

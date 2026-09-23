@@ -7,7 +7,8 @@ cd /workspace
 usage() {
     cat >&2 <<'EOF'
 usage: aa-run.sh JOB [args]
-  freshness       daily-automated.sh freshness   (scrape → build → deploy)
+  freshness       daily-automated.sh freshness   (scrape → build; then publish)
+  publish         daily-automated.sh publish     (push + deploy a built site)
   enrichment      daily-automated.sh enrichment  (claude -p enrichment)
   daily           daily-automated.sh             (legacy full pipeline)
   visibility      fetch-bing-metrics.ts + monitor-search-visibility.ts
@@ -22,7 +23,7 @@ job="${1:-help}"
 [[ $# -gt 0 ]] && shift
 
 case "$job" in
-    freshness|enrichment) exec bash scripts/daily-automated.sh "$job" "$@" ;;
+    freshness|enrichment|publish) exec bash scripts/daily-automated.sh "$job" "$@" ;;
     daily) exec bash scripts/daily-automated.sh "$@" ;;
     visibility)
         # The plist ran both with `;` — keep that, but report either failure.

@@ -12,10 +12,6 @@
 ARG BASE_IMAGE=mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
 FROM ${BASE_IMAGE}
 
-ARG BUN_VERSION=1.3.11
-ARG NETLIFY_CLI_VERSION=27.8.1
-ARG CLAUDE_CODE_VERSION=2.1.280
-
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=Europe/Athens \
     LANG=C.UTF-8 \
@@ -34,10 +30,12 @@ RUN rm -f /etc/apt/sources.list.d/nodesource* \
  && rm -rf /var/lib/apt/lists/*
 
 # Pinned CLIs: bun (runtime), netlify (deploy), claude (auto-enrich `claude -p`).
-RUN npm install -g --no-fund --no-audit \
-      "bun@${BUN_VERSION}" \
-      "netlify-cli@${NETLIFY_CLI_VERSION}" \
-      "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}" \
+# `npm ci` installs exactly docker/cli/package-lock.json and verifies every
+# tarball's integrity hash. Bump versions there (npm install --package-lock-only).
+COPY docker/cli/package.json docker/cli/package-lock.json /opt/aa-cli/
+RUN npm ci --prefix /opt/aa-cli --no-fund --no-audit \
+ && ln -s /opt/aa-cli/node_modules/.bin/bun /opt/aa-cli/node_modules/.bin/bunx \
+          /opt/aa-cli/node_modules/.bin/netlify /opt/aa-cli/node_modules/.bin/claude /usr/local/bin/ \
  && npm cache clean --force \
  && bun --version && netlify --version && claude --version
 

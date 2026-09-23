@@ -68,11 +68,23 @@ function formatStaleMessage(reason: StaleReason): string {
   }
 }
 
+/**
+ * The message can quote a line from logs/deploy-cadence.log, which pipeline
+ * runs write. It is passed to AppleScript as an argument, never spliced into
+ * the script text, so no quote or backslash in it can change the script.
+ */
+export function osascriptAlertArgs(message: string): string[] {
+  return [
+    "osascript",
+    "-e", "on run argv",
+    "-e", 'display notification (item 1 of argv) with title "Agent Athens" subtitle "Deploy cadence broken" sound name "Basso"',
+    "-e", "end run",
+    "--", message,
+  ];
+}
+
 function fireOsascriptAlert(message: string): void {
-  // AppleScript string-literal escape — double-up the double quotes inside.
-  const safeMessage = message.replace(/"/g, '\\"');
-  const script = `display notification "${safeMessage}" with title "Agent Athens" subtitle "Deploy cadence broken" sound name "Basso"`;
-  Bun.spawnSync(["osascript", "-e", script]);
+  Bun.spawnSync(osascriptAlertArgs(message));
 }
 
 async function appendAlertLog(message: string): Promise<void> {
@@ -86,16 +98,18 @@ async function appendAlertLog(message: string): Promise<void> {
   await Bun.write(ALERT_LOG, existing + line);
 }
 
-const result = await loadLastSuccess();
+if (import.meta.main) {
+  const result = await loadLastSuccess();
 
-if (result.kind === "fresh") {
-  // Silent exit 0 — deploy chain is healthy.
-  process.exit(0);
+  if (result.kind === "fresh") {
+    // Silent exit 0 — deploy chain is healthy.
+    process.exit(0);
+  }
+
+  const message = formatStaleMessage(result);
+  fireOsascriptAlert(message);
+  await appendAlertLog(message);
+  // Also write to stderr so launchd's StandardErrorPath captures it.
+  console.error(message);
+  process.exit(1);
 }
-
-const message = formatStaleMessage(result);
-fireOsascriptAlert(message);
-await appendAlertLog(message);
-// Also write to stderr so launchd's StandardErrorPath captures it.
-console.error(message);
-process.exit(1);
