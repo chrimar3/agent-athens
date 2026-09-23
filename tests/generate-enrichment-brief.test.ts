@@ -436,6 +436,16 @@ describe('buildBrief', () => {
     expect(brief).toContain('write-tags.ts');
   });
 
+  test('points database reads at db-read.ts, never the sqlite3 shell (security loop round 1: the enrichment session no longer holds it)', () => {
+    const events = [{
+      id: 'test-1', title: 'Test', type: 'concert', venue_name: 'V', price_type: 'open',
+      start_date: '2027-06-15T21:00:00', end_date: null, time_doors: null, url: null, description: null, source: 'test',
+    }];
+    const brief = buildBrief(events, new Map(), new Map(), [], 1);
+    expect(brief).toContain('bun run scripts/db-read.ts "SELECT');
+    expect(brief).not.toMatch(/\bsqlite3 -/);
+  });
+
   test('includes "Recent Openings" section when openings provided', () => {
     const events = [{
       id: 'test-1', title: 'Test', type: 'concert', venue_name: 'V', price_type: 'open',

@@ -105,8 +105,20 @@ Ground truth: CLAUDE.md in this worktree is the standing law; PHASE3-LOG.md and 
 
 Do, in order: (1) the measurement-verdict step — compare the fresh probe/console/diagnostic against the previous cycle, rule on every open prediction (P1, P2, ...) and record verdicts in PHASE3-LOG.md; (2) work the queue top-down within the law. Unattended constraints: merges to fable-impact ONLY with full gates green (build exit 0, bun test 0 fail, tsc clean); anything ambiguous, operator-owned, or gate-failing gets LOGGED and skipped, never forced; never touch the frozen instrument; never fabricate content; end by committing an updated PHASE3-LOG.md with a session summary + next-session queue.'
 
+# Security loop round 1: this session reads third-party measurement output
+# (Perplexity probe results), so it gets an explicit tool list instead of
+# "everything acceptEdits allows", and the db-guard unattended profile:
+# AA_UNATTENDED_SESSION scopes Read/Glob/Grep/Write to the Phase-3 worktree
+# plus the benchmark dir (AA_SESSION_EXTRA_ROOTS, --add-dir), refuses secrets
+# (.env*, .git, .netlify, keys, ~/.config) and unknown tools. The hook that
+# enforces it is the Phase-3 worktree's own copy (settings.json wires
+# $CLAUDE_PROJECT_DIR/scripts/hooks/db-guard.ts), so it takes effect once that
+# branch carries the round-1 hook. No web tools and no git push/-C/config/
+# remote: merges and commits are local; anything else is logged and skipped
+# under the standing law.
+PHASE3_ALLOWED_TOOLS="Read,Glob,Grep,Edit,MultiEdit,Write,TodoWrite,Task,Bash(bun run *),Bash(bun test),Bash(bun test *),Bash(bunx tsc *),Bash(git status),Bash(git status *),Bash(git diff),Bash(git diff *),Bash(git log *),Bash(git show *),Bash(git add *),Bash(git commit *),Bash(git merge *),Bash(git checkout *),Bash(git switch *),Bash(git branch *),Bash(git rev-parse *),Bash(ls *),Bash(wc *)"
 (
-  cd "$PHASE3_WT" && "$CLAUDE_BIN" -p "$PROMPT" --permission-mode acceptEdits >> "$SESSION_LOG" 2>&1
+  cd "$PHASE3_WT" && AA_UNATTENDED_SESSION=phase3 AA_SESSION_EXTRA_ROOTS="$BENCH" "$CLAUDE_BIN" -p "$PROMPT" --permission-mode acceptEdits --allowedTools "$PHASE3_ALLOWED_TOOLS" --add-dir "$BENCH" >> "$SESSION_LOG" 2>&1
 ) &
 CLAUDE_PID=$!
 ( sleep "$MAX_SESSION_SECONDS" && kill -9 "$CLAUDE_PID" 2>/dev/null && echo "[watchdog] killed session after ${MAX_SESSION_SECONDS}s" >> "$SESSION_LOG" ) &

@@ -333,6 +333,9 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/netlify-headers.test.ts',
     'tests/workflow-security.test.ts',
     'scripts/__tests__/deploy-gate.test.ts',
+    'scripts/db-read.ts',
+    'tests/db-read.test.ts',
+    'tests/auto-enrich-guard-selftest.test.ts',
   ];
   /** Listed by name in path-guard.json even where a broader glob already covers
    *  them, so narrowing that glob later cannot silently drop them. */
@@ -350,6 +353,11 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/netlify-headers.test.ts',
     'tests/workflow-security.test.ts',
     'scripts/__tests__/deploy-gate.test.ts',
+    'scripts/db-read.ts',
+    'tests/db-read.test.ts',
+    'tests/auto-enrich-guard-selftest.test.ts',
+    'tests/docker-hardening.test.ts',
+    'tests/security/**',
   ];
   const MUST_NOT_PROTECT = [
     '.claude/notes/ledger.md',

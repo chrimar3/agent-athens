@@ -707,6 +707,13 @@ export function buildBrief(
   lines.push('');
   lines.push('## Execution Instructions');
   lines.push('');
+  // Security loop round 1: the session no longer holds the sqlite3 shell; the
+  // db-guard hook refuses it. db-read.ts is the only read path.
+  lines.push('**Database reads** (optional: venue history, related events): the sqlite3 shell is not available in this session. Use one read-only SELECT per call, output is JSON:');
+  lines.push('```bash');
+  lines.push('bun run scripts/db-read.ts "SELECT id, title, start_date FROM events WHERE venue_name = \'<venue>\' LIMIT 20"');
+  lines.push('```');
+  lines.push('');
   lines.push('For EACH event:');
   lines.push('');
   lines.push('1. **Research**: WebSearch the event URL for details. Search for artist/performer background. Also search the venue if writing sensory opening details about the physical space — unverified atmosphere (invented food smells, assumed decor) is a fabrication violation even if it sounds plausible.');
