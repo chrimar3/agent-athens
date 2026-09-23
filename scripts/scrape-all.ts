@@ -45,6 +45,7 @@ import type { DomDocument, DomElement } from './dom-eval-types';
 import { ACTIVE_SOURCE_IDS } from '../src/config/active-source-ids';
 import { checkImportDuplicate } from '../src/quality/import-gate';
 import type { Event } from '../src/types';
+import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
 
 // Browser surface for page.evaluate() callbacks — module-local on purpose;
 // see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
@@ -58,7 +59,7 @@ function fail(what: string, tryNext: string): never {
   console.error(`scrape-all: FAILED — ${what} — try: ${tryNext}`);
   process.exit(1);
 }
-const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_PATH = chromePath();
 
 // ============================================================================
 // TYPES
@@ -967,7 +968,7 @@ async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
       browser = await puppeteer.launch({
         headless: true,
         executablePath: CHROME_PATH,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: chromeLaunchArgs()
       });
 
       const page = await browser.newPage();

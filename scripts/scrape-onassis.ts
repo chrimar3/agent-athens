@@ -23,10 +23,11 @@ import { log } from '../src/utils/logger';
 import { createHash } from 'crypto';
 import type { Event, EventType } from '../src/types';
 import { SCHEMA_TYPE_MAP } from '../src/enrichment/quality-gates';
+import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
 
 const SOURCE_ID = 'onassis';
 const BASE_URL = 'https://www.onassis.org';
-const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_PATH = chromePath();
 
 // Onassis Stegi opening hours (only attached to exhibitions)
 const ONASSIS_OPENING_HOURS = {
@@ -224,7 +225,7 @@ export async function scrapeOnassis(): Promise<ScrapedExhibition[]> {
   const browser = await puppeteer.launch({
     headless: true,
     executablePath: CHROME_PATH,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: chromeLaunchArgs()
   });
 
   let events: ScrapedExhibition[] = [];

@@ -1,0 +1,55 @@
+# Agent Athens hardened pipeline container. Run it through docker/aa-run.sh,
+# which sets the AA_* paths below and prevents overlapping runs.
+#
+# What the container can reach on the Mac: the repo (read-write — the pipeline
+# writes data/, dist/, logs/ and commits), ~/agent-athens-backups (read-write)
+# and, only for jobs that need it, ~/.config/agentathens (read-only API keys;
+# other jobs get an empty folder). Nothing else from the home folder; no ports
+# are published. Tokens are passed per job by aa-run.sh, never all at once.
+# Guarded by tests/docker-hardening.test.ts.
+name: agent-athens
+
+services:
+  pipeline:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: agent-athens-pipeline:local
+    pull_policy: never
+    init: true                       # reaps orphaned Chromium/claude processes
+    user: "1001:1001"                # pwuser from the base image, never root
+    read_only: true                  # image filesystem is immutable at run time
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 2048                 # Chromium and parallel claude batches are thread-heavy
+    mem_limit: 6g
+    cpus: 4
+    shm_size: 1gb                    # Chromium needs more than the 64 MB default
+    tmpfs:
+      - /tmp:size=2g,mode=1777
+      # Fresh, empty home on every run: nothing a compromised run writes to
+      # ~ (shell rc files, CLI configs) survives to the next run.
+      - /home/pwuser:size=1g,uid=1001,gid=1001,mode=0700
+      # Own tmpfs so ~/.config is pwuser's: Docker would otherwise create it
+      # as root when mounting the secrets folder inside it.
+      - /home/pwuser/.config:size=64m,uid=1001,gid=1001,mode=0700
+    environment:
+      TZ: Europe/Athens
+    working_dir: /workspace
+    volumes:
+      - type: bind
+        source: ${AA_REPO:?run through docker/aa-run.sh}
+        target: /workspace
+      # Linux node_modules from the image, recreated every run; the Mac's
+      # darwin node_modules underneath stay untouched.
+      - /workspace/node_modules
+      - type: bind
+        source: ${AA_BACKUPS_DIR:?run through docker/aa-run.sh}
+        target: /home/pwuser/agent-athens-backups
+      - type: bind
+        source: ${AA_SECRETS_DIR:?run through docker/aa-run.sh}
+        target: /home/pwuser/.config/agentathens
+        read_only: true
+    # No `ports:` — nothing listens for the network. Preview the site on the
+    # Mac with `bun run serve` (binds 127.0.0.1 only).

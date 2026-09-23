@@ -1,7 +1,8 @@
 #!/usr/bin/env bun
 import puppeteer from 'puppeteer-core';
+import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
 
-const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_PATH = chromePath();
 
 // Try more.com URLs instead
 const TEST_URLS = [
@@ -14,7 +15,7 @@ async function main() {
   const browser = await puppeteer.launch({
     executablePath: CHROME_PATH,
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: chromeLaunchArgs()
   });
   
   for (const url of TEST_URLS) {

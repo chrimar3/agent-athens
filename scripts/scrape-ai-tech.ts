@@ -24,8 +24,9 @@ import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
 import { normalizeDateField } from '../src/utils/date-format';
 import { normalizePriceType } from '../src/db/database';
+import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
 
-const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_PATH = chromePath();
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const today = new Date().toISOString().split('T')[0];
@@ -566,7 +567,7 @@ async function scrapeEventbrite(): Promise<DiscoveredEvent[]> {
     browser = await puppeteer.launch({
       headless: true,
       executablePath: CHROME_PATH,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: chromeLaunchArgs()
     });
 
     const page = await browser.newPage();
@@ -688,7 +689,7 @@ async function scrapeMeetup(): Promise<DiscoveredEvent[]> {
     browser = await puppeteer.launch({
       headless: true,
       executablePath: CHROME_PATH,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: chromeLaunchArgs()
     });
 
     const page = await browser.newPage();
@@ -799,7 +800,7 @@ async function scrapeLuma(): Promise<DiscoveredEvent[]> {
     browser = await puppeteer.launch({
       headless: true,
       executablePath: CHROME_PATH,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: chromeLaunchArgs()
     });
 
     const page = await browser.newPage();
