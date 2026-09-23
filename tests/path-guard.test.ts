@@ -441,6 +441,22 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/watchdog-responders.test.ts',
     'tests/daily-pipeline-deferred-publish.test.ts',
     'tests/daily-pipeline-staging.test.ts',
+    // Round 4: output-safety modules the published site depends on, build state
+    // read back from container-writable folders, URL-column writes, container CLIs.
+    'src/validators/inline-script-allowlist.ts',
+    'src/generators/security-headers.ts',
+    'src/utils/html-escape.ts',
+    'src/utils/html-json.ts',
+    'src/validators/persisted-state.ts',
+    'scripts/lib/url-columns.ts',
+    'docker/cli/package.json',
+    'docker/cli/package-lock.json',
+    'src/watchdog/notify.ts',
+    'src/watchdog/host-files.ts',
+    'tests/security/osascript-argv.test.ts',
+    'tests/security/host-log-symlink.test.ts',
+    'tests/security/dependabot-container-cli.test.ts',
+    'tests/host-run-guard.test.ts',
   ];
   /** Listed by name in path-guard.json even where a broader glob already covers
    *  them, so narrowing that glob later cannot silently drop them. */
@@ -484,6 +500,14 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/watchdog-responders.test.ts',
     'tests/daily-pipeline-deferred-publish.test.ts',
     'tests/daily-pipeline-staging.test.ts',
+    'src/validators/inline-script-allowlist.ts',
+    'src/generators/security-headers.ts',
+    'src/utils/html-escape.ts',
+    'src/utils/html-json.ts',
+    'src/validators/persisted-state.ts',
+    'scripts/lib/url-columns.ts',
+    'docker/cli/**',
+    'tests/host-run-guard.test.ts',
   ];
   const MUST_NOT_PROTECT = [
     '.claude/notes/ledger.md',
@@ -506,6 +530,10 @@ describe('.github/path-guard.json — the shipped glob list', () => {
       'data/events.db', '.env', '.claude/settings.local.json', 'config/athens-venues.json',
       '.claude/agents/reviewer.md', 'docker/Dockerfile', 'SECURITY.md',
       'src/utils/outbound-url.ts', 'src/utils/safe-url.ts', 'src/ingest/allowed-senders.ts', 'scripts/lib/chrome-path.ts',
+      // Round 4: exist on the regular branch only (docker/ included).
+      'src/validators/inline-script-allowlist.ts', 'src/generators/security-headers.ts',
+      'src/validators/persisted-state.ts', 'scripts/lib/url-columns.ts',
+      'docker/cli/package.json', 'docker/cli/package-lock.json',
     ]);
     for (const p of MUST_PROTECT) {
       if (allowMissing.has(p)) continue;

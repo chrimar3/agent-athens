@@ -20,11 +20,13 @@
 // no timezone parse mismatch can read fresh-as-stale across midnight.
 
 import { Database } from "bun:sqlite";
-import { readFileSync, existsSync, appendFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { homedir } from "node:os";
 import { classifyDeadman, type DeadmanInputs, type DeadmanResult } from "../src/watchdog/classifier";
 import { planResponse, executeActions, hostStateDir, type ResponderState } from "../src/watchdog/responders";
+import { osascriptNotificationArgv } from "../src/watchdog/notify";
+import { appendFileNoFollow, hostLogDir } from "../src/watchdog/host-files";
 import { loadQuarantine, filterQuarantined } from "../src/utils/quarantine";
 import { findVenueConfig } from "../src/quality/location-filter";
 import { ACTIVE_SOURCE_IDS } from "../src/config/active-source-ids";
@@ -39,7 +41,11 @@ const dbPath = (): string => process.env.DEADMAN_DB_PATH || join(ROOT, "data", "
 // DEADMAN_DRY_RUN=1 → classify + print, skip all delivery (notify/email/heartbeat).
 // Lets the watchdog be verified against a degenerate DB without spamming channels.
 const DRY_RUN = process.env.DEADMAN_DRY_RUN === "1";
-const HEARTBEAT_CSV = join(ROOT, "logs", "deadman-heartbeat.csv");
+// Host-only (security loop round 4): logs/ is writable by pipeline
+// containers, which could plant a symlink there for this host job to write
+// through. The heartbeat lives in hostLogDir() and is opened O_NOFOLLOW.
+// Resolved at call time so tests can point AA_STATE_DIR at a temp dir.
+export const heartbeatPath = (): string => join(hostLogDir(), "deadman-heartbeat.csv");
 // Responder cooldown state (Phase 2A); deleting it merely re-enables actions
 // immediately, so it is safe to lose. Kept in the HOST-only state dir
 // (AA_STATE_DIR, default ~/.config/agentathens-docker) since security loop
@@ -328,11 +334,11 @@ const launchdHealth: PipelineHealthSource = {
 };
 
 // ── Delivery layers ──────────────────────────────────────────────────────────
+// The message is result.reasons[0], which can quote a scraped venue name.
+// It reaches AppleScript only as an argument (src/watchdog/notify.ts), never
+// as script text (security loop round 4).
 function fireNotification(title: string, subtitle: string, message: string): void {
-  // AppleScript string-literal escape — mirror check-deploy-cadence.ts:71-76.
-  const esc = (s: string) => s.replace(/"/g, '\\"');
-  const script = `display notification "${esc(message)}" with title "${esc(title)}" subtitle "${esc(subtitle)}" sound name "Basso"`;
-  Bun.spawnSync(["osascript", "-e", script]);
+  Bun.spawnSync(osascriptNotificationArgv({ title, subtitle, message, sound: "Basso" }));
 }
 
 /** Returns true if msmtp accepted the message. Never throws. */
@@ -387,14 +393,13 @@ export async function sendPush(
   }
 }
 
-function writeHeartbeat(row: Record<string, string | number | boolean>): void {
+export function writeHeartbeat(row: Record<string, string | number | boolean>): void {
   const header = "timestamp,status,deploy_age_h,enrich_age_h,pipeline_ok,email,reasons";
   const line = [
     row.timestamp, row.status, row.deploy_age_h, row.enrich_age_h, row.pipeline_ok, row.email,
     `"${String(row.reasons).replace(/"/g, "'")}"`,
   ].join(",");
-  if (!existsSync(HEARTBEAT_CSV)) appendFileSync(HEARTBEAT_CSV, header + "\n");
-  appendFileSync(HEARTBEAT_CSV, line + "\n");
+  appendFileNoFollow(heartbeatPath(), line + "\n", header + "\n");
 }
 
 function ageH(ms: number | null, now: number): string {
@@ -522,18 +527,26 @@ if (result.status === "OK") {
 }
 
 // Layer 3 — heartbeat (always; email column is the !ok marker on delivery failure).
-writeHeartbeat({
-  timestamp: tsIso,
-  status: result.status,
-  deploy_age_h: ageH(lastDeployMs, nowMs),
-  enrich_age_h: ageH(lastEnrichMs, nowMs),
-  pipeline_ok: pipelineHealthy,
-  email: emailState,
-  responder: responderLine,
-  reasons: result.reasons.join(" | "),
-});
+// A refused write (symlink planted at the path) must not hide the status, so
+// it is reported and turns the exit code non-zero instead of crashing.
+let heartbeatOk = true;
+try {
+  writeHeartbeat({
+    timestamp: tsIso,
+    status: result.status,
+    deploy_age_h: ageH(lastDeployMs, nowMs),
+    enrich_age_h: ageH(lastEnrichMs, nowMs),
+    pipeline_ok: pipelineHealthy,
+    email: emailState,
+    responder: responderLine,
+    reasons: result.reasons.join(" | "),
+  });
+} catch (e) {
+  heartbeatOk = false;
+  console.error(`[deadman] HEARTBEAT NOT WRITTEN to ${heartbeatPath()}: ${e instanceof Error ? e.message : String(e)}. If it is a symlink, something planted it: inspect it, delete it, and rerun the deadman.`);
+}
 
-process.exit(result.status === "OK" ? 0 : 1);
+process.exit(result.status === "OK" && heartbeatOk ? 0 : 1);
 }
 
 if (import.meta.main) {

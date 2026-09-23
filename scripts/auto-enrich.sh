@@ -25,6 +25,18 @@ unset CLAUDECODE 2>/dev/null || true
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+
+# host-guard:begin (pinned by tests/host-run-guard.test.ts)
+# Unattended claude sessions over scraped text run inside the hardened
+# container (docker/aa-run.sh enrichment sets AA_CONTAINER=1); a direct run on
+# the Mac needs an explicit, temporary override.
+if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" != "1" ]]; then
+    echo "auto-enrich: REFUSED — enrichment runs inside the container, not directly on this Mac." >&2
+    echo "auto-enrich: next: install it (docker/README.md) and run 'docker/aa-run.sh enrichment'; for a one-off host run set AA_ALLOW_HOST_RUN=1." >&2
+    exit 9
+fi
+# host-guard:end
+
 DB_PATH="$PROJECT_DIR/data/events.db"
 BRIEFS_DIR="$PROJECT_DIR/temp-briefs"
 # LOG_DIR_OVERRIDE (2026-08-11): test seam. Without it, the auth-precheck

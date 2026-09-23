@@ -10,9 +10,13 @@
 # owner merges it by hand after review.
 #
 # `docker` covers docker/Dockerfile: the digest-pinned base image (and the
-# Chromium it carries) would otherwise never get an update PR. The CLI
-# versions pinned as ARGs in that Dockerfile are not tracked by Dependabot;
-# bump them by hand.
+# Chromium it carries) would otherwise never get an update PR.
+#
+# `npm` in /docker/cli (security loop round 4) covers the command-line tools
+# baked into that image (claude-code, netlify-cli, bun), pinned by
+# docker/cli/package-lock.json and installed with `npm ci`. That lockfile is
+# npm's, not bun's, so it needs its own npm entry; without it those pinned
+# versions never get a security or version PR.
 version: 2
 updates:
   - package-ecosystem: "bun"
@@ -41,4 +45,14 @@ updates:
       day: "monday"
     groups:
       docker:
+        patterns: ["*"]
+
+  - package-ecosystem: "npm"
+    directory: "/docker/cli"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    groups:
+      container-cli:
         patterns: ["*"]

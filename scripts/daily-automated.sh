@@ -1235,6 +1235,19 @@ main() {
         esac
     done
 
+    # host-guard:begin (pinned by tests/host-run-guard.test.ts)
+    # This pipeline handles untrusted input — scraped pages, newsletters, AI
+    # sessions over them — and runs inside the hardened container
+    # (docker/aa-run.sh sets AA_CONTAINER=1). A run directly on the Mac, with
+    # its home folder, keychain and account-wide logins, needs an explicit,
+    # temporary override.
+    if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" != "1" ]]; then
+        echo "daily-automated: REFUSED — the pipeline runs inside the container, not directly on this Mac." >&2
+        echo "daily-automated: next: install it (docker/README.md, ~20 min) and run 'docker/aa-run.sh ${PIPELINE_MODE}'; for a one-off host run set AA_ALLOW_HOST_RUN=1." >&2
+        exit 9
+    fi
+    # host-guard:end
+
     # caffeinate:begin (pinned by tests/daily-pipeline-sleep-safety.test.ts)
     # Deploying runs take 2-4 h; on battery this laptop idle-sleeps after 1 min,
     # which suspends the run mid-upload (see deploy-watchdog note). Re-exec once

@@ -391,27 +391,49 @@ exec "${REAL_GIT}" "$@"
   });
 
   test('`bun run deploy` (package.json) refuses a local unreviewed commit — netlify is never invoked', () => {
+    // Security loop round 4: the manual path is scripts/redeploy.sh (quarantine
+    // refusal, full gate, artifact gate, state=ready check), never a bare netlify call.
     const pkg = JSON.parse(readFileSync(join(PROJECT_ROOT, 'package.json'), 'utf-8'));
     const cmd: string = pkg.scripts.deploy;
-    expect(cmd).toContain('bash scripts/deploy-gate.sh &&');
-    expect(cmd).not.toContain('--local-only');
+    expect(cmd).toBe('bash scripts/redeploy.sh');
     const r = fixture();
+    mkdirSync(join(r, 'scripts'));
+    copyFileSync(REDEPLOY, join(r, 'scripts/redeploy.sh'));
+    writeFileSync(join(r, 'scripts/deploy-gate.sh'), `#!/bin/bash\nexec bash "${GATE}" "$@"\n`);
+    writeFileSync(join(r, 'scripts/check-published-artifacts.ts'), 'process.exit(0);\n');
+    sh(r, ['git', 'add', '-A']);
+    sh(r, ['git', 'commit', '-q', '-m', 'add scripts']);
+    mergeUpstream(r);
+    mkdirSync(join(r, '.netlify'));
+    writeFileSync(join(r, '.netlify/state.json'), '{"siteId":"s1"}\n');
     const bin = fakeBin(r);
+    const state = mkdtempSync(join(tmpdir(), 'deploy-cmd-state-'));
+    tmpDirs.push(state);
     const sentinel = join(bin, 'netlify-called');
-    exe(join(bin, 'netlify'), `#!/bin/bash\necho "$*" >> "${sentinel}"\n`);
-    const run = () => sh(r, ['bash', '-c', cmd.replace('scripts/deploy-gate.sh', GATE)], { PATH: `${bin}:${process.env.PATH}` });
+    exe(join(bin, 'netlify'), `#!/bin/bash
+echo "$*" >> "${sentinel}"
+case "$1" in
+  deploy) echo '{"deploy_id":"d1"}' ;;
+  api) echo '{"state":"ready"}' ;;
+esac
+`);
+    const run = () => sh(r, ['bash', '-c', cmd], { PATH: `${bin}:${process.env.PATH}`, AA_STATE_DIR: state });
 
     writeFileSync(join(r, 'src/app.ts'), 'export const x = 13;\n');
     sh(r, ['git', 'commit', '-qam', 'unreviewed']);
     stamp(r, headSha(r));
     const res = run();
-    expect(res.code).not.toBe(0);
+    expect(res.code).toBe(2);
     expect(res.err).toContain('[origin-gate] REFUSED');
     expect(existsSync(sentinel)).toBe(false);
 
     mergeUpstream(r); // precondition: the same command deploys once the commit is reviewed
-    expect(run().code).toBe(0);
-    expect(readFileSync(sentinel, 'utf-8')).toContain('deploy --prod --no-build --dir=dist');
+    const ok = run();
+    expect(ok.code).toBe(0);
+    expect(ok.out).toContain('[redeploy] verified ready deploy_id=d1');
+    const netlifyCalls = readFileSync(sentinel, 'utf-8');
+    expect(netlifyCalls).toContain('deploy --prod --no-build --dir=dist');
+    expect(netlifyCalls).toContain('api getSiteDeploy');
   });
 });
 
@@ -530,11 +552,10 @@ describe('deploy-gate — seam guards (fail if the gate is removed from a call s
     expect(gateIdx).toBeLessThan(netlifyIdx);
   });
 
-  test('manual path: package.json "deploy" runs the gate before netlify deploy, with --no-build', () => {
+  test('manual path: package.json "deploy" is scripts/redeploy.sh and nothing else (no direct netlify call)', () => {
     const script: string = pkg.scripts.deploy;
-    expect(script).toContain('deploy-gate.sh');
-    expect(script).toContain('--no-build');
-    expect(script.indexOf('deploy-gate.sh')).toBeLessThan(script.indexOf('netlify deploy'));
+    expect(script).toBe('bash scripts/redeploy.sh');
+    expect(script).not.toContain('netlify');
   });
 
   test('redeploy.sh runs the FULL gate (origin gate included), the artifact gate and the quarantine check before netlify', () => {

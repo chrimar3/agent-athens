@@ -11,10 +11,11 @@
  * launchd: com.agentathens.digest, Sundays 08:30.
  */
 import { Database } from 'bun:sqlite';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import { DateTime } from 'luxon';
 import { loadQuarantine } from '../src/utils/quarantine';
+import { writeFileNoFollow } from '../src/watchdog/host-files';
 
 const ROOT = join(import.meta.dir, '..');
 
@@ -144,7 +145,9 @@ if (import.meta.main) {
   const outDir = join(ROOT, 'docs', 'digest');
   if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
   const outPath = join(outDir, `${weekLabel}.md`);
-  writeFileSync(outPath, md);
+  // No-follow (security loop round 4): refuse a symlink planted at the digest
+  // path rather than write through it as the owner.
+  writeFileNoFollow(outPath, md);
   console.log(`[digest] wrote ${outPath}`);
 
   // 5-line ntfy summary via the deadman's push layer (module import is safe:

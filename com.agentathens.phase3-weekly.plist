@@ -8,7 +8,7 @@
     <array>
         <string>/bin/bash</string>
         <string>-c</string>
-        <string>cd "/Users/chrism/Project with Claude/AgentAthens/agent-athens" &amp;&amp; bash scripts/phase3-weekly.sh >> logs/phase3-weekly.log 2>&amp;1</string>
+        <string>d="${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/logs"; mkdir -p "$d" &amp;&amp; exec &gt;&gt;"$d/phase3-weekly-stdout.log" 2&gt;&amp;1 &amp;&amp; cd "/Users/chrism/Project with Claude/AgentAthens/agent-athens" &amp;&amp; exec bash scripts/phase3-weekly.sh</string>
     </array>
     <key>StartCalendarInterval</key>
     <dict>
@@ -24,7 +24,8 @@
         <key>PATH</key>
         <string>/Users/chrism/.bun/bin:/Users/chrism/.local/bin:/usr/local/bin:/usr/bin:/bin</string>
     </dict>
-    <key>StandardErrorPath</key>
-    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/phase3-weekly-stderr.log</string>
+    <!-- Output goes to the host-only state folder (security loop round 4):
+         containers can write the repo logs/ folder, so a symlink planted there
+         would make launchd or this job write into any file the owner can write. -->
 </dict>
 </plist>

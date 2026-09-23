@@ -24,7 +24,10 @@ BENCH="$BASELINE_WT/benchmark/visibility-baseline-20260708"
 # LOG_DIR_OVERRIDE in auto-enrich.sh. launchd never sets them.
 PHASE3_WT="${PHASE3_WT_OVERRIDE:-/Users/chrism/Project with Claude/AgentAthens/agent-athens-phase3}"
 MAIN_REPO="/Users/chrism/Project with Claude/AgentAthens/agent-athens"
-LOG_DIR="${PHASE3_LOG_DIR_OVERRIDE:-$MAIN_REPO/logs}"
+# Host-only log folder (security loop round 4): pipeline containers can write
+# $MAIN_REPO/logs, so a symlink planted there would make this host job
+# truncate or append into any file the owner can write.
+LOG_DIR="${PHASE3_LOG_DIR_OVERRIDE:-${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/logs}"
 RUN_LOG="$LOG_DIR/phase3-weekly.log"
 CLAUDE_BIN="${CLAUDE_BIN:-$HOME/.local/bin/claude}"
 [ -x "$CLAUDE_BIN" ] || CLAUDE_BIN="$(command -v claude || echo /usr/local/bin/claude)"
@@ -34,6 +37,13 @@ ts() { date '+%Y-%m-%d %H:%M:%S'; }
 log() { echo "[$(ts)] $*" | tee -a "$RUN_LOG"; }
 
 mkdir -p "$LOG_DIR" 2>/dev/null || true
+# Refuse to write through a symlink, even in the host-only folder.
+for f in "$LOG_DIR" "$RUN_LOG" "$LOG_DIR/phase3-auth-precheck-last.log"; do
+  if [ -L "$f" ]; then
+    echo "[phase3-weekly] REFUSED — $f is a symlink; something planted it. Inspect it, delete it, then rerun bash scripts/phase3-weekly.sh." >&2
+    exit 1
+  fi
+done
 # The session and the self-test must see the same hook profile: the
 # unattended one. The enrichment profile (stricter) is never this script's.
 unset AA_ENRICHMENT_SESSION
@@ -124,7 +134,14 @@ layer1_status="ok"
 cd "$BASELINE_WT" || { log "FATAL: baseline worktree missing"; exit 1; }
 
 log "L1: refreshing DB snapshot for diagnostic"
-cp "$MAIN_REPO/data/events.db" "$PHASE3_WT/data/events.db" 2>>"$RUN_LOG" || layer1_status="db-copy-failed"
+# data/ is container-writable: a symlink there would make cp copy any file
+# the owner can read into the worktree the L2 session reads.
+if [ -L "$MAIN_REPO/data/events.db" ]; then
+  log "L1: REFUSED to copy $MAIN_REPO/data/events.db — it is a symlink (inspect and delete it)"
+  layer1_status="db-copy-refused-symlink"
+else
+  cp "$MAIN_REPO/data/events.db" "$PHASE3_WT/data/events.db" 2>>"$RUN_LOG" || layer1_status="db-copy-failed"
+fi
 
 log "L1: Perplexity probe (20 queries x 3 runs)"
 if ! PERPLEXITY_API_KEY="$(cat "$HOME/.config/agentathens/perplexity-api-key")" \
