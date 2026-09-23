@@ -10,6 +10,8 @@ usage: aa-run.sh JOB [args]
   freshness       daily-automated.sh freshness   (scrape → build; then publish)
   publish         daily-automated.sh publish     (push + deploy a built site)
   verify-live     print the live Netlify deploy id (compared on the Mac)
+  ingest          daily-automated.sh ingest      (newsletter email only)
+  restore ID      restore a recorded Netlify deploy
   enrichment      daily-automated.sh enrichment  (claude -p enrichment)
   daily           daily-automated.sh             (legacy full pipeline)
   visibility      fetch-bing-metrics.ts + monitor-search-visibility.ts
@@ -33,6 +35,8 @@ case "$job" in
         bun run scripts/monitor-search-visibility.ts || rc=$?
         exit "$rc" ;;
     verify-live) exec bash docker/verify-live.sh ;;
+    ingest) exec bash scripts/daily-automated.sh ingest "$@" ;;
+    restore) exec bash docker/restore-deploy.sh "$@" ;;
     site) exec bun run src/generate-site.ts "$@" ;;
     test) exec bun test "$@" ;;
     doctor) exec /usr/local/bin/aa-doctor ;;

@@ -31,7 +31,14 @@ REPO="$(cd "$HERE/.." && pwd)"
 JOB="${1:-help}"
 [ $# -gt 0 ] && shift
 
-fail() { echo "aa-run: $1" >&2; echo "aa-run: next: $2" >&2; exit "${3:-1}"; }
+fail() {
+    echo "aa-run: $1" >&2; echo "aa-run: next: $2" >&2
+    # Scheduled (non-interactive) runs have nobody watching the terminal.
+    if [ ! -t 1 ] && [ -f "$HERE/integrity-check.sh" ]; then
+        bash "$HERE/integrity-check.sh" notify "Job ${JOB:-?} did not run: $1" >/dev/null 2>&1 || true
+    fi
+    exit "${3:-1}"
+}
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] aa-run: $*"; }
 
 GIT_ID="GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL"
@@ -47,7 +54,9 @@ RW_TOP="data dist logs node_modules temp tmp temp-descriptions temp-briefs temp-
 # .env visible), GITRW (may commit).
 job_policy() {
     case "$1" in
-        scrape)     TOKENS="$GIT_ID"; SECRETS=no; DOTENV=yes; GITRW=yes ;;
+        scrape)     TOKENS="$GIT_ID"; SECRETS=no; DOTENV=${SCRAPE_DOTENV:-no}; GITRW=yes ;;
+        ingest)     TOKENS=""; SECRETS=no; DOTENV=yes; GITRW=no ;;
+        restore)    TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no ;;
         publish)    TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID $GIT_ID"; SECRETS=gsc; DOTENV=no; GITRW=yes ;;
         verify-live) TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no ;;
         legacy)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN $GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=yes ;;
@@ -62,7 +71,7 @@ job_policy() {
 }
 
 case "$JOB" in
-    freshness|publish|enrichment|daily|visibility|verify-live|site|test|shell|doctor|image|image-refresh|help) ;;
+    freshness|publish|enrichment|daily|visibility|verify-live|restore|site|test|shell|doctor|image|image-refresh|help) ;;
     -h|--help) JOB=help ;;
     *) fail "unknown job '$JOB'" "run 'docker/aa-run.sh help' for the list" 2 ;;
 esac
@@ -71,6 +80,7 @@ if [ "$JOB" = "help" ]; then
     echo "  image           build the container image (on the Mac)"
     echo "  image-refresh   rebuild from scratch to pick up system package fixes"
     echo "  verify-live     alert if the live site is not a deploy the pipeline made"
+    echo "  restore ID      restore a deploy recorded in deploys.log (watchdog rollback)"
     exit 0
 fi
 
@@ -125,7 +135,7 @@ if [ "$(uname -s)" = "Darwin" ]; then age_days=$(( ($(date +%s) - $(date -j -f %
 else age_days=$(( ($(date +%s) - $(date -d "$created" +%s)) / 86400 )); fi
 # Stale images are refused for the runs that load outside content; checks,
 # restores and the live-site check still run.
-case "$JOB" in doctor|shell|verify-live) stale_ok=yes ;; *) stale_ok=no ;; esac
+case "$JOB" in doctor|shell|verify-live|restore) stale_ok=yes ;; *) stale_ok=no ;; esac
 if [ "$age_days" -gt 30 ] && [ "$stale_ok" = "no" ] && [ -z "${AA_ALLOW_STALE_IMAGE:-}" ]; then
     fail "image is $age_days days old — Chromium and system packages are missing security fixes" \
          "run 'docker/aa-run.sh image-refresh' (or set AA_ALLOW_STALE_IMAGE=1 for one run)" 7
@@ -249,6 +259,7 @@ run_container() {
         case " $TOKENS " in *" $key "*) export "$key=${line#*=}"; env_flags+=(-e "$key") ;; esac
     done < "$ENV_FILE"
     [ -n "${AA_DEFER_PUBLISH:-}" ] && env_flags+=(-e AA_DEFER_PUBLISH)
+    [ -n "${AA_SKIP_INGEST:-}" ] && env_flags+=(-e AA_SKIP_INGEST)
 
     local mounts=() entry
     while IFS= read -r entry; do
@@ -333,9 +344,18 @@ case "$JOB" in
         backup_db
         if grep -q 'AA_DEFER_PUBLISH' "$REPO/scripts/daily-automated.sh"; then
             rm -f "$REPO/.pipeline-publish-ready"
+            if grep -q 'AA_SKIP_INGEST' "$REPO/scripts/daily-automated.sh"; then
+                # Email first, in a run with the mailbox password and no browser;
+                # the scrape run then sees no .env at all.
+                clear_lock "$REPO/.pipeline-ingest.lock"
+                run_container ingest "$NAME-ingest" ingest || log "WARNING: email ingest failed; continuing with scraping"
+                export AA_SKIP_INGEST=1
+            else
+                SCRAPE_DOTENV=yes   # older pipeline: ingest still runs inside the scrape run
+            fi
             export AA_DEFER_PUBLISH=1
             rc=0; run_container scrape "$NAME" freshness "$@" || rc=$?
-            unset AA_DEFER_PUBLISH
+            unset AA_DEFER_PUBLISH AA_SKIP_INGEST
             [ "$rc" -eq 0 ] || exit "$rc"
             if [ -f "$REPO/.pipeline-publish-ready" ]; then
                 clear_lock "$REPO/.pipeline-publish.lock"
@@ -351,6 +371,14 @@ case "$JOB" in
     publish)
         clear_lock "$REPO/.pipeline-publish.lock"
         run_container publish "$NAME" publish "$@"
+        ;;
+    restore)
+        # Only a deploy the pipeline itself recorded may be restored.
+        id="${1:-}"
+        printf '%s' "$id" | grep -qE '^[0-9a-f]{20,40}$' || fail "restore needs a deploy id" "docker/aa-run.sh restore <id from $DEPLOYS_LOG>" 2
+        { [ -f "$DEPLOYS_LOG" ] && awk '{print $2}' "$DEPLOYS_LOG" | grep -qxF "$id"; } \
+            || fail "deploy $id is not in $DEPLOYS_LOG" "only deploys the pipeline recorded can be restored" 2
+        run_container restore "$NAME" restore "$id"
         ;;
     verify-live)
         rc=0; run_container verify-live "$NAME" verify-live || rc=$?

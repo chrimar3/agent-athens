@@ -28,6 +28,9 @@
 # folder, $AA_STATE_DIR/QUARANTINE is written (aa-run.sh then refuses every
 # job until you review and delete it), and an alert is sent.
 set -u
+# Replacement refs (refs/replace/*) make git show substituted content for any
+# object; every git command here must see the real objects.
+export GIT_NO_REPLACE_OBJECTS=1
 
 # What a pipeline commit may touch (run_deploy's allowlist is a subset).
 DATA_PATHS_RE='^(data/|docs/DECISIONS-QUEUE\.md$)'
@@ -101,13 +104,16 @@ staged_hash() {
     (cd "$REPO" && git diff --cached --binary 2>/dev/null) | shasum -a 256 | awk '{print $1}'
 }
 
-# Every local ref except the checked-out branch (covered by the commit check),
-# pipeline-data (covered below), remote-tracking refs and quarantine branches.
+# Every ref except the checked-out branch (covered by the commit check),
+# pipeline-data (covered below), remote-tracking refs and quarantine branches:
+# local branches, tags, the stash, notes and replace refs (refs/replace can
+# swap the content git shows for any object) must not move during a run.
 other_refs_hash() {
     local current
     current="$(cd "$REPO" && git symbolic-ref -q HEAD || echo DETACHED)"
-    (cd "$REPO" && git for-each-ref --format='%(refname) %(objectname)' refs/heads refs/tags refs/stash 2>/dev/null) \
-        | grep -vE "^($current|refs/heads/pipeline-data|refs/heads/quarantine/[^ ]*) " | shasum -a 256 | awk '{print $1}'
+    (cd "$REPO" && git for-each-ref --format='%(refname) %(objectname)' 2>/dev/null) \
+        | grep -vE "^($current|refs/heads/pipeline-data|refs/heads/quarantine/[^ ]*|refs/remotes/[^ ]*) " \
+        | shasum -a 256 | awk '{print $1}'
 }
 
 # Symlinks in the folders runs may write. A Mac-side job writing a log or
@@ -167,7 +173,7 @@ case "$MODE" in
         [ "$(staged_hash)" = "$(sed -n 's/^staged=//p' "$STATE_FILE")" ] \
             || quarantine "changes were staged for your next commit during the run (inspect 'git diff --cached')" "" ""
         [ "$(other_refs_hash)" = "$(sed -n 's/^refs=//p' "$STATE_FILE")" ] \
-            || quarantine "a branch, tag or the stash other than the pipeline's own moved during the run (compare 'git for-each-ref')" "" ""
+            || quarantine "a branch, tag, the stash, a note or a replace ref moved during the run (compare 'git for-each-ref')" "" ""
         links="$(find_rw_symlinks)"
         [ -z "$links" ] || quarantine "symlink(s) appeared in folders runs may write: $(echo "$links" | head -5 | tr '\n' ' ')" "" ""
         rm -f "$STATE_FILE"

@@ -40,7 +40,15 @@ both tokens.)
 
 The API-key folder is mounted only where it is used: the scrape run gets none
 of it, the publish run gets only the Search Console key (sitemap submission),
-`visibility` gets the folder read-only.
+`visibility` gets the folder read-only. Newsletter email is fetched in its own
+`ingest` run (mailbox password from `.env`, no browser) before the scrape run,
+which then sees no `.env` at all (needs the pipeline's `AA_SKIP_INGEST`
+support from the protected-paths PR).
+
+Rollback without a Mac-side Netlify login: `docker/aa-run.sh restore <id>`
+restores a deploy, but only one recorded in `deploys.log`; the watchdog uses
+the same path. Set `AA_OFFSITE_CMD` in your shell before
+`docker/install-launchd.sh --apply` and the scheduled runs inherit it.
 
 **Host runs are refused.** Once the protected-paths PR is merged,
 `scripts/daily-automated.sh` and `scripts/auto-enrich.sh` exit with code 9

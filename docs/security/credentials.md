@@ -8,7 +8,7 @@ current when a credential is added or moved.
 |---|---|---|---|---|
 | GitHub token (`GH_TOKEN`) | `~/.config/agentathens-docker/docker.env` | freshness: `git push`, yield canary issues | Push to this repo; open/close issues | Fine-grained PAT, only `chrimar3/agent-athens`; Contents RW, Issues RW, Metadata R; 90-day expiry |
 | GitHub CLI login (`gh auth login`, macOS keychain) | Mac, host mode only | legacy host pipeline: `git push` credential helper | Whatever scopes you granted gh, often all your repos | Remove once the container runs the pipeline: `gh auth logout` |
-| Netlify CLI login (`netlify login`) | `~/Library/Preferences/netlify/config.json` | legacy host pipeline and `bun run deploy` | **Account-wide** | Remove once the container runs the pipeline: `netlify logout` |
+| Netlify CLI login (`netlify login`) | `~/Library/Preferences/netlify/config.json` | legacy host pipeline, `bun run deploy` / `scripts/redeploy.sh` | **Account-wide** | The watchdog's rollback now runs through `docker/aa-run.sh restore`, so after the container switch you can `netlify logout`; log back in only for a manual `bun run deploy` |
 | Netlify site id (`NETLIFY_SITE_ID`) | `~/.config/agentathens-docker/docker.env` | publish, verify-live | Not a secret; pinned so no container-writable file picks the target site | — |
 | Netlify token (`NETLIFY_AUTH_TOKEN`) | `~/.config/agentathens-docker/docker.env` | freshness: `netlify deploy` | **Account-wide**: deploy or delete any site on the account | Dedicated token with expiry; keep only this site on the account, or a separate Netlify account for it |
 | Claude token (`CLAUDE_CODE_OAUTH_TOKEN`) | `~/.config/agentathens-docker/docker.env` | enrichment: `claude -p` | Uses your Claude subscription quota | `claude setup-token`; revoke from claude.ai settings |
@@ -19,7 +19,7 @@ current when a credential is added or moved.
 | Perplexity key | `~/.config/agentathens/perplexity-api-key` | phase3-weekly (host) | API spend | Spending cap on the provider |
 | msmtp app password | `~/.msmtprc` | deadman watchdog email (host) | Send mail as that account | Dedicated alerts mailbox |
 | ntfy topic | `~/.config/agentathens/ntfy-topic` or `AGENTATHENS_NTFY_TOPIC` | deadman and integrity-check alerts | Read or spoof alerts | Long random topic, or ntfy access tokens. **The topic that used to be in `config/monitoring.json` is public in git history: treat it as burned, create a new one and resubscribe your phone** |
-| Google Maps browser key | older rendered pages under `data/event-pages/` | public web pages | Maps billing | HTTP-referrer restriction to `agentathens.com/*`, Maps JavaScript API only |
+| Google Maps browser keys | saved third-party pages under `data/event-pages/`, `data/html-to-parse/` | nothing: they belong to the scraped sites | none for this project (they are the other sites' public browser keys) | the project has no Maps key of its own; the folders are allowlisted in `.github/gitleaks.toml` |
 | IndexNow key | `config/indexnow.json` | freshness: IndexNow ping | None — public by design (the key file is served) | — |
 
 ## File permissions on the Mac

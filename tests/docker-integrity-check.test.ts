@@ -156,7 +156,25 @@ describe('integrity-check.sh', () => {
     git('update-ref', 'refs/heads/feature', c);
     const r = verify();
     expect(r.code).toBe(1);
-    expect(r.out).toContain('branch, tag or the stash');
+    expect(r.out).toContain('the stash, a note or a replace ref');
+  });
+
+  test('a planted replace ref (swaps what git shows for an object) is quarantined', () => {
+    expect(snapshot().code).toBe(0);
+    writeFileSync(join(repo, 'scripts/job.ts'), 'console.log("planted")\n');
+    const blob = git('hash-object', '-w', 'scripts/job.ts').out.trim();
+    git('checkout', '-q', 'HEAD', '--', 'scripts/job.ts');
+    const orig = git('rev-parse', 'HEAD:scripts/job.ts').out.trim();
+    git('replace', orig, blob);
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('replace ref');
+  });
+
+  test('a planted git note is quarantined', () => {
+    expect(snapshot().code).toBe(0);
+    git('notes', 'add', '-m', 'x', 'HEAD');
+    expect(verify().code).toBe(1);
   });
 
   test('a symlink planted in a writable folder is quarantined', () => {

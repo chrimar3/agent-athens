@@ -63,7 +63,10 @@ loaded() { launchctl print "$DOMAIN/$1" >/dev/null 2>&1; }
 disabled() { launchctl print-disabled "$DOMAIN" 2>/dev/null | grep -qE "\"$1\" => (true|disabled)"; }
 
 write_plist() {  # name job hour minute weekday
-    local label="com.agentathens.docker.$1" file="$AGENTS/com.agentathens.docker.$1.plist" wd=""
+    local label="com.agentathens.docker.$1" file="$AGENTS/com.agentathens.docker.$1.plist" wd="" offsite=""
+    # Carry the off-machine backup command into scheduled runs (see docker/README.md).
+    [ -n "${AA_OFFSITE_CMD:-}" ] && offsite="        <key>AA_OFFSITE_CMD</key><string>$(xml "$AA_OFFSITE_CMD")</string>
+"
     [ -n "$5" ] && wd="        <key>Weekday</key><integer>$5</integer>
 "
     cat > "$file" <<EOF
@@ -89,7 +92,7 @@ $wd        <key>Hour</key><integer>$3</integer>
     <dict>
         <key>PATH</key><string>/usr/local/bin:/opt/homebrew/bin:/Applications/Docker.app/Contents/Resources/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
         <key>TZ</key><string>Europe/Athens</string>
-    </dict>
+$offsite    </dict>
     <key>StandardOutPath</key><string>$(xml "$LOGDIR/docker-$1.log")</string>
     <key>StandardErrorPath</key><string>$(xml "$LOGDIR/docker-$1.log")</string>
     <key>RunAtLoad</key><false/>

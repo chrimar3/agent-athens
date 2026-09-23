@@ -92,6 +92,23 @@ describe('docker/aa-run.sh least privilege', () => {
     expect(wrapper).toContain('gcp-kpi-reader.json:/home/pwuser/.config/agentathens/gcp-kpi-reader.json:ro');
   });
 
+  test('email ingest runs on its own; the Chrome scrape run sees no .env by default', () => {
+    expect(policy('scrape')).toContain('DOTENV=${SCRAPE_DOTENV:-no}');
+    expect(policy('ingest')).toContain('TOKENS=""');
+    expect(wrapper).toMatch(/run_container ingest[\s\S]*export AA_SKIP_INGEST=1[\s\S]*run_container scrape/);
+  });
+
+  test('restore only accepts a deploy id the pipeline recorded', () => {
+    expect(wrapper).toMatch(/restore\)[\s\S]{0,400}grep -qxF "\$id"[\s\S]{0,200}only deploys the pipeline recorded/);
+    expect(policy('restore')).toMatch(/TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no/);
+    const r = Bun.spawnSync(['bash', join(ROOT, 'docker/restore-deploy.sh'), 'not-hex'], { env: { PATH: process.env.PATH ?? '', NETLIFY_AUTH_TOKEN: 'x', NETLIFY_SITE_ID: 'y' } });
+    expect(r.exitCode).toBe(2);
+  });
+
+  test('scheduled runs that refuse to start send an alert', () => {
+    expect(wrapper).toMatch(/fail\(\) \{[\s\S]{0,300}! -t 1[\s\S]{0,200}integrity-check\.sh" notify/);
+  });
+
   test('freshness defers publishing to a separate run when the pipeline supports it', () => {
     expect(wrapper).toMatch(/export AA_DEFER_PUBLISH=1[\s\S]*run_container scrape[\s\S]*run_container publish/);
   });
@@ -124,7 +141,7 @@ describe('docker/aa-run.sh least privilege', () => {
   });
 
   test('stale images are refused except for checks and restores', () => {
-    expect(wrapper).toContain('case "$JOB" in doctor|shell|verify-live) stale_ok=yes');
+    expect(wrapper).toContain('case "$JOB" in doctor|shell|verify-live|restore) stale_ok=yes');
     expect(wrapper).toMatch(/-gt 30 \] && \[ "\$stale_ok" = "no" \][\s\S]{0,300}\s7\n/);
   });
 
@@ -154,6 +171,9 @@ describe('docker/install-launchd.sh', () => {
   test('wrapper logs go to the host-only state folder, not the repo', () => {
     expect(installer).toContain('LOGDIR="${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/logs"');
     expect(installer).not.toContain('$REPO/logs/docker-');
+  });
+  test('carries AA_OFFSITE_CMD into the generated plists when set', () => {
+    expect(installer).toContain('<key>AA_OFFSITE_CMD</key><string>$(xml "$AA_OFFSITE_CMD")</string>');
   });
   test('schedules the live-site check and the weekly image rebuild', () => {
     expect(installer).toContain('verify-live|verify-live|12|15|');
