@@ -16,6 +16,7 @@ import { Database } from 'bun:sqlite';
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { isCurrentSql, athensTodaySql } from '../src/db/effective-end-sql';
+import { countListedEventsInDb } from '../src/utils/listed-count';
 
 const ROOT = resolve(import.meta.dir, '..');
 const DEFAULTS = {
@@ -68,7 +69,11 @@ export interface Scoreboard {
   // Live rows only (merged_into IS NULL) — intentionally lower than
   // health_report.database.total, which is health-check's raw row count.
   total_events: number;
+  // Current live ROWS of every location status — not what the site lists.
   upcoming_events: number;
+  // Events the site lists: the one shared count (src/utils/listed-count.ts),
+  // the same number llms.txt and the health report state.
+  listed_events: number;
   per_source: Record<string, number>;
   health_report: HealthReportBlock;
   // Per-sensor verdict for the Analyst's precondition step: 'malformed' means
@@ -131,7 +136,8 @@ export function parseHealthReport(text: string, fileName: string): HealthReportB
         events: Number(m[3]),
         delta: m[4] === 'same' ? 0 : Number(m[4]),
       };
-    } else if (section === 'DATABASE' && (m = line.match(/^\s+Total: (\d+) \| Visible: (\d+) \| Hidden: (\d+)/))) {
+    } else if (section === 'DATABASE' && (m = line.match(/^\s+(?:Total|All rows): (\d+) \| (?:Visible|Publishable current rows[^:]*): (\d+) \| (?:Hidden|Other rows): (\d+)/))) {
+      // Pre-2026-09-23 reports say Total/Visible/Hidden; later ones label the same counts as rows.
       block.database = { total: Number(m[1]), visible: Number(m[2]), hidden: Number(m[3]), new_unverified_venues: 0 };
     } else if (section === 'DATABASE' && (m = line.match(/^\s+New unverified venues: (\d+)/))) {
       // health-check omits this line when the count is 0, hence the default above.
@@ -205,7 +211,7 @@ export function openEventsDbReadOnly(dbPath: string): Database {
 // every count here is over live rows only, or the same event counts N times.
 const LIVE = 'merged_into IS NULL';
 
-function readDbCounts(dbPath: string): Pick<Scoreboard, 'total_events' | 'upcoming_events' | 'per_source'> {
+function readDbCounts(dbPath: string): Pick<Scoreboard, 'total_events' | 'upcoming_events' | 'listed_events' | 'per_source'> {
   const db = openEventsDbReadOnly(dbPath);
   try {
     const total = (db.prepare(`SELECT COUNT(*) AS n FROM events WHERE ${LIVE}`).get() as { n: number }).n;
@@ -213,7 +219,7 @@ function readDbCounts(dbPath: string): Pick<Scoreboard, 'total_events' | 'upcomi
     const rows = db.prepare(`SELECT source, COUNT(*) AS n FROM events WHERE ${LIVE} GROUP BY source ORDER BY source`).all() as Array<{ source: string; n: number }>;
     const per_source: Record<string, number> = {};
     for (const r of rows) per_source[r.source] = r.n;
-    return { total_events: total, upcoming_events: upcoming, per_source };
+    return { total_events: total, upcoming_events: upcoming, listed_events: countListedEventsInDb(db), per_source };
   } catch (e) {
     if (e instanceof ScoreboardError) throw e;
     throw new ScoreboardError(
@@ -273,7 +279,7 @@ if (import.meta.main) {
   try {
     const sb = assembleScoreboard(parseArgs(process.argv.slice(2)));
     console.log(
-      `assemble-scoreboard: wrote scoreboard (total=${sb.total_events}, upcoming=${sb.upcoming_events}, ` +
+      `assemble-scoreboard: wrote scoreboard (listed=${sb.listed_events}, total_rows=${sb.total_events}, current_rows=${sb.upcoming_events}, ` +
         `report=${sb.health_report.report_file}, health_report=${sb.sensor_status.health_report}, age_days=${sb.health_report.report_age_days})`,
     );
   } catch (e) {

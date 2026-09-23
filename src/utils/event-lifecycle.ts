@@ -100,9 +100,13 @@ export function resolveEffectiveEnd(event: {
   startDate: string;
   endDate?: string | null;
   type?: string;
+  presumedEndDate?: string;
 }): EffectiveEnd {
   if (event.endDate) {
     return { date: event.endDate.substring(0, 10), presumed: false };
+  }
+  if (event.presumedEndDate) {
+    return { date: event.presumedEndDate.substring(0, 10), presumed: true };
   }
   const startOnly = event.startDate.substring(0, 10);
   if (isRunImplyingType(event.type)) {

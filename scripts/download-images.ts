@@ -9,6 +9,8 @@
 import { Database } from 'bun:sqlite';
 import { join } from 'path';
 import { processEventImage } from '../src/images/image-pipeline';
+import { excludeQuarantinedRows, QUARANTINE_PATH } from '../src/images/quarantine-filter';
+import { loadQuarantine, type QuarantineRegistry } from '../src/utils/quarantine';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 
@@ -25,10 +27,13 @@ const CONCURRENCY = 5;
 /** Rows worth downloading. Exclusions (2026-08-11, the 0/481 daily-retry loop):
  *  - /lmnts/events/ URLs are permanently dead (502/404 — fix-athinorama-images.ts:5);
  *    retrying them every run made the summary read "Downloaded: 0 | Failed: 481".
- *  - merged_into rows are phantom losers with no live page — no image needed. */
+ *  - merged_into rows are phantom losers with no live page — no image needed.
+ *  - quarantined sources (2026-09-23: 106 of 118 were clubber.gr HTML walls);
+ *    filtered before the limit so they cannot fill the batch. */
 export function selectImageRows(
   db: Database,
   opts: { force?: boolean; sourceFilter?: string | null; limit?: number | null },
+  quarantine: QuarantineRegistry = loadQuarantine(QUARANTINE_PATH),
 ): Array<{ id: string; image_url: string; source: string }> {
   const conditions = [
     'image_url IS NOT NULL',
@@ -41,9 +46,9 @@ export function selectImageRows(
     conditions.push('source = $source');
     params.$source = opts.sourceFilter;
   }
-  let query = `SELECT id, image_url, source FROM events WHERE ${conditions.join(' AND ')} ORDER BY start_date DESC`;
-  if (opts.limit) query += ` LIMIT ${opts.limit}`;
-  return db.prepare(query).all(params) as Array<{ id: string; image_url: string; source: string }>;
+  const query = `SELECT id, image_url, source FROM events WHERE ${conditions.join(' AND ')} ORDER BY start_date DESC`;
+  const rows = excludeQuarantinedRows(db.prepare(query).all(params) as Array<{ id: string; image_url: string; source: string }>, quarantine);
+  return opts.limit ? rows.slice(0, opts.limit) : rows;
 }
 
 async function main() {

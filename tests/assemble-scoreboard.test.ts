@@ -289,7 +289,7 @@ describe('assembleScoreboard — output shape', () => {
 
   test('required top-level keys are all present', () => {
     expect(Object.keys(parsed).sort()).toEqual(
-      ['citations', 'crawlers', 'generated_at', 'health_report', 'per_source', 'sensor_status', 'total_events', 'upcoming_events'].sort(),
+      ['citations', 'crawlers', 'generated_at', 'health_report', 'listed_events', 'per_source', 'sensor_status', 'total_events', 'upcoming_events'].sort(),
     );
   });
 });

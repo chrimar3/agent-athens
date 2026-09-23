@@ -10,7 +10,7 @@ import type { Locale } from '../i18n/strings';
 import { STRINGS } from '../i18n/strings';
 import type { Event } from '../types';
 import { formatGreekDateOnly, formatPriceGreek } from './i18n';
-import { formatExhibitionDateRange } from './filters';
+import { formatExhibitionDateRange, isPresumedRunning } from './filters';
 import { DateTime } from 'luxon';
 import { ATHENS_TZ, ENGLISH_DAYS, ENGLISH_MONTHS, ENGLISH_MONTHS_SHORT, parseISODate, toAthensDateTime, weekdayIndex } from './format-date';
 
@@ -54,7 +54,7 @@ export function formatDateRange(event: Event, locale: Locale): string {
   // Non-exhibitions show only the start (mirrors formatExhibitionDateRange).
   if (event.type !== 'exhibition') return start.text;
   const end = event.endDate ? short(event.endDate) : null;
-  if (!end) return `${start.text} - ${STRINGS.en.ongoing}`;
+  if (!end) return isPresumedRunning(event) ? `${start.text} - ${STRINGS.en.ongoing}` : start.text;
 
   const thisYear = DateTime.now().setZone(ATHENS_TZ).year;
   if (start.year !== end.year) return `${start.text} ${start.year} - ${end.text} ${end.year}`;

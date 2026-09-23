@@ -19,6 +19,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 // between 00:00 and 03:00 Athens and would read as a stale sensor).
 import { isCurrentSql } from '../src/db/effective-end-sql';
 import { getAthensTodayStr } from '../src/utils/event-lifecycle';
+import { countListedEventsInDb } from '../src/utils/listed-count';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const REPORTS_DIR = join(import.meta.dir, '../data/health-reports');
@@ -28,6 +29,8 @@ const REPORTS_DIR = join(import.meta.dir, '../data/health-reports');
 export const BUILD_TIME_WARN_MS = 2_400_000;
 
 // Use the same Athens day and effective-end rules for every event ratio.
+// These are ROWS (before dedup, cancellation and hold-backs), not the events
+// the site lists — that number comes only from getListedCount().
 const VISIBLE_UPCOMING = `
   location_status IN ('verified_athens', 'pass_through')
   AND merged_into IS NULL
@@ -135,6 +138,26 @@ export function getDatabaseSummary(dbIn?: Database): { total: number; visible: n
     const unverified = (db.prepare("SELECT COUNT(*) as count FROM events WHERE location_status = 'unverified'").get() as { count: number }).count;
     return { total, visible, hidden: total - visible, unverified };
   } finally { if (!dbIn) db.close(); }
+}
+
+/** Events the site lists — the one shared count (src/utils/listed-count.ts). */
+export function getListedCount(dbIn?: Database): number {
+  const db = dbIn ?? getDb();
+  try {
+    return countListedEventsInDb(db);
+  } finally { if (!dbIn) db.close(); }
+}
+
+/**
+ * DATABASE section body. The listed count leads; the row counts keep their
+ * values but are labelled as rows. scripts/assemble-scoreboard.ts parses the
+ * second line — change both together.
+ */
+export function formatDatabaseSection(summary: { total: number; visible: number; hidden: number }, listed: number): string[] {
+  return [
+    `  Listed events (what the site lists): ${listed}`,
+    `  All rows: ${summary.total} | Publishable current rows (before dedup and hold-backs): ${summary.visible} | Other rows: ${summary.hidden}`,
+  ];
 }
 
 function getNewUnverifiedVenues(): string[] {
@@ -295,8 +318,7 @@ function generateDailyReport(): string {
   lines.push('DATABASE');
   lines.push('-'.repeat(50));
 
-  const dbSummary = getDatabaseSummary();
-  lines.push(`  Total: ${dbSummary.total} | Visible: ${dbSummary.visible} | Hidden: ${dbSummary.hidden}`);
+  lines.push(...formatDatabaseSection(getDatabaseSummary(), getListedCount()));
 
   const newVenues = getNewUnverifiedVenues();
   if (newVenues.length > 0) {
@@ -315,7 +337,7 @@ function generateDailyReport(): string {
   if (genStats) {
     const buildTime = (genStats.build_duration_ms / 1000).toFixed(1);
     const schemaStats = getSchemaValidationStats();
-    lines.push(`  v ${buildTime}s | ${genStats.pages_generated} pages | Schema valid: ${schemaStats.valid}/${schemaStats.total}`);
+    lines.push(`  v ${buildTime}s | ${genStats.pages_generated} pages | Schema valid: ${schemaStats.valid}/${schemaStats.total} publishable current rows`);
 
     if (genStats.build_duration_ms > BUILD_TIME_WARN_MS) {
       alerts.push({ level: 'WARNING', message: `Build time ${buildTime}s exceeds ${BUILD_TIME_WARN_MS / 1000}s threshold` });
@@ -334,7 +356,7 @@ function generateDailyReport(): string {
   const enrichmentPct = enrichmentStats.total > 0
     ? ((enrichmentStats.enriched / enrichmentStats.total) * 100).toFixed(1)
     : '0.0';
-  lines.push(`  ${enrichmentStats.enriched}/${enrichmentStats.total} (${enrichmentPct}%) enriched`);
+  lines.push(`  ${enrichmentStats.enriched}/${enrichmentStats.total} (${enrichmentPct}%) enriched (publishable current rows)`);
   lines.push('');
 
   // ALERTS SECTION

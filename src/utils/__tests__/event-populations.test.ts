@@ -49,3 +49,16 @@ describe('selectUpcomingListing', () => {
     expect(out.map(e => e.id)).toEqual(['soon', 'run']);
   });
 });
+
+describe('selectPublishedPopulation — titles placing the event in another city', () => {
+  test('are held back and counted; Athens titles are kept', async () => {
+    const { getRejectedCityNames } = await import('../../quality/location-filter');
+    expect(getRejectedCityNames()).toContain('Λάρισα'); // precondition: live blacklist still lists the city
+    const r = selectPublishedPopulation([
+      ev({ id: 'larisa', title: 'WANG LIVE ΛΑΡΙΣΑ // 20.11.2026 // CIRCUS' }),
+      ev({ id: 'athens', title: 'Κρατική Ορχήστρα Θεσσαλονίκης στο Μέγαρο' }),
+    ]);
+    expect(r.events.map(e => e.id)).toEqual(['athens']);
+    expect(r.cityHeld).toBe(1);
+  });
+});

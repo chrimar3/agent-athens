@@ -40,6 +40,35 @@ export function getReferer(source: string): string | undefined {
   return undefined;
 }
 
+export type SniffedImageType = 'jpeg' | 'png' | 'gif' | 'webp' | 'avif';
+
+function asciiAt(buf: Uint8Array, offset: number, text: string): boolean {
+  if (buf.length < offset + text.length) return false;
+  for (let i = 0; i < text.length; i++) {
+    if (buf[offset + i] !== text.charCodeAt(i)) return false;
+  }
+  return true;
+}
+
+/**
+ * Identify a raster image by its leading bytes. Returns null for anything
+ * else (HTML challenge pages, HEIC, truncated bodies).
+ */
+export function sniffImageType(buf: Uint8Array): SniffedImageType | null {
+  if (buf.length >= 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return 'jpeg';
+  if (buf.length >= 8 && buf[0] === 0x89 && asciiAt(buf, 1, 'PNG') && buf[4] === 0x0d && buf[5] === 0x0a && buf[6] === 0x1a && buf[7] === 0x0a) return 'png';
+  if (asciiAt(buf, 0, 'GIF87a') || asciiAt(buf, 0, 'GIF89a')) return 'gif';
+  if (asciiAt(buf, 0, 'RIFF') && asciiAt(buf, 8, 'WEBP')) return 'webp';
+  if (asciiAt(buf, 4, 'ftyp')) {
+    // ISO-BMFF: major brand at 8, compatible brands from 16 to the box end.
+    const boxEnd = Math.min(buf.length, ((buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3]) >>> 0);
+    for (let at = 8; at + 4 <= boxEnd; at += at === 8 ? 8 : 4) {
+      if (asciiAt(buf, at, 'avif') || asciiAt(buf, at, 'avis')) return 'avif';
+    }
+  }
+  return null;
+}
+
 /**
  * Download an image from a URL with appropriate headers.
  * Returns the image buffer on success, null on failure.
@@ -70,14 +99,22 @@ export async function downloadImage(imageUrl: string, source: string): Promise<B
       return null;
     }
 
-    const contentType = response.headers.get('content-type') || '';
-    if (!contentType.startsWith('image/')) {
+    const contentType = (response.headers.get('content-type') || '').toLowerCase();
+    const declaredImage = contentType.startsWith('image/');
+    // Some CDNs (cometogether) serve real JPEG/PNG as a generic binary type;
+    // those pass only when the bytes prove an image. HTML never passes.
+    const genericBinary = contentType === '' || /^(application|binary)\/octet-stream\b/.test(contentType);
+    if (!declaredImage && !genericBinary) {
       console.log(`  ⚠ Not an image (${contentType}) for ${imageUrl}`);
       return null;
     }
 
-    const arrayBuffer = await response.arrayBuffer();
-    return Buffer.from(arrayBuffer);
+    const buffer = Buffer.from(await response.arrayBuffer());
+    if (!declaredImage && !sniffImageType(buffer)) {
+      console.log(`  ⚠ Not an image (${contentType || 'no content-type'}, bytes are not JPEG/PNG/WebP/GIF/AVIF) for ${imageUrl}`);
+      return null;
+    }
+    return buffer;
   } catch (error: any) {
     if (error.name === 'AbortError') {
       console.log(`  ⚠ Timeout downloading ${imageUrl}`);
