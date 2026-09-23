@@ -243,9 +243,9 @@ export function renderEventBlock(event: Event, locale: Locale = 'el'): string {
   const linkPrefix = locale === 'en' ? '/en/events' : '/events';
 
   return `<article class="hub-event-block">
-    <h3><a href="${linkPrefix}/${slug}/">${event.title}</a></h3>
-    <p class="hub-event-meta">${event.venue.name} · ${dateStr} · ${price}</p>
-    <p class="hub-event-excerpt">${excerpt}</p>
+    <h3><a href="${linkPrefix}/${slug}/">${escapeHtml(event.title)}</a></h3>
+    <p class="hub-event-meta">${escapeHtml(event.venue.name)} · ${dateStr} · ${price}</p>
+    <p class="hub-event-excerpt">${escapeHtml(excerpt)}</p>
   </article>`;
 }
 

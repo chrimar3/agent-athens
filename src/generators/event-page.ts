@@ -1,4 +1,6 @@
 import { escapeHtml } from '../utils/html-escape';
+import { safeHttpUrl, firstSafeImageSrc } from '../utils/safe-url';
+import { IMG_FALLBACK_ATTR } from '../templates/image-fallback';
 import { displayTitle } from '../utils/display-title';
 import { escapeJsonForHtml, decodeJsonLdEntities } from '../utils/html-json';
 /**
@@ -181,7 +183,7 @@ export function eventOgImagePath(event: Event): string {
 
 /** og:image / JSON-LD image: own photo → venue photo → generated per-event card. */
 export function resolveEventOgImage(event: Event): string {
-  return event.imageLocal || event.imageUrl || event.venueImage || eventOgImagePath(event);
+  return firstSafeImageSrc(event.imageLocal, event.imageUrl, event.venueImage) || eventOgImagePath(event);
 }
 
 /** Pair selected prose with its known language; a page locale is not a translation. */
@@ -204,14 +206,7 @@ function schemaDescription(event: Event, locale: Locale): { description: string;
 
 /** Source attribution accepts HTTP(S) URLs without credentials or control characters. */
 function sourceListingUrl(value?: string): string | undefined {
-  if (!value || /[\u0000-\u0020\u007f]/.test(value)) return undefined;
-  try {
-    const url = new URL(value);
-    if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) return undefined;
-    return url.href;
-  } catch {
-    return undefined;
-  }
+  return safeHttpUrl(value) ?? undefined;
 }
 
 /**
@@ -318,9 +313,9 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
 
   const offerDecision = buildOfferOrOmit({
     price: event.price,
-    ticketUrl: event.ticketUrl,
+    ticketUrl: safeHttpUrl(event.ticketUrl) ?? undefined,
     ticketUrlResolved: event.ticketUrlResolved,
-    venue: { name: event.venue.name, website: event.venue.website },
+    venue: { name: event.venue.name, website: safeHttpUrl(event.venue.website) ?? undefined },
     eventStatus: schema.eventStatus,
     selfCanonicalUrl: schema.url,
   });
@@ -762,16 +757,18 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
 
   // CTA — resolved via tiered cascade (see src/ticketing/cta.ts)
   const cta = resolveCtaForEvent(event, t);
-  const ctaLinkable = !isPast && cta.kind !== 'none' && cta.href;
+  // CTA hrefs are scraped/AI data: canonical http(s) only, then attribute-escaped.
+  const ctaHref = safeHttpUrl(cta.href);
+  const ctaLinkable = !isPast && cta.kind !== 'none' && ctaHref;
   const ctaHtml = ctaLinkable
-    ? `<a href="${cta.href}" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">${cta.label}</a>`
+    ? `<a href="${escapeAttr(ctaHref)}" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">${cta.label}</a>`
     : '';
 
   // Inline CTA for body content (GEO source order: after description, before venue)
   const inlineCtaHtml = isPast
     ? ''
     : ctaLinkable
-      ? `<div class="edp-inline-cta"><a href="${cta.href}" class="edp-cta" rel="noopener" target="_blank">${cta.label}</a></div>`
+      ? `<div class="edp-inline-cta"><a href="${escapeAttr(ctaHref)}" class="edp-cta" rel="noopener" target="_blank">${cta.label}</a></div>`
       : cta.kind === 'door'
         ? `<div class="edp-inline-cta"><span class="edp-door-only">${cta.label}</span></div>`
         : event.price.type === 'open'
@@ -779,8 +776,10 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
           : '';
 
   // Venue section — Google Maps link
-  const mapsUrl = event.venue.coordinates
-    ? `https://www.google.com/maps?q=${event.venue.coordinates.lat},${event.venue.coordinates.lon}`
+  const mapLat = Number(event.venue.coordinates?.lat);
+  const mapLon = Number(event.venue.coordinates?.lon);
+  const mapsUrl = event.venue.coordinates && Number.isFinite(mapLat) && Number.isFinite(mapLon)
+    ? `https://www.google.com/maps?q=${mapLat},${mapLon}`
     : `https://www.google.com/maps/search/${encodeURIComponent(event.venue.name + ' Athens')}`;
 
   // Source attribution — when a URL exists, label with its actual host so the
@@ -813,7 +812,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
         <div class="edp-mobile-bar-title">${escapeHtml(displayTitle(event.title, event.venue?.name))}</div>
         <div class="edp-mobile-bar-price">${priceDisplay}</div>
       </div>
-      <a href="${cta.href}" class="edp-cta" rel="noopener" target="_blank">${mobileLabel}</a>
+      <a href="${escapeAttr(ctaHref)}" class="edp-cta" rel="noopener" target="_blank">${mobileLabel}</a>
     </div>
   </div>`
     : '';
@@ -865,7 +864,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   <meta property="og:description" content="${metaDescription}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="event">
-  <meta property="og:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
+  <meta property="og:image" content="${escapeAttr(ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`)}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="${t.ogLocale}">
@@ -875,7 +874,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${safeMetaTitle}">
   <meta name="twitter:description" content="${metaDescription}">
-  <meta name="twitter:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
+  <meta name="twitter:image" content="${escapeAttr(ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`)}">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -898,7 +897,7 @@ ${renderAnalytics()}
   <main>
   <article id="main-content" tabindex="-1"${isPast ? ' data-past="true"' : ''}>
     <section class="edp-hero" style="--edp-type-color: ${typeColorVar}">
-      <div class="edp-hero-bg" style="background-image: url('${ogImage.startsWith('http') ? ogImage : ogImage}')"></div>
+      <div class="edp-hero-bg" style="background-image: url('${escapeAttr(ogImage)}')"></div>
       <div class="edp-hero-inner">
         <nav class="edp-breadcrumb">
           <a href="${homeHref}">agent-athens</a>
@@ -960,7 +959,7 @@ ${renderAnalytics()}
           ? `<div class="edp-venue-address">${escapeHtml(event.venue.address)}</div>`
           : ''}
         ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${escapeHtml(displayNeighborhood(event.venue.neighborhood))}</div>` : ''}
-        ${isPlaceholderVenue ? '' : `<a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>`}
+        ${isPlaceholderVenue ? '' : `<a href="${escapeAttr(mapsUrl)}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>`}
       </section>
 
       ${sourceHtml}
@@ -1046,13 +1045,13 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
   const venueName = localizedVenueName(event, locale);
   const venueText = neighborhood ? `${venueName} · ${neighborhood}` : venueName;
 
-  const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
+  const imgSrc = firstSafeImageSrc(event.imageLocal, event.imageUrl, event.venueImage);
 
   return `
   <article class="event-card">
     ${imgSrc
       ? `<div class="card-image-wrapper" data-type="${event.type}">
-      <img class="card-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img class="card-image" src="${escapeAttr(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" ${IMG_FALLBACK_ATTR}>
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}

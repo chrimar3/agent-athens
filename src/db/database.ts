@@ -13,6 +13,7 @@ import { loadGateRules, loadOverrides } from "../utils/load-gate-rules";
 import { decodeEventFields } from "../utils/decode-html-entities";
 import { findVenueConfig } from "../quality/location-filter";
 import { checkImportDuplicate } from "../quality/import-gate";
+import { safeHttpUrl } from "../utils/safe-url";
 import type { Event } from "../types";
 
 const DB_PATH = join(import.meta.dir, "../../data/events.db");
@@ -131,7 +132,8 @@ export function eventToRow(event: Event): Record<string, any> {
     $price_amount: event.price.amount || null,
     $price_currency: event.price.currency || "EUR",
     $price_range: event.price.range || null,
-    $url: event.url || null,
+    // URL columns hold canonical http(s) URLs only; a bad value drops the field, not the row.
+    $url: safeHttpUrl(event.url),
     $source: event.source,
     $ai_context: event.semanticTags ? JSON.stringify(event.semanticTags) : null,
     $schema_json: JSON.stringify(event),
@@ -139,7 +141,7 @@ export function eventToRow(event: Event): Record<string, any> {
     $updated_at: event.updatedAt || new Date().toISOString(),
     $scraped_at: new Date().toISOString(),
     // Image fields
-    $image_url: event.imageUrl || null,
+    $image_url: safeHttpUrl(event.imageUrl),
     $image_source: event.imageSource || null,
     $image_local: event.imageLocal || null,
     // Exhibition-specific fields
@@ -147,6 +149,14 @@ export function eventToRow(event: Event): Record<string, any> {
     $closed_days: event.closedDays || null,
     $permanent_collection: event.permanentCollection ? 1 : 0
   };
+}
+
+/** SQLite keeps non-numeric text in REAL columns; only finite numbers become coordinates. */
+function finiteCoordinates(lat: unknown, lng: unknown): { lat: number; lon: number } | undefined {
+  if (!lat || !lng) return undefined;
+  const la = typeof lat === 'number' ? lat : Number(lat);
+  const lo = typeof lng === 'number' ? lng : Number(lng);
+  return Number.isFinite(la) && Number.isFinite(lo) ? { lat: la, lon: lo } : undefined;
 }
 
 /**
@@ -203,9 +213,7 @@ export function rowToEvent(row: any): Event {
       name: row.venue_name,
       address: row.venue_address,
       neighborhood: row.venue_neighborhood,
-      coordinates: row.venue_lat && row.venue_lng
-        ? { lat: row.venue_lat, lon: row.venue_lng }
-        : undefined,
+      coordinates: finiteCoordinates(row.venue_lat, row.venue_lng),
       capacity: row.venue_capacity
     },
     price: {
@@ -690,7 +698,7 @@ export function updateEventImage(
   try {
     const result = stmt.run({
       $id: eventId,
-      $imageUrl: imageUrl,
+      $imageUrl: safeHttpUrl(imageUrl),
       $imageSource: imageSource
     });
     return result.changes > 0;

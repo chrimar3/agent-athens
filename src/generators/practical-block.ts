@@ -14,6 +14,7 @@ import { formatDateOnly, formatPrice } from '../utils/i18n-date';
 import { STRINGS, type Locale } from '../i18n/strings';
 import { resolveCtaForEvent } from '../ticketing/cta';
 import { normalizeGreek } from '../utils/normalize-greek';
+import { safeHttpUrl } from '../utils/safe-url';
 
 export interface VenueInfo {
   address?: string;
@@ -119,9 +120,11 @@ export function generatePracticalBlock(
 
   // Tickets — resolved via tiered cascade (see src/ticketing/cta.ts)
   const cta = resolveCtaForEvent(event, t);
-  if (cta.kind !== 'none') {
-    const valueHtml = cta.href
-      ? `<a href="${cta.href}" rel="noopener" target="_blank">${cta.label}</a>${cta.subLabel ? `<br><small>${cta.subLabel}</small>` : ''}`
+  // CTA hrefs are scraped/AI data: canonical http(s) only, then attribute-escaped.
+  const ctaHref = safeHttpUrl(cta.href);
+  if (cta.kind !== 'none' && (ctaHref || !cta.href)) {
+    const valueHtml = ctaHref
+      ? `<a href="${escapeHtml(ctaHref)}" rel="noopener" target="_blank">${cta.label}</a>${cta.subLabel ? `<br><small>${escapeHtml(cta.subLabel)}</small>` : ''}`
       : cta.label;
     fields.push({
       label: 'Εισιτήρια',

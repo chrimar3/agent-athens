@@ -12,6 +12,7 @@
  * deriving from the stored strings (no URL churn).
  */
 
+import { firstSafeImageSrc } from '../utils/safe-url';
 import { readFileSync, existsSync } from 'fs';
 import he from 'he';
 import { writeFileIfChangedSync } from '../utils/write-if-changed';
@@ -109,7 +110,7 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
     startDate: event.startDate,
     hasEnglish: Boolean(event.fullDescriptionEn),
     slug: generateEventSlug(event),
-    thumb: event.imageLocal || event.imageUrl || event.venueImage || '',
+    thumb: firstSafeImageSrc(event.imageLocal, event.imageUrl, event.venueImage) || '',
     price: event.price.type,
   }));
 

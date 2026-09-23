@@ -21,7 +21,9 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
 import type { HubIdentity } from '../utils/hub-identity';
-import { renderCardSaveButton, renderSavedEventsScript, renderCardSaveScript, saveMetaFor } from './action-bar';
+import { renderCardSaveButton, renderSavedEventsScript, renderCardSaveScript, saveMetaFor, escapeAttr } from './action-bar';
+import { firstSafeImageSrc } from '../utils/safe-url';
+import { IMG_FALLBACK_ATTR } from './image-fallback';
 import { BASE_URL, pageUrl } from '../config/site-url';
 import { renderAnalytics } from '../config/analytics';
 
@@ -310,7 +312,7 @@ export function renderEventCard(event: Event, locale: Locale = 'el'): string {
   const t = STRINGS[locale];
   const { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, numericPrice, exhibitionIsOpen } = prepareCardData(event, locale);
 
-  const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
+  const imgSrc = firstSafeImageSrc(event.imageLocal, event.imageUrl, event.venueImage);
 
   // 2026-05-25 microdata strip: JSON-LD ItemList (schema-graph-builders.ts)
   // is the authoritative emission surface. The visible price span carries
@@ -322,7 +324,7 @@ export function renderEventCard(event: Event, locale: Locale = 'el'): string {
   <article class="event-card" data-price="${numericPrice}" data-type="${event.type}" data-price-type="${event.price.type}">
     ${imgSrc
       ? `<div class="card-image-wrapper" data-type="${event.type}">
-      <img class="card-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img class="card-image" src="${escapeAttr(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" ${IMG_FALLBACK_ATTR}>
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}

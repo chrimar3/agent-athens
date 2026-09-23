@@ -8,7 +8,9 @@ import type { Event } from '../types';
 import { STRINGS, type Locale } from '../i18n/strings';
 import { prepareCardData, TYPE_ICONS } from './page';
 import { getEventTile } from '../generators/event-tile';
-import { renderCardSaveButton, saveMetaFor } from './action-bar';
+import { renderCardSaveButton, saveMetaFor, escapeAttr } from './action-bar';
+import { firstSafeImageSrc } from '../utils/safe-url';
+import { IMG_FALLBACK_ATTR } from './image-fallback';
 
 export type BadgeTreatment = 'yellow' | 'neutral';
 
@@ -18,13 +20,13 @@ export type BadgeTreatment = 'yellow' | 'neutral';
  */
 export function renderEventCardList(event: Event, locale: Locale = 'el'): string {
   const { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText } = prepareCardData(event, locale);
-  const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
+  const imgSrc = firstSafeImageSrc(event.imageLocal, event.imageUrl, event.venueImage);
 
   return `
   <article class="event-card-list">
     ${imgSrc
       ? `<div class="list-image-wrapper" data-type="${event.type}">
-      <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img src="${escapeAttr(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" ${IMG_FALLBACK_ATTR}>
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>`
@@ -48,13 +50,13 @@ export function renderEventCardList(event: Event, locale: Locale = 'el'): string
  */
 export function renderFeatureCard(event: Event, locale: Locale = 'el'): string {
   const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText, shortDesc } = prepareCardData(event, locale);
-  const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
+  const imgSrc = firstSafeImageSrc(event.imageLocal, event.imageUrl, event.venueImage);
 
   return `
   <article class="event-card-feature">
     ${imgSrc
       ? `<div class="feature-image-wrapper" data-type="${event.type}">
-      <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img src="${escapeAttr(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" ${IMG_FALLBACK_ATTR}>
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
     </div>`
@@ -158,7 +160,7 @@ export function renderHeroSection(events: Event[], mode: HeroMode, locale: Local
 
   // Featured card
   const featuredData = prepareCardData(featured, locale);
-  const featuredImg = featured.imageLocal || featured.imageUrl || featured.venueImage;
+  const featuredImg = firstSafeImageSrc(featured.imageLocal, featured.imageUrl, featured.venueImage);
   const featuredIcon = TYPE_ICONS[featured.type] || TYPE_ICONS.other;
   // Cut at a word boundary — a hard substring produced mid-word truncations
   // ("Barbara Kruger has tra") on the highest-visibility card of the page.
@@ -171,7 +173,7 @@ export function renderHeroSection(events: Event[], mode: HeroMode, locale: Local
     <a href="${featuredData.href}" class="hero-card hero-card--featured">
       ${featuredImg
         ? `<div class="hero-card-image-wrapper" data-type="${featured.type}">
-        <img class="hero-card-image" src="${escapeHtml(featuredImg)}" alt="${escapeHtml(displayTitle(featured.title, featured.venue?.name))}" loading="eager" fetchpriority="high" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+        <img class="hero-card-image" src="${escapeAttr(featuredImg)}" alt="${escapeHtml(displayTitle(featured.title, featured.venue?.name))}" loading="eager" fetchpriority="high" decoding="async" referrerpolicy="no-referrer" ${IMG_FALLBACK_ATTR}>
         <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${featuredIcon}</span>
         <span class="card-badge${featuredData.lightText}" style="background: ${featuredData.colorVar}">${featuredData.badgeLabel}</span>
       </div>`
@@ -190,14 +192,14 @@ export function renderHeroSection(events: Event[], mode: HeroMode, locale: Local
   // Pick cards
   const picksHtml = picks.map(event => {
     const data = prepareCardData(event, locale);
-    const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
+    const imgSrc = firstSafeImageSrc(event.imageLocal, event.imageUrl, event.venueImage);
     const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;
 
     return `
       <a href="${data.href}" class="hero-card hero-card--pick">
         ${imgSrc
           ? `<div class="hero-pick-image" data-type="${event.type}">
-          <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+          <img src="${escapeAttr(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" ${IMG_FALLBACK_ATTR}>
           <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
         </div>`
           : `<div class="hero-pick-image" data-type="${event.type}">
@@ -236,7 +238,7 @@ export function renderFeaturedEventCard(
   locale: Locale = 'el'
 ): string {
   const { dateStr, priceText, href, badgeLabel, colorVar, lightText, icon, venueText } = prepareCardData(event, locale);
-  const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
+  const imgSrc = firstSafeImageSrc(event.imageLocal, event.imageUrl, event.venueImage);
 
   const badgeClass = badgeTreatment === 'neutral'
     ? 'card-badge card-badge--neutral'
@@ -249,7 +251,7 @@ export function renderFeaturedEventCard(
   <article class="event-card-featured-editorial">
     ${imgSrc
       ? `<div class="featured-editorial-image" data-type="${event.type}">
-      <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img src="${escapeAttr(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" ${IMG_FALLBACK_ATTR}>
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="${badgeClass}" ${badgeStyle}>${badgeLabel}</span>
     </div>`
