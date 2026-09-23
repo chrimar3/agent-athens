@@ -316,6 +316,7 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     price: event.price,
     ticketUrl: safeHttpUrl(event.ticketUrl) ?? undefined,
     ticketUrlResolved: event.ticketUrlResolved,
+    source: event.source,
     venue: { name: event.venue.name, website: safeHttpUrl(event.venue.website) ?? undefined },
     eventStatus: schema.eventStatus,
     selfCanonicalUrl: schema.url,

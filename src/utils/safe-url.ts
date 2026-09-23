@@ -1,4 +1,5 @@
 import he from 'he';
+import { applyTicketTrust } from '../ticketing/ticket-trust';
 
 /**
  * Safe URL helpers for values that come from scraped or AI-supplied data.
@@ -71,6 +72,8 @@ export function firstSafeImageSrc(...candidates: unknown[]): string | null {
 
 /** Event fields that carry a URL and are published in HTML and JSON. */
 export interface EventUrlFields {
+  /** Scrape source; open-listing sources get the ticket-trust rule (src/ticketing/ticket-trust.ts). */
+  source?: string;
   url?: string;
   ticketUrl?: string;
   ticketUrlResolved?: string | null;
@@ -83,8 +86,10 @@ export interface EventUrlFields {
  * Replaces each URL field with its safeHttpUrl / safeImageSrc form, or clears
  * it when the value is not a safe URL. The build applies this once to every
  * event it loads, so the JSON files (api/*.json, data/events.json, the search
- * index) carry the same checked values the HTML templates emit. Returns the
- * number of fields cleared.
+ * index) carry the same checked values the HTML templates emit. Events from
+ * open-listing sources also lose ticket URLs off known ticketing platforms
+ * and their own domain (applyTicketTrust). Returns the number of fields
+ * cleared.
  */
 export function sanitizeEventUrlFields(event: EventUrlFields): number {
   let cleared = 0;
@@ -106,5 +111,6 @@ export function sanitizeEventUrlFields(event: EventUrlFields): number {
   if ('imageUrl' in event) event.imageUrl = image(event.imageUrl);
   if ('imageLocal' in event) event.imageLocal = image(event.imageLocal);
   if ('venueImage' in event) event.venueImage = image(event.venueImage);
+  cleared += applyTicketTrust(event);
   return cleared;
 }

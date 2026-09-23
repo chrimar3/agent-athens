@@ -10,6 +10,7 @@ import { join } from 'path';
 import { tmpdir } from 'os';
 import { scanHtmlForArtifacts, validatePublishedArtifacts } from '../../src/validators/published-artifacts';
 import { renderAnalytics } from '../../src/config/analytics';
+import { renderHeadersFile } from '../../src/generators/security-headers';
 import { renderEventDetailPage } from '../../src/generators/event-page';
 import { renderEventCard } from '../../src/templates/page';
 import { IMG_FALLBACK_ATTR } from '../../src/templates/image-fallback';
@@ -153,6 +154,7 @@ describe('validatePublishedArtifacts names the failing page and the fix', () => 
     try {
       mkdirSync(join(dir, 'events', 'bad'), { recursive: true });
       writeFileSync(join(dir, 'index.html'), page('<a href="/x/">ok</a>'));
+      writeFileSync(join(dir, '_headers'), renderHeadersFile());
       writeFileSync(join(dir, 'events', 'bad', 'index.html'), page('<a href="javascript:alert(1)" onclick="x()">x</a>'));
       const report = validatePublishedArtifacts(dir);
       expect(report.failures.map(f => f.file)).toEqual(['events/bad/index.html']);

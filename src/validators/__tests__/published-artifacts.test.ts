@@ -3,6 +3,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { scanHtmlForArtifacts, validatePublishedArtifacts } from '../published-artifacts';
+import { renderHeadersFile } from '../../generators/security-headers';
 
 // Round-0 judges found these live: an escaped enrichment marker on 343–686
 // event pages, "[PLACEHOLDER]" copy on 6 hubs, raw markdown tables on 44
@@ -66,6 +67,7 @@ describe('validatePublishedArtifacts', () => {
     try {
       mkdirSync(join(dir, 'events', 'a'), { recursive: true });
       writeFileSync(join(dir, 'index.html'), page('<p>ok</p>'));
+      writeFileSync(join(dir, '_headers'), renderHeadersFile()); // required by the gate
       writeFileSync(join(dir, 'events', 'a', 'index.html'), page('<p>&lt;!-- timeliness-expires: x --&gt;</p>'));
       writeFileSync(join(dir, 'concerts.html'), page('<aside>[PLACEHOLDER] quote</aside>'));
       const report = validatePublishedArtifacts(dir);

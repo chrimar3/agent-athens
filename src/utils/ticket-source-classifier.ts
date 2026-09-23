@@ -33,6 +33,8 @@ const config: ClassificationConfig = JSON.parse(
 );
 
 const knownMerchants = new Set(config.known_merchants.map((h) => h.toLowerCase()));
+/** Online-checkout hosts from config (read-only view for the ticket-trust rule, src/ticketing/ticket-trust.ts). */
+export const KNOWN_MERCHANT_HOSTS: ReadonlySet<string> = knownMerchants;
 const listingAggregators = new Set(config.listing_aggregators.map((h) => h.toLowerCase()));
 const venueDirectOnly = new Set(config.venue_direct_only.map((h) => h.toLowerCase()));
 

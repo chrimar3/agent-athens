@@ -14,9 +14,11 @@ import { closeSync, existsSync, openSync, readdirSync, readFileSync, readSync } 
 import { extname, join, relative } from 'path';
 import { createHash } from 'crypto';
 import he from 'he';
+import { load } from 'cheerio';
 import { INLINE_SCRIPT_HASHES, COPIED_SCRIPT_ALLOWLIST } from './inline-script-allowlist';
 import { BASE_URL } from '../config/site-url';
 import { renderHeadersFile } from '../generators/security-headers';
+import { VERIFICATION_FILE_ALLOWLIST, VERIFICATION_FILE_PATTERNS, VERIFICATION_META_ALLOWLIST } from './verification-allowlist';
 
 const LD_BLOCK = /<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g;
 const SCRIPT_BLOCK = /<script\b[\s\S]*?<\/script>/g;
@@ -51,7 +53,11 @@ export function scanHtmlForArtifacts(html: string): string[] {
 // emitted pages themselves are checked before deploy. Rules:
 //   - href/src/action/... use http(s), mailto, tel or a relative URL
 //   - no on* handler at all (the enforced CSP blocks them); no srcdoc
-//   - <script src> only same-origin or ALLOWED_SCRIPT_HOSTS over https
+//   - <script src> (and SVG <script href>) only same-origin or
+//     ALLOWED_SCRIPT_HOSTS over https; "//host" is resolved like the browser
+//     does (https: on the live site) and allowlisted as that host
+//   - <link> that loads a resource (stylesheet, preload, ...) only same-origin
+//     or ALLOWED_LINK_HOSTS over https
 //   - an inline executable <script> body must be on INLINE_SCRIPT_ALLOWLIST
 //     (sha256 of the templates' own scripts, inline-script-allowlist.ts)
 //   - JSON data blocks must parse, hold no "<script", "</script" or "<!--",
@@ -59,15 +65,22 @@ export function scanHtmlForArtifacts(html: string): string[] {
 //     javascript:/vbscript: value
 //   - <iframe> only to the OpenStreetMap embed the venue pages use
 //   - no <meta http-equiv="refresh">, <object>, <embed>, <base>, <frame>, <frameset>
+//   - no search-engine ownership-verification <meta> except the allowlisted
+//     one (verification-allowlist.ts)
+// Pages are parsed with an HTML5 parser, so the rules apply to the elements a
+// browser builds, including from unclosed or malformed markup.
 // ---------------------------------------------------------------------------
 
 /** External script hosts the templates emit (src/config/analytics.ts). */
 export const ALLOWED_SCRIPT_HOSTS: ReadonlySet<string> = new Set(['www.googletagmanager.com']);
+/** External hosts a <link> may load a resource from (the webfont stylesheet in src/templates/page.ts). */
+export const ALLOWED_LINK_HOSTS: ReadonlySet<string> = new Set(['fonts.googleapis.com']);
+/** <link rel> values that make the browser fetch and use (or pre-render) the target. */
+const RESOURCE_LINK_RELS = new Set(['stylesheet', 'preload', 'modulepreload', 'prefetch', 'prerender', 'import', 'manifest', 'serviceworker']);
+const SITE_ORIGIN = new URL(BASE_URL).origin;
 const SAFE_SCHEMES = new Set(['http', 'https', 'mailto', 'tel']);
 const URL_ATTRS = new Set(['href', 'src', 'action', 'formaction', 'poster', 'data', 'xlink:href', 'background', 'srcset']);
 const JSON_SCRIPT_TYPE = /^application\/(?:ld\+)?json$/i;
-const SCRIPT_ELEMENT = /<script\b((?:[^>"']|"[^"]*"|'[^']*')*)>([\s\S]*?)<\/script\s*>/gi;
-const STYLE_ELEMENT = /(<style\b(?:[^>"']|"[^"]*"|'[^']*')*>)[\s\S]*?<\/style\s*>/gi;
 const START_TAG = /<([a-zA-Z][^\s\/>]*)((?:[^>"']|"[^"]*"|'[^']*')*)>/g;
 const ATTRIBUTE = /([^\s"'>\/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
 const DANGEROUS_SCHEME_IN_SCRIPT = /\b(?:javascript|vbscript)\s*:/i;
@@ -84,32 +97,67 @@ const FIX_ACTIVE_ELEMENT = 'fix: templates emit no frames, meta refresh, plugins
 const ALLOWED_IFRAME = /^https:\/\/www\.openstreetmap\.org\/export\/embed\.html\?/;
 const FORBIDDEN_ELEMENTS = new Set(['object', 'embed', 'base', 'frame', 'frameset', 'applet']);
 const SCRIPT_TAG_IN_JSON = /<\/?script/i;
+const FIX_VERIFICATION = 'fix: search-engine ownership proofs publish only from VERIFICATION_FILE_ALLOWLIST / VERIFICATION_META_ALLOWLIST (src/validators/verification-allowlist.ts); a new one is an owner decision — delete it from dist/ and rebuild';
 
 function parseAttributes(raw: string): [string, string | undefined][] {
   return [...raw.matchAll(ATTRIBUTE)].map(m => [m[1].toLowerCase(), m[2] ?? m[3] ?? m[4]]);
 }
 
-/** Scheme a browser would act on, after entity decoding and tab/newline stripping; null when relative. */
-function urlScheme(value: string): string | null {
-  const decoded = he.decode(value, { isAttributeValue: true }).replace(/[\t\n\r]/g, '').replace(/^[\x00-\x20]+/, '');
+/**
+ * Scheme a browser would act on, after entity decoding (skipped for values an
+ * HTML parser already decoded) and tab/newline stripping; null when relative.
+ */
+function urlScheme(value: string, alreadyDecoded = false): string | null {
+  const text = alreadyDecoded ? value : he.decode(value, { isAttributeValue: true });
+  const decoded = text.replace(/[\t\n\r]/g, '').replace(/^[\x00-\x20]+/, '');
   const m = /^([a-zA-Z][a-zA-Z0-9+.-]*):/.exec(decoded);
   return m ? m[1].toLowerCase() : null;
 }
 
-function scriptHostIssue(src: string): string | null {
-  const value = he.decode(src, { isAttributeValue: true }).trim();
-  if (value.startsWith('/') && !value.startsWith('//')) return null; // same origin
-  let url: URL;
+/**
+ * A parser-decoded attribute URL resolved the way the browser resolves it on
+ * the live site: relative paths against the site, "//host/x" (and "/\\host")
+ * to https://host/x. Null when it does not parse.
+ */
+function resolveOnSite(value: string): URL | null {
   try {
-    url = new URL(value, 'https://agentathens.com/');
+    return new URL(value, `${SITE_ORIGIN}/`);
   } catch {
-    return `unparseable <script src> "${value.slice(0, 80)}" (${FIX_SCRIPT_HOST})`;
+    return null;
   }
-  if (url.origin === 'https://agentathens.com' && !value.startsWith('//')) return null; // relative path
-  if (url.protocol !== 'https:' || !ALLOWED_SCRIPT_HOSTS.has(url.hostname)) {
-    return `script from unlisted source ${url.protocol}//${url.hostname} (${FIX_SCRIPT_HOST})`;
-  }
-  return null;
+}
+
+/** Null when the (parser-decoded) URL is same-origin or https on an allowlisted host. */
+function externalHostIssue(value: string, allowed: ReadonlySet<string>): { url: URL | null; ok: boolean } {
+  const url = resolveOnSite(value);
+  if (!url) return { url, ok: false };
+  if (url.origin === SITE_ORIGIN) return { url, ok: true };
+  return { url, ok: url.protocol === 'https:' && allowed.has(url.hostname) };
+}
+
+function scriptHostIssue(src: string): string | null {
+  const { url, ok } = externalHostIssue(src, ALLOWED_SCRIPT_HOSTS);
+  if (ok) return null;
+  if (!url) return `unparseable <script src> "${src.trim().slice(0, 80)}" (${FIX_SCRIPT_HOST})`;
+  return `script from unlisted source ${url.protocol}//${url.hostname} (${FIX_SCRIPT_HOST})`;
+}
+
+function linkResourceIssue(rel: string, href: string | undefined): string | null {
+  const rels = rel.toLowerCase().split(/\s+/).filter(Boolean);
+  if (href === undefined || !rels.some(r => RESOURCE_LINK_RELS.has(r))) return null;
+  const { url, ok } = externalHostIssue(href, ALLOWED_LINK_HOSTS);
+  if (ok) return null;
+  const where = url ? `${url.protocol}//${url.hostname}` : `"${href.trim().slice(0, 80)}"`;
+  return `<link rel="${rels.join(' ')}"> loads from unlisted source ${where} (fix: remove the tag, or add the host to ALLOWED_LINK_HOSTS in src/validators/published-artifacts.ts after review)`;
+}
+
+/** <meta name> values search engines accept as proof of site ownership. */
+const VERIFICATION_META = /^(?:google-site-verification|msvalidate\.01|yandex-verification|baidu-site-verification|facebook-domain-verification|p:domain_verify|naver-site-verification|norton-safeweb-site-verification|ahrefs-site-verification|seznam-wmt)$/i;
+
+function verificationMetaIssue(name: string, content: string): string | null {
+  if (!VERIFICATION_META.test(name)) return null;
+  const allowed = VERIFICATION_META_ALLOWLIST.some(e => e.name.toLowerCase() === name.toLowerCase() && e.content === content);
+  return allowed ? null : `ownership-verification <meta name="${name}"> with an unlisted token (${FIX_VERIFICATION})`;
 }
 
 function jsonHasDangerousUrl(value: unknown, key = ''): boolean {
@@ -154,57 +202,104 @@ function scriptContentIssues(type: string | undefined, content: string, hasSrc: 
   return issues;
 }
 
-/** Output-safety issues in one page; each names what was found and where to fix it. */
+/** Element-like DOM node from the HTML5 parser (domhandler shape, parse5 tree). */
+interface DomNode {
+  type: string;
+  name?: string;
+  namespace?: string;
+  attribs?: Record<string, string>;
+  data?: string;
+  children?: DomNode[];
+}
+
+const textOf = (node: DomNode): string => (node.children ?? []).map(c => (c.type === 'text' ? c.data ?? '' : '')).join('');
+
+/**
+ * Output-safety issues in one page; each names what was found and where to fix it.
+ *
+ * The page is parsed with a spec-compliant HTML5 parser (parse5 via cheerio,
+ * scripting enabled like a browser), so malformed markup — an unclosed
+ * <script src>, a tag inside an attribute that a <noscript> end tag breaks
+ * out of, SVG <script href> — is judged as the browser will build it, not as
+ * a regex reads the text. Attribute values come from the parser already
+ * entity-decoded.
+ */
 export function scanHtmlForUnsafeOutput(html: string): string[] {
   const issues = new Set<string>();
+  scanDom(load(html).root()[0] as unknown as DomNode, issues);
+  return [...issues];
+}
 
-  for (const m of html.matchAll(SCRIPT_ELEMENT)) {
-    const attrs = new Map(parseAttributes(m[1]));
-    const src = attrs.get('src');
-    if (src !== undefined) {
-      const issue = scriptHostIssue(src);
+function scanDom(root: DomNode, issues: Set<string>): void {
+  const visit = (node: DomNode): void => {
+    if (node.attribs) scanElement(node, issues);
+    for (const child of node.children ?? []) visit(child);
+  };
+  visit(root);
+}
+
+function scanElement(node: DomNode, issues: Set<string>): void {
+  const tagName = (node.name ?? '').toLowerCase();
+  const attrs = node.attribs ?? {};
+  const attr = (n: string) => (attrs[n] ?? '').trim();
+
+  if (tagName === 'script') {
+    // HTML <script src>; SVG <script href>/<script xlink:href> (the parser
+    // stores the adjusted xlink:href under "href").
+    const srcs = ['src', 'href', 'xlink:href'].filter(n => attrs[n] !== undefined);
+    for (const n of srcs) {
+      const issue = scriptHostIssue(attrs[n]);
       if (issue) issues.add(issue);
     }
-    for (const issue of scriptContentIssues(attrs.get('type'), m[2], src !== undefined)) issues.add(issue);
+    for (const issue of scriptContentIssues(attrs.type, textOf(node), srcs.length > 0)) issues.add(issue);
   }
-
-  // Markup outside script/style bodies and comments is what the browser parses as tags.
-  const markup = html
-    .replace(SCRIPT_ELEMENT, (_all, attrs: string) => `<script${attrs}></script>`)
-    .replace(STYLE_ELEMENT, '$1</style>')
-    .replace(HTML_COMMENT, '');
-
-  for (const tag of markup.matchAll(START_TAG)) {
-    const tagName = tag[1].toLowerCase();
-    const attrs = parseAttributes(tag[2]);
-    const attr = (n: string) => he.decode(attrs.find(([k]) => k === n)?.[1] ?? '', { isAttributeValue: true }).trim();
-    if (FORBIDDEN_ELEMENTS.has(tagName)) issues.add(`<${tagName}> element (${FIX_ACTIVE_ELEMENT})`);
-    if (tagName === 'iframe' && !ALLOWED_IFRAME.test(attr('src'))) {
+  if (tagName === 'noscript') {
+    // With scripting enabled the body is text; a visitor without JavaScript
+    // gets it parsed as markup, so check it that way too.
+    const inner = load(textOf(node), { scriptingEnabled: false } as Parameters<typeof load>[1], false).root()[0] as unknown as DomNode;
+    scanDom(inner, issues);
+  }
+  if (FORBIDDEN_ELEMENTS.has(tagName)) issues.add(`<${tagName}> element (${FIX_ACTIVE_ELEMENT})`);
+  if (tagName === 'iframe') {
+    const src = resolveOnSite(attr('src'));
+    if (!src || !ALLOWED_IFRAME.test(src.href)) {
       issues.add(`<iframe> to "${attr('src').slice(0, 80)}" — only the OpenStreetMap embed is allowed (${FIX_ACTIVE_ELEMENT})`);
     }
-    if (tagName === 'meta' && /refresh/i.test(attr('http-equiv'))) issues.add(`<meta http-equiv="refresh"> (${FIX_ACTIVE_ELEMENT})`);
-    for (const [name, value = ''] of attrs) {
-      if (/^on[a-z]+$/.test(name)) {
-        issues.add(`inline event handler ${name}= on <${tagName}> (${FIX_HANDLER})`);
-      } else if (name === 'srcdoc') {
-        issues.add(`srcdoc markup on <${tagName}> (${FIX_URL})`);
-      } else if (URL_ATTRS.has(name)) {
-        const candidates = name === 'srcset' ? value.split(',').map(c => c.trim().split(/\s+/)[0]) : [value];
-        for (const candidate of candidates) {
-          const scheme = urlScheme(candidate);
-          if (scheme && !SAFE_SCHEMES.has(scheme)) issues.add(`unsafe URL scheme "${scheme}:" in <${tagName} ${name}> (${FIX_URL})`);
-        }
+  }
+  if (tagName === 'link') {
+    const issue = linkResourceIssue(attr('rel'), attrs.href);
+    if (issue) issues.add(issue);
+  }
+  if (tagName === 'meta' && /refresh/i.test(attr('http-equiv'))) issues.add(`<meta http-equiv="refresh"> (${FIX_ACTIVE_ELEMENT})`);
+  if (tagName === 'meta') {
+    const issue = verificationMetaIssue(attr('name'), attr('content'));
+    if (issue) issues.add(issue);
+  }
+  for (const [rawName, value] of Object.entries(attrs)) {
+    const name = rawName.toLowerCase();
+    if (/^on[a-z]+$/.test(name)) {
+      issues.add(`inline event handler ${name}= on <${tagName}> (${FIX_HANDLER})`);
+    } else if (name === 'srcdoc') {
+      issues.add(`srcdoc markup on <${tagName}> (${FIX_URL})`);
+    } else if (URL_ATTRS.has(name)) {
+      const candidates = name === 'srcset' ? value.split(',').map(c => c.trim().split(/\s+/)[0]) : [value];
+      for (const candidate of candidates) {
+        const scheme = urlScheme(candidate, true);
+        if (scheme && !SAFE_SCHEMES.has(scheme)) issues.add(`unsafe URL scheme "${scheme}:" in <${tagName} ${name}> (${FIX_URL})`);
       }
     }
   }
-  return [...issues];
 }
 
 // ---------------------------------------------------------------------------
 // Every other deployed file. Netlify publishes all of dist/ except dot-files,
 // so each file type the build emits has a rule and anything else fails.
 //   _redirects   only the rule families the generator emits (below)
-//   _headers     byte-identical to renderHeadersFile() (enforced script CSP)
+//   _headers     required, and byte-identical to renderHeadersFile() (the
+//                enforced script CSP lives only there)
+//   ownership    google*.html, BingSiteAuth.xml, yandex_*, IndexNow keys,
+//   proofs       anything under .well-known/ ...: only the exact path+content
+//                on VERIFICATION_FILE_ALLOWLIST (verification-allowlist.ts)
 //   .js/.mjs     path + sha256 on COPIED_SCRIPT_ALLOWLIST
 //   .svg         no script, foreignObject, on* handler or non-http(s) link
 //   .json        parses; URL-valued keys hold http(s) or site-relative URLs;
@@ -474,6 +569,11 @@ export function validatePublishedArtifacts(distDir: string): ArtifactReport {
         fail(rel, [`not a regular file (symlink or special file) (${FIX_UNKNOWN})`]);
         continue;
       }
+      const verification = verificationFileIssue(full, rel);
+      if (verification) {
+        fail(rel, [verification]);
+        continue;
+      }
       const issues = scanFile(distDir, full, rel);
       const type = rel === '_redirects' || rel === '_headers' ? rel : extname(entry.name).toLowerCase() || entry.name;
       if (issues === null) {
@@ -486,5 +586,23 @@ export function validatePublishedArtifacts(distDir: string): ArtifactReport {
     }
   };
   walk(distDir);
+  // The enforced script CSP is delivered only by _headers: a dist/ without it
+  // would deploy with no script-src enforcement at all.
+  if (!existsSync(join(distDir, '_headers'))) {
+    report.failures.push({ file: '_headers', issues: [`missing: the enforced Content-Security-Policy lives in _headers (${FIX_HEADERS})`] });
+  }
   return report;
+}
+
+/**
+ * A search-engine ownership proof (verification-allowlist.ts): refused unless
+ * the exact path and content are allowlisted. Null for every other file.
+ */
+function verificationFileIssue(full: string, rel: string): string | null {
+  const name = rel.split('/').pop()!;
+  const isProof = rel.startsWith('.well-known/') || VERIFICATION_FILE_PATTERNS.some(re => re.test(name));
+  if (!isProof) return null;
+  const entry = VERIFICATION_FILE_ALLOWLIST.find(e => e.path === rel);
+  if (!entry) return `ownership-verification file not on the allowlist (${FIX_VERIFICATION})`;
+  return readFileSync(full, 'utf-8') === entry.content ? null : `ownership-verification file content differs from the allowlisted token (${FIX_VERIFICATION})`;
 }
