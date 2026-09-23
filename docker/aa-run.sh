@@ -10,8 +10,9 @@
 # Least privilege per run:
 #   - each run receives only the tokens it needs (TOKENS below); the token file
 #     lives in ~/.config/agentathens-docker/, a folder no container ever mounts;
-#   - code paths are mounted read-only (CODE_PATHS), .git/config and .git/hooks
-#     always read-only, and all of .git read-only for runs that never commit;
+#   - every top-level repo entry except the data folders (RW_TOP) is mounted
+#     read-only — code, docs, specs, config, .netlify, .env — plus .git/config
+#     and .git/hooks always, and all of .git for runs that never commit;
 #   - freshness runs in two containers: scrape/build with no GitHub or Netlify
 #     token, then — only if the host integrity check passes — a publish run
 #     that holds those tokens but never loads a web page;
@@ -20,7 +21,8 @@
 # docker/integrity-check.sh runs around every container run.
 #
 # Exit codes: the job's own exit code; 2 usage; 3 Docker unavailable;
-# 4 env file problem; 5 paused by a quarantine; 6 integrity check failed.
+# 4 env file problem; 5 paused by a quarantine; 6 integrity check failed;
+# 7 image too old; 8 live site not deployed by the pipeline.
 # 0 without running when the same job is already running.
 set -euo pipefail
 
@@ -33,16 +35,20 @@ fail() { echo "aa-run: $1" >&2; echo "aa-run: next: $2" >&2; exit "${3:-1}"; }
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] aa-run: $*"; }
 
 GIT_ID="GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL"
-# Paths no container may write. Mounted read-only over the repo mount.
-CODE_PATHS="scripts src config tests static netlify docker .claude .github exemplars
-package.json bun.lock bunfig.toml tsconfig.json netlify.toml CLAUDE.md SECURITY.md .gitignore .gitattributes"
+# Top-level repo entries a run may write. Every other entry is mounted
+# read-only over the repo mount, so no run can change what the Mac or an agent
+# session later executes or reads as instructions. Root-level runtime files
+# (locks, the publish marker) stay writable through the repo root, and
+# integrity-check.sh flags any other new root entry.
+RW_TOP="data dist logs node_modules temp tmp temp-descriptions temp-briefs temp-research"
 
 # Per run: TOKENS, SECRETS (mount ~/.config/agentathens read-only), DOTENV
 # (repo .env visible), GITRW (may commit).
 job_policy() {
     case "$1" in
         scrape)     TOKENS="$GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=yes ;;
-        publish)    TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN $GIT_ID"; SECRETS=no; DOTENV=no; GITRW=yes ;;
+        publish)    TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID $GIT_ID"; SECRETS=no; DOTENV=no; GITRW=yes ;;
+        verify-live) TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no ;;
         legacy)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN $GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=yes ;;
         daily)      TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN $GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=yes ;;
         enrichment) TOKENS="CLAUDE_CODE_OAUTH_TOKEN"; SECRETS=no; DOTENV=no; GITRW=no ;;
@@ -55,13 +61,15 @@ job_policy() {
 }
 
 case "$JOB" in
-    freshness|publish|enrichment|daily|visibility|site|test|shell|doctor|image|help) ;;
+    freshness|publish|enrichment|daily|visibility|verify-live|site|test|shell|doctor|image|image-refresh|help) ;;
     -h|--help) JOB=help ;;
     *) fail "unknown job '$JOB'" "run 'docker/aa-run.sh help' for the list" 2 ;;
 esac
 if [ "$JOB" = "help" ]; then
     sed -n '/^usage: /,/^EOF$/p' "$HERE/entrypoint.sh" | sed '$d'
-    echo "  image           build/refresh the container image (on the Mac)"
+    echo "  image           build the container image (on the Mac)"
+    echo "  image-refresh   rebuild from scratch to pick up system package fixes"
+    echo "  verify-live     alert if the live site is not a deploy the pipeline made"
     exit 0
 fi
 
@@ -82,6 +90,10 @@ export AA_SECRETS_DIR="$EMPTY_DIR"
 
 if [ "$JOB" = "image" ]; then
     "${COMPOSE[@]}" build "$@" pipeline
+    exit $?
+fi
+if [ "$JOB" = "image-refresh" ]; then
+    "${COMPOSE[@]}" build --no-cache --pull pipeline
     exit $?
 fi
 
@@ -110,7 +122,13 @@ docker image inspect agent-athens-pipeline:local >/dev/null 2>&1 \
 created="$(docker image inspect -f '{{.Created}}' agent-athens-pipeline:local | cut -c1-10)"
 if [ "$(uname -s)" = "Darwin" ]; then age_days=$(( ($(date +%s) - $(date -j -f %Y-%m-%d "$created" +%s)) / 86400 ))
 else age_days=$(( ($(date +%s) - $(date -d "$created" +%s)) / 86400 )); fi
-[ "$age_days" -le 30 ] || log "WARNING: image is $age_days days old — Chromium and system packages miss security fixes; run 'docker/aa-run.sh image --pull'"
+# Stale images are refused for the runs that load outside content; checks,
+# restores and the live-site check still run.
+case "$JOB" in doctor|shell|verify-live) stale_ok=yes ;; *) stale_ok=no ;; esac
+if [ "$age_days" -gt 30 ] && [ "$stale_ok" = "no" ] && [ -z "${AA_ALLOW_STALE_IMAGE:-}" ]; then
+    fail "image is $age_days days old — Chromium and system packages are missing security fixes" \
+         "run 'docker/aa-run.sh image-refresh' (or set AA_ALLOW_STALE_IMAGE=1 for one run)" 7
+fi
 
 # Hold off idle sleep for the whole run, as daily-automated.sh does with
 # caffeinate on the Mac (it cannot inside the container). Enrichment is
@@ -150,21 +168,62 @@ clear_lock() {  # $1 path
 }
 
 # Plain byte copy of the database before any run that writes it. Nothing on
-# the Mac parses the file; restores go through docs/security/incident-response.md.
+# the Mac parses the file (restores are checked inside the container by
+# docker/restore-backup.sh). Waits for other pipeline runs so the copy is not
+# torn, records a SHA-256 per backup, keeps tiered generations, and hands the
+# file to $AA_OFFSITE_CMD (e.g. an rclone or rsync wrapper) when set.
 backup_db() {
-    local db="$REPO/data/events.db" stamp
+    local db="$REPO/data/events.db" stamp waited=0 f
     [ -f "$db" ] || { log "no data/events.db to back up"; return 0; }
+    while [ -n "$(docker ps -q --filter 'name=^/agent-athens-')" ]; do
+        [ "$waited" -ge 600 ] && { log "WARNING: another pipeline run is still active after 10 min — skipping this backup"; return 0; }
+        sleep 15; waited=$((waited + 15))
+    done
     stamp="$(date +%Y-%m-%d-%H%M)"
-    for suffix in "" -wal -shm; do
-        [ -f "$db$suffix" ] && cp -p "$db$suffix" "$BACKUPS_DIR/events-$stamp.db$suffix"
+    for f in "" -wal -shm; do
+        [ -f "$db$f" ] && cp -p "$db$f" "$BACKUPS_DIR/events-$stamp.db$f"
     done
     gzip -f "$BACKUPS_DIR/events-$stamp.db"*
-    # Keep the newest 60 backup sets.
-    ls -1t "$BACKUPS_DIR"/events-*.db.gz 2>/dev/null | tail -n +61 | while read -r old; do
-        rm -f "$old" "${old%.db.gz}.db-wal.gz" "${old%.db.gz}.db-shm.gz"
-    done
+    (cd "$BACKUPS_DIR" && for f in events-"$stamp".db*.gz; do shasum -a 256 "$f"; done >> SHA256SUMS)
+    prune_backups
     log "backed up data/events.db to $BACKUPS_DIR/events-$stamp.db.gz"
+    if [ -n "${AA_OFFSITE_CMD:-}" ]; then
+        if $AA_OFFSITE_CMD "$BACKUPS_DIR/events-$stamp.db.gz" >/dev/null 2>&1; then
+            log "off-machine copy done"
+        else
+            log "WARNING: off-machine copy failed ($AA_OFFSITE_CMD)"
+            bash "$HERE/integrity-check.sh" notify "Off-machine backup copy failed; check AA_OFFSITE_CMD" || true
+        fi
+    fi
 }
+
+# Keep: the newest 20 sets, the newest set of each of the last 14 days, of each
+# of the last 8 weeks and of each of the last 6 months. Names are
+# events-YYYY-MM-DD-HHMM.db.gz, so the date is parsed from the name.
+prune_backups() {
+    local f d day week month keep days="" weeks="" months="" n=0 nd=0 nw=0 nm=0
+    local keepfile; keepfile="$(mktemp)"
+    for f in $(ls -1t "$BACKUPS_DIR"/events-*.db.gz 2>/dev/null); do
+        d="$(basename "$f" | sed -n 's/^events-\([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}\)-.*/\1/p')"
+        [ -n "$d" ] || continue
+        keep=no; n=$((n + 1))
+        [ "$n" -le 20 ] && keep=yes
+        day="$d"; month="${d%-*}"
+        if [ "$(uname -s)" = "Darwin" ]; then week=$(( $(date -j -f %Y-%m-%d "$d" +%s) / 604800 ))
+        else week=$(( $(date -d "$d" +%s) / 604800 )); fi
+        case " $days " in *" $day "*) ;; *) nd=$((nd + 1)); days="$days $day"; [ "$nd" -le 14 ] && keep=yes ;; esac
+        case " $weeks " in *" $week "*) ;; *) nw=$((nw + 1)); weeks="$weeks $week"; [ "$nw" -le 8 ] && keep=yes ;; esac
+        case " $months " in *" $month "*) ;; *) nm=$((nm + 1)); months="$months $month"; [ "$nm" -le 6 ] && keep=yes ;; esac
+        [ "$keep" = "yes" ] && echo "$f" >> "$keepfile"
+    done
+    for f in $(ls -1t "$BACKUPS_DIR"/events-*.db.gz 2>/dev/null); do
+        grep -qxF "$f" "$keepfile" && continue
+        rm -f "$f" "${f%.db.gz}.db-wal.gz" "${f%.db.gz}.db-shm.gz"
+    done
+    rm -f "$keepfile"
+}
+
+is_dotenv() { case "$1" in .env.example) return 1 ;; .env|.env.*) return 0 ;; esac; return 1; }
 
 # Run one container under a policy. $1 policy, $2 container name, rest: entrypoint args.
 run_container() {
@@ -185,35 +244,80 @@ run_container() {
     done < "$ENV_FILE"
     [ -n "${AA_DEFER_PUBLISH:-}" ] && env_flags+=(-e AA_DEFER_PUBLISH)
 
-    local mounts=() p f
-    for p in $CODE_PATHS; do
-        [ -e "$REPO/$p" ] && mounts+=(-v "$REPO/$p:/workspace/$p:ro")
-    done
+    local mounts=() entry
+    while IFS= read -r entry; do
+        case "$entry" in .git|.pipeline-*|.auto-enrich.lock.d) continue ;; esac
+        case " $RW_TOP " in *" $entry "*) continue ;; esac
+        # The Netlify CLI keeps working files under .netlify/ while deploying;
+        # only the publish run (no browser, no outside input) may write it.
+        [ "$entry" = ".netlify" ] && [ "$policy" = "publish" ] && continue
+        case "$entry" in *:*) fail "repo entry '$entry' contains ':' and cannot be mounted" "rename it" 2 ;; esac
+        if [ "$DOTENV" = "no" ] && [ -f "$REPO/$entry" ] && is_dotenv "$entry"; then
+            mounts+=(-v "/dev/null:/workspace/$entry:ro")    # hidden, not just read-only
+        else
+            mounts+=(-v "$REPO/$entry:/workspace/$entry:ro")
+        fi
+    done < <(ls -A1 "$REPO")
+    # The one file under a read-only folder that the pipeline writes.
+    [ -f "$REPO/docs/DECISIONS-QUEUE.md" ] && mounts+=(-v "$REPO/docs/DECISIONS-QUEUE.md:/workspace/docs/DECISIONS-QUEUE.md")
     if [ "$GITRW" = "yes" ]; then
         mounts+=(-v "$REPO/.git/config:/workspace/.git/config:ro" -v "$REPO/.git/hooks:/workspace/.git/hooks:ro")
     else
         mounts+=(-v "$REPO/.git:/workspace/.git:ro")
     fi
-    if [ "$DOTENV" = "no" ]; then
-        for f in "$REPO"/.env*; do
-            [ -f "$f" ] && [ "$(basename "$f")" != ".env.example" ] && mounts+=(-v "/dev/null:/workspace/$(basename "$f"):ro")
-        done
-    fi
-
     local tty=()
     [ -t 0 ] && [ -t 1 ] || tty=(-T)
     docker rm -f "$name" >/dev/null 2>&1 || true   # leftover from a killed run
     local state="$STATE_DIR/state/$name.pre" rc
     bash "$HERE/integrity-check.sh" snapshot "$state" || fail "integrity snapshot failed" "see the message above" 6
     log "starting $name (tokens: ${TOKENS:-none})"
+    local out="$STATE_DIR/state/$name.out"
     set +e
-    "${COMPOSE[@]}" run --rm ${tty[@]+"${tty[@]}"} ${env_flags[@]+"${env_flags[@]}"} \
-        ${mounts[@]+"${mounts[@]}"} --name "$name" pipeline "$@"
-    rc=$?
+    if [ "$policy" = "publish" ] || [ "$policy" = "verify-live" ]; then
+        # Output is read back on the Mac (deploy record / live check).
+        "${COMPOSE[@]}" run --rm -T ${env_flags[@]+"${env_flags[@]}"} \
+            ${mounts[@]+"${mounts[@]}"} --name "$name" pipeline "$@" 2>&1 | tee "$out"
+        rc=${PIPESTATUS[0]}
+    else
+        "${COMPOSE[@]}" run --rm ${tty[@]+"${tty[@]}"} ${env_flags[@]+"${env_flags[@]}"} \
+            ${mounts[@]+"${mounts[@]}"} --name "$name" pipeline "$@"
+        rc=$?
+    fi
     set -e
     log "$name finished with exit code $rc"
     bash "$HERE/integrity-check.sh" verify "$state" "$name" || exit 6
+    [ "$policy" = "publish" ] && [ "$rc" -eq 0 ] && record_deploy "$out"
     return "$rc"
+}
+
+# Host-only record of the deploys the pipeline made (no container can write
+# $STATE_DIR). The deadman watchdog restores from it and verify-live checks
+# the live site against it.
+DEPLOYS_LOG="$STATE_DIR/deploys.log"
+record_deploy() {
+    local line id hash
+    line="$(grep -E '^PUBLISH-RESULT deploy_id=[0-9a-f]{20,40} dist_hash=[0-9a-f]{64} state=ready$' "$1" | tail -1 || true)"
+    if [ -z "$line" ]; then
+        log "WARNING: publish finished but printed no PUBLISH-RESULT line — deploy not recorded"
+        return 0
+    fi
+    id="$(echo "$line" | sed -E 's/.*deploy_id=([0-9a-f]+).*/\1/')"
+    hash="$(echo "$line" | sed -E 's/.*dist_hash=([0-9a-f]+).*/\1/')"
+    echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $id $hash" >> "$DEPLOYS_LOG"
+    log "recorded deploy $id"
+}
+
+check_live() {  # $1 container output
+    local live
+    live="$(grep -E '^LIVE deploy_id=[0-9a-f]{20,40}$' "$1" | tail -1 | sed -E 's/^LIVE deploy_id=//' || true)"
+    [ -n "$live" ] || { bash "$HERE/integrity-check.sh" notify "verify-live could not read the live deploy id"; exit 8; }
+    if [ -f "$DEPLOYS_LOG" ] && awk '{print $2}' "$DEPLOYS_LOG" | grep -qxF "$live"; then
+        log "live site is pipeline deploy $live"
+    else
+        log "ALERT: live deploy $live is not one the pipeline recorded"
+        bash "$HERE/integrity-check.sh" notify "Live site runs deploy $live, which the pipeline did not make. See docs/security/incident-response.md"
+        exit 8
+    fi
 }
 
 case "$JOB" in
@@ -240,6 +344,11 @@ case "$JOB" in
     publish)
         clear_lock "$REPO/.pipeline-publish.lock"
         run_container publish "$NAME" publish "$@"
+        ;;
+    verify-live)
+        rc=0; run_container verify-live "$NAME" verify-live || rc=$?
+        [ "$rc" -eq 0 ] || { bash "$HERE/integrity-check.sh" notify "verify-live failed (exit $rc)"; exit "$rc"; }
+        check_live "$STATE_DIR/state/$NAME.out"
         ;;
     daily)
         clear_lock "$REPO/.pipeline-full.lock"

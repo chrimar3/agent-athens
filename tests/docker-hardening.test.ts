@@ -100,19 +100,41 @@ describe('docker/aa-run.sh least privilege', () => {
     expect(wrapper).toContain('inside "$ENV_FILE" "$REPO" || inside "$ENV_FILE" "$SECRETS_DIR"');
   });
 
-  test('code paths, .git/config and .git/hooks are mounted read-only', () => {
-    const codePaths = (wrapper.match(/CODE_PATHS="([^"]*)"/) ?? ['', ''])[1].split(/\s+/);
-    for (const p of ['scripts', 'src', 'config', 'docker', '.claude', '.github', 'package.json', 'bun.lock', 'bunfig.toml']) {
-      expect(codePaths).toContain(p);
-    }
-    expect(wrapper).toContain('$REPO/$p:/workspace/$p:ro');
+  test('every top-level entry except the data folders is mounted read-only', () => {
+    const rw = ((wrapper.match(/RW_TOP="([^"]*)"/) ?? ['', ''])[1]).split(/\s+/).sort();
+    expect(rw).toEqual(['data', 'dist', 'logs', 'node_modules', 'temp', 'temp-briefs', 'temp-descriptions', 'temp-research', 'tmp']);
+    expect(wrapper).toContain('done < <(ls -A1 "$REPO")');
+    expect(wrapper).toContain('mounts+=(-v "$REPO/$entry:/workspace/$entry:ro")');
     expect(wrapper).toContain('.git/config:/workspace/.git/config:ro');
     expect(wrapper).toContain('.git/hooks:/workspace/.git/hooks:ro');
     expect(wrapper).toContain('$REPO/.git:/workspace/.git:ro');
   });
 
-  test('every .env* file is masked for runs without DOTENV', () => {
-    expect(wrapper).toContain('for f in "$REPO"/.env*');
+  test('.netlify is writable only by the publish run', () => {
+    expect(wrapper).toContain('[ "$entry" = ".netlify" ] && [ "$policy" = "publish" ] && continue');
+  });
+
+  test('deploys are recorded on the Mac from a strict result line', () => {
+    expect(wrapper).toContain('DEPLOYS_LOG="$STATE_DIR/deploys.log"');
+    expect(wrapper).toContain("'^PUBLISH-RESULT deploy_id=[0-9a-f]{20,40} dist_hash=[0-9a-f]{64} state=ready$'");
+    expect(wrapper).toMatch(/verify-live\)\s+TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no/);
+    expect(wrapper).toMatch(/check_live[\s\S]*is not one the pipeline recorded[\s\S]*exit 8/);
+  });
+
+  test('stale images are refused except for checks and restores', () => {
+    expect(wrapper).toContain('case "$JOB" in doctor|shell|verify-live) stale_ok=yes');
+    expect(wrapper).toMatch(/-gt 30 \] && \[ "\$stale_ok" = "no" \][\s\S]{0,300}\s7\n/);
+  });
+
+  test('backups wait for other runs, are checksummed and pruned in tiers', () => {
+    expect(wrapper).toContain("docker ps -q --filter 'name=^/agent-athens-'");
+    expect(wrapper).toContain('>> SHA256SUMS');
+    expect(wrapper).toMatch(/prune_backups\(\)[\s\S]*-le 20[\s\S]*-le 14[\s\S]*-le 8[\s\S]*-le 6/);
+  });
+
+  test('every .env* file is hidden (not just read-only) for runs without DOTENV', () => {
+    expect(wrapper).toContain('is_dotenv() { case "$1" in .env.example) return 1 ;; .env|.env.*) return 0 ;; esac; return 1; }');
+    expect(wrapper).toContain('mounts+=(-v "/dev/null:/workspace/$entry:ro")');
   });
 
   test('env file is parsed, never sourced', () => {
@@ -122,6 +144,18 @@ describe('docker/aa-run.sh least privilege', () => {
   test('help succeeds and unknown jobs are refused', () => {
     expect(Bun.spawnSync(['bash', join(ROOT, 'docker/aa-run.sh'), 'help']).exitCode).toBe(0);
     expect(Bun.spawnSync(['bash', join(ROOT, 'docker/aa-run.sh'), 'bogus-job']).exitCode).toBe(2);
+  });
+});
+
+describe('docker/install-launchd.sh', () => {
+  const installer = read('docker/install-launchd.sh');
+  test('wrapper logs go to the host-only state folder, not the repo', () => {
+    expect(installer).toContain('LOGDIR="${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/logs"');
+    expect(installer).not.toContain('$REPO/logs/docker-');
+  });
+  test('schedules the live-site check and the weekly image rebuild', () => {
+    expect(installer).toContain('verify-live|verify-live|12|15|');
+    expect(installer).toContain('image-refresh|image-refresh|5|30|0');
   });
 });
 

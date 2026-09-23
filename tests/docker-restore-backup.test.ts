@@ -21,14 +21,16 @@ function makeDb(path: string, rows: number) {
   db.close();
 }
 
+let current = '0';
 const run = (...args: string[]) => {
   const r = Bun.spawnSync(['bash', SCRIPT, ...args], {
-    env: { ...process.env, AA_RESTORE_REPO: repo, AA_BACKUPS_DIR: backups, AA_STATE_DIR: state, AA_RESTORE_CHECK: checker },
+    env: { ...process.env, AA_RESTORE_REPO: repo, AA_BACKUPS_DIR: backups, AA_STATE_DIR: state, AA_RESTORE_CHECK: checker, AA_TEST_CURRENT: current },
   });
   return { code: r.exitCode, out: r.stdout.toString() + r.stderr.toString() };
 };
 
 beforeEach(() => {
+  current = '0';
   root = mkdtempSync(join(tmpdir(), 'aa-restore-'));
   repo = join(root, 'repo');
   backups = join(root, 'backups');
@@ -38,7 +40,7 @@ beforeEach(() => {
   writeFileSync(join(repo, 'data/events.db'), 'live-db-bytes');
   // Stand-in for the container check: same query, run locally.
   checker = join(root, 'check.sh');
-  writeFileSync(checker, '#!/bin/bash\nsqlite3 -readonly "$1" "PRAGMA integrity_check; SELECT COUNT(*) FROM events;"\n');
+  writeFileSync(checker, '#!/bin/bash\nsqlite3 -readonly "$1" "PRAGMA integrity_check; SELECT COUNT(*) FROM events;"\necho "CURRENT=${AA_TEST_CURRENT:-0}"\n');
   chmodSync(checker, 0o755);
 });
 
@@ -62,6 +64,30 @@ describe('restore-backup.sh', () => {
     expect(r.code).toBe(1);
     expect(readFileSync(join(repo, 'data/events.db'), 'utf8')).toBe('live-db-bytes');
     expect(existsSync(join(repo, 'data/events.db.restore-candidate'))).toBe(false);
+  });
+
+  test('a backup whose bytes no longer match SHA256SUMS is refused', () => {
+    const tmp = join(root, 'good.sqlite');
+    makeDb(tmp, 3);
+    const name = 'events-2026-09-04-0800.db.gz';
+    writeFileSync(join(backups, name), gzipSync(readFileSync(tmp)));
+    writeFileSync(join(backups, 'SHA256SUMS'), `${'0'.repeat(64)}  ${name}\n`);
+    const r = run();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('SHA-256');
+    expect(readFileSync(join(repo, 'data/events.db'), 'utf8')).toBe('live-db-bytes');
+  });
+
+  test('a backup with far fewer events than the live database needs --force', () => {
+    const tmp = join(root, 'small.sqlite');
+    makeDb(tmp, 3);
+    writeFileSync(join(backups, 'events-2026-09-05-0800.db.gz'), gzipSync(readFileSync(tmp)));
+    current = '100';
+    const refused = run();
+    expect(refused.code).toBe(1);
+    expect(refused.out).toContain('under 70%');
+    expect(readFileSync(join(repo, 'data/events.db'), 'utf8')).toBe('live-db-bytes');
+    expect(run('--force').code).toBe(0);
   });
 
   test('an empty events table is refused', () => {

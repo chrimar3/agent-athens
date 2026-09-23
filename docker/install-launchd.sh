@@ -40,7 +40,10 @@ freshness|freshness|8|0|
 enrichment|enrichment|10|0|
 enrichment-13|enrichment|13|0|
 enrichment-16|enrichment|16|30|
-enrichment-19|enrichment|19|0|"
+enrichment-19|enrichment|19|0|
+verify-live|verify-live|12|15|
+verify-live-20|verify-live|20|15|
+image-refresh|image-refresh|5|30|0"
 
 LEGACY="com.agentathens.daily
 com.agentathens.freshness
@@ -51,6 +54,9 @@ com.agentathens.enrichment-19
 com.agentathens.monitor-visibility"
 
 STATE="${AA_SECRETS_DIR:-$HOME/.config/agentathens}/launchd-pre-docker.txt"
+# Wrapper logs live in the host-only state folder: containers can write the
+# repo's logs/ folder, so it is no place for the record of what they did.
+LOGDIR="${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/logs"
 
 xml() { printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'; }
 loaded() { launchctl print "$DOMAIN/$1" >/dev/null 2>&1; }
@@ -84,8 +90,8 @@ $wd        <key>Hour</key><integer>$3</integer>
         <key>PATH</key><string>/usr/local/bin:/opt/homebrew/bin:/Applications/Docker.app/Contents/Resources/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
         <key>TZ</key><string>Europe/Athens</string>
     </dict>
-    <key>StandardOutPath</key><string>$(xml "$REPO/logs/docker-$1.log")</string>
-    <key>StandardErrorPath</key><string>$(xml "$REPO/logs/docker-$1.log")</string>
+    <key>StandardOutPath</key><string>$(xml "$LOGDIR/docker-$1.log")</string>
+    <key>StandardErrorPath</key><string>$(xml "$LOGDIR/docker-$1.log")</string>
     <key>RunAtLoad</key><false/>
     <key>KeepAlive</key><false/>
     <key>Nice</key><integer>5</integer>
@@ -103,7 +109,7 @@ if [ "$MODE" = "plan" ]; then
     done
     echo "Would install these container jobs in $AGENTS:"
     echo "$JOBS" | while IFS='|' read -r n j h m w; do
-        printf '  com.agentathens.docker.%-15s %s at %02d:%02d\n' "$n" "$j" "$h" "$m"
+        printf '  com.agentathens.docker.%-15s %s at %02d:%02d%s\n' "$n" "$j" "$h" "$m" "${w:+ on Sundays}"
     done
     echo "Run with --apply after 'docker/aa-run.sh doctor' passes."
     exit 0
@@ -111,7 +117,7 @@ fi
 
 if [ "$MODE" = "apply" ]; then
     [ -x "$REPO/docker/aa-run.sh" ] || chmod +x "$REPO/docker/aa-run.sh"
-    mkdir -p "$REPO/logs"
+    mkdir -p "$LOGDIR"
     # Record each host job's state first; --rollback restores exactly this.
     if [ ! -f "$STATE" ]; then
         mkdir -p "$(dirname "$STATE")"
@@ -135,7 +141,7 @@ if [ "$MODE" = "apply" ]; then
         launchctl bootstrap "$DOMAIN" "$AGENTS/$label.plist"
         echo "installed $label"
     done
-    echo "Done. Container jobs log to $REPO/logs/docker-*.log."
+    echo "Done. Container jobs log to $LOGDIR/docker-*.log."
     echo "Add the com.agentathens.docker.* labels to pipeline_health_labels in your deadman config."
     exit 0
 fi

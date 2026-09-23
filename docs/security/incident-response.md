@@ -36,6 +36,9 @@ each step says how to confirm it worked. Credential details:
 
 ## The website shows content you didn't publish
 
+(`verify-live` alerts you when the live deploy is not one the pipeline
+recorded in `~/.config/agentathens-docker/deploys.log`.)
+
 1. Netlify → Deploys → pick the last deploy you trust → *Publish deploy*.
    Confirm on https://agentathens.com in a private window.
 2. Rotate the Netlify token (above), then check the deploy list and audit log

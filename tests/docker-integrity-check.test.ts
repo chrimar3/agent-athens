@@ -80,8 +80,28 @@ describe('integrity-check.sh', () => {
     writeFileSync(cfg, readFileSync(cfg, 'utf8') + '[core]\n\tfsmonitor = touch /tmp/should-not-run\n');
     const r = verify();
     expect(r.code).toBe(1);
-    expect(r.out).toContain('.git/config');
+    expect(r.out).toContain('.git metadata');
     expect(readFileSync(join(state, 'QUARANTINE'), 'utf8')).toContain('git was not run');
+  });
+
+  for (const planted of ['commondir', 'info/attributes', 'objects/info/alternates', 'worktrees/x/gitdir']) {
+    test(`a planted .git/${planted} is quarantined`, () => {
+      expect(snapshot().code).toBe(0);
+      mkdirSync(join(repo, '.git', planted, '..'), { recursive: true });
+      writeFileSync(join(repo, '.git', planted), '/tmp/elsewhere\n');
+      const r = verify();
+      expect(r.code).toBe(1);
+      expect(r.out).toContain('.git metadata');
+    });
+  }
+
+  test('ordinary commit and ref updates in .git are not flagged', () => {
+    expect(snapshot().code).toBe(0);
+    writeFileSync(join(repo, 'data/scoreboard.json'), '{"n":2}\n');
+    git('commit', '-qam', 'chore: daily pipeline update');
+    git('branch', '-f', 'pipeline-data', 'HEAD');
+    git('pack-refs', '--all');
+    expect(verify().code).toBe(0);
   });
 
   test('a new git hook is quarantined', () => {

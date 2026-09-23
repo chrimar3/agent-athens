@@ -7,6 +7,9 @@ current when a credential is added or moved.
 | Credential | Lives in | Used by | Blast radius if stolen | Least-privilege setup |
 |---|---|---|---|---|
 | GitHub token (`GH_TOKEN`) | `~/.config/agentathens-docker/docker.env` | freshness: `git push`, yield canary issues | Push to this repo; open/close issues | Fine-grained PAT, only `chrimar3/agent-athens`; Contents RW, Issues RW, Metadata R; 90-day expiry |
+| GitHub CLI login (`gh auth login`, macOS keychain) | Mac, host mode only | legacy host pipeline: `git push` credential helper | Whatever scopes you granted gh, often all your repos | Remove once the container runs the pipeline: `gh auth logout` |
+| Netlify CLI login (`netlify login`) | `~/Library/Preferences/netlify/config.json` | legacy host pipeline and `bun run deploy` | **Account-wide** | Remove once the container runs the pipeline: `netlify logout` |
+| Netlify site id (`NETLIFY_SITE_ID`) | `~/.config/agentathens-docker/docker.env` | publish, verify-live | Not a secret; pinned so no container-writable file picks the target site | — |
 | Netlify token (`NETLIFY_AUTH_TOKEN`) | `~/.config/agentathens-docker/docker.env` | freshness: `netlify deploy` | **Account-wide**: deploy or delete any site on the account | Dedicated token with expiry; keep only this site on the account, or a separate Netlify account for it |
 | Claude token (`CLAUDE_CODE_OAUTH_TOKEN`) | `~/.config/agentathens-docker/docker.env` | enrichment: `claude -p` | Uses your Claude subscription quota | `claude setup-token`; revoke from claude.ai settings |
 | Gmail app password (`EMAIL_USER`/`EMAIL_PASSWORD`) | repo `.env` (gitignored) | freshness: IMAP newsletter ingestion | Read (and delete) the mailbox | A dedicated Gmail account that only receives the newsletters — never your personal mailbox |

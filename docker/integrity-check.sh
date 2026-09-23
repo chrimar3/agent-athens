@@ -6,7 +6,8 @@
 # Containers see the code paths read-only (aa-run.sh CODE_MOUNTS), so they
 # cannot rewrite scripts the Mac later runs. What a read-only mount cannot
 # stop is checked here instead:
-#   1. .git/config and .git/hooks unchanged (checked before running any git,
+#   1. nothing in .git that steers git changed — config, hooks, commondir,
+#      info/, worktrees/, alternates, HEAD … (checked before running any git,
 #      because git config can make git itself execute commands);
 #   2. commits made during the run touch only data paths (a commit can carry
 #      any content without touching the working tree);
@@ -34,9 +35,17 @@ REPO="${AA_INTEGRITY_REPO:-$(cd "$HERE/.." && pwd)}"  # override for tests only
 STATE_DIR="${AA_STATE_DIR:-$HOME/.config/agentathens-docker}"
 MODE="${1:-}"; STATE_FILE="${2:-}"; JOB="${3:-job}"
 
-hash_git_meta() {  # .git/config + every hook file, content-addressed
-    (cd "$REPO/.git" && { cat config; find hooks -type f 2>/dev/null | LC_ALL=C sort | while read -r f; do echo "== $f"; cat "$f"; done; } ) \
-        | shasum -a 256 | awk '{print $1}'
+# Everything in .git that can change what git DOES (config, hooks, commondir,
+# info/, worktrees/, modules/, objects/info/alternates, HEAD …) must be
+# byte-identical after a run. Only what an ordinary commit/fetch writes may
+# change.
+GIT_VOLATILE_RE='^(objects/[0-9a-f]{2}/|objects/pack/|refs/|logs/|index$|index\.lock$|ORIG_HEAD$|FETCH_HEAD$|COMMIT_EDITMSG$|packed-refs$|gc\.log$|AUTO_MERGE$|shallow$)'
+hash_git_meta() {  # path + content of every non-volatile file and link in .git
+    (cd "$REPO/.git" && find . \( -type f -o -type l \) | sed 's|^\./||' | grep -Ev "$GIT_VOLATILE_RE" | LC_ALL=C sort \
+        | while IFS= read -r f; do
+              printf '== %s\n' "$f"
+              if [ -L "$f" ]; then readlink "$f"; else cat "$f"; fi
+          done) | shasum -a 256 | awk '{print $1}'
 }
 
 root_entries() {  # sorted top-level names, excluding runtime ones
@@ -95,7 +104,7 @@ case "$MODE" in
         pre_head="$(sed -n 's/^head=//p' "$STATE_FILE")"
         pre_meta="$(sed -n 's/^gitmeta=//p' "$STATE_FILE")"
         [ "$(hash_git_meta)" = "$pre_meta" ] \
-            || quarantine ".git/config or .git/hooks changed during the run (git was not run afterwards; inspect .git by hand)" "" ""
+            || quarantine ".git metadata (config, hooks, commondir, info/ …) changed during the run (git was not run afterwards; inspect .git by hand)" "" ""
         new_root="$(root_entries | LC_ALL=C comm -13 <(sed -n 's/^root=//p' "$STATE_FILE") -)"
         [ -z "$new_root" ] || quarantine "new file(s) at the repo root: $(echo "$new_root" | tr '\n' ' ')" "$pre_head" "$new_root"
         bad="$(cd "$REPO" && git diff --name-only "$pre_head" HEAD 2>/dev/null | grep -Ev "$DATA_PATHS_RE" || true)"
@@ -103,5 +112,9 @@ case "$MODE" in
         rm -f "$STATE_FILE"
         echo "integrity-check: PASS ($JOB)"
         ;;
-    *) echo "usage: $0 snapshot STATE_FILE | verify STATE_FILE JOB" >&2; exit 2 ;;
+    notify)
+        # Reused by aa-run.sh for other alerts (live-site check, backups).
+        notify "${2:-Agent Athens alert}"
+        ;;
+    *) echo "usage: $0 snapshot STATE_FILE | verify STATE_FILE JOB | notify MESSAGE" >&2; exit 2 ;;
 esac
