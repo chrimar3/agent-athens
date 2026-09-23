@@ -58,7 +58,7 @@ RUN chmod 0755 /usr/local/bin/stat /usr/local/bin/aa-entrypoint /usr/local/bin/a
 # never used or touched.
 WORKDIR /workspace
 COPY package.json bun.lock bunfig.toml ./
-RUN bun install --frozen-lockfile \
+RUN bun install --frozen-lockfile --ignore-scripts \
  && chown -R pwuser:pwuser /workspace
 
 USER pwuser
