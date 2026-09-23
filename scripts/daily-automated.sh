@@ -11,6 +11,15 @@
 # Usage:
 #   ./scripts/daily-automated.sh           # Run full pipeline
 #   ./scripts/daily-automated.sh --dry-run # Show what would run
+#   AA_DEFER_PUBLISH=1 ./scripts/daily-automated.sh freshness
+#                                          # Build + gate + artifact commit, then
+#                                          # STOP before push/deploy (writes
+#                                          # .pipeline-publish-ready)
+#   ./scripts/daily-automated.sh publish   # Ship that deferred build: no ingest,
+#                                          # scrape, enrich or generate
+#
+# Exit codes: 0 success (a deferred run counts as success) · 1 failure or a
+# gate refused · 3 publish mode found no deferred build to publish.
 #
 # @see specs/001-data-pipeline/tasks.md (Task 6.3)
 # @see docs/LAUNCHD-SETUP.md
@@ -38,6 +47,11 @@ STATE_FILE="$PROJECT_DIR/data/state/pipeline-state.json"
 # The ONLY ref the pipeline is ever allowed to push. Guarded by the push-gate
 # in run_deploy (scripts/__tests__/deploy-gate.test.ts pins both).
 readonly PRODUCTION_BRANCH="main"
+
+# Deferred publish (AA_DEFER_PUBLISH=1): the producing run leaves this marker
+# (JSON: headSha, builtSha, distHash, createdAt) for `publish` mode, which is
+# the only step that needs the GitHub and Netlify credentials.
+PUBLISH_MARKER="$PROJECT_DIR/.pipeline-publish-ready"
 
 # Ensure we're in project directory
 cd "$PROJECT_DIR"
@@ -582,12 +596,27 @@ run_scoreboard() {
 }
 
 # Phase 5: Deploy
+#
+# Also the body of `publish` mode (publishing=1): the deferred build is
+# re-verified (marker, deploy gate, published-artifact gate) and then shipped
+# through the same origin-gate / push-gate / Netlify code below. With
+# AA_DEFER_PUBLISH=1 a producing run stops after the artifact commit.
 run_deploy() {
     log_phase "DEPLOYMENT"
 
     if [[ "$DRY_RUN" == "true" ]]; then
         log "[DRY RUN] Would deploy to Netlify"
         return 0
+    fi
+
+    local publishing=0
+    local gate_args=()
+    if [[ "$PIPELINE_MODE" == "publish" ]]; then
+        publishing=1
+        gate_args=(--allow-descendant)
+        local marker_rc=0
+        check_publish_marker || marker_rc=$?
+        [[ "$marker_rc" -eq 0 ]] || return "$marker_rc"
     fi
 
     # Step 0: Clean-tree deploy gate (Option 3 Phase 1, 2026-07-07). Refuses
@@ -597,11 +626,23 @@ run_deploy() {
     # same HEAD this gate sees). Closes the 2026-07-06 23:17Z breach where a
     # local build from an uncommitted tree was auto-deployed. Guard tests:
     # scripts/__tests__/deploy-gate.test.ts.
-    if ! bash "$SCRIPT_DIR/deploy-gate.sh" >> "$LOG_FILE" 2>&1; then
+    # publish mode passes --allow-descendant: its HEAD is the deferred run's
+    # artifact commit on top of the stamped sha (see deploy-gate.sh).
+    if ! bash "$SCRIPT_DIR/deploy-gate.sh" ${gate_args[@]+"${gate_args[@]}"} >> "$LOG_FILE" 2>&1; then
         log_error "[deploy-gate] REFUSED — dist/ does not correspond to committed HEAD (see log for the named condition). Skipping deploy."
         return 1
     fi
     log "[deploy-gate] PASS — dist/ corresponds to committed HEAD"
+
+    # publish mode: dist/ was built hours earlier by another run — re-run the
+    # build's published-artifact invariant over it before it can ship.
+    if [[ $publishing -eq 1 ]]; then
+        if ! bun run scripts/check-published-artifacts.ts dist >> "$LOG_FILE" 2>&1; then
+            log_error "[publish] REFUSED — published-artifact gate failed on dist/ (see $LOG_FILE). Nothing pushed or deployed; fix the source, re-run the deferred build, then publish."
+            return 1
+        fi
+        log "[publish] published-artifact gate PASS on dist/"
+    fi
 
     # Step 1: Commit and push pipeline outputs (dist/ is gitignored)
     #
@@ -617,42 +658,70 @@ run_deploy() {
         "data/scoreboard.json"
     )
 
-    log "Checking for pipeline-output changes..."
-    # staging:begin (block extracted VERBATIM by tests/daily-pipeline-staging.test.ts — keep both markers)
-    # One call for the whole list is fatal on any pathspec that matches no
-    # file (exit 128) and stages NOTHING, so a single absent artefact silently
-    # dropped all three from that day's commit (issue #5). Stage per path so
-    # the others still land, and log each failure instead of swallowing it.
-    for f in "${PIPELINE_ALLOWLIST[@]}"; do
-        git add -- "$f" >> "$LOG_FILE" 2>&1 || log_error "[staging] git add failed for $f (continuing)"
-    done
-    # staging:end
-
-    # Defense-in-depth guard: if anything outside the allow-list ended up in
-    # the index (e.g. developer had work pre-staged when pipeline fired), abort
-    # and reset rather than commit unintended files.
-    local UNEXPECTED=""
-    while IFS= read -r staged; do
-        local is_allowed=0
-        for allowed in "${PIPELINE_ALLOWLIST[@]}"; do
-            if [[ "$staged" == "$allowed" ]]; then
-                is_allowed=1
-                break
-            fi
+    local artifact_committed=0
+    if [[ $publishing -eq 0 ]]; then
+        log "Checking for pipeline-output changes..."
+        # staging:begin (block extracted VERBATIM by tests/daily-pipeline-staging.test.ts — keep both markers)
+        # One call for the whole list is fatal on any pathspec that matches no
+        # file (exit 128) and stages NOTHING, so a single absent artefact silently
+        # dropped all three from that day's commit (issue #5). Stage per path so
+        # the others still land, and log each failure instead of swallowing it.
+        for f in "${PIPELINE_ALLOWLIST[@]}"; do
+            git add -- "$f" >> "$LOG_FILE" 2>&1 || log_error "[staging] git add failed for $f (continuing)"
         done
-        if [[ $is_allowed -eq 0 ]]; then
-            UNEXPECTED="$UNEXPECTED $staged"
-        fi
-    done < <(git diff --cached --name-only)
+        # staging:end
 
-    if [[ -n "$UNEXPECTED" ]]; then
-        log_error "Pipeline staging guard tripped — unexpected staged files:$UNEXPECTED"
-        log_error "Aborting commit to prevent WIP contamination. Resetting index."
-        git reset HEAD -- >> "$LOG_FILE" 2>&1 || true
-    elif git diff --cached --quiet; then
-        log "No pipeline-output changes to commit"
-    else
-        git commit -m "chore: daily pipeline update $(date +%Y-%m-%d)" || true
+        # Defense-in-depth guard: if anything outside the allow-list ended up in
+        # the index (e.g. developer had work pre-staged when pipeline fired), abort
+        # and reset rather than commit unintended files.
+        local UNEXPECTED=""
+        while IFS= read -r staged; do
+            local is_allowed=0
+            for allowed in "${PIPELINE_ALLOWLIST[@]}"; do
+                if [[ "$staged" == "$allowed" ]]; then
+                    is_allowed=1
+                    break
+                fi
+            done
+            if [[ $is_allowed -eq 0 ]]; then
+                UNEXPECTED="$UNEXPECTED $staged"
+            fi
+        done < <(git diff --cached --name-only)
+
+        if [[ -n "$UNEXPECTED" ]]; then
+            log_error "Pipeline staging guard tripped — unexpected staged files:$UNEXPECTED"
+            log_error "Aborting commit to prevent WIP contamination. Resetting index."
+            git reset HEAD -- >> "$LOG_FILE" 2>&1 || true
+        elif git diff --cached --quiet; then
+            log "No pipeline-output changes to commit"
+        else
+            git commit -m "chore: daily pipeline update $(date +%Y-%m-%d)" || true
+            artifact_committed=1
+        fi
+
+        # Deferred publish: the gate passed and the allowlisted artifacts are
+        # committed locally; stop before anything that needs the GitHub or
+        # Netlify credentials. `publish` mode re-verifies and ships.
+        if [[ "${AA_DEFER_PUBLISH:-}" == "1" ]]; then
+            write_publish_marker || return 1
+            return 0
+        fi
+    fi
+
+    # Step 1b: only reviewed code may ship. Fails closed (no push, no deploy).
+    if ! verify_origin_ancestry; then
+        return 1
+    fi
+
+    # Step 1c: push. A producing run pushes after its artifact commit (as
+    # before); publish mode pushes whatever pipeline commits are still ahead.
+    local push_wanted=$artifact_committed
+    if [[ $publishing -eq 1 ]]; then
+        local ahead
+        ahead=$(git rev-list --count "refs/remotes/origin/$PRODUCTION_BRANCH..HEAD" 2>/dev/null) || ahead=0
+        [[ "$ahead" -gt 0 ]] && push_wanted=1
+    fi
+    if [[ $push_wanted -eq 1 ]]; then
         # push-gate:begin (block extracted VERBATIM by scripts/__tests__/deploy-gate.test.ts — keep both markers)
         #
         # Pushing a branch NAME sends the LOCAL ref of that name — a valid
@@ -844,6 +913,10 @@ run_deploy() {
             # Locale-convert at display time only. Divergence from CLAUDE.md's
             # Athens-time rule is deliberate: machine-parsed by check-deploy-cadence.ts.
             echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) deploy-success" >> logs/deploy-cadence.log
+            if [[ $publishing -eq 1 ]]; then
+                rm -f "$PUBLISH_MARKER"
+                log "[publish] deferred build published (deploy $DEPLOY_ID); marker removed"
+            fi
             return 0
         fi
         [ "$attempt" = "2" ] && { log_error "[deploy] failed after retry; state=$STATE error=$ERR_MSG"; return 1; }
@@ -868,6 +941,152 @@ run_deploy() {
         log_error "[deploy] gate refused retry: state=$STATE error=$ERR_MSG"
         return 1
     done
+}
+
+# Deferred publish (AA_DEFER_PUBLISH=1): record which build is waiting. Values
+# come from the stamp the deploy gate just verified and from HEAD after the
+# artifact commit; `publish` mode refuses unless dist/ still matches them.
+write_publish_marker() {
+    local stamp="$PROJECT_DIR/dist/.build-provenance"
+    local built_sha dist_hash head_sha created
+    built_sha=$(sed -n 's/^sha=//p' "$stamp" 2>/dev/null | head -1)
+    dist_hash=$(sed -n 's/^distHash=//p' "$stamp" 2>/dev/null | head -1)
+    head_sha=$(git rev-parse HEAD 2>/dev/null) || head_sha=""
+    created=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+    if ! [[ "$built_sha" =~ ^[0-9a-f]{40}$ && "$dist_hash" =~ ^[0-9a-f]{64}$ && "$head_sha" =~ ^[0-9a-f]{40}$ ]]; then
+        log_error "[publish] cannot write $PUBLISH_MARKER — stamp or HEAD unreadable (sha='$built_sha' distHash='$dist_hash' HEAD='$head_sha'). Nothing pushed or deployed; rebuild and re-run."
+        return 1
+    fi
+    if ! printf '{"headSha":"%s","builtSha":"%s","distHash":"%s","createdAt":"%s"}\n' \
+            "$head_sha" "$built_sha" "$dist_hash" "$created" > "$PUBLISH_MARKER.tmp" \
+        || ! mv -f "$PUBLISH_MARKER.tmp" "$PUBLISH_MARKER"; then
+        rm -f "$PUBLISH_MARKER.tmp"
+        log_error "[publish] cannot write $PUBLISH_MARKER. Nothing pushed or deployed; check disk space/permissions and re-run."
+        return 1
+    fi
+    log "[publish] DEFERRED — deploy gate passed and artifacts committed; NOT pushed, NOT deployed (AA_DEFER_PUBLISH=1)."
+    log "[publish] Marker $PUBLISH_MARKER: head ${head_sha:0:9}, built ${built_sha:0:9}, dist ${dist_hash:0:12}. Ship it with: scripts/daily-automated.sh publish"
+    return 0
+}
+
+# publish mode precondition: a deferred build is waiting AND dist/ is still
+# the build that run stamped. Returns 3 when there is nothing to publish.
+check_publish_marker() {
+    if [[ ! -f "$PUBLISH_MARKER" ]]; then
+        log_error "[publish] REFUSED — no deferred build waiting ($PUBLISH_MARKER missing). Nothing pushed or deployed. Produce one with: AA_DEFER_PUBLISH=1 scripts/daily-automated.sh freshness"
+        return 3
+    fi
+    local stamp="$PROJECT_DIR/dist/.build-provenance"
+    local m_built m_dist s_built s_dist
+    m_built=$(jq -r '.builtSha // empty' "$PUBLISH_MARKER" 2>/dev/null)
+    m_dist=$(jq -r '.distHash // empty' "$PUBLISH_MARKER" 2>/dev/null)
+    s_built=$(sed -n 's/^sha=//p' "$stamp" 2>/dev/null | head -1)
+    s_dist=$(sed -n 's/^distHash=//p' "$stamp" 2>/dev/null | head -1)
+    if [[ -z "$m_built" || -z "$m_dist" || "$m_built" != "$s_built" || "$m_dist" != "$s_dist" ]]; then
+        log_error "[publish] REFUSED — $PUBLISH_MARKER (built ${m_built:0:9}, dist ${m_dist:0:12}) does not match dist/.build-provenance (built ${s_built:0:9}, dist ${s_dist:0:12}): dist/ was rebuilt or replaced after the deferred run, or the marker is unreadable. Nothing pushed or deployed; re-run the deferred build, then publish."
+        return 1
+    fi
+    log "[publish] marker matches dist/ stamp (built ${s_built:0:9}, dist ${s_dist:0:12})"
+    return 0
+}
+
+# awake-bounded:begin (extracted VERBATIM by tests/daily-pipeline-deferred-publish.test.ts — keep both markers)
+# Run "$@" in the background with an AWAKE-time limit of $1 seconds (15 s
+# ticks of kernel-paused sleep, the same policy as the push and deploy
+# watchdogs: a suspended laptop is not a stalled command), then TERM, then
+# KILL after 4 more ticks. Returns the command's status, or 124 on timeout.
+run_awake_bounded() {
+    local limit="$1"; shift
+    local flag
+    flag=$(mktemp) || return 125
+    "$@" &
+    local pid=$!
+    ( ticks=0
+      while [ "$(( ticks * 15 ))" -lt "$limit" ]; do
+        kill -0 "$pid" 2>/dev/null || exit 0
+        sleep 15
+        ticks=$(( ticks + 1 ))
+      done
+      kill -0 "$pid" 2>/dev/null || exit 0
+      echo timeout > "$flag"
+      kill "$pid" 2>/dev/null
+      ticks=0
+      while [ "$ticks" -lt 4 ]; do
+        kill -0 "$pid" 2>/dev/null || exit 0
+        sleep 5
+        ticks=$(( ticks + 1 ))
+      done
+      kill -9 "$pid" 2>/dev/null
+    ) &
+    local wd=$! rc=0
+    wait "$pid" || rc=$?
+    kill "$wd" 2>/dev/null || true
+    wait "$wd" 2>/dev/null || true
+    [[ -s "$flag" ]] && rc=124
+    rm -f "$flag"
+    return "$rc"
+}
+# awake-bounded:end
+
+# Origin gate: production may only carry code that is on the remote
+# production branch (reviewed and merged) plus the pipeline's own
+# data-artifact commits. Called by run_deploy before the push AND the deploy.
+verify_origin_ancestry() {
+    # origin-gate:begin (extracted VERBATIM by tests/daily-pipeline-deferred-publish.test.ts — keep both markers)
+    #
+    # Fetch the remote tip (bounded, non-interactive), then require EVERY
+    # commit in origin/<branch>..HEAD to be a pipeline artifact commit: one
+    # parent, exactly the pipeline's commit message, authored by the identity
+    # this checkout commits as, touching ONLY PIPELINE_ALLOWLIST paths. Anything
+    # else refuses the push and the deploy. An unreachable remote refuses too
+    # (fail closed): without the remote tip nothing can be called reviewed.
+    local og_ref="refs/remotes/origin/$PRODUCTION_BRANCH" og_rc=0
+    run_awake_bounded "${FETCH_TIMEOUT:-120}" env GIT_TERMINAL_PROMPT=0 \
+        git -c credential.helper='!gh auth git-credential' fetch --quiet --no-tags \
+        origin "+refs/heads/$PRODUCTION_BRANCH:$og_ref" >> "$LOG_FILE" 2>&1 || og_rc=$?
+    if [[ "$og_rc" -ne 0 ]]; then
+        local og_what="failed (exit $og_rc)"
+        [[ "$og_rc" -eq 124 ]] && og_what="timed out after ${FETCH_TIMEOUT:-120}s of awake time"
+        log_error "[origin-gate] REFUSED — fetching origin/$PRODUCTION_BRANCH $og_what; cannot prove HEAD is reviewed code. Nothing pushed or deployed. Check network/credentials (git fetch origin $PRODUCTION_BRANCH) and re-run."
+        return 1
+    fi
+
+    local og_commits
+    if ! og_commits=$(git rev-list "$og_ref..HEAD" 2>>"$LOG_FILE"); then
+        log_error "[origin-gate] REFUSED — cannot list $og_ref..HEAD. Nothing pushed or deployed; inspect the repository state and re-run."
+        return 1
+    fi
+
+    local og_email og_msg_re='^chore: daily pipeline update [0-9]{4}-[0-9]{2}-[0-9]{2}$'
+    og_email=$(git var GIT_AUTHOR_IDENT 2>/dev/null | sed -n 's/.*<\([^>]*\)>.*/\1/p')
+    local og_bad="" og_count=0 og_c og_why og_words og_msg og_ae og_path og_ok og_allowed
+    for og_c in $og_commits; do
+        og_count=$(( og_count + 1 ))
+        og_why=""
+        og_words=$(git rev-list --parents -n 1 "$og_c" | wc -w | tr -d ' ')
+        [[ "$og_words" == "2" ]] || og_why="$og_why not a single-parent commit;"
+        og_msg=$(git log -1 --no-show-signature --format=%B "$og_c")
+        [[ "$og_msg" =~ $og_msg_re ]] || og_why="$og_why message is not the pipeline's;"
+        og_ae=$(git log -1 --no-show-signature --format=%ae "$og_c")
+        [[ -n "$og_email" && "$og_ae" == "$og_email" ]] || og_why="$og_why author <$og_ae> is not <$og_email>;"
+        while IFS= read -r og_path; do
+            [[ -z "$og_path" ]] && continue
+            og_ok=0
+            for og_allowed in "${PIPELINE_ALLOWLIST[@]}"; do
+                if [[ "$og_path" == "$og_allowed" ]]; then og_ok=1; break; fi
+            done
+            [[ $og_ok -eq 1 ]] || og_why="$og_why touches $og_path;"
+        done < <(git diff-tree --no-commit-id --name-only -r "$og_c")
+        [[ -z "$og_why" ]] || og_bad="$og_bad ${og_c:0:12} ($og_why)"
+    done
+
+    if [[ -n "$og_bad" ]]; then
+        log_error "[origin-gate] REFUSED — HEAD carries commit(s) not on origin/$PRODUCTION_BRANCH that are not pipeline artifact commits:$og_bad. Nothing pushed or deployed. Get that code reviewed and merged, bring local $PRODUCTION_BRANCH back to origin/$PRODUCTION_BRANCH plus pipeline commits only, and re-run."
+        return 1
+    fi
+    log "[origin-gate] PASS — $og_count local commit(s) ahead of origin/$PRODUCTION_BRANCH, all pipeline artifact commits"
+    return 0
+    # origin-gate:end
 }
 
 # Phase 6b: GSC sitemap submission (Phase-3 T1, 2026-07-19). Google's
@@ -964,9 +1183,9 @@ main() {
         case $arg in
             --dry-run)         DRY_RUN="true" ;;
             --mode=*)          PIPELINE_MODE="${arg#--mode=}" ;;
-            full|freshness|enrichment) PIPELINE_MODE="$arg" ;;
-            --help|-h)         echo "Usage: $0 [full|freshness|enrichment] [--dry-run]"; exit 0 ;;
-            *)                 echo "Unknown arg: $arg"; echo "Usage: $0 [full|freshness|enrichment] [--dry-run]"; exit 1 ;;
+            full|freshness|enrichment|publish) PIPELINE_MODE="$arg" ;;
+            --help|-h)         echo "Usage: [AA_DEFER_PUBLISH=1] $0 [full|freshness|enrichment|publish] [--dry-run]"; exit 0 ;;
+            *)                 echo "Unknown arg: $arg"; echo "Usage: [AA_DEFER_PUBLISH=1] $0 [full|freshness|enrichment|publish] [--dry-run]"; exit 1 ;;
         esac
     done
 
@@ -985,7 +1204,7 @@ main() {
     # caffeinate:end
 
     case "$PIPELINE_MODE" in
-        full|freshness|enrichment) ;;
+        full|freshness|enrichment|publish) ;;
         *) echo "Invalid mode: $PIPELINE_MODE"; exit 1 ;;
     esac
 
@@ -1049,6 +1268,24 @@ main() {
     log "Project: $PROJECT_DIR"
     log ""
 
+    # ── PUBLISH MODE: ship the build a deferred run left behind. Runs NO
+    # ingest/scrape/enrich/generate and does not touch events.db; its lock is
+    # .pipeline-publish.lock (per-mode lock above). run_deploy re-verifies the
+    # marker, the deploy gate and the published-artifact gate first.
+    if [[ "$PIPELINE_MODE" == "publish" ]]; then
+        local publish_rc=0
+        run_deploy || publish_rc=$?
+        if [[ $publish_rc -ne 0 ]]; then
+            log_error "Publish did not complete (exit $publish_rc) — see the [publish]/[deploy-gate]/[origin-gate]/[deploy] lines above"
+            exit "$publish_rc"
+        fi
+        # Search-engine notifications belong after the pages are live.
+        run_indexnow_ping
+        run_gsc_sitemap_submit
+        log "Publish completed successfully"
+        exit 0
+    fi
+
     # Check dependencies
     check_dependencies
 
@@ -1104,12 +1341,17 @@ main() {
                 deploy_ok=1
                 run_image_cleanup
             fi
-            # IndexNow pings URLs from the freshly-built sitemap. Those URLs are
-            # already live from the last successful deploy, so a failed deploy
-            # today doesn't invalidate the ping — don't gate on deploy success.
-            run_indexnow_ping
-            # Same rationale for the Google-side sitemap submission (Phase-3 T1).
-            run_gsc_sitemap_submit
+            if [[ "${AA_DEFER_PUBLISH:-}" == "1" ]]; then
+                # Nothing new is live yet: `publish` mode pings after its deploy.
+                log "Deferred publish: IndexNow + GSC sitemap submission run in publish mode"
+            else
+                # IndexNow pings URLs from the freshly-built sitemap. Those URLs are
+                # already live from the last successful deploy, so a failed deploy
+                # today doesn't invalidate the ping — don't gate on deploy success.
+                run_indexnow_ping
+                # Same rationale for the Google-side sitemap submission (Phase-3 T1).
+                run_gsc_sitemap_submit
+            fi
         else
             log_error "Site generation failed — skipping deploy"
         fi

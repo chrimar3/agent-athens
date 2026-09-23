@@ -30,6 +30,7 @@ import { mkdtempSync, rmSync, mkdirSync, writeFileSync, readFileSync, existsSync
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { spawnSync } from 'bun';
+import { computeDistHash } from '../../src/utils/build-provenance';
 
 const PROJECT_ROOT = join(import.meta.dir, '../..');
 const GATE = join(PROJECT_ROOT, 'scripts/deploy-gate.sh');
@@ -69,12 +70,14 @@ function headSha(dir: string): string {
   return sh(dir, ['git', 'rev-parse', 'HEAD']).out.trim();
 }
 
-function stamp(dir: string, sha: string, sourceDirty = 0): void {
-  writeFileSync(join(dir, 'dist/.build-provenance'), `sha=${sha}\nsourceDirty=${sourceDirty}\n`);
+/** Stamp as the build does: sha + sourceDirty + the dist/ content hash at stamp time. */
+function stamp(dir: string, sha: string, sourceDirty = 0, distHash?: string): void {
+  const hash = distHash ?? computeDistHash(join(dir, 'dist'));
+  writeFileSync(join(dir, 'dist/.build-provenance'), `sha=${sha}\nsourceDirty=${sourceDirty}\ndistHash=${hash}\n`);
 }
 
-function runGate(dir: string) {
-  return sh(dir, ['bash', GATE]);
+function runGate(dir: string, ...args: string[]) {
+  return sh(dir, ['bash', GATE, ...args]);
 }
 
 describe('deploy-gate.sh — correspondence predicate (functional, fixture repos)', () => {
@@ -149,6 +152,87 @@ describe('deploy-gate.sh — correspondence predicate (functional, fixture repos
     const res = runGate(r);
     expect(res.code).not.toBe(0);
   });
+
+  test('dist/ changed AFTER the stamp (content edit) → refuses, names the dist hash', () => {
+    const r = fixture();
+    writeFileSync(join(r, 'dist/index.html'), '<p>built</p>\n');
+    stamp(r, headSha(r));
+    expect(runGate(r).code).toBe(0); // precondition: the untouched build passes
+    writeFileSync(join(r, 'dist/index.html'), '<p>edited after build</p>\n');
+    const res = runGate(r);
+    expect(res.code).not.toBe(0);
+    expect((res.err + res.out).toLowerCase()).toContain('dist hash');
+  });
+
+  test('a file ADDED to dist/ after the stamp → refuses', () => {
+    const r = fixture();
+    writeFileSync(join(r, 'dist/index.html'), '<p>built</p>\n');
+    stamp(r, headSha(r));
+    writeFileSync(join(r, 'dist/extra.html'), '<p>planted</p>\n');
+    expect(runGate(r).code).not.toBe(0);
+  });
+
+  test('stamp without distHash (pre-hash build) → refuses, FAIL CLOSED', () => {
+    const r = fixture();
+    writeFileSync(join(r, 'dist/.build-provenance'), `sha=${headSha(r)}\nsourceDirty=0\n`);
+    const res = runGate(r);
+    expect(res.code).not.toBe(0);
+    expect(res.err + res.out).toContain('distHash');
+  });
+
+  test('stamp sha is an ANCESTOR of HEAD (artifact-only commit on top) → refused by default', () => {
+    const r = fixture();
+    stamp(r, headSha(r));
+    writeFileSync(join(r, 'data/artifact.json'), '{"n":2}\n');
+    sh(r, ['git', 'commit', '-qam', 'chore: daily pipeline update 2026-09-23']);
+    expect(runGate(r).code).not.toBe(0);
+  });
+
+  test('--allow-descendant: ancestor stamp + no source-scope change since → exit 0 (deferred publish)', () => {
+    const r = fixture();
+    stamp(r, headSha(r));
+    writeFileSync(join(r, 'data/artifact.json'), '{"n":2}\n');
+    sh(r, ['git', 'commit', '-qam', 'chore: daily pipeline update 2026-09-23']);
+    const res = runGate(r, '--allow-descendant');
+    expect(res.code).toBe(0);
+  });
+
+  test('--allow-descendant: a SOURCE change committed after the stamp → refuses', () => {
+    const r = fixture();
+    stamp(r, headSha(r));
+    writeFileSync(join(r, 'src/app.ts'), 'export const x = 42;\n');
+    sh(r, ['git', 'commit', '-qam', 'chore: daily pipeline update 2026-09-23']);
+    const res = runGate(r, '--allow-descendant');
+    expect(res.code).not.toBe(0);
+    expect((res.err + res.out).toLowerCase()).toContain('source');
+  });
+
+  test('--allow-descendant: stamp sha NOT an ancestor of HEAD → refuses', () => {
+    const r = fixture();
+    stamp(r, '0'.repeat(40));
+    expect(runGate(r, '--allow-descendant').code).not.toBe(0);
+  });
+
+  test('--allow-descendant: stamp on a SIBLING commit (real sha, same source) → refuses — descendant means ancestor', () => {
+    const r = fixture();
+    const base = headSha(r);
+    writeFileSync(join(r, 'data/artifact.json'), '{"side":1}\n');
+    sh(r, ['git', 'commit', '-qam', 'side']);
+    const side = headSha(r);
+    sh(r, ['git', 'reset', '-q', '--hard', base]);
+    writeFileSync(join(r, 'data/artifact.json'), '{"main":1}\n');
+    sh(r, ['git', 'commit', '-qam', 'main']);
+    stamp(r, side);
+    const res = runGate(r, '--allow-descendant');
+    expect(res.code).not.toBe(0);
+    expect(res.err + res.out).toContain('not an ancestor');
+  });
+
+  test('unknown gate argument → refuses (a typo must not silently change the predicate)', () => {
+    const r = fixture();
+    stamp(r, headSha(r));
+    expect(runGate(r, '--allow-anything').code).not.toBe(0);
+  });
 });
 
 describe('deploy-gate — seam guards (fail if the gate is removed from a call site)', () => {
@@ -184,6 +268,18 @@ describe('deploy-gate — seam guards (fail if the gate is removed from a call s
   test('build entrypoint stamps provenance (generate-site wires writeBuildProvenance)', () => {
     const gen = readFileSync(join(PROJECT_ROOT, 'src/generate-site.ts'), 'utf-8');
     expect(gen).toContain('writeBuildProvenance');
+  });
+
+  test('source scope covers everything `netlify deploy` reads besides dist/ (netlify/, netlify.toml, static/, bunfig.toml)', () => {
+    const scope: string[] = JSON.parse(readFileSync(join(PROJECT_ROOT, 'config/deploy-gate-scope.json'), 'utf-8')).sourceScope;
+    for (const p of ['src', 'config', 'scripts', 'package.json', 'tsconfig.json', 'netlify', 'netlify.toml', 'static', 'bunfig.toml']) {
+      expect(scope).toContain(p);
+    }
+  });
+
+  test('gate verifies the dist/ content hash recorded in the stamp (weaken-guard)', () => {
+    const gate = readFileSync(GATE, 'utf-8');
+    expect(gate).toContain('distHash');
   });
 
   test('gate checks all three conditions (weaken-guard: tokens present in gate script)', () => {
@@ -447,6 +543,37 @@ describe('build-provenance stamper (unit, fixture repos)', () => {
     writeBuildProvenance(join(r, 'dist'), r);
     content = readFileSync(join(r, 'dist/.build-provenance'), 'utf-8');
     expect(content).toContain('sourceDirty=1');
+  });
+
+  test('records distHash = computeDistHash(dist) and the hash excludes the stamp itself', async () => {
+    const { writeBuildProvenance } = await import('../../src/utils/build-provenance');
+    const r = mkFixtureRepo(); repos.push(r);
+    writeFileSync(join(r, 'dist/a.html'), 'A');
+    const before = computeDistHash(join(r, 'dist'));
+    writeBuildProvenance(join(r, 'dist'), r);
+    const content = readFileSync(join(r, 'dist/.build-provenance'), 'utf-8');
+    expect(content).toMatch(/^distHash=[0-9a-f]{64}$/m);
+    expect(content).toContain(`distHash=${before}`);
+    expect(computeDistHash(join(r, 'dist'))).toBe(before); // stamp present, hash unchanged
+  });
+
+  test('computeDistHash: deterministic, sensitive to bytes, paths and additions', () => {
+    const r = mkFixtureRepo(); repos.push(r);
+    const d = join(r, 'dist');
+    mkdirSync(join(d, 'sub'));
+    writeFileSync(join(d, 'sub/b.html'), 'B');
+    writeFileSync(join(d, 'a.html'), 'A');
+    const h1 = computeDistHash(d);
+    expect(h1).toMatch(/^[0-9a-f]{64}$/);
+    expect(computeDistHash(d)).toBe(h1);
+    writeFileSync(join(d, 'a.html'), 'A2');
+    const h2 = computeDistHash(d);
+    expect(h2).not.toBe(h1);
+    writeFileSync(join(d, 'a.html'), 'A');
+    expect(computeDistHash(d)).toBe(h1);
+    rmSync(join(d, 'a.html'));
+    writeFileSync(join(d, 'c.html'), 'A'); // same bytes, different path
+    expect(computeDistHash(d)).not.toBe(h1);
   });
 
   test('non-source dirt (data/) does not set sourceDirty', async () => {

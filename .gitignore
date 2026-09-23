@@ -84,3 +84,6 @@ package-lock.json
 /design-system-audit.html
 /diagnostic-report.md
 data/responder-state.json
+
+# Deferred-publish marker written by daily-automated.sh (runtime state)
+.pipeline-publish-ready
