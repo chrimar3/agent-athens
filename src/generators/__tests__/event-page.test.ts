@@ -1122,7 +1122,7 @@ describe("selectRelatedEvents — excludes past events from venue block", () => 
 
   test("caps at 6 upcoming events, soonest first", () => {
     const many = Array.from({ length: 9 }, (_, i) =>
-      atVenue({ id: `future-${i}`, startDate: iso(i + 1), endDate: undefined })
+      atVenue({ id: `future-${i}`, title: `Concert ${i}`, startDate: iso(i + 1), endDate: undefined })
     );
     const result = selectRelatedEvents([currentEvent, pastConcert, ...many], currentEvent.id);
     expect(result.length).toBe(6);

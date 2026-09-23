@@ -638,7 +638,7 @@ describe("Related pages rendering (via renderPage)", () => {
 
     const html = renderPage(metadata, [sampleConcert]);
 
-    expect(html).toContain('href="/open">Ελεύθερη είσοδος εκδηλώσεις</a>');
+    expect(html).toContain('href="/open">Εκδηλώσεις με ελεύθερη είσοδο</a>');
   });
 
   test("should always include 'All events' link", () => {

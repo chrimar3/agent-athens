@@ -9,6 +9,10 @@
  * 2. Title containment (0.9)
  * 3. Token overlap ≥ 70% (0.75) — with edit-distance-1 typo tolerance
  * 4. Artist extraction (0.6) — bare headliner vs. full-lineup listing
+ * 5. Same slot (0.9) — last resort, also reached when the sequel guard fires
+ *    ("2ος χρόνος" season markers aren't sequels): an identical explicit start
+ *    minute at one venue licenses a word-boundary title prefix, or equal words
+ *    once Greek final -σ is ignored (digit tokens must still agree)
  *
  * Safety: events MUST share canonical venue + overlapping dates
  * before any title comparison. Protected events are always skipped.
@@ -41,7 +45,8 @@ export type MatchLayer =
   | 'exact_canonical'
   | 'containment'
   | 'token_overlap'
-  | 'artist_extraction';
+  | 'artist_extraction'
+  | 'same_slot';
 
 export interface DuplicatePair {
   eventA: string; // ID
@@ -265,6 +270,29 @@ function fuzzyEquals(a: string, b: string): boolean {
   );
 }
 
+function hasStatedClock(startDate: string | null | undefined): boolean {
+  return !!startDate && /T\d{2}:\d{2}/.test(startDate) && !/T00:00/.test(startDate);
+}
+
+/** Greek nominative/genitive differ by a final σ (canonicalization folds ς→σ). */
+const stemGreek = (t: string): string => t.replace(/σ$/, '');
+
+function sameSlotTitleMatch(ca: Canonical, cb: Canonical): string | null {
+  const [shorter, longer] = ca.title.length <= cb.title.length ? [ca.title, cb.title] : [cb.title, ca.title];
+  // ≥4 keeps the <5-char generic-word guard ("ABC") while admitting "1984".
+  if (shorter.length >= 4 && longer.startsWith(shorter + ' ')) {
+    return `"${shorter}" is a prefix of "${longer}"`;
+  }
+  if (ca.digits !== cb.digits) return null;
+  const stems = (t: string[]) => new Set(t.map(stemGreek));
+  const sa = stems(ca.tokens);
+  const sb = stems(cb.tokens);
+  if (sa.size >= 2 && sa.size === sb.size && [...sa].every((t) => sb.has(t))) {
+    return `same words ignoring Greek case endings`;
+  }
+  return null;
+}
+
 // ============================================================================
 // Pair Comparison
 // ============================================================================
@@ -331,7 +359,7 @@ function matchTitle(
   // these are different installments ("Κωμωδία της Γειτονιάς 2" vs "… 3",
   // "(2007)" vs "(1982)") — never fuzzy/partial-match them.
   if (ca.digits && cb.digits && ca.digits !== cb.digits) {
-    return null;
+    return matchSameSlot(a, b, ca, cb);
   }
 
   // Layer 2: Containment
@@ -428,5 +456,25 @@ function matchTitle(
     }
   }
 
-  return null;
+  return matchSameSlot(a, b, ca, cb);
+}
+
+// Layer 5. Venue+date grouping already holds; a date-only row or the T00:00
+// sentinel states no minute, so it never qualifies.
+function matchSameSlot(
+  a: Record<string, any>,
+  b: Record<string, any>,
+  ca: Canonical,
+  cb: Canonical
+): DuplicatePair | null {
+  if (!hasStatedClock(a.start_date) || a.start_date !== b.start_date) return null;
+  const why = sameSlotTitleMatch(ca, cb);
+  if (!why) return null;
+  return {
+    eventA: a.id,
+    eventB: b.id,
+    confidence: 0.9,
+    layer: 'same_slot',
+    reason: `Same start ${a.start_date}; ${why}`,
+  };
 }

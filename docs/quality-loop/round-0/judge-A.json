@@ -1,0 +1,301 @@
+{
+  "judge": "judge-A",
+  "inspected": [
+    "Local build dist/ served at http://localhost:4791 (built 2026-09-22 22:44-23:05 from the dirty working tree) and the live site https://agentathens.com for comparison; findings say which one they come from",
+    "Puppeteer (installed Chrome) audit of 15 pages at 1280px and 375px: /, /this-weekend/, /concerts/, /theatre/, /nightlife/, /today/, /en/today/, /en/concerts/, /saved/, 5 Greek event pages (dj_set, concert x2, exhibition, theater) and 1 English event page; axe-core wcag2a/2aa/21aa/22aa run on every desktop page; screenshots, overflow, tap-target, landmark, LCP/CLS checks",
+    "Throttled runs (Fast 4G, 4x CPU, 375px) against the live homepage, /concerts and an event page, plus the local homepage",
+    "Interactive checks: search overlay (queries 'κυτταρο', 'jazz', 'tito', 'σαββατο'), mobile menu, keyboard Tab focus ring, 'Περισσότερα' expand on an event description",
+    "Read-only DB queries (sqlite3 -readonly and bun:sqlite readonly): visible population (615 rows), type/source/price_source/time breakdowns, same-slot duplicates, athinorama 2027 rows vs created_at, event_concerns hard-stop table, scrape_stats, kpi.db tables",
+    "Cross-check of dist/search-index.json (429 listed events) against the DB; count of visible rows without an index.html page (193)",
+    "Source verification: megaron.gr ELSON page (WebFetch), halfnote.gr E.J. Strickland page (WebFetch), web search on Phantom Spell",
+    "Tests: bun test src/ (2394 pass / 0 fail), bun test tests/ (1088 pass / 47 skip / 0 fail), AA_BROWSER_TESTS=1 bun test tests/browser/ (27 pass), bunx tsc --noEmit (exit 0); working tree and dist/events count unchanged afterwards",
+    "Code and config: src/generate-site.ts, src/db/database.ts, src/generators/event-page.ts, src/utils/event-lifecycle.ts, src/utils/normalize-greek.ts, config/enrichment-gate-rules.yml, config/lifecycle-presumption.json, scripts/fix-megaron-default-times.ts, scripts/deploy-gate.sh, scripts/weekly-digest.ts, .github/workflows/ci.yml, package.json, tsconfig.json, netlify.toml",
+    "Docs and records: .claude/CLAUDE.md, docs/INTENT.md, docs/design-system.md, README.md, docs/session-log.md (S231), .claude/notes/ledger.md (sections, venue_default entry), docs/known-issues.md, docs/digest/2026-W38.md, data/scoreboard.json, data/search-visibility-log.csv, data/build-completeness.json, logs/pipeline-2026-09-22.log, logs/deploy-cadence.log"
+  ],
+  "aspects": [
+    {
+      "aspect": "Data accuracy",
+      "score": 3,
+      "evidence": [
+        "Invented prices shown as fact: of the 429 listed events (dist/search-index.json), 170 carry price_source='venue_default' (megaron.gr 83, athinorama 40, cometogether 24, RA 14, onassis 6, halfnote 2, more.com 1). All 105 visible megaron venue_default rows share price_amount=25 / price_range '€15-80'.",
+        "Checked against the source: megaron.gr ELSON page (WebFetch) lists '€40, €32, €26, €18, €14, €10, €8'. /events/ee949384-.../ shows plain '€25' in the hero and in Πρακτικές Πληροφορίες. The meta description says 'From €25', and JSON-LD offers.price is \"25\".",
+        "Invented clock: 113 visible megaron.gr rows sit at T20:30 (query GROUP BY substr(start_date,12,5)). scripts/fix-megaron-default-times.ts:3-5 admits the scraper 'defaulted it until 2026-09-22' and has not been applied. 88 of the 429 listed events are megaron 20:30 rows. Some happen to be right (ELSON is 20:30 on megaron.gr); tours and children's activities at 20:30 are plainly wrong.",
+        "Year-rollover phantoms: 48 listed events are athinorama rows with start_date in 2027 whose created_at is in Feb–Jun 2026. For example 'Human Touch' 2027-04-25 was created 2026-04-26, and 'Κάρμεν' 2027-05-24 at Εθνική Λυρική Σκηνή was created 2026-05-26. search-index shows a spike of 39 events in 2027-04. These have event pages and sitemap entries (521b8cee and 03e1246b are in sitemap-events.xml).",
+        "Same-date duplicates in the listed set: El Che-Teatro / El Che (Θέατρο Nous, 2026-10-08), 1984 x2 (Δίπυλον, 10-12), Η κουζίνα x2 (Κιβωτός, 10-14), Στρακαστρούκες / ΣΤΡΑΚΑΣΤΡΟΥΚΕΣ (AUDITORIUM, 10-23; also seen in the search overlay), Πολίτες β' κατηγορίας x2 (Τζένη Καρέζη, 10-05).",
+        "A past exhibition shown as running: the Kruger event page's venue rail shows 'Έκθεση φωτογραφίας | Μαζί, Ορατές 24 Ιουν - Συνεχίζεται · Ανοιχτή' on 2026-09-22. The DB holds 80+ unmerged per-day rows with NULL end_date, kept alive by the 90-day presumption window (config/lifecycle-presumption.json).",
+        "Miscategorised or out of area: 'LORD BISHOP ROCKS ... + DISILLUSIVE PLAY & NO NAME DOGS' is labelled ΘΕΑΤΡΟ on /this-weekend/. 'WANG LIVE ΛΑΡΙΣΑ // 20.11.2026' is listed at an Athens venue (search-index).",
+        "The data contradicts itself on one page: /en/events/00013a1f-kyttaro-phantom-spell/ shows 'Price €22' while its own description says 'advance EUR 25, door EUR 30'. Addresses are garbled or truncated: 'Αχαρνών, Ipeirou και' (Kyttaro) and 'Κέντρο Πολιτισμού Ίδρυμα Σταύρος Νιάρχος, 364' (SNFCC).",
+        "Correct where checked: Half Note E.J. Strickland on 2026-10-24 at 22:00 from €20 matches halfnote.gr (WebFetch), and the hard-stop gate correctly hides clinamen, which the enricher found is at Onassis Mandra, not Stegi (event_concerns)."
+      ],
+      "top_defects": [
+        { "defect": "venue_default prices (a flat €25 for every Megaron event) are rendered and emitted in schema as the event's real price on about 40% of listings", "fix": "Show venue_default as 'Με εισιτήριο' or 'indicative' and drop offers.price when price_source != 'direct'", "effort": "S" },
+        { "defect": "About 48 athinorama year-rollover phantom rows (past April 2026 gigs listed as April 2027) are live with pages and sitemap entries", "fix": "Reject or hide athinorama rows whose start_date is more than 300 days after created_at with the same month and day; clean up the existing rows", "effort": "S" },
+        { "defect": "113 megaron rows carry an invented 20:30 time", "fix": "Run the prepared fix-megaron-default-times.ts --apply plus enrich-time (user approval pending)", "effort": "S" }
+      ],
+      "what_would_make_it_8": "No invented values on any public surface: price and time shown only when the source states them, phantom and rollover rows removed, and the same-date duplicate pairs merged. After that, a 30-event random sample checked against sources should come back with at most 1–2 minor discrepancies."
+    },
+    {
+      "aspect": "Coverage & freshness",
+      "score": 4,
+      "evidence": [
+        "Scrapers are healthy today: scrape_stats rows 2305-2314 on 2026-09-22 show success=1 for all 10 active sources. Only clubber is quarantined (captcha, config quarantine since 2026-08-11).",
+        "A small catalogue for Athens: 615 visible upcoming rows, of which only 429 are listed (llms.txt '429 current listings'). Listed exhibitions: 4. Cinema: 3. Theatre: 106, and several of those are one row per performance date of the same production.",
+        "Exhibitions are almost absent: /exhibitions shows Abdulaziz WATER, ONX.Exhibition.NY.2026, ANNEX M and Kruger, and nothing from the city's galleries or museums. Benaki returns 4 events and none are visible.",
+        "31% of the visible population is hidden by the enrichment hard-stop: 193 of 615 visible rows have no index.html. Real, near-term events are missing from the site entirely, for example Jack Savoretti at Λυκαβηττός on 2026-09-25, Drumcode Athens at Bolivar on 09-26, all 4 Athens Baroque Festival 2026 nights (09-24..27), and Swallow the Sun on 10-17. The cause is a Tier A0 concern such as 'ticket-merchant-unverified' in event_concerns (config/enrichment-gate-rules.yml:40-42), which hides the whole event, not just the unverified sentence.",
+        "Freshness: listings rebuilt today ('Τελευταία ενημέρωση: 22 Σεπτεμβρίου 2026' on the homepage). But logs/deploy-cadence.log has a 26-day deploy gap (2026-08-11 to 2026-09-06), and docs/digest/2026-W38.md reports 'Deploys 1/7'.",
+        "Removal of past events is working for dated events (lifecycle classifier with a 45-day window). It fails for NULL-end-date runs ('Μαζί, Ορατές' still presented as open) and for the 2027 rollover phantoms."
+      ],
+      "top_defects": [
+        { "defect": "An enrichment-quality concern hides the entire event (Jack Savoretti, Drumcode, Athens Baroque Festival), not only the risky description", "fix": "Make Tier A0 suppress the enriched description and merchant line but keep publishing the scraped fact row", "effort": "M" },
+        { "defect": "Exhibition and cinema coverage is close to zero", "fix": "Add a gallery/museum source (e.g. athinorama art section) and a cinema source", "effort": "L" },
+        { "defect": "Deploy cadence has had multi-week gaps", "fix": "Alert when there is no successful deploy for more than 48h (deadman on deploy-cadence.log)", "effort": "S" }
+      ],
+      "what_would_make_it_8": "At least 1,000 current listings with exhibitions and cinema represented, the hard-stop degraded to description-only so real events stay listed, and a daily deploy streak with alerting on any miss."
+    },
+    {
+      "aspect": "Content quality",
+      "score": 4,
+      "evidence": [
+        "Where it exists, the enriched prose is specific and useful. Kruger (curator, 13 works, tram access, run end) and Phantom Spell (influences, band background, door time) both read as editorial, not filler. Phantom Spell's background matched a web search (Kyle McNeill project, Heather & Hearth 2025).",
+        "Coverage is thin: only 178 of 429 listed events (41%) have full_description_en. full_description_gr is populated on 0 visible rows. Stub pages such as ELSON carry no description, and JSON-LD description equals the title.",
+        "Greek pages show English prose: 378 Greek event pages carry 'Περιγραφή στα Αγγλικά'. The Greek homepage hero excerpt is English ('Barbara Kruger's slogans — white-on-red block capitals...').",
+        "Pipeline artefacts are visible to users. A literal '<!-- timeliness-expires: 2026-11-01 -->' paragraph appears on 662 event pages, 331 Greek and 331 English (grep '<p>&lt;!-- timeliness'). I confirmed it on screen after expanding, both locally and on the live site. Raw markdown tables '| Aspect | Details | | --- | --- |' render as text on 44 event pages (e.g. Kruger).",
+        "Placeholder copy has shipped: an '[PLACEHOLDER] Η Αθήνα δεν κοιμάται ποτέ...' pull-quote appears on concerts.html, exhibitions.html, nightlife.html and the 3 English equivalents. It is also live (curl agentathens.com/concerts shows 2 matches).",
+        "Factual error in hub FAQ copy: /exhibitions says 'ΕΜΣΤ στο Καλλιθέα'. Hub intros promise things the listings don't have ('γκαλερί στο Κολωνάκι' on /this-weekend with no gallery events). There is a grammar error in the empty state: 'Όλες οι κινηματογράφος'."
+      ],
+      "top_defects": [
+        { "defect": "HTML comment and markdown table from enrichment output render as visible text (662 and 44 pages)", "fix": "Strip <!-- --> markers and convert or reject markdown tables in the description renderer, and add a build gate that fails on '&lt;!--' or '| --- |' in page body", "effort": "S" },
+        { "defect": "'[PLACEHOLDER]' pull-quotes are live on 6 hub pages", "fix": "Remove the placeholder, and fail the build if any page contains '[PLACEHOLDER]'", "effort": "S" },
+        { "defect": "59% of listings have no description, and Greek pages show English text", "fix": "Prioritise enrichment of listed, near-term events; show a concise factual Greek summary from scraped data when there is no enrichment", "effort": "L" }
+      ],
+      "what_would_make_it_8": "No template or pipeline artefacts on any page, at least 75% of listed events with an accurate description, and Greek pages with Greek text (or a clean, clearly labelled English block)."
+    },
+    {
+      "aspect": "Discovery & information architecture",
+      "score": 6,
+      "evidence": [
+        "The homepage leads with time chips carrying counts (Σήμερα 5 · Αύριο 4 · Σαββατοκύριακο 29 · Αυτή την εβδομάδα 42), then 'Απόψε στην Αθήνα' with a hero and a rail (screenshot __desk.png).",
+        "Hubs have Type, Price and Sort filters (Ημερομηνία on type hubs), a category pill row, day headers and weekend day jumps (Παρ 25 · Σάβ 26 · Κυρ 27). Empty facet pages are noindex and show a plain empty state (/cinema-today).",
+        "Search overlay works with accent-insensitive Greek: 'κυτταρο' returns 5 Κύτταρο events plus 'Δείτε όλα (6)'; 'jazz' returns events, the venue (Half Note) and a category.",
+        "Search shows raw entities ('Tito &amp; Tarantula'), because search-index.json stores escaped titles. It also ranks the April 2027 phantoms ('Human Touch 25 Apr', 'Vocal Jazz Festival 24 Apr') first for 'jazz'.",
+        "At 375px the /this-weekend/ intro box fills the first screen and the first event sits below the fold (wk screenshots). The homepage chip row is clipped at 'Σαββατοκύρια…'.",
+        "Navigation is duplicated or mixed: the Greek header has both 'Σχετικά' and an English 'About'; the English header has 'About' twice. The search close control renders as 'x×' next to a separate clear '×'."
+      ],
+      "top_defects": [
+        { "defect": "Search results show HTML entities and phantom past events", "fix": "Decode titles when building search-index and exclude rows flagged as rollover phantoms", "effort": "S" },
+        { "defect": "Hub intro pushes the first event below the fold on phones", "fix": "Collapse the intro to 2 lines or move it after the first 6 cards on mobile", "effort": "S" },
+        { "defect": "Duplicate About/Σχετικά nav items and a doubled close icon in search", "fix": "Keep one localised About link and one close control", "effort": "S" }
+      ],
+      "what_would_make_it_8": "Clean search results (decoded, current only), the first event above the fold at 375px on every hub, and a single consistent localised navigation."
+    },
+    {
+      "aspect": "Event page & action layer",
+      "score": 6,
+      "evidence": [
+        "Every event page sampled has Save, Share and Calendar (Google / Apple .ics / Outlook), a ticket CTA, a Πρακτικές Πληροφορίες table, a venue card with 'Άνοιγμα στον Χάρτη', 'Πηγή: <source>' attribution and 'Επόμενες εκδηλώσεις στο <venue>' (ELSON, Kruger, Burger Disco pages).",
+        "Calendar output is correct: ELSON event.ics has DTSTART;TZID=Europe/Athens:20261217T203000, and the Google link converts it to 20261217T183000Z. The exhibition .ics uses VALUE=DATE 20260428..20261102. VTIMEZONE is missing (minor RFC 5545 gap).",
+        "The mobile sticky bottom bar (title, price, 'Εισιτήρια') is present on the Burger Disco page at 375px. Saved-events browser tests pass (27/27 with AA_BROWSER_TESTS=1).",
+        "The decision-critical facts are unreliable. The ELSON price is '€25' while the real prices are €8–40. The Phantom Spell page shows €22 against the description's €25/30. Addresses are truncated or garbled ('...Νιάρχος, 364'; 'Αχαρνών, Ipeirou και'). Greek pages show English addresses ('Vassilissis Sofias Avenue & Kokkali 1') and mixed Latin neighbourhoods ('(Ilisia)').",
+        "The venue rail shows a finished exhibition as 'Ανοιχτή'. Many pages have no description (ELSON). The map link uses coarse coordinates (maps?q=37.975,23.757), not the venue name."
+      ],
+      "top_defects": [
+        { "defect": "Price and address on the page are often inherited or garbled", "fix": "Show only direct prices, and render addresses from the curated venue config instead of scraped fragments", "effort": "M" },
+        { "defect": "Related rail includes past or duplicate runs", "fix": "Build rails from selectListable(upcomingEvents), not pageableEvents", "effort": "S" },
+        { "defect": "Map link is a bare lat/lng", "fix": "Use a Maps query of venue name plus address, or a place_id", "effort": "S" }
+      ],
+      "what_would_make_it_8": "Every fact in the practical-info block is correct or explicitly marked unknown, addresses are complete and localised, and the related rails show only current events."
+    },
+    {
+      "aspect": "Visual design & brand",
+      "score": 6,
+      "evidence": [
+        "A coherent dark theme with a Manrope type scale and a single yellow accent (#f5e642) consistent with docs/design-system.md §1. Event heroes use a blurred image backdrop and large titles, and cards use typographic fallbacks when there is no image (screenshots of ELSON, Burger Disco and /this-weekend).",
+        "The active pill contradicts the spec: docs/design-system.md says the 'Active/selected filter pill: background fill, --bg-primary text', but /concerts renders white on #f5e642 (axe: contrast 1.28).",
+        "The desktop hub has one tall text-only card at the left of a mostly empty row under 'Σήμερα' (_concerts__desk.png), a large dead area.",
+        "Category colour usage has drifted from the spec's single --accent-secondary for badges: green ΕΡΓΑΣΤΗΡΙΟ, magenta DJ SET badge plus magenta date text, blue ΕΚΘΕΣΗ, red ΘΕΑΤΡΟ.",
+        "Visible artefacts undermine the finish: '[PLACEHOLDER]' pull-quotes, literal HTML comments, raw markdown tables."
+      ],
+      "top_defects": [
+        { "defect": "Active pill white-on-yellow violates the design system", "fix": "Use --bg-primary text on the accent fill, as the spec says", "effort": "S" },
+        { "defect": "Sparse single-card rows and tall text-only cards on desktop hubs", "fix": "Use a denser list or grid for day groups with fewer than 3 events; cap text-only card height", "effort": "M" },
+        { "defect": "Category colour palette drift", "fix": "Reconcile the badge colours with design-system.md, or update the spec to the new token set", "effort": "S" }
+      ],
+      "what_would_make_it_8": "No template artefacts, pill and badge states matching the spec tokens, and hub layouts without large empty regions at 1280px."
+    },
+    {
+      "aspect": "Mobile experience",
+      "score": 6,
+      "evidence": [
+        "No horizontal overflow at 375px on any of the 15 audited pages (scrollWidth - innerWidth = 0 everywhere).",
+        "Compact phone rows (thumbnail, text, save icon) on /this-weekend (wk_mob_scroll.png). The event page has a sticky ticket bar. The hamburger opens a full-height drawer with 6 items and a close button.",
+        "The header is 56px and fixed. On hubs the fixed filter bar adds another 104px; together they cover about 20% of an 812px viewport while scrolling (the fixed-element list in the audit).",
+        "On /this-weekend/ at 375px the first viewport holds only the H1, the timestamp and the intro box, with no events. The homepage chip row is truncated.",
+        "Many small targets: 11–28 interactive elements under 24px per page at 375px, mostly inline card-title links (e.g. 'ΠΥΞ ΛΑΞ(49x17)'). The row itself is larger, so this is partly mitigated.",
+        "Throttled live homepage (Fast 4G, 4x CPU, 375px): FCP/LCP 816ms, CLS 0."
+      ],
+      "top_defects": [
+        { "defect": "First event below the fold on hubs", "fix": "Shorten or collapse the intro on phones", "effort": "S" },
+        { "defect": "Fixed header plus fixed filter bar eat vertical space", "fix": "Hide the filter bar on scroll-down and reveal it on scroll-up", "effort": "S" },
+        { "defect": "Sub-24px inline links", "fix": "Make the whole row the link target (stretched link) or pad the title links", "effort": "S" }
+      ],
+      "what_would_make_it_8": "Events visible in the first 812px on every hub, a single sticky bar at most, and all primary targets at least 24px (ideally 44px)."
+    },
+    {
+      "aspect": "Accessibility",
+      "score": 6,
+      "evidence": [
+        "axe-core (wcag2a/2aa/21aa/22aa) on all 15 desktop pages found only 2–3 rule types per page. Footer '.footer-copyright' contrast is 4.25:1 (#7a7a7a on #151515 at 12px). The llms.txt link in the footer text has 2.02:1 contrast against surrounding text (link-in-text-block). On hub pages the active category pill has 1.28:1 (white on #f5e642).",
+        "Good foundations: one main, a labelled nav ('Κύρια πλοήγηση'), a skip link on every page, html lang='el'/'en' correct, every <img> has an alt attribute (noAlt=0), and prefers-reduced-motion appears 3 times in design-system.css.",
+        "The keyboard focus ring is visible: after Tab x4 on /concerts the active element 'Χώροι' has a solid 2px rgb(88,166,255) outline.",
+        "Language of parts fails WCAG 3.1.2 on 378 Greek event pages. English description paragraphs sit under <section class=\"edp-description\"> with no lang=\"en\" (0 lang=\"en\" on the Kruger page).",
+        "English aria-labels on Greek pages ('Save', 'Close', 'About me — open colophon' on the Burger Disco page). The pull-quote is aria-hidden yet visible, so sighted and screen-reader users get different content."
+      ],
+      "top_defects": [
+        { "defect": "Active pill contrast 1.28:1 on every hub", "fix": "Use dark text on the yellow fill", "effort": "S" },
+        { "defect": "English content without lang='en' on Greek pages", "fix": "Add lang='en' to the description section whenever the English fallback is used", "effort": "S" },
+        { "defect": "Footer contrast and link-in-text-block failures site-wide", "fix": "Raise footer text to at least #8a8a8a and underline inline footer links", "effort": "S" }
+      ],
+      "what_would_make_it_8": "Zero axe AA violations across a sample of templates, lang attributes on mixed-language blocks, and localised aria-labels."
+    },
+    {
+      "aspect": "Performance",
+      "score": 7,
+      "evidence": [
+        "Live, throttled (Fast 4G, 4x CPU, 375px): homepage FCP=LCP 816ms with load 1.49s; /concerts LCP 488ms; Kruger event page LCP 648ms. CLS was 0.000 on all.",
+        "Local audit CLS ≤ 0.026 on all 30 page/viewport runs. Images are self-hosted WebP (/images/events/*.webp) and lazy-loaded. Only one third-party script (gtag async).",
+        "Heavy HTML: the homepage document is 461KB raw locally and 475,102 bytes live (content-length), 94,516 bytes compressed. Hub documents are 175–535KB raw. DOM is about 1,000–1,300 nodes on hubs.",
+        "The Google Fonts CSS link is render-blocking on every page. Live HTML is served with 'cache-control: public,max-age=0,must-revalidate' (the netlify.toml /*.html rule does not match pretty URLs).",
+        "dist/ is 2.0G, of which images are 1.7G, so every build and deploy moves a lot of data."
+      ],
+      "top_defects": [
+        { "defect": "Oversized HTML (homepage 475KB raw) from inline JSON-LD and data", "fix": "Trim inline JSON and duplicated card markup; paginate hub lists", "effort": "M" },
+        { "defect": "Render-blocking Google Fonts CSS", "fix": "Self-host Manrope subsets with preload and font-display: swap", "effort": "S" },
+        { "defect": "Cache headers do not apply to pretty URLs", "fix": "Add header rules for /* HTML routes (short max-age plus stale-while-revalidate)", "effort": "S" }
+      ],
+      "what_would_make_it_8": "Homepage HTML under 150KB raw, no render-blocking third-party CSS, and throttled mobile LCP under 1s on the heaviest hub."
+    },
+    {
+      "aspect": "Search & AI citability",
+      "score": 5,
+      "evidence": [
+        "Rich JSON-LD @graph on event pages: MusicEvent with location MusicVenue, Wikidata sameAs (Q582203 for Megaron), containedInPlace chain Athens → Attica → Greece, WebPage isBasedOn the source URL, and a publisher Organization (ELSON page).",
+        "Crawlability: robots.txt allows GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot and others, and points to sitemap-index.xml. The split sitemaps hold 678 event, 185 editorial and 46 venue URLs. llms.txt exists. Canonicals are present. Empty facets are noindex (1,003 root *.html pages are noindex).",
+        "Structured data states invented facts. offers.price is \"25\" for ELSON (the real prices are €8–40), and the ledger itself (ledger.md:333) calls confidently wrong offers.price 'worse than an absent price'. endDate equals startDate, and doorTime equals the start time, which is inferred.",
+        "JSON-LD description on enriched pages contains a raw markdown table and '\\u003c!-- timeliness-expires ... --\\u003e' (Kruger page). JSON-LD name carries literal entities: 'Rising Road \\u0026amp; Deuxcadance'.",
+        "No hreflang on any page (grep 'hreflang=' in dist = 0). This is deliberate (event-page.ts:681-692, S144), but it leaves 379 EN/EL pairs unlinked. llms.txt pairs English link text with Greek descriptions.",
+        "Phantom 2027 events are in the sitemap (521b8cee and 03e1246b in sitemap-events.xml), which gives engines false 'upcoming' facts to cite."
+      ],
+      "top_defects": [
+        { "defect": "Schema offers.price and times assert defaults as facts", "fix": "Emit offers.price only when price_source='direct', and omit doorTime/endDate when not sourced", "effort": "S" },
+        { "defect": "Schema description and name carry markdown, HTML comments and entities", "fix": "Sanitise and decode at the single schema emitter, with a validator rule to catch it", "effort": "S" },
+        { "defect": "Phantom and duplicate events in the sitemap", "fix": "Filter rollover phantoms before sitemap and search-index emission", "effort": "S" }
+      ],
+      "what_would_make_it_8": "Every schema field is either source-backed or omitted, text fields are clean, the sitemap holds only real current events, and a bilingual cluster is decided (hreflang or explicit single-language canonical policy) and consistent."
+    },
+    {
+      "aspect": "Internationalisation",
+      "score": 3,
+      "evidence": [
+        "English hubs render Greek cards. /en/this-weekend/, /en/today/, /en/concerts/ and /en/exhibitions/ show 'ΣΥΝΑΥΛΙΑ', 'ΕΚΘΕΣΗ', 'Παρασκευή 25 Σεπτεμβρίου στις 20:30', 'Με εισιτήριο' and 'Ελεύθερη είσοδος' under English day headers ('Friday 25 September 2026'). Confirmed in a screenshot (en_wk.png) and on the live site (curl agentathens.com/en/concerts/ shows 'ΣΥΝΑΥΛΙΑ ... Τρίτη 22 Σεπτεμβρίου').",
+        "Greek pages carry English text: 378 event pages have English descriptions (0 Greek descriptions in the DB). The Greek meta description is English ('Live ΕΛΣΟΝ ... — Dec 17, 2026 — From €25 Cultural events in Athens on Agent Athens.'). Addresses and neighbourhoods are in English ('Vassilissis Sofias Avenue', '(Ilisia)', 'Κυψέλη / Patission').",
+        "English aria-labels on Greek pages. English 'About' in the Greek header. The English event page shows the Greek venue name 'Κύτταρο' untransliterated.",
+        "No hreflang anywhere, so EN and EL are not linked for engines. Only 379 English event pages exist against 883 Greek ones.",
+        "Working parts: the English event page chrome is fully English ('Practical Information', 'Find tickets', 'Sunday 25 October 2026 at 19:00'), and html lang is correct per locale."
+      ],
+      "top_defects": [
+        { "defect": "EN hubs render card labels and dates in Greek", "fix": "Pass the locale into the card renderer (badge, date formatter, price label)", "effort": "S" },
+        { "defect": "Greek meta descriptions and addresses are in English", "fix": "Localise generateEventMetaDescription and use Greek venue addresses from the venue config", "effort": "M" },
+        { "defect": "English aria-labels and nav items on Greek pages", "fix": "Route all labels through i18n/strings.ts, with a test scanning el pages for English UI strings", "effort": "S" }
+      ],
+      "what_would_make_it_8": "A test that renders every template in both locales and fails on foreign-language UI strings, with EN hubs and EL meta/addresses fully localised."
+    },
+    {
+      "aspect": "Code quality & architecture",
+      "score": 6,
+      "evidence": [
+        "strict TypeScript and 'bunx tsc --noEmit' exit 0. About 140 src modules with focused utilities (event-lifecycle, venue-identity, schema-geo, hreflang), comments that explain constraints, and config-driven rules (gate rules, lifecycle presumption, quarantine).",
+        "Large god files: src/generate-site.ts is 1,898 lines, src/validators/schema-completeness.ts 1,542, src/enrichment/quality-gates.ts 1,318, src/generators/event-page.ts 1,199.",
+        "Lifecycle logic is duplicated against its own rule. event-lifecycle.ts says 'Single source of truth ... Do not re-derive this rule locally', yet generate-site.ts:245-257 re-derives the exhibition end_date rule inline for upcomingEvents.",
+        "Encoding is inconsistent end to end: titles are stored HTML-escaped in the DB ('&#171;LONE&#187;', 'Rising Road &amp; Deuxcadance'). Each emitter decodes differently, so search-index and JSON-LD leak entities while cards do not.",
+        "Two slug algorithms are kept apart deliberately (event-page.ts:140-172). slugify drops Greek, so titles like 'ΤΖΟΝΙ ΜΠΛΕ 2ος Χρόνος' become '2e071062-anesis-2'. There are two sibling dirs per event ('7866dc83--4' and '7866dc83-theatro-chorn-4').",
+        "tsconfig include covers only src/** and tests/**, so the 102 scripts/*.ts, including the scrapers, are not type-checked. The package.json 'test' script points to scripts/test-pipeline.ts, which does not exist."
+      ],
+      "top_defects": [
+        { "defect": "HTML entities stored in the DB and decoded ad hoc per emitter", "fix": "Decode at ingest (one normaliser), and assert in tests that no emitter output contains '&amp;#' or '&amp;amp;'", "effort": "M" },
+        { "defect": "generate-site.ts monolith that re-derives lifecycle rules", "fix": "Extract the listing and page selection into event-lifecycle and split build phases into modules", "effort": "M" },
+        { "defect": "scripts/ outside typecheck, and a broken npm test", "fix": "Add scripts/**/* to tsconfig include and fix or remove the package.json test script", "effort": "S" }
+      ],
+      "what_would_make_it_8": "One normalisation boundary for text, one lifecycle and listing selector used by every surface, scrapers type-checked, and no file over roughly 800 lines in the build path."
+    },
+    {
+      "aspect": "Testing & verification",
+      "score": 6,
+      "evidence": [
+        "Large, green suite. bun test src/: 2,394 pass / 0 fail across 115 files. bun test tests/: 1,088 pass / 47 skip / 0 fail. AA_BROWSER_TESTS=1 bun test tests/browser/: 27 pass. A prod-DB guard preload (bunfig.toml) blocks tests from opening data/events.db.",
+        "Strong gate design is present: scripts/deploy-gate.sh (clean-tree plus provenance == HEAD), with tests in scripts/__tests__/deploy-gate.test.ts. The build fails on price_type vocabulary, performer QID and event-count floor (generate-site.ts:193-287). The session log records mutation checks (S231).",
+        "CI (.github/workflows/ci.yml) runs only 'bun test tests/' plus two script tests. The 2,394 tests under src/**/__tests__ never run on PRs. Browser tests are opt-in and skipped by default (47 skips).",
+        "Nothing guards the rendered output against the defects visible today. No test or build gate catches '[PLACEHOLDER]' on 6 hubs, the visible '<!-- timeliness-expires -->' on 662 pages, raw markdown tables, Greek labels on /en/ hubs, entity leaks in search-index/JSON-LD, or athinorama rollover phantoms.",
+        "data/build-completeness.json reports event schema 'passRate 100' while offers.price asserts venue defaults. The validator checks shape, not truth. The aria aggregate has been 'stale' since 2026-05-21."
+      ],
+      "top_defects": [
+        { "defect": "CI skips all src/**/__tests__ (2,394 tests)", "fix": "Run 'bun test src/ tests/' in ci.yml, or fold src tests into tests/", "effort": "S" },
+        { "defect": "No post-build content assertions on dist", "fix": "Add a dist scan gate for '[PLACEHOLDER]', '&lt;!--', '| --- |', '&amp;#', and Greek badge strings on /en/ pages", "effort": "S" },
+        { "defect": "Browser tests opt-in only", "fix": "Run AA_BROWSER_TESTS=1 in CI with setup-chrome", "effort": "S" }
+      ],
+      "what_would_make_it_8": "CI runs the whole suite including browser tests, plus a rendered-output gate that would have failed on every visible artefact found in this audit."
+    },
+    {
+      "aspect": "Operations & reliability",
+      "score": 5,
+      "evidence": [
+        "The daily launchd pipeline ran 3 times on 2026-09-22 (logs/pipeline-2026-09-22.log: 01:06, 08:05, 10:00). Every run takes a gzip DB backup with an integrity check ('events-2026-09-22.db.gz (15M, 19551 rows, integrity ok)', 9 rolling backups, 136M).",
+        "Safety rails are in place: a deploy gate that requires a clean committed tree, a db-guard hook, source quarantine, a yield canary, a deadman watchdog, and a health report with per-source status (data/scoreboard.json health_report all 'ok').",
+        "Deploy reliability is poor. logs/deploy-cadence.log shows no deploy from 2026-08-11 to 2026-09-06 (26 days) and then 09-06, 09-12, 09-14, 09-20. docs/digest/2026-W38.md says 'Deploys 1/7'.",
+        "Enrichment depends on a personal Claude CLI quota: 'ERROR: Claude CLI auth check failed — reason=\"You've hit your weekly limit\"' at 01:08:51 today, and the auto-enrichment run failed 118/118 items (❌ lines).",
+        "Single point of failure: pipeline, DB and backups all live on one laptop (/Users/chrism/agent-athens-backups), with no off-machine copy seen. The working tree has 63 uncommitted or untracked paths, so the local dist (built dirty) cannot pass the deploy gate until it is committed."
+      ],
+      "top_defects": [
+        { "defect": "Multi-week deploy gaps with no hard alert", "fix": "Alert (push or email) when the last deploy-success is older than 36h", "effort": "S" },
+        { "defect": "Backups only on the same machine", "fix": "Copy the nightly gz to off-site storage (e.g. an rclone/S3 bucket) and restore-test weekly", "effort": "S" },
+        { "defect": "Enrichment blocked by a personal usage cap", "fix": "Degrade gracefully (publish unenriched facts) and schedule enrichment to respect quota resets", "effort": "M" }
+      ],
+      "what_would_make_it_8": "30 consecutive days of successful daily deploys with automatic alerting on any miss, off-site restorable backups, and no single personal-quota dependency on the publishing path."
+    },
+    {
+      "aspect": "Measurement",
+      "score": 3,
+      "evidence": [
+        "INTENT focus #1 is not delivered. data/scoreboard.json (generated 2026-09-22T07:02) has \"citations\": null and \"crawlers\": null.",
+        "The kpi.db citation tables are empty: bwt_ai_citations 0 rows, manual_citation_log 0, server_log_ai_bots 0, bwt_grounding_queries 0, gsc_queries_long 0. Only ga4_ai_referrals (18 rows) and tracked_prompts (5) hold data.",
+        "Search visibility is partly instrumented: data/search-visibility-log.csv records Bing (784 impressions / 7d, average position 5.2) and GSC (e.g. 2026-09-21: 910 impressions, 18 clicks). Today's GSC pull is STALE ('gsc_reason=request_timeout').",
+        "A 'COMPUTED' digest carries a hardcoded, false claim: scripts/weekly-digest.ts:72 always prints 'Google (GSC): still blind', while the visibility log holds GSC data.",
+        "Event counts disagree across sources: scoreboard 'upcoming_events': 1122, health report 'visible': 713, llms.txt '429 current listings', and my DB visible query returns 615.",
+        "No action-layer telemetry: ticket CTAs link directly to the merchant (no /go/ links in dist; the netlify/functions/go.ts click logger is unused). The only gtag calls are 'js' and 'config'. There are no events for ticket click, save, share or calendar."
+      ],
+      "top_defects": [
+        { "defect": "Citation and crawler sensors are null or empty", "fix": "Wire the Netlify log drain (or edge function) into server_log_ai_bots, and run the tracked-prompt citation panel on a schedule into manual/bwt tables", "effort": "M" },
+        { "defect": "No measurement of the action layer (the stated moat)", "fix": "Route ticket CTAs through /go/ or fire gtag events for ticket, save, share and calendar", "effort": "S" },
+        { "defect": "Conflicting counts and a hardcoded 'still blind' line", "fix": "Define one computed 'listed events' metric used by scoreboard, health and llms.txt; compute the GSC line from the log", "effort": "S" }
+      ],
+      "what_would_make_it_8": "A scoreboard that updates daily with non-null citation counts, AI-crawler hits, GSC/Bing trends, and ticket/save click-through, all from one consistent event count."
+    },
+    {
+      "aspect": "Documentation & institutional memory",
+      "score": 6,
+      "evidence": [
+        ".claude/CLAUDE.md is specific and actionable (Tier-1 rules, commands, location filter, data model), and docs/INTENT.md is current (updated 2026-09-02, stale after 2026-10-02).",
+        "The session log is honest and detailed. S231 (docs/session-log.md:7543) states exact test counts, what was not deployed, and open items that I confirmed independently (megaron --apply pending, '&amp;' in JSON-LD, duplicate rails, 'WANG LIVE ΛΑΡΙΣΑ').",
+        "Institutional memory is too large to act on: .claude/notes/ledger.md is 12,037 lines, yet CLAUDE.md says 'START HERE'. The session log is 7,553 lines and known-issues.md 1,250 lines.",
+        "README.md is stale and has hardcoded counts ('As of 2026-06-04', 'Static pages 3,800+', '2,660+ tests'). Today there are 2,519 HTML files and more than 3,500 tests. This breaks the parent CLAUDE.md rule to write counts only where they are computed.",
+        "docs/design-system.md claims 'WCAG contrast validated' and specifies dark text on active pills, but the built pills fail at 1.28:1. The digest 'COMPUTED' header covers a hardcoded 'still blind' line. The package.json 'test' script points to a missing file."
+      ],
+      "top_defects": [
+        { "defect": "Ledger (12k lines) is a 'START HERE' document no one can read in a session", "fix": "Keep a curated top-50 active Mistakes/Patterns index at the head and archive the rest (with user approval per the history-policy rule)", "effort": "M" },
+        { "defect": "README has stale hardcoded stats", "fix": "Generate the stats block from the build (or link to /proof) instead of hand-writing numbers", "effort": "S" },
+        { "defect": "Spec and digest claims contradict reality", "fix": "Re-verify the design-system contrast claim against built CSS; remove hardcoded digest lines", "effort": "S" }
+      ],
+      "what_would_make_it_8": "Every count in README and the digests is computed, a short current index sits over the long ledger, and spec claims are re-verified against the build each release."
+    }
+  ],
+  "overall_notes": "Strong engineering scaffolding (gates, tests, provenance, careful comments, an honest session log) sits around a product whose public facts and surface are weaker than the tooling suggests. The three biggest problems a user or answer engine would meet today are all on the live site as well as the local build. (1) Invented or phantom facts: venue-default prices shown as real on about 40% of listings and in schema offers.price, the Megaron 20:30 default on about 20%, and about 48 athinorama year-rollover phantoms. (2) Visible pipeline artefacts: a literal '<!-- timeliness-expires -->' on 662 pages, '[PLACEHOLDER]' on 6 hubs, raw markdown tables on 44 pages. (3) i18n breakage: English hubs render Greek cards, and Greek pages carry English descriptions, meta and addresses. Coverage is also thin: 429 listed events, 4 exhibitions, and 31% of the visible DB population hidden because an enrichment concern suppresses the whole event. Measurement, the INTENT focus #1, is mostly unbuilt: citations and crawlers are null, and there is no click telemetry. Performance and baseline accessibility are the healthiest areas. Not verified: whether ONX.Exhibition.NY.2026 actually shows in Athens (the Onassis page was not fetched), and whether Phantom Spell's '€22' or '€25/30' is the true price."
+}

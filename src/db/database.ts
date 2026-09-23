@@ -236,7 +236,9 @@ export function rowToEvent(row: any): Event {
     closedDays: row.closed_days || undefined,
     permanentCollection: row.permanent_collection === 1,
     // Location verification status
-    locationStatus: row.location_status || 'unverified'
+    locationStatus: row.location_status || 'unverified',
+    mergedInto: row.merged_into || undefined,
+    priceSource: row.price_source || undefined
   };
 }
 

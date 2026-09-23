@@ -17,6 +17,8 @@
 import { describe, test, expect, beforeEach, afterEach } from 'bun:test';
 import type { Database } from 'bun:sqlite';
 import { upsertEvent } from '../../db/database';
+import { checkImportDuplicate } from '../import-gate';
+import { findDuplicates } from '../duplicate-detector';
 import { createTestDB, cleanupDB } from '../../../tests/helpers/db-helpers';
 import { sampleConcert } from '../../../tests/fixtures/events';
 import type { Event } from '../../types';
@@ -182,5 +184,29 @@ describe('import-time duplicate gate', () => {
     );
     expect(concert.success).toBe(true);
     expect(concert.isNew).toBe(true);
+  });
+});
+
+// A gate skip is permanent (the row is never written), so only layers proven
+// safe for irreversible use may block imports. same_slot marks duplicates in
+// the reversible mark-duplicates pass instead.
+describe('import gate ignores the same_slot layer', () => {
+  let db: Database;
+  const at = '2026-11-05T21:00:00+03:00';
+  const venue = { name: 'Εθνικό Θέατρο', address: 'Αγίου Κωνσταντίνου 22, Αθήνα' };
+
+  beforeEach(() => {
+    db = createTestDB();
+    expect(upsertEvent(makeEvent({ id: 'dream-full', title: 'Όνειρο καλοκαιρινής νύχτας', type: 'theater', startDate: at, endDate: undefined, venue, source: 'athinorama.gr' }), db).success).toBe(true);
+  });
+  afterEach(() => cleanupDB(db));
+
+  // Called the way scripts/scrape-all.ts calls it: naive Athens wall time, as stored.
+  test('a candidate matched only by same_slot is not gated', () => {
+    const stored = (db.prepare("SELECT start_date FROM events WHERE id = 'dream-full'").get() as { start_date: string }).start_date;
+    const candidate = { id: 'dream-short', title: 'Όνειρο', startDate: stored, type: 'theater', source: 'more.com', venue: { name: venue.name } } as Event;
+    expect(findDuplicates([{ ...candidate, start_date: stored, venue_name: venue.name }, { id: 'dream-full', title: 'Όνειρο καλοκαιρινής νύχτας', start_date: stored, venue_name: venue.name, type: 'theater', source: 'athinorama.gr' }], [])
+      .map(p => p.layer)).toEqual(['same_slot']); // precondition: only same_slot links them
+    expect(checkImportDuplicate(candidate, db)).toBeNull();
   });
 });

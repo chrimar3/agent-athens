@@ -17,7 +17,7 @@ import { join } from 'path';
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
 import type { Event, HubConfig } from '../types';
-import { generateEventSlug } from './event-page';
+import { generateEventSlug, eventOgImagePath } from './event-page';
 import { formatGreekDateOnly } from '../utils/i18n';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
@@ -58,6 +58,8 @@ export const TYPE_COLORS: Record<string, string> = {
   classical: '#ffa726',
   comedy: '#ffca28',
   festival: '#f5e642',
+  tech: '#29b6f6',   // --color-tech
+  other: '#78909c',  // --color-other
 };
 
 // Greek type names for OG images
@@ -77,6 +79,8 @@ const TYPE_NAMES_GREEK: Record<string, string> = {
   classical: 'Κλασική Μουσική',
   comedy: 'Κωμωδία',
   festival: 'Φεστιβάλ',
+  tech: 'Tech',
+  other: 'Εκδηλώσεις',
 };
 
 // Emoji per type (used as watermark)
@@ -479,7 +483,7 @@ export async function generateEventOgImages(events: Event[]): Promise<number> {
     newCache[slug] = hash;
 
     // Skip if the image already exists and content hasn't changed
-    const imagePath = join(eventsDir, `${slug}.png`);
+    const imagePath = join(DIST_DIR, eventOgImagePath(event));
     if (previousCache[slug] === hash && existsSync(imagePath)) {
       skipped++;
       continue;

@@ -28,10 +28,10 @@ import {
 } from './schema-geo';
 import { VENUE_TYPE_MAP, formatSchemaDate } from '../enrichment/quality-gates';
 import { isRunImplyingType } from './event-lifecycle';
-import { generateEventSlug } from '../generators/event-page';
+import { generateEventSlug, resolveEventOgImage, descriptionPlainText } from '../generators/event-page';
 import { buildOfferOrOmit } from '../ticketing/offer-builder';
-import { getOgImage } from './og-image-fallback';
 import { findVenueConfig } from '../quality/location-filter';
+import { schemaText } from './schema-text';
 
 // --- Per-event ListItem builder (extracted verbatim from page.ts:459-512) ---
 
@@ -44,7 +44,7 @@ function itemDescriptionOrOmit(event: Event, locale: Locale): string | undefined
       ? event.fullDescriptionEn || event.description
       : event.fullDescriptionGr || event.description) ||
     event.fullDescription || '';
-  const text = source.replace(/\s+/g, ' ').trim();
+  const text = descriptionPlainText(schemaText(source)).replace(/\s+/g, ' ').trim();
   if (!text || text === event.title) return undefined;
   return text.length <= 200 ? text : `${text.slice(0, 200).replace(/\s+\S*$/, '')}…`;
 }
@@ -68,7 +68,7 @@ function buildItemListElements(events: Event[], locale: Locale): Array<Record<st
     const item: Record<string, unknown> = {
       '@type': event['@type'],
       '@id': selfCanonicalUrl,
-      name: event.title,
+      name: schemaText(event.title),
       ...(() => { const d = itemDescriptionOrOmit(event, locale); return d ? { description: d } : {}; })(),
       startDate: formatSchemaDate(event.startDate),
       ...(endDate ? { endDate } : {}),
@@ -76,7 +76,7 @@ function buildItemListElements(events: Event[], locale: Locale): Array<Record<st
       isAccessibleForFree: event.price.type === 'open' || event.price.type === 'donation',
       location: {
         '@type': VENUE_TYPE_MAP[event['@type']] || 'EventVenue',
-        name: event.venue.name,
+        name: schemaText(event.venue.name),
         address: {
           '@type': 'PostalAddress',
           // Phase-2 B4 (visibility 2026-07-08): config-first, parity with the
@@ -119,7 +119,7 @@ function buildItemListElements(events: Event[], locale: Locale): Array<Record<st
     // and EDP Event entities cannot drift on image presence. Omit on empty
     // (omit-beats-fabricate): the helper always returns a non-empty path,
     // but the absolute-URL guard keeps the contract explicit.
-    const ogImage = getOgImage(event);
+    const ogImage = resolveEventOgImage(event);
     if (ogImage) {
       item.image = ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`;
     }

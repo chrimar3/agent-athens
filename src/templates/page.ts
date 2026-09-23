@@ -1,15 +1,16 @@
 import { escapeHtml } from '../utils/html-escape';
-import { escapeJsonForHtml } from '../utils/html-json';
+import { displayTitle } from '../utils/display-title';
+import { escapeJsonForHtml, decodeJsonLdEntities } from '../utils/html-json';
 // HTML page template with full GEO/SEO optimization
 // Greek Primary + English Metadata Strategy
 
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { Event, EventType, PageMetadata } from '../types';
-import { STRINGS, type Locale, type UIStrings } from '../i18n/strings';
-import { formatGreekDateOnly, formatGreekTime } from '../utils/i18n';
-import { formatDateOnly } from '../utils/i18n-date';
-import { formatExhibitionDateRange, isCurrentlyOpen } from '../utils/filters';
+import { STRINGS, type Locale } from '../i18n/strings';
+import { formatGreekTime } from '../utils/i18n';
+import { formatDateOnly, formatDateRange } from '../utils/i18n-date';
+import { isCurrentlyOpen } from '../utils/filters';
 import { getAthensTodayStr } from '../utils/event-lifecycle';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { generateEventSlug } from '../generators/event-page';
@@ -20,7 +21,7 @@ import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerSc
 import { renderSearchOverlay, renderSearchScript } from './search-overlay';
 import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './filter-bar';
 import type { HubIdentity } from '../utils/hub-identity';
-import { renderCardSaveButton, renderSavedEventsScript, renderCardSaveScript } from './action-bar';
+import { renderCardSaveButton, renderSavedEventsScript, renderCardSaveScript, saveMetaFor } from './action-bar';
 import { BASE_URL, pageUrl } from '../config/site-url';
 import { renderAnalytics } from '../config/analytics';
 
@@ -32,20 +33,14 @@ const bingVerification: string = indexNowConfig.bing_wmt_verification || '';
 
 // ── Badge & icon lookup maps ───────────────────────────
 
-export const BADGE_LABELS: Record<string, string> = {
-  concert: 'ΣΥΝΑΥΛΙΑ',
-  dj_set: 'DJ SET',
-  exhibition: 'ΕΚΘΕΣΗ',
-  cinema: 'ΣΙΝΕΜΑ',
-  screening: 'ΠΡΟΒΟΛΗ',
-  theater: 'ΘΕΑΤΡΟ',
-  festival: 'ΦΕΣΤΙΒΑΛ',
-  performance: 'ΠΑΡΑΣΤΑΣΗ',
-  show: 'ΣΟΟΥ',
-  workshop: 'ΕΡΓΑΣΤΗΡΙΟ',
-  tech: 'TECH',
-  other: 'ΑΛΛΟ',
-};
+// Greek badge labels, kept as an export for existing importers. Locale-aware
+// callers use badgeLabel(type, locale).
+export const BADGE_LABELS: Record<string, string> = STRINGS.el.badgeLabels;
+
+export function badgeLabel(type: string, locale: Locale = 'el'): string {
+  const labels = STRINGS[locale].badgeLabels;
+  return labels[type] || labels.other;
+}
 
 // Empty by default — all canonical EventType badge colors are mid-to-high luminance
 // and need dark text (#0d0d0d) for WCAG AA contrast. Re-add a type here only if its
@@ -116,7 +111,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 
   <!-- OpenGraph: Greek Primary, English Secondary -->
   <meta property="og:title" content="${escapeHtml(title)}">
-  <meta property="og:description" content="${eventCount} εκδηλώσεις στην Αθήνα">
+  <meta property="og:description" content="${eventCount} ${t.eventsInAthens}">
   <meta property="og:url" content="${pageUrl(url)}">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="${locale === 'en' ? 'en_US' : 'el_GR'}">
@@ -127,7 +122,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtml(title)}">
-  <meta name="twitter:description" content="${eventCount} εκδηλώσεις στην Αθήνα">
+  <meta name="twitter:description" content="${eventCount} ${t.eventsInAthens}">
   <meta name="twitter:image" content="${BASE_URL}${filters.type ? `/images/og/${filters.type.replace('_', '-')}-default.png` : '/images/og/agentathens-default.png'}">
 
   <!-- GEO: Location metadata -->
@@ -141,7 +136,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
 
   <!-- Schema.org JSON-LD -->
   ${schemaMarkup ? `<script type="application/ld+json">
-  ${escapeJsonForHtml(schemaMarkup)}
+  ${escapeJsonForHtml(decodeJsonLdEntities(schemaMarkup))}
   </script>` : ''}
 
   <!-- Design system -->
@@ -161,13 +156,14 @@ ${renderAnalytics()}
     <header class="page-header">
       <div class="page-header-row">
         <h1>${escapeHtml(h1Override ?? title)}</h1>
-        <span class="last-update">Τελευταία ενημέρωση: ${new Date(lastUpdate).toLocaleDateString('el-GR', {
+        <span class="last-update">${t.lastUpdated}: ${new Date(lastUpdate).toLocaleDateString(t.dateTimeLocale, {
           month: 'long',
           day: 'numeric',
           year: 'numeric',
           hour: '2-digit',
-          minute: '2-digit'
-        })} ώρα Αθήνας</span>
+          minute: '2-digit',
+          timeZone: 'Europe/Athens'
+        })} ${t.athensTime}</span>
       </div>
     </header>
 
@@ -184,12 +180,12 @@ ${renderAnalytics()}
       </section>
       <p class="filter-empty-state" style="display:none">${t.filterNoResults}</p>
       ` : `
-      <p>Δεν βρέθηκαν εκδηλώσεις που να ταιριάζουν με αυτά τα κριτήρια. Ελέγξτε ξανά αύριο για ενημερώσεις!</p>
-      <p>Το ημερολόγιό μας ενημερώνεται καθημερινά στις 8:00 π.μ. ώρα Αθήνας.</p>
+      <p>${t.emptyListing}</p>
+      <p>${t.emptyListingSchedule}</p>
       `}
 
       ${postContentHtml || ''}
-      ${renderRelatedPages(filters, t)}
+      ${renderRelatedPages(filters, locale)}
     </main>
   </div>
 
@@ -199,6 +195,7 @@ ${renderAnalytics()}
   ${filterBarScriptHTML}
   ${renderSavedEventsScript()}
   ${renderCardSaveScript()}
+  ${renderDayLabelScript(locale)}
 </body>
 </html>`;
 }
@@ -236,6 +233,7 @@ export interface CardData {
 }
 
 export function prepareCardData(event: Event, locale: Locale = 'el'): CardData {
+  const t = STRINGS[locale];
   const isExhibition = event.type === 'exhibition';
   const exhibitionIsOpen = isExhibition && isCurrentlyOpen(event);
 
@@ -245,8 +243,8 @@ export function prepareCardData(event: Event, locale: Locale = 'el'): CardData {
   // date read as stale data to every judge panel that hit one.
   let dateStr: string;
   if (isExhibition) {
-    dateStr = formatExhibitionDateRange(event);
-    if (exhibitionIsOpen) dateStr += ' · Ανοιχτή';
+    dateStr = formatDateRange(event, locale);
+    if (exhibitionIsOpen) dateStr += ` · ${t.exhibitionOpenRelated}`;
   } else {
     const todayStr = getAthensTodayStr();
     const startedBeforeToday = event.startDate.substring(0, 10) < todayStr;
@@ -254,28 +252,28 @@ export function prepareCardData(event: Event, locale: Locale = 'el'): CardData {
       && startedBeforeToday
       && String(event.endDate).substring(0, 10) >= todayStr;
     if (isRunning) {
-      dateStr = `${formatExhibitionDateRange(event)} · Σε εξέλιξη`;
+      dateStr = `${formatDateRange(event, locale)} · ${t.nowRunning}`;
     } else if (startedBeforeToday) {
       // Implied run (no endDate; lifecycle keeps run-implying types visible):
       // "Από <start>" is factual either way — a bare past date read as stale.
-      dateStr = `Από ${formatGreekDateOnly(event.startDate)}`;
+      dateStr = `${t.fromDate} ${formatDateOnly(event.startDate, locale)}`;
     } else {
-      dateStr = formatGreekDateOnly(event.startDate);
+      dateStr = formatDateOnly(event.startDate, locale);
       const timeStr = getEventTime(event);
-      if (timeStr) dateStr += ` στις ${timeStr}`;
+      if (timeStr) dateStr += ` ${t.atTime} ${timeStr}`;
     }
   }
 
   // Price — text only, no links (detail page has full info)
   let priceText: string;
   if (event.price.type === 'open') {
-    priceText = 'Ελεύθερη είσοδος';
+    priceText = t.openEntry;
   } else if (event.price.amount && event.price.amount > 0) {
     priceText = `€${event.price.amount}`;
   } else if (event.price.range && event.price.range !== 'with-ticket' && event.price.range.includes('€')) {
     priceText = event.price.range;
   } else {
-    priceText = 'Με εισιτήριο';
+    priceText = t.ticketed;
   }
 
   // Internal link to detail page
@@ -285,17 +283,19 @@ export function prepareCardData(event: Event, locale: Locale = 'el'): CardData {
   const href = `${prefix}/${slug}/`;
 
   // Badge
-  const badgeLabel = BADGE_LABELS[event.type] || BADGE_LABELS.other;
+  const badge = badgeLabel(event.type, locale);
   const colorVar = `var(--color-${event.type.replace('_', '-')})`;
   const lightText = LIGHT_TEXT_BADGES.has(event.type) ? ' card-badge--light-text' : '';
 
   // Placeholder icon
   const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;
 
-  // Venue display
-  const venueText = event.venue.neighborhood
-    ? `${event.venue.name} · ${displayNeighborhood(event.venue.neighborhood)}`
-    : event.venue.name;
+  // Venue display. Neighbourhoods are stored in English; only Greek pages
+  // translate them.
+  const neighborhood = event.venue.neighborhood
+    ? (locale === 'el' ? displayNeighborhood(event.venue.neighborhood) : event.venue.neighborhood)
+    : '';
+  const venueText = neighborhood ? `${event.venue.name} · ${neighborhood}` : event.venue.name;
 
   // Short description for meta tag (truncate to 160 chars)
   const shortDesc = (event.description || '').substring(0, 160);
@@ -303,10 +303,11 @@ export function prepareCardData(event: Event, locale: Locale = 'el'): CardData {
   // Numeric price for data attribute (sort-by-price)
   const numericPrice = event.price.type === 'open' ? 0 : (event.price.amount || 9999);
 
-  return { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen };
+  return { dateStr, priceText, href, slug, badgeLabel: badge, colorVar, lightText, icon, venueText, shortDesc, numericPrice, exhibitionIsOpen };
 }
 
 export function renderEventCard(event: Event, locale: Locale = 'el'): string {
+  const t = STRINGS[locale];
   const { dateStr, priceText, href, slug, badgeLabel, colorVar, lightText, icon, venueText, numericPrice, exhibitionIsOpen } = prepareCardData(event, locale);
 
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
@@ -321,25 +322,54 @@ export function renderEventCard(event: Event, locale: Locale = 'el'): string {
   <article class="event-card" data-price="${numericPrice}" data-type="${event.type}" data-price-type="${event.price.type}">
     ${imgSrc
       ? `<div class="card-image-wrapper" data-type="${event.type}">
-      <img class="card-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(event.title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img class="card-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
-      ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
-      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn))}
+      ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
+      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn), saveMetaFor(event), locale)}
     </div>`
       : `<div class="card-image-wrapper" data-type="${event.type}">
       ${getEventTile(event.id) ?? ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
-      ${exhibitionIsOpen ? '<span class="card-badge-open">ΑΝΟΙΧΤΗ</span>' : ''}
-      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn))}
+      ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
+      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn), saveMetaFor(event), locale)}
     </div>`}
     <div class="card-body">
-      <h3 class="card-title"><a href="${href}" class="card-link">${escapeHtml(event.title)}</a></h3>
+      <h3 class="card-title"><a href="${href}" class="card-link">${escapeHtml(displayTitle(event.title, event.venue?.name))}</a></h3>
       <span class="card-date"><time datetime="${event.startDate}">${dateStr}</time></span>
       <span class="card-venue">${escapeHtml(venueText)}</span>
       ${priceHtml}
     </div>
   </article>`;
+}
+
+/**
+ * Prefixes "Σήμερα · " / "Αύριο · " to dated headers. Computed in the browser
+ * against Europe/Athens: pages are built once a day, so a build-time "today"
+ * would be wrong after midnight. Without JS the absolute date still reads.
+ */
+function renderDayLabelScript(locale: Locale): string {
+  const labels = STRINGS[locale].filterTimeLabels;
+  const words = [labels['today'], labels['tomorrow']];
+  return `<script>
+(function() {
+  function iso(d) { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Athens', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d); }
+  function apply() {
+    var today = iso(new Date());
+    // Calendar arithmetic, not now+24h: on the eve of a DST change 24h skips a day.
+    var p = today.split('-');
+    var tomorrow = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2] + 1)).toISOString().slice(0, 10);
+    document.querySelectorAll('.date-group-header[data-date]').forEach(function(h) {
+      if (!h.hasAttribute('data-label-base')) h.setAttribute('data-label-base', h.textContent);
+      var d = h.getAttribute('data-date');
+      var word = d === today ? '${words[0]}' : d === tomorrow ? '${words[1]}' : '';
+      h.textContent = (word ? word + ' · ' : '') + h.getAttribute('data-label-base');
+    });
+  }
+  window.__aaDayLabels = apply;
+  apply();
+})();
+</script>`;
 }
 
 function renderDateGroupedEvents(events: Event[], locale: Locale): string {
@@ -372,8 +402,8 @@ function renderDateGroupedEvents(events: Event[], locale: Locale): string {
   const parts: string[] = [];
   for (const dateKey of sortedKeys) {
     const dateEvents = groups.get(dateKey)!;
-    const headerText = locale === 'en' ? formatDateOnly(dateKey, 'en') : formatGreekDateOnly(dateKey);
-    parts.push(`<h2 class="date-group-header">${headerText}</h2>`);
+    const headerText = formatDateOnly(dateKey, locale);
+    parts.push(`<h2 class="date-group-header" id="d-${dateKey}" data-date="${dateKey}">${headerText}</h2>`);
     parts.push(`<div class="date-group" data-count="${dateEvents.length}">`);
     for (const event of dateEvents) {
       parts.push(renderEventCard(event, locale));
@@ -382,8 +412,7 @@ function renderDateGroupedEvents(events: Event[], locale: Locale): string {
   }
 
   if (running.length > 0) {
-    const runningHeader = locale === 'en' ? 'Now running' : 'Σε εξέλιξη';
-    parts.push(`<h2 class="date-group-header">${runningHeader}</h2>`);
+    parts.push(`<h2 class="date-group-header">${STRINGS[locale].nowRunning}</h2>`);
     parts.push(`<div class="date-group" data-count="${running.length}">`);
     for (const event of running) {
       parts.push(renderEventCard(event, locale));
@@ -394,34 +423,26 @@ function renderDateGroupedEvents(events: Event[], locale: Locale): string {
   return parts.join('\n');
 }
 
-function renderRelatedPages(filters: any, t: UIStrings): string {
-  // Generate related page suggestions
+function renderRelatedPages(filters: PageMetadata['filters'], locale: Locale): string {
+  const t = STRINGS[locale];
   const links: string[] = [];
 
-  const typeTranslations: Record<string, string> = {
-    'concerts': 'συναυλίες',
-    'theater': 'θέατρο',
-    'exhibitions': 'εκθέσεις',
-    'cinema': 'κινηματογράφος',
-    'performances': 'παραστάσεις',
-    'workshops': 'εργαστήρια'
-  };
-
-  if (filters.type) {
-    const greekType = typeTranslations[filters.type] || filters.type;
-    links.push(`<a href="/${filters.type}">Όλες οι ${greekType}</a>`);
-    links.push(`<a href="/open-${filters.type}">Ελεύθερη είσοδος ${greekType}</a>`);
+  if (locale === 'en') {
+    // English has no per-type listing pages; /en/this-week/ is the always-built
+    // English hub and /en/open/ needs only 3 open-entry events.
+    if (filters.time !== 'this-week') links.push(`<a href="/en/this-week/">${t.relatedThisWeek}</a>`);
+    if (filters.price !== 'open') links.push(`<a href="/en/open/">${t.relatedOpenEvents}</a>`);
+  } else {
+    if (filters.type) {
+      const all = t.typeDiscoveryLabels[filters.type] ?? t.typeLabels[filters.type] ?? filters.type;
+      const plural = t.filterTypeLabels[filters.type] ?? t.typeLabels[filters.type] ?? filters.type;
+      links.push(`<a href="/${filters.type}">${all}</a>`);
+      links.push(`<a href="/open-${filters.type}">${t.relatedOpenOfType.replace('{type}', plural)}</a>`);
+    }
+    if (filters.time !== 'this-week') links.push(`<a href="/this-week">${t.relatedThisWeek}</a>`);
+    if (filters.price !== 'open') links.push(`<a href="/open">${t.relatedOpenEvents}</a>`);
+    links.push(`<a href="/">${t.relatedAllEvents}</a>`);
   }
-
-  if (filters.time !== 'this-week') {
-    links.push(`<a href="/this-week">Εκδηλώσεις αυτής της εβδομάδας</a>`);
-  }
-
-  if (filters.price !== 'open') {
-    links.push(`<a href="/open">Ελεύθερη είσοδος εκδηλώσεις</a>`);
-  }
-
-  links.push(`<a href="/">Όλες οι εκδηλώσεις</a>`);
 
   if (links.length === 0) return '';
 

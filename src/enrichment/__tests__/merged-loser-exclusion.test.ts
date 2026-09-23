@@ -17,6 +17,15 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { getEnrichmentQueue } from '../enrichment-queue';
 import { syncQueueFromEvents, getNextBatch } from '../priority-queue-manager';
+import { athensTodaySql } from '../../db/effective-end-sql';
+
+// getNextBatch only dispatches still-current events, so the fixture must stay
+// upcoming relative to the real Athens today (a fixed date goes vacuous).
+function upcomingStart(): string {
+  const d = new Date(`${athensTodaySql()}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + 5);
+  return `${d.toISOString().slice(0, 10)}T18:00:00`;
+}
 
 function makeDb(): Database {
   const db = new Database(':memory:');
@@ -28,6 +37,7 @@ function makeDb(): Database {
       id TEXT PRIMARY KEY,
       title TEXT NOT NULL,
       start_date TEXT NOT NULL,
+      end_date TEXT,
       venue_name TEXT,
       type TEXT,
       genres TEXT,
@@ -62,8 +72,8 @@ function seedEvent(db: Database, id: string, title: string, mergedInto: string |
     INSERT INTO events (
       id, title, start_date, type, venue_name, price_type, source,
       created_at, updated_at, location_status, needs_enrichment, merged_into, merged_at
-    ) VALUES (?, ?, '2026-07-05T18:00:00', 'concert', 'Island Athens Riviera', 'with-ticket', ?, '', '', 'verified_athens', 1, ?, ?)
-  `).run(id, title, mergedInto ? 'athinorama.gr' : 'more.com', mergedInto, mergedInto ? '2026-07-05T09:00:00' : null);
+    ) VALUES (?, ?, ?, 'concert', 'Island Athens Riviera', 'with-ticket', ?, '', '', 'verified_athens', 1, ?, ?)
+  `).run(id, title, upcomingStart(), mergedInto ? 'athinorama.gr' : 'more.com', mergedInto, mergedInto ? '2026-07-05T09:00:00' : null);
 }
 
 describe('merged losers excluded from enrichment selection (S198)', () => {

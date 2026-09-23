@@ -1,6 +1,8 @@
 import he from 'he';
 import type { Locale } from '../i18n/strings';
 import { STRINGS } from '../i18n/strings';
+import type { Event } from '../types';
+import { displayTitle } from '../utils/display-title';
 
 export function escapeAttr(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -18,15 +20,16 @@ export function renderActionBarHtml(
   slug: string,
   title: string,
   canonicalUrl: string,
-  locale: Locale = 'el'
+  locale: Locale = 'el',
+  meta: SaveMeta = {}
 ): string {
   const t = STRINGS[locale];
   // decode-then-escape: pre-S154 DB rows carry HTML entities; bare escapeAttr
   // would double-escape (&amp; → &amp;amp;). he.decode is idempotent on already-
   // decoded text. Same pattern as the meta-attr seam in event-page.ts.
-  const safeTitle = escapeAttr(he.decode(title));
+  const safeTitle = escapeAttr(displayTitle(title, meta.venue));
   return `<div class="edp-action-bar">
-          <button class="edp-save-btn" data-save-event data-event-english="${locale === 'en'}" data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${safeTitle}" data-save-label="${t.saveEvent}" data-unsave-label="${t.unsaveEvent}" type="button" aria-pressed="false" aria-label="${t.saveEvent}">
+          <button class="edp-save-btn" data-save-event data-event-english="${locale === 'en'}" data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${safeTitle}"${saveMetaAttrs(meta)} data-save-label="${t.saveEvent}" data-unsave-label="${t.unsaveEvent}" type="button" aria-pressed="false" aria-label="${t.saveEvent}">
             ${ACTIONBAR_BOOKMARK_ICON}
             <span class="edp-save-label">${t.saveEvent}</span>
           </button>
@@ -37,8 +40,56 @@ export function renderActionBarHtml(
         </div>`;
 }
 
-export function renderCardSaveButton(eventId: string, slug: string, title: string, hasEnglish = false): string {
-  return `<button class="card-save-btn" data-event-english="${hasEnglish}" data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${escapeAttr(he.decode(title))}" type="button" aria-pressed="false" aria-label="Save">${CARD_BOOKMARK_ICON}</button>`;
+export interface SaveMeta {
+  start?: string;
+  end?: string;
+  venue?: string;
+  priceType?: string;
+  priceAmount?: number;
+}
+
+/** What /saved/ needs to show a row without refetching: date, venue, price. */
+export function saveMetaFor(event: Event): SaveMeta {
+  const price = event.price as Event['price'] | string | undefined;
+  const priceType = typeof price === 'string' ? price : price?.type;
+  const priceAmount = typeof price === 'object' && typeof price?.amount === 'number' ? price.amount : undefined;
+  return {
+    start: event.startDate || undefined,
+    end: event.endDate || undefined,
+    venue: event.venue?.name ? he.decode(event.venue.name) : undefined,
+    priceType,
+    priceAmount,
+  };
+}
+
+function saveMetaAttrs(meta: SaveMeta): string {
+  const attrs: string[] = [];
+  if (meta.start) attrs.push(`data-event-start="${escapeAttr(meta.start)}"`);
+  if (meta.end) attrs.push(`data-event-end="${escapeAttr(meta.end)}"`);
+  if (meta.venue) attrs.push(`data-event-venue="${escapeAttr(meta.venue)}"`);
+  if (meta.priceType) attrs.push(`data-event-price-type="${escapeAttr(meta.priceType)}"`);
+  if (meta.priceAmount !== undefined) attrs.push(`data-event-price-amount="${meta.priceAmount}"`);
+  return attrs.length ? ' ' + attrs.join(' ') : '';
+}
+
+export function renderSavedPageBody(locale: Locale): string {
+  const st = STRINGS[locale];
+  return `
+    <h1>${st.savedEvents}</h1>
+    <noscript><p>${st.savedRequiresJs}</p></noscript>
+    <div id="saved-events-list" class="saved-events-container">
+      <section id="saved-upcoming" class="saved-section" hidden><h2 class="saved-section__title">${st.savedUpcoming}</h2><div class="saved-section__list"></div></section>
+      <section id="saved-past" class="saved-section saved-section--past" hidden><h2 class="saved-section__title">${st.savedPast}</h2><div class="saved-section__list"></div></section>
+    </div>
+    <div class="saved-empty-state" id="saved-empty" style="display:none">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      <p>${st.savedEventsEmpty}</p>
+      <p><a class="saved-empty-state__cta" href="${locale === 'en' ? '/en/this-weekend/' : '/this-weekend/'}">${st.savedBrowseWeekend}</a></p>
+    </div>`;
+}
+
+export function renderCardSaveButton(eventId: string, slug: string, title: string, hasEnglish = false, meta: SaveMeta = {}, locale: Locale = 'el'): string {
+  return `<button class="card-save-btn" data-event-english="${hasEnglish}" data-event-id="${eventId}" data-event-slug="${slug}" data-event-title="${escapeAttr(displayTitle(title, meta.venue))}"${saveMetaAttrs(meta)} type="button" aria-pressed="false" aria-label="${escapeAttr(STRINGS[locale].saveEventAria)}">${CARD_BOOKMARK_ICON}</button>`;
 }
 
 export function renderSavedEventsScript(): string {
@@ -48,6 +99,12 @@ export function renderSavedEventsScript(): string {
   var MAX = 200;
   var memory = [];
   var storageUnavailable = false;
+  var META = ['start', 'end', 'venue', 'priceType'];
+  function withMeta(entry, obj) {
+    META.forEach(function(k) { if (obj[k]) entry[k] = obj[k]; });
+    if (typeof obj.priceAmount === 'number') entry.priceAmount = obj.priceAmount;
+    return entry;
+  }
   function normalize(value) {
     if (!Array.isArray(value)) return [];
     var seen = new Set();
@@ -57,7 +114,10 @@ export function renderSavedEventsScript(): string {
       seen.add(e.eventId);
       return true;
     }).map(function(e) {
-      return { eventId: e.eventId, title: e.title, savedAt: e.savedAt, hasEnglish: e.hasEnglish === true, slug: e.slug.replace(/^\\/(en\\/)?events\\//, '').replace(/\\/$/, '') };
+      var out = { eventId: e.eventId, title: e.title, savedAt: e.savedAt, hasEnglish: e.hasEnglish === true, slug: e.slug.replace(/^\\/(en\\/)?events\\//, '').replace(/\\/$/, '') };
+      META.forEach(function(k) { if (typeof e[k] === 'string' && e[k]) out[k] = e[k]; });
+      if (typeof e.priceAmount === 'number' && isFinite(e.priceAmount)) out.priceAmount = e.priceAmount;
+      return out;
     }).filter(function(e) { return e.slug && e.slug !== '.' && e.slug !== '..' && !/[\\/\\\\]/.test(e.slug); }).slice(0, MAX);
   }
   function read() {
@@ -76,7 +136,7 @@ export function renderSavedEventsScript(): string {
     isSaved: function(id) { return read().some(function(e) { return e.eventId === id; }); },
     save: function(obj) {
       var arr = read().filter(function(e) { return e.eventId !== obj.eventId; });
-      arr.unshift({ eventId: obj.eventId, savedAt: new Date().toISOString(), slug: obj.slug, title: obj.title, hasEnglish: obj.hasEnglish === true });
+      arr.unshift(withMeta({ eventId: obj.eventId, savedAt: new Date().toISOString(), slug: obj.slug, title: obj.title, hasEnglish: obj.hasEnglish === true }, obj));
       if (arr.length > MAX) arr = arr.slice(0, MAX);
       write(arr);
     },
@@ -84,6 +144,28 @@ export function renderSavedEventsScript(): string {
       write(read().filter(function(e) { return e.eventId !== id; }));
     },
     count: function() { return read().length; },
+    fromButton: function(btn) {
+      var d = btn.dataset;
+      var amount = d.eventPriceAmount === undefined ? undefined : Number(d.eventPriceAmount);
+      return {
+        eventId: d.eventId, slug: d.eventSlug, title: d.eventTitle, hasEnglish: d.eventEnglish === 'true',
+        start: d.eventStart, end: d.eventEnd, venue: d.eventVenue, priceType: d.eventPriceType,
+        priceAmount: typeof amount === 'number' && isFinite(amount) ? amount : undefined
+      };
+    },
+    // Pages that render a save button know the event's current date/venue/price;
+    // folding them into an existing save repairs pre-meta saves and date moves.
+    refresh: function(obj) {
+      var arr = read();
+      var changed = false;
+      arr.forEach(function(e) {
+        if (e.eventId !== obj.eventId) return;
+        var before = JSON.stringify(e);
+        withMeta(e, obj);
+        if (JSON.stringify(e) !== before) changed = true;
+      });
+      if (changed) write(arr);
+    },
     toggle: function(obj) {
       if (window.__aaSaved.isSaved(obj.eventId)) { window.__aaSaved.unsave(obj.eventId); return false; }
       window.__aaSaved.save(obj); return true;
@@ -123,13 +205,9 @@ export function renderSaveButtonScript(): string {
   }
   btns.forEach(function(btn) {
     btn.addEventListener('click', function() {
-      window.__aaSaved.toggle({
-        eventId: btn.dataset.eventId,
-        slug: btn.dataset.eventSlug,
-        hasEnglish: btn.dataset.eventEnglish === 'true',
-        title: btn.dataset.eventTitle
-      });
+      window.__aaSaved.toggle(window.__aaSaved.fromButton(btn));
     });
+    if (window.__aaSaved.isSaved(btn.dataset.eventId)) window.__aaSaved.refresh(window.__aaSaved.fromButton(btn));
   });
   document.addEventListener('aa:saved-change', sync);
   sync();
@@ -146,8 +224,8 @@ export function renderCardSaveScript(): string {
       var saved = window.__aaSaved.isSaved(btn.dataset.eventId);
       btn.classList.toggle('is-saved', saved);
       btn.setAttribute('aria-pressed', saved ? 'true' : 'false');
-      var en = document.documentElement.lang === 'en';
-      btn.setAttribute('aria-label', saved ? (en ? 'Remove saved event' : 'Αφαίρεση αποθηκευμένης εκδήλωσης') : (en ? 'Save event' : 'Αποθήκευση εκδήλωσης'));
+      var L = document.documentElement.lang === 'en' ? ${JSON.stringify({ save: STRINGS.en.saveEventAria, unsave: STRINGS.en.unsaveEventAria })} : ${JSON.stringify({ save: STRINGS.el.saveEventAria, unsave: STRINGS.el.unsaveEventAria })};
+      btn.setAttribute('aria-label', saved ? L.unsave : L.save);
     });
   }
   document.addEventListener('click', function(e) {
@@ -155,12 +233,7 @@ export function renderCardSaveScript(): string {
     if (!btn) return;
     e.preventDefault();
     e.stopPropagation();
-    window.__aaSaved.toggle({
-      eventId: btn.dataset.eventId,
-      slug: btn.dataset.eventSlug,
-      hasEnglish: btn.dataset.eventEnglish === 'true',
-        title: btn.dataset.eventTitle
-    });
+    window.__aaSaved.toggle(window.__aaSaved.fromButton(btn));
   });
   // Card-body click delegation: the stretched-link ::before overlay wins
   // touch/pointer hit-testing but Chrome's SYNTHESIZED mouse click re-hit-
@@ -174,6 +247,9 @@ export function renderCardSaveScript(): string {
     if (!card) return;
     var link = card.querySelector('.card-link');
     if (link) link.click();
+  });
+  document.querySelectorAll('.card-save-btn').forEach(function(btn) {
+    if (window.__aaSaved.isSaved(btn.dataset.eventId)) window.__aaSaved.refresh(window.__aaSaved.fromButton(btn));
   });
   document.addEventListener('aa:saved-change', syncAll);
   syncAll();
@@ -227,40 +303,102 @@ export function renderShareButtonScript(): string {
 }
 
 export function renderSavedPageScript(locale: Locale): string {
+  const t = STRINGS[locale];
   const removeLabel = locale === 'en' ? 'Remove' : 'Αφαίρεση';
+  const labels = JSON.stringify({
+    remove: removeLabel,
+    open: t.freeEntry,
+    donation: t.freeDonation,
+    ticketed: t.ticketed,
+    until: locale === 'en' ? 'until' : 'έως',
+    intl: locale === 'en' ? 'en-GB' : 'el-GR',
+  });
   return `<script>
 (function() {
   if (!window.__aaSaved) return;
 
-  var list = document.getElementById('saved-events-list');
+  var L = ${labels};
+  var EN = ${locale === 'en'};
+  var up = document.getElementById('saved-upcoming');
+  var past = document.getElementById('saved-past');
   var empty = document.getElementById('saved-empty');
-  if (!list || !empty) return;
+  var list = document.getElementById('saved-events-list');
+  if (!up || !past || !empty || !list) return;
+
+  // Stored dates are Athens wall-clock strings ("YYYY-MM-DD" or "…THH:MM:SS");
+  // format their parts directly so the viewer's own timezone never shifts them.
+  var athensToday = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Athens', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  var dayFmt = new Intl.DateTimeFormat(L.intl, { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short' });
+  var endFmt = new Intl.DateTimeFormat(L.intl, { timeZone: 'UTC', day: 'numeric', month: 'short' });
+  var DAY = /^(\\d{4})-(\\d{2})-(\\d{2})(?:T(\\d{2}):(\\d{2}))?/;
+  function utcNoon(m) { return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 12)); }
+  function isRunning(item) {
+    return !!item.start && item.start.slice(0, 10) < athensToday && !!item.end && item.end.slice(0, 10) >= athensToday;
+  }
+  function formatWhen(item) {
+    if (isRunning(item)) {
+      var e = DAY.exec(item.end);
+      return e ? L.until + ' ' + endFmt.format(utcNoon(e)) : '';
+    }
+    var m = DAY.exec(item.start || '');
+    if (!m) return '';
+    var day = dayFmt.format(utcNoon(m));
+    return m[4] && !(m[4] === '00' && m[5] === '00') ? day + ' · ' + m[4] + ':' + m[5] : day;
+  }
+
+  function formatPrice(item) {
+    if (typeof item.priceAmount === 'number' && item.priceAmount > 0) return '€' + item.priceAmount;
+    if (item.priceType === 'open') return L.open;
+    if (item.priceType === 'donation') return L.donation;
+    if (item.priceType === 'with-ticket') return L.ticketed;
+    return '';
+  }
+  function isPast(item) {
+    var last = (item.end || item.start || '').slice(0, 10);
+    return !!last && last < athensToday;
+  }
+
+  function row(item) {
+    var el = document.createElement('div');
+    el.className = 'saved-event-item';
+    var body = document.createElement('div');
+    body.className = 'saved-event-body';
+    var a = document.createElement('a');
+    a.href = (EN && item.hasEnglish ? '/en/events/' : '/events/') + encodeURIComponent(item.slug) + '/';
+    a.textContent = item.title;
+    body.appendChild(a);
+    var meta = [formatWhen(item), item.venue || '', formatPrice(item)].filter(Boolean).join(' · ');
+    if (meta) {
+      var p = document.createElement('p');
+      p.className = 'saved-event-meta';
+      p.textContent = meta;
+      body.appendChild(p);
+    }
+    var btn = document.createElement('button');
+    btn.className = 'saved-event-remove';
+    btn.setAttribute('data-remove-id', item.eventId);
+    btn.type = 'button';
+    btn.setAttribute('aria-label', L.remove + ': ' + item.title);
+    btn.textContent = L.remove;
+    el.appendChild(body);
+    el.appendChild(btn);
+    return el;
+  }
+
+  function fill(section, items) {
+    var box = section.querySelector('.saved-section__list');
+    while (box.firstChild) box.removeChild(box.firstChild);
+    items.forEach(function(item) { box.appendChild(row(item)); });
+    section.hidden = items.length === 0;
+  }
 
   function render() {
     var saved = window.__aaSaved.get();
-    if (saved.length === 0) {
-      while (list.firstChild) list.removeChild(list.firstChild);
-      empty.style.display = '';
-      return;
-    }
-    empty.style.display = 'none';
-    while (list.firstChild) list.removeChild(list.firstChild);
-    saved.forEach(function(item) {
-      var row = document.createElement('div');
-      row.className = 'saved-event-item';
-      var a = document.createElement('a');
-      a.href = (${locale === 'en'} && item.hasEnglish ? '/en/events/' : '/events/') + encodeURIComponent(item.slug) + '/';
-      a.textContent = item.title;
-      var btn = document.createElement('button');
-      btn.className = 'saved-event-remove';
-      btn.setAttribute('data-remove-id', item.eventId);
-      btn.type = 'button';
-      btn.setAttribute('aria-label', '${removeLabel}');
-      btn.textContent = '${removeLabel}';
-      row.appendChild(a);
-      row.appendChild(btn);
-      list.appendChild(row);
-    });
+    empty.style.display = saved.length === 0 ? '' : 'none';
+    // Undated (pre-meta) saves sort after dated ones until a page repairs them.
+    var byStart = function(a, b) { return (a.start || '9999').localeCompare(b.start || '9999'); };
+    fill(up, saved.filter(function(i) { return !isPast(i); }).sort(byStart));
+    fill(past, saved.filter(isPast).sort(function(a, b) { return byStart(b, a); }));
   }
 
   list.addEventListener('click', function(e) {

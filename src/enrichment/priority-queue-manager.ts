@@ -422,13 +422,30 @@ export function syncQueueFromEvents(db: Database): {
 }
 
 /**
- * Get next batch of events to enrich
+ * Get next batch of events to enrich — soonest first.
+ *
+ * Only still-current events (effective end >= today, so running exhibitions
+ * and theater runs stay eligible and past rows never are). Order key is the
+ * effective next date max(start, today): a running exhibition counts as today.
+ * priority_score only breaks ties inside a near-term band (0-3 / 4-7 / 8-14
+ * days, the calculatePriority time bands); beyond 14 days date alone decides.
+ * priority_score is frozen at --sync time and lets venue tier (+50) outweigh
+ * the time factor (+40), so it must not lead the ordering.
  */
 export function getNextBatch(
   db: Database,
-  options: { limit?: number; tier?: 'stub' | 'standard' | 'premium'; minPriority?: number } = {}
+  options: {
+    limit?: number;
+    tier?: 'stub' | 'standard' | 'premium';
+    minPriority?: number;
+    /** Athens YYYY-MM-DD; defaults to athensTodaySql(). Injected by tests. */
+    today?: string;
+  } = {}
 ): EventWithPriority[] {
-  const { limit = 10, tier, minPriority = 0 } = options;
+  const { limit = 10, tier, minPriority = 0, today = athensTodaySql() } = options;
+
+  const nextDate = `MAX(substr(e.start_date, 1, 10), $today)`;
+  const daysOut = `CAST(julianday(${nextDate}) - julianday($today) AS INTEGER)`;
 
   let query = `
     SELECT
@@ -457,21 +474,32 @@ export function getNextBatch(
     FROM enrichment_queue q
     JOIN events e ON q.event_id = e.id
     WHERE q.status = 'pending'
-      AND q.priority_score >= ?
+      AND q.priority_score >= $minPriority
       AND e.merged_into IS NULL
+      AND ${isCurrentSql('e.')}
   `;
 
-  const params: (string | number)[] = [minPriority];
+  const params: Record<string, string | number> = { $minPriority: minPriority, $today: today, $limit: limit };
 
   if (tier) {
-    query += ` AND q.tier = ?`;
-    params.push(tier);
+    query += ` AND q.tier = $tier`;
+    params.$tier = tier;
   }
 
-  query += ` ORDER BY q.priority_score DESC, e.start_date ASC LIMIT ?`;
-  params.push(limit);
+  query += `
+    ORDER BY
+      CASE
+        WHEN ${daysOut} <= 3 THEN -3
+        WHEN ${daysOut} <= 7 THEN -2
+        WHEN ${daysOut} <= 14 THEN -1
+        ELSE ${daysOut}
+      END ASC,
+      q.priority_score DESC,
+      ${nextDate} ASC,
+      e.start_date ASC
+    LIMIT $limit`;
 
-  return db.prepare(query).all(...params) as EventWithPriority[];
+  return db.prepare(query).all(params) as EventWithPriority[];
 }
 
 /**

@@ -36,7 +36,7 @@ interface SectionEditorial {
   textEn: string;
 }
 
-interface EditorialContent {
+export interface EditorialContent {
   pullQuotes: PullQuote[];
   featuredEvents: Record<string, Vignette>;
   sectionEditorials: Record<string, SectionEditorial>;
@@ -61,6 +61,15 @@ function loadEditorialContent(): EditorialContent {
   }
 }
 
+// Seed copy in config/editorial-content.json starts "[PLACEHOLDER"; it must
+// never reach a page (it did, on six hubs, until 2026-09-22).
+const isPlaceholder = (text: string | undefined | null): boolean => !text || /^\s*\[PLACEHOLDER/.test(text);
+
+/** Test seam: replace (or with null, reset) the loaded content. */
+export function _setEditorialContentForTests(content: EditorialContent | null): void {
+  _cache = content;
+}
+
 // ── Public API ─────────────────────────────────────────
 
 /**
@@ -72,7 +81,8 @@ export function getPullQuotes(hub: string, locale: Locale): string[] {
   const key = locale === 'el' ? 'textEl' : 'textEn';
   return content.pullQuotes
     .filter((q) => q.hubs.includes(hub))
-    .map((q) => q[key]);
+    .map((q) => q[key])
+    .filter((text) => !isPlaceholder(text));
 }
 
 /**
@@ -103,7 +113,8 @@ export function getFeaturedVignette(
     if (entry.validUntil && today > entry.validUntil) return null;
   }
 
-  return locale === 'el' ? entry.vignetteEl : entry.vignetteEn;
+  const text = locale === 'el' ? entry.vignetteEl : entry.vignetteEn;
+  return isPlaceholder(text) ? null : text;
 }
 
 /**
@@ -141,5 +152,6 @@ export function getSectionEditorial(hub: string, locale: Locale): string | null 
   const content = loadEditorialContent();
   const entry = content.sectionEditorials[hub];
   if (!entry) return null;
-  return locale === 'el' ? entry.textEl : entry.textEn;
+  const text = locale === 'el' ? entry.textEl : entry.textEn;
+  return isPlaceholder(text) ? null : text;
 }

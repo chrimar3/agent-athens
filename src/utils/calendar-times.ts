@@ -119,6 +119,29 @@ function nowUtcStamp(): string {
   );
 }
 
+// RFC 5545 §3.6.5: every TZID a calendar references must be defined in it.
+// EU rule since 1996: EEST from the last Sunday of March 01:00 UTC (03:00 EET)
+// to the last Sunday of October 01:00 UTC (04:00 EEST).
+const ATHENS_VTIMEZONE = [
+  "BEGIN:VTIMEZONE",
+  "TZID:Europe/Athens",
+  "BEGIN:DAYLIGHT",
+  "TZOFFSETFROM:+0200",
+  "TZOFFSETTO:+0300",
+  "TZNAME:EEST",
+  "DTSTART:19970330T030000",
+  "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
+  "END:DAYLIGHT",
+  "BEGIN:STANDARD",
+  "TZOFFSETFROM:+0300",
+  "TZOFFSETTO:+0200",
+  "TZNAME:EET",
+  "DTSTART:19971026T040000",
+  "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU",
+  "END:STANDARD",
+  "END:VTIMEZONE",
+];
+
 export function generateIcs(event: Event, canonicalUrl: string): string {
   const times = resolveEventTimes(event);
   if (!times) return "";
@@ -138,8 +161,15 @@ export function generateIcs(event: Event, canonicalUrl: string): string {
       ]
     : [
         "DTSTART;TZID=Europe/Athens:" + formatICS(start),
-        "DTEND;TZID=Europe/Athens:" + formatICS(end),
+        // No DTEND without a real end: RFC 5545 §3.6.1 reads a DATE-TIME start
+        // with no end as ending at the start. The +3h in resolveEventTimes is a
+        // display default for calendar deeplinks, not a fact to export.
+        // A later-day end on a timed event is the run's end, not this
+        // performance's — exporting it makes a multi-week calendar block.
+        ...(event.endDate && event.endDate.slice(0, 10) === event.startDate.slice(0, 10)
+          ? ["DTEND;TZID=Europe/Athens:" + formatICS(end)] : []),
       ];
+  const usesTzid = dtLines.some(l => l.includes("TZID=Europe/Athens"));
 
   const lines = [
     "BEGIN:VCALENDAR",
@@ -147,6 +177,7 @@ export function generateIcs(event: Event, canonicalUrl: string): string {
     "PRODID:-//Agent Athens//agentathens.com//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
+    ...(usesTzid ? ATHENS_VTIMEZONE : []),
     "BEGIN:VEVENT",
     foldLine("UID:" + escIcs(uid)),
     "DTSTAMP:" + nowUtcStamp(),

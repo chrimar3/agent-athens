@@ -1,5 +1,5 @@
 import { escapeHtml } from '../utils/html-escape';
-import { escapeJsonForHtml } from '../utils/html-json';
+import { escapeJsonForHtml, decodeJsonLdEntities } from '../utils/html-json';
 // Content page template — static pages (about, editorial, corrections)
 // Uses site chrome (nav, footer, hamburger) but no filter bar, cards, or hero.
 // Supports locale for bilingual E-E-A-T pages (el + en).
@@ -38,7 +38,7 @@ export function renderContentPage(
   const metaDesc = options?.metaDescription || defaultDesc;
 
   const schemaBlock = options?.schemaJson
-    ? `\n  <script type="application/ld+json">\n  ${escapeJsonForHtml(options.schemaJson)}\n  </script>`
+    ? `\n  <script type="application/ld+json">\n  ${escapeJsonForHtml(decodeJsonLdEntities(options.schemaJson))}\n  </script>`
     : '';
 
   // S144 (GEO 2026-05-21): canonical is locale-aware self. Supersedes the

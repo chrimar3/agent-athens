@@ -10,7 +10,7 @@
  */
 
 import { describe, test, expect } from 'bun:test';
-import { categoryToType } from '../scrape-megaron';
+import { categoryToType, parseMegaronListing, toDbEvent } from '../scrape-megaron';
 
 describe('categoryToType — spike-derived mapping', () => {
   test('Μουσική → concert', () => {
@@ -80,5 +80,25 @@ describe('categoryToType — unknown / empty fallback', () => {
 
   test('whitespace-only → other', () => {
     expect(categoryToType('   ')).toBe('other');
+  });
+});
+
+// Trimmed from a real /el/events card (2026-09-22). The listing carries no
+// clock time — megaron.gr states it only on the detail page.
+const LISTING_CARD = `<li><div class="tease tease--event-calendar" data-presale="2099-09-21" data-sort="" data-date="28 09 2099,">
+<div class="flex"><div class="right"><div class="flex">
+<div class="col-1"> <a href="https://www.megaron.gr/event/12o-diethnes-festival-poiisis-athinon/"> <h2 class="">12ο Διεθνές Φεστιβάλ Ποίησης Αθηνών</h2> </a> </div>
+<div class="col-2"><div class="category-tag"><a href="/events/events-calendar/?katigoria=sunedrio"><div class="category-title" style="color:#b12fce">Συνέδριο</div></a></div></div>
+</div></div></div></div></li>`;
+
+describe('listing → DB event: no invented clock time', () => {
+  test('fixture precondition: the card parses and has no HH:MM anywhere', () => {
+    expect(parseMegaronListing(LISTING_CARD)).toHaveLength(1);
+    expect(LISTING_CARD).not.toMatch(/\b[0-2]?\d:[0-5]\d\b/);
+  });
+
+  test('a card without a stated time yields a date-only startDate', () => {
+    const [scraped] = parseMegaronListing(LISTING_CARD);
+    expect(toDbEvent(scraped).startDate).toBe('2099-09-28');
   });
 });

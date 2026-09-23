@@ -24,7 +24,7 @@ import { generateSearchIndex } from './generators/search-index';
 import { generateHubPages, getHubEvents } from './generators/hub-page';
 import { generateOgImages, generateFavicons, generateEventOgImages, generateHubOgImages } from './generators/og-image';
 import { precomputeEventTiles } from './generators/event-tile';
-import { renderHeroSection } from './templates/card-variants';
+import { renderHeroSection, chooseHeroMode } from './templates/card-variants';
 import type { HeroMode } from './templates/card-variants';
 import { DateTime } from 'luxon';
 import { renderContentPage } from './templates/content-page';
@@ -36,7 +36,7 @@ import { buildSiteOrganizationGraphMember } from './utils/schema-geo';
 import { validateAllPages, printSchemaSummary } from './validators/schema-completeness';
 import { buildCompletenessReport, printBucketSummary, printHardStopSummary, writeCompletenessReport, type AriaAggregate } from './validators/completeness-reporter';
 import { buildDataFeed, writeDataFeed } from './generators/datafeed';
-import { renderHomepageCapsule, renderHubNavGrid, renderTerminalCta } from './templates/homepage';
+import { renderHomepageCapsule, renderHubNavGrid, renderTimeChips } from './templates/homepage';
 import type { CapsuleStats, HubNavItem } from './templates/homepage';
 import { BASE_URL } from './config/site-url';
 import { renderAnalytics } from './config/analytics';
@@ -175,19 +175,13 @@ async function main() {
   // DB retention: events persist indefinitely for dedup history.
   // Lifecycle (upcoming vs past) is handled at the generation layer.
 
-  // Load all events from database
+  // Load all events from database. Public view, publishable status
+  // (verified_athens + pass_through, spec FR-B) and rollover hold-back live in
+  // selectPublishedPopulation so each stage is under test.
   const allEvents = getAllEvents();
-
-  // Filter by location_status: only verified_athens and pass_through events
-  // Per spec FR-B: "Site shows: verified_athens + pass_through only"
-  const PUBLISHABLE_STATUSES = ['verified_athens', 'pass_through'];
-  const locationFiltered = allEvents.filter(event => {
-    // Check if event has location_status field (from database)
-    const status = event.locationStatus;
-    // Reject unverified events - require explicit verification
-    if (!status || status === 'unverified') return false;
-    return PUBLISHABLE_STATUSES.includes(status);
-  });
+  const { selectPublishedPopulation, selectUpcomingListing } = await import('./utils/event-populations');
+  const { events: locationFiltered, rolloverHeld } = selectPublishedPopulation(allEvents);
+  console.log(`🕰️  Held back ${rolloverHeld} athinorama rows dated >300 days after first scrape (rollover suspects)`);
 
   // Pre-build performer QID gate (S179): every wikidata QID in
   // config/performer-sameAs.json must carry a resolver-written verification
@@ -239,21 +233,7 @@ async function main() {
   // Split events into two arrays:
   // 1. upcomingEvents — for listings, hubs, search index, counts (current/future only)
   // 2. pageableEvents — for event page generation (upcoming + past-active ≤45d)
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const upcomingEvents = locationFiltered.filter(event => {
-    const startDate = new Date(event.startDate);
-
-    // For exhibitions: show if currently running (end_date >= today) or starting soon
-    if (event.type === 'exhibition' && event.endDate) {
-      const endDate = new Date(event.endDate);
-      endDate.setHours(23, 59, 59, 999); // End of day
-      return endDate >= today; // Still running or future
-    }
-
-    // For other events: show if starting today or in the future
-    return startDate >= today;
-  });
+  const upcomingEvents = selectUpcomingListing(locationFiltered, new Date());
 
   // pageableEvents: upcoming + past events within 45-day retention window
   const { classifyEventLifecycle, shouldNoindexEvent } = await import('./utils/event-lifecycle');
@@ -355,7 +335,7 @@ async function main() {
   console.log(`✅ Loaded ${allEvents.length} events from SQLite`);
   console.log(`📍 ${locationFiltered.length} events with verified Athens location`);
   console.log(`📅 Publishing ${upcomingEvents.length} current/upcoming events`);
-  console.log(`📄 ${pageableEvents.length} pageable events (includes ${pageableEvents.length - upcomingEvents.length} past-active)`);
+  console.log(`📄 ${pageableEvents.length} pageable events (includes ${pageableEvents.length - upcomingEvents.length} not listed: past-active or merged duplicates)`);
   if (venueImageMap.size > 0) {
     const venueImgCount = pageableEvents.filter(e => !e.imageLocal && !e.imageUrl && e.venueImage).length;
     console.log(`🏛️ ${venueImageMap.size} venue images loaded, ${venueImgCount} events get venue fallback`);
@@ -426,17 +406,13 @@ async function main() {
 
   const weekendEvents = filterEvents(events, { time: 'this-weekend' as TimeRange });
 
-  let heroHtml = '';
-  if (todayEvents.length >= 3) {
-    heroHtml = renderHeroSection(todayEvents, 'today');
-  } else if (dayOfWeek >= 5) {
-    heroHtml = renderHeroSection(weekendEvents, 'weekend');
-  } else if (todayEvents.length > 0) {
-    heroHtml = renderHeroSection(todayEvents, 'today');
-  } else {
-    const weekEvents = filterEvents(events, { time: 'this-week' as TimeRange });
-    heroHtml = renderHeroSection(weekEvents, 'coming-days');
-  }
+  const heroMode = chooseHeroMode(todayEvents, dayOfWeek);
+  const heroHtml = renderHeroSection(
+    heroMode === 'today' ? todayEvents
+      : heroMode === 'weekend' ? weekendEvents
+      : filterEvents(events, { time: 'this-week' as TimeRange }),
+    heroMode,
+  );
 
   // Load hub config for homepage navigation
   const hubPagesConfig: { hubs: HubConfig[] } = JSON.parse(
@@ -481,13 +457,12 @@ async function main() {
     typeCount: new Set(events.map(e => e.type)).size,
   };
 
-  // Build homepage pre-content: hero + answer capsule + hub nav
-  const homepagePreContent = heroHtml
-    + renderHomepageCapsule(capsuleStats)
+  // Time shortcuts + hero first; the stats capsule and category grid follow the
+  // listing — above it they pushed the first dated event ~1,500px down on phones.
+  // (The terminal CTA repeated the grid's links verbatim, so it is not rendered.)
+  const homepagePreContent = renderTimeChips(hubNavData) + heroHtml;
+  const homepagePostContent = renderHomepageCapsule(capsuleStats)
     + renderHubNavGrid(hubNavData);
-
-  // Build terminal CTA (injected after card grid)
-  const homepagePostContent = renderTerminalCta(hubNavData);
 
   // Bypass generatePage — render directly without filter bar (no allEvents)
   // Phase-2 B3: metadata eventCount feeds the "N εκδηλώσεις στην Αθήνα"
@@ -1174,19 +1149,12 @@ async function main() {
 
   // Generate /saved/ pages (el + en)
   console.log('\n💾 Generating saved-events pages...');
-  const { renderSavedEventsScript, renderSavedPageScript } = await import('./templates/action-bar');
+  const { renderSavedEventsScript, renderSavedPageScript, renderSavedPageBody } = await import('./templates/action-bar');
   for (const savedLocale of ['el', 'en'] as const) {
     const st = STRINGS[savedLocale];
     const savedSlug = savedLocale === 'en' ? 'en/saved' : 'saved';
     const savedAltSlug = savedLocale === 'en' ? 'saved' : 'en/saved';
-    const savedBodyHtml = `
-    <h1>${st.savedEvents}</h1>
-    <noscript><p>${st.savedRequiresJs}</p></noscript>
-    <div id="saved-events-list" class="saved-events-container"></div>
-    <div class="saved-empty-state" id="saved-empty" style="display:none">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-      <p>${st.savedEventsEmpty}</p>
-    </div>`;
+    const savedBodyHtml = renderSavedPageBody(savedLocale);
     const savedExtraScripts = renderSavedEventsScript() + renderSavedPageScript(savedLocale);
     const savedHtml = renderContentPage(savedSlug, st.savedEvents, savedBodyHtml, {
       metaDescription: st.savedEventsDesc,
@@ -1345,6 +1313,19 @@ async function main() {
     process.exit(1);
   }
   console.log(`  ✓ canonical parity invariant: ${parityReport.passed} URLs verified`);
+
+  // Build-time invariant: no pipeline artefact (escaped enrichment marker,
+  // [PLACEHOLDER] copy, raw markdown table, entity-encoded JSON-LD name)
+  // reaches a published page. Output-keyed, so it holds for every generator.
+  const { validatePublishedArtifacts } = await import('./validators/published-artifacts');
+  const artifactReport = validatePublishedArtifacts(DIST_DIR);
+  if (artifactReport.failures.length > 0) {
+    console.error(`\n❌ Published-artifact invariant FAILED: ${artifactReport.failures.length} page(s)`);
+    for (const f of artifactReport.failures.slice(0, 15)) console.error(`   ${f.file}: ${f.issues.join('; ')}`);
+    console.error('\nFix: sanitise at the source (toPublishable for descriptions, editorial-content for copy, the schema emitter for names) — see src/validators/published-artifacts.ts.');
+    process.exit(1);
+  }
+  console.log(`  ✓ published-artifact invariant: ${artifactReport.scanned} pages clean`);
 
   // Build-time invariant: dormant-locale bare-root pages must be noindex AND
   // absent from every sitemap; any sitemap URL must stay indexable. Output-keyed

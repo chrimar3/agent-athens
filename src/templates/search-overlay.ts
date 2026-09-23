@@ -66,6 +66,25 @@ export function renderSearchOverlay(locale: Locale = 'el'): string {
 }
 
 /**
+ * Event result order: Fuse relevance first, in bands of 0.05 (scores inside a
+ * band are the same match with different field lengths); within a band the
+ * sooner start wins (the index lists only current events, so a past start is
+ * a running one). Shipped verbatim in the page script and unit-tested from
+ * this string.
+ */
+export const RANK_EVENTS_JS = `function rankEvents(results) {
+    function band(r) { return Math.floor((r.score || 0) / 0.05); }
+    function when(r) { return String(r.item.startDate || '').slice(0, 10); }
+    return results.map(function(r, i) { return { r: r, i: i }; }).sort(function(a, b) {
+      var ba = band(a.r), bb = band(b.r);
+      if (ba !== bb) return ba - bb;
+      var wa = when(a.r), wb = when(b.r);
+      if (wa !== wb) return wa < wb ? -1 : 1;
+      return a.i - b.i;
+    }).map(function(x) { return x.r; });
+  }`;
+
+/**
  * Render the client-side search script (IIFE, no external deps at parse time).
  * Uses safe DOM methods (createElement/textContent) instead of innerHTML
  * since index data passes through JSON — defense in depth.
@@ -110,6 +129,8 @@ export function renderSearchScript(locale: Locale = 'el'): string {
     var stored = JSON.parse(sessionStorage.getItem(RECENT_KEY) || '[]');
     if (Array.isArray(stored)) recentSearches = stored.filter(function(q) { return typeof q === 'string' && q.trim(); }).slice(0, 5);
   } catch(e) {}
+
+  ${RANK_EVENTS_JS}
 
   function norm(s) {
     return s.trim().toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
@@ -423,7 +444,7 @@ export function renderSearchScript(locale: Locale = 'el'): string {
 
     hideEmptyState();
 
-    var eventResults = fuseEvents.search(q);
+    var eventResults = rankEvents(fuseEvents.search(q));
     var venueResults = fuseVenues.search(q);
     var catResults = fuseCategories.search(q);
 
