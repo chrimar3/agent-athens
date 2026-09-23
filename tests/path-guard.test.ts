@@ -143,8 +143,11 @@ describe('path-guard.sh — protected touches are refused', () => {
 
     const comments = calls(log).filter((l) => l.startsWith('pr comment'));
     expect(comments).toHaveLength(1);
-    expect(comments[0]).toContain('config/athens-venues.json');
+    // Round 3: the comment names the matched globs (default-branch content) and
+    // a count; the filenames themselves are attacker-chosen and stay in the log.
+    expect(comments[0]).not.toContain('config/athens-venues.json');
     expect(comments[0]).toContain('config/**');
+    expect(comments[0]).toContain('1 protected path');
     const labels = calls(log).filter((l) => l.startsWith('pr edit'));
     expect(labels).toHaveLength(1);
     expect(labels[0]).toContain('--add-label needs-input');
@@ -184,6 +187,69 @@ describe('path-guard.sh — protected touches are refused', () => {
     // One hit, not two halves of a split name.
     expect(r.err).toContain('1 protected path(s) touched');
     expect(calls(log).filter((l) => l.startsWith('pr comment'))).toHaveLength(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Round 3: the bot comment must not reflect attacker-chosen filenames. A fork PR
+// controls every changed path, and a name holding a backtick breaks out of a
+// code span — the project's bot would then post the attacker's markdown (a
+// phishing link, an @mention). The comment carries a count, the matched globs
+// (read from the default branch, so not PR-controlled) and a link to the job
+// log; the names go to the log only, with control characters replaced so a
+// name holding a newline cannot start a `::workflow-command::` line.
+// ---------------------------------------------------------------------------
+describe('path-guard.sh — the bot comment reflects no PR-controlled text', () => {
+  const HOSTILE = 'data/x` [Security fix required](https://evil.example/login) @chrimar3 `y.md';
+
+  test('a filename with backticks, a markdown link and an @mention never reaches the comment', () => {
+    const { gh, log } = fakeGh({ globs: GLOBS, files: [{ filename: HOSTILE }] });
+    const r = runGuard(gh, { GITHUB_SERVER_URL: 'https://github.com', GITHUB_RUN_ID: '123456' });
+    expect(r.code).toBe(1);
+    const comments = calls(log).filter((l) => l.startsWith('pr comment'));
+    expect(comments).toHaveLength(1);
+    for (const piece of ['evil.example', 'Security fix required', '@chrimar3', 'x`', '](https://evil']) expect(comments[0]).not.toContain(piece);
+    expect(comments[0]).toContain('1 protected path');
+    expect(comments[0]).toContain('`data/**`');
+    expect(comments[0]).toContain(`https://github.com/${REPO}/actions/runs/123456`);
+    // The job log still names the file, for the reviewer.
+    expect(r.err).toContain('evil.example');
+  });
+
+  test('a rename out of a protected dir is described by count and glob, not by either name', () => {
+    const { gh, log } = fakeGh({ globs: GLOBS, files: [{ filename: 'misc/[click](https://evil.example).json', previous_filename: 'config/a.json' }] });
+    const r = runGuard(gh);
+    expect(r.code).toBe(1);
+    const comment = calls(log).find((l) => l.startsWith('pr comment'))!;
+    expect(comment).not.toContain('evil.example');
+    expect(comment).not.toContain('config/a.json');
+    expect(comment).toContain('`config/**`');
+  });
+
+  test('without a run id the comment points to the job log in words (no half-built URL)', () => {
+    const { gh, log } = fakeGh({ globs: GLOBS, files: [{ filename: 'config/a.json' }] });
+    const r = runGuard(gh, { GITHUB_RUN_ID: '' });
+    expect(r.code).toBe(1);
+    const comment = calls(log).find((l) => l.startsWith('pr comment'))!;
+    expect(comment).toContain('path-guard job log');
+    expect(comment).not.toContain('/actions/runs/');
+  });
+
+  test('a filename holding a newline cannot inject a workflow command into the log', () => {
+    const { gh } = fakeGh({ globs: GLOBS, files: [{ filename: 'config/a\n::error title=pwn::injected.json' }] });
+    const r = runGuard(gh);
+    expect(r.code).toBe(1);
+    for (const line of `${r.out}\n${r.err}`.split('\n')) expect(line.startsWith('::')).toBe(false);
+    expect(r.err).toContain('injected.json');
+  });
+
+  test('two hits under one glob are counted, and the glob is listed once', () => {
+    const { gh, log } = fakeGh({ globs: GLOBS, files: [{ filename: 'config/a.json' }, { filename: 'config/b.json' }, { filename: '.github/x.yml' }] });
+    runGuard(gh);
+    const comment = calls(log).find((l) => l.startsWith('pr comment'))!;
+    expect(comment).toContain('3 protected path');
+    expect(comment.split('`config/**`').length - 1).toBe(1);
+    expect(comment).toContain('`.github/**`');
   });
 });
 

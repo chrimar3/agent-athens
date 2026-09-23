@@ -16,8 +16,18 @@
 # against an older side branch with a shorter list is still judged by main's.
 # Makes API calls only — it never needs (and must never be given) PR code.
 #
+# The bot comment (security loop round 3) carries NO PR-controlled text: every
+# changed path is attacker-chosen in a fork PR, and a name holding a backtick
+# breaks out of a markdown code span, so the project's bot would post the
+# attacker's link or @mention. The comment gives the number of protected paths
+# touched, the matched globs (read from the default branch, so not PR-controlled)
+# and a link to this job's log. The names go to the log only, with every
+# non-printable character replaced so a name holding a newline cannot start a
+# `::workflow-command::` line.
+#
 # Env: REPO (owner/name), PR (number), BASE (the PR's base branch, for
-# messages), GLOBS_REF (the default branch), GH_BIN (default `gh`).
+# messages), GLOBS_REF (the default branch), GH_BIN (default `gh`), and the
+# runner's GITHUB_SERVER_URL / GITHUB_RUN_ID for the log link (optional).
 # Exit: 0 = no protected path touched; 1 = touched, or refused.
 set -u
 
@@ -91,7 +101,11 @@ N="$(awk 'END { print NR }' "$WORK/files.jsonl")"
 # A rename is two paths: .filename (where it landed) and .previous_filename
 # (where it came from). Checking only .filename lets a PR move a protected file
 # OUT of its protected directory unnoticed, so both sides count as a touch.
-HITS=()
+# For the log only: non-printable characters (a newline above all) become '?'.
+printable() { printf '%s' "$1" | LC_ALL=C tr -c '[:print:]' '?'; }
+
+HITS=()      # log lines (contain PR-controlled names — never put in the comment)
+HIT_GLOBS=() # the glob each hit matched (default-branch content)
 while IFS= read -r line; do
   [ -n "$line" ] || continue
   f="$(printf '%s' "$line" | jq -r '.filename // empty' 2>/dev/null)"
@@ -99,13 +113,17 @@ while IFS= read -r line; do
   if [ -z "$f" ] && [ -z "$p" ]; then
     refuse "a changed-file entry for PR #$PR had no filename"
   fi
+  # The glob is deliberately unquoted on the right of == (pattern match).
+  # shellcheck disable=SC2053
   for g in "${GLOBS[@]}"; do
     if [ -n "$f" ] && [[ "$f" == $g ]]; then
-      HITS+=("\`$f\` (protected by \`$g\`)")
+      HITS+=("$(printable "$f") (protected by $g)")
+      HIT_GLOBS+=("$g")
       break
     fi
     if [ -n "$p" ] && [[ "$p" == $g ]]; then
-      HITS+=("\`$p\` → \`$f\` (renamed out of protected \`$g\`)")
+      HITS+=("$(printable "$p") -> $(printable "$f") (renamed out of protected $g)")
+      HIT_GLOBS+=("$g")
       break
     fi
   done
@@ -119,8 +137,23 @@ fi
 printf 'path-guard: REFUSED — %d protected path(s) touched (failing closed):\n' "${#HITS[@]}" >&2
 printf '  %s\n' "${HITS[@]}" >&2
 
-BODY="$(printf '**path-guard: this PR touches protected paths.** Propose changes to them via an issue instead of a PR.\n\n%s\nProtected globs: `.github/path-guard.json` on `%s`. Labeled `needs-input`.' \
-  "$(printf -- '- %s\n' "${HITS[@]}")" "$GLOBS_REF")"
+# Each matched glob once, in first-hit order; backticks stripped so even a
+# default-branch glob cannot close its code span.
+GLOB_LINES=""
+for g in "${HIT_GLOBS[@]}"; do
+  case "$GLOB_LINES" in *"|$g|"*) continue ;; esac
+  GLOB_LINES="$GLOB_LINES|$g|"
+done
+GLOB_LIST="$(printf '%s' "$GLOB_LINES" | tr -s '|' '\n' | sed '/^$/d' | tr -d '`' | sed 's/.*/- `&`/')"
+
+RUN_ID="${GITHUB_RUN_ID:-}"
+case "$RUN_ID" in
+  ''|*[!0-9]*) LOG_REF="the path-guard job log" ;;
+  *) LOG_REF="the [path-guard job log](${GITHUB_SERVER_URL:-https://github.com}/$REPO/actions/runs/$RUN_ID)" ;;
+esac
+
+BODY="$(printf '**path-guard: this PR touches %d protected path(s).** Propose changes to them via an issue instead of a PR (see CONTRIBUTING.md).\n\nMatched protected globs:\n%s\n\nThe file names are listed in %s. Protected globs: `.github/path-guard.json` on `%s`. Labeled `needs-input`.' \
+  "${#HITS[@]}" "$GLOB_LIST" "$LOG_REF" "$GLOBS_REF")"
 
 "$GH" pr comment "$PR" --repo "$REPO" --body "$BODY" \
   || echo "path-guard: could not post the PR comment (the check still fails)" >&2

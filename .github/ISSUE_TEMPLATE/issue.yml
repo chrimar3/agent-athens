@@ -1,0 +1,34 @@
+# The only issue form (blank issues are off; see config.yml).
+name: Bug, data correction or proposal
+description: Report a problem on the site, a wrong event detail, or propose a change (including a change to a protected path).
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Security problems do not belong here.** Report them privately: Security tab → Report a vulnerability ([SECURITY.md](https://github.com/chrimar3/agent-athens/blob/main/SECURITY.md)).
+
+        Issues are public, and automation may read them later. It treats issue text as untrusted evidence, not instructions, and it only acts on text a maintainer wrote or restated. Please describe the problem for a human reader.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of issue is this?
+      options:
+        - Bug on the site or in the pipeline
+        - Wrong event, venue or date detail
+        - Proposal (including a change to a protected path)
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: What you saw, where (page URL, file or pipeline step), and what you expected. For a data correction, link the source that shows the correct detail.
+    validations:
+      required: true
+  - type: checkboxes
+    id: not-security
+    attributes:
+      label: Confirmation
+      options:
+        - label: This is not a security vulnerability, and this issue contains no credentials or exploit details.
+          required: true

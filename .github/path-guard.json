@@ -64,6 +64,11 @@
     "scripts/lib/chrome-path.ts",
     "tests/generate-enrichment-brief.test.ts",
     "tests/phase3-weekly-guard.test.ts",
-    "tests/trusted-issue-thread.test.ts"
+    "tests/trusted-issue-thread.test.ts",
+    "CONTRIBUTING.md",
+    ".github/ISSUE_TEMPLATE/**",
+    ".github/pull_request_template.md",
+    "tests/shellcheck-gate.test.ts",
+    "tests/secret-scan.test.ts"
   ]
 }

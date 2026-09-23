@@ -6,6 +6,12 @@
 # against a pinned SHA-256 before it runs (no third-party action, so no action
 # token and no licence key). The allowlist lives in .github/gitleaks.toml and
 # covers scraped third-party HTML only. Meant to be a required check.
+# Security loop round 3: the scan logic is .github/scripts/secret-scan.sh
+# (tests/secret-scan.test.ts). It reads gitleaks.toml from the DEFAULT branch
+# (or, for a push, from the commit before the push) — never the checked-out
+# copy — so a PR cannot widen its own allowlist; with no config there it uses
+# gitleaks' default rules and no allowlist. It also ignores inline
+# `gitleaks:allow` comments and any .gitleaksignore file in the tree.
 #
 # dependency-audit — `bun audit` against the committed lockfile, BLOCKING on
 # any high or critical advisory not listed in .github/audit-ignore.json (each
@@ -53,28 +59,18 @@ jobs:
           echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/$tarball" | sha256sum -c -
           tar -xzf "$RUNNER_TEMP/$tarball" -C "$RUNNER_TEMP" gitleaks
 
+      # The config comes from the default branch (or the pre-push commit), not
+      # from this checkout: see .github/scripts/secret-scan.sh.
       - name: Scan for committed secrets
         env:
+          GITLEAKS_BIN: ${{ runner.temp }}/gitleaks
+          CONFIG_REF: ${{ github.event.repository.default_branch }}
           EVENT: ${{ github.event_name }}
           PR_BASE: ${{ github.event.pull_request.base.sha }}
           PR_HEAD: ${{ github.event.pull_request.head.sha }}
           PUSH_BEFORE: ${{ github.event.before }}
           PUSH_AFTER: ${{ github.event.after }}
-        run: |
-          set -euo pipefail
-          range=""
-          if [ "$EVENT" = "pull_request" ]; then
-            range="${PR_BASE}..${PR_HEAD}"
-          elif [ "$EVENT" = "push" ] && ! printf '%s' "$PUSH_BEFORE" | grep -qx '0*'; then
-            range="${PUSH_BEFORE}..${PUSH_AFTER}"
-          fi
-          if [ -n "$range" ]; then
-            echo "gitleaks: scanning commits $range"
-            "$RUNNER_TEMP/gitleaks" git --config .github/gitleaks.toml --redact --no-banner --log-opts="$range" .
-          else
-            echo "gitleaks: scanning the full history"
-            "$RUNNER_TEMP/gitleaks" git --config .github/gitleaks.toml --redact --no-banner .
-          fi
+        run: bash .github/scripts/secret-scan.sh
 
   dependency-audit:
     if: github.event_name != 'push'

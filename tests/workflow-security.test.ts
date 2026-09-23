@@ -18,6 +18,13 @@
  * (security-events, to upload results); a weekly read-only job checks the main
  * branch ruleset; the audit is blocking with a documented ignore list; and
  * Dependabot covers the container definition in /docker.
+ * Security loop round 3: no workflow runs dependency lifecycle scripts
+ * (`--ignore-scripts` on every install) and package.json carries an explicit
+ * trustedDependencies list, which replaces bun's built-in default list; a
+ * pinned, checksum-verified ShellCheck job; secret-scan reads its gitleaks
+ * config from outside the change under scan (tests/secret-scan.test.ts); and
+ * the contributor-facing files (CONTRIBUTING.md, issue chooser, PR template,
+ * README → SECURITY.md) exist and say what reviewers and automation do.
  */
 import { describe, test, expect } from 'bun:test';
 import { readFileSync, readdirSync, existsSync } from 'fs';
@@ -124,9 +131,9 @@ describe('ci.yml — the required ci job', () => {
   const ci = workflows.find((w) => w.file === 'ci.yml')!;
   const runs = (ci.wf.jobs.ci?.steps ?? []).map((s) => s.run ?? '').join('\n');
 
-  test('job is named ci and installs from the frozen lockfile', () => {
+  test('job is named ci and installs from the frozen lockfile without lifecycle scripts', () => {
     expect(Object.keys(ci.wf.jobs)).toContain('ci');
-    expect(runs).toContain('bun install --frozen-lockfile');
+    expect(runs).toContain('bun install --frozen-lockfile --ignore-scripts');
   });
 
   test('runs the src/ tests as well as tests/ and the guard seams', () => {
@@ -210,7 +217,9 @@ describe('security.yml — secret scan and dependency audit', () => {
     expect(all).toMatch(/GITLEAKS_VERSION[^\n]*\d+\.\d+\.\d+/);
     expect(all).toMatch(/GITLEAKS_SHA256[^\n]*[0-9a-f]{64}/);
     expect(all).toContain('sha256sum -c');
-    expect(all).toContain('--config .github/gitleaks.toml');
+    // Round 3: the config is handed over by secret-scan.sh, read from the default branch.
+    expect(all).toContain('bash .github/scripts/secret-scan.sh');
+    expect(readFileSync(join(ROOT, '.github', 'scripts', 'secret-scan.sh'), 'utf-8')).toContain('CONFIG_PATH=".github/gitleaks.toml"');
     expect(existsSync(join(ROOT, '.github', 'gitleaks.toml'))).toBe(true);
   });
 
@@ -283,6 +292,181 @@ describe('.github/CODEOWNERS', () => {
     const patterns = rules.map((r) => r.pattern);
     for (const p of ['/.github/', '/.claude/', '/scripts/hooks/', '/netlify/', '/netlify.toml', '/package.json', '/bun.lock', '/scripts/daily-automated.sh', '/scripts/deploy-gate.sh']) {
       expect(patterns).toContain(p);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Round 3 — supply chain: install-time scripts.
+// ---------------------------------------------------------------------------
+describe('dependency lifecycle scripts', () => {
+  test('every `bun install` in every workflow uses --frozen-lockfile and --ignore-scripts', () => {
+    let installs = 0;
+    for (const { file, wf } of workflows) {
+      for (const job of Object.values(wf.jobs)) {
+        for (const s of job.steps ?? []) {
+          for (const line of (s.run ?? '').split('\n')) {
+            if (!/\bbun\s+(install|i|add)\b/.test(line)) continue;
+            installs++;
+            expect(`${file}: ${line.trim()}`).toContain('--frozen-lockfile');
+            expect(`${file}: ${line.trim()}`).toContain('--ignore-scripts');
+          }
+          // npm/yarn/pnpm installs would bypass both the lockfile and the policy.
+          expect(s.run ?? '').not.toMatch(/\b(npm|yarn|pnpm)\s+(install|i|ci|add)\b/);
+        }
+      }
+    }
+    expect(installs).toBeGreaterThanOrEqual(2); // ci + dependency-audit
+  });
+
+  // Why exactly this list: `bun install` otherwise trusts bun's built-in list of
+  // several hundred popular packages; an explicit list REPLACES it. Checked in
+  // round 3 with `bun pm untrusted` and a clean `--ignore-scripts` install:
+  // sharp and @resvg/resvg-js ship prebuilt binaries as optional dependencies
+  // and need no script (both render after an --ignore-scripts install), and the
+  // whole ci test set passes without any script. The one package whose script
+  // matters is puppeteer: its postinstall downloads the Chrome build that
+  // scripts/scrape-benaki.ts and pa11y (scripts/audit-aria.ts) launch on the
+  // Mac. protobufjs's postinstall (a CLI version check) stays blocked. CI and
+  // the audit install with --ignore-scripts, so even puppeteer's script never
+  // runs there.
+  test('package.json has an explicit trustedDependencies list, and bun.lock records the same list', () => {
+    const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf-8')) as { trustedDependencies?: string[] };
+    expect(pkg.trustedDependencies).toEqual(['puppeteer']);
+    const lock = readFileSync(join(ROOT, 'bun.lock'), 'utf-8');
+    const m = lock.match(/"trustedDependencies":\s*\[([^\]]*)\]/);
+    expect(m).not.toBeNull();
+    const listed = [...m![1].matchAll(/"([^"]+)"/g)].map((x) => x[1]);
+    expect(listed).toEqual(['puppeteer']);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Round 3 — ShellCheck over the bash gate layer (logic: tests/shellcheck-gate.test.ts).
+// ---------------------------------------------------------------------------
+describe('ci.yml — the shellcheck job', () => {
+  const ci = workflows.find((w) => w.file === 'ci.yml')!;
+  const job = ci.wf.jobs.shellcheck;
+
+  test('exists, and uses the job-level default read-only token', () => {
+    expect(job).toBeDefined();
+    expect(job.permissions ?? { contents: 'read' }).toEqual({ contents: 'read' });
+  });
+
+  test('downloads a pinned ShellCheck release and verifies its SHA-256 before running it', () => {
+    const steps = job.steps ?? [];
+    const install = steps.find((s) => (s.run ?? '').includes('sha256sum -c'));
+    expect(install).toBeDefined();
+    expect(install!.env?.SHELLCHECK_VERSION).toMatch(/^v\d+\.\d+\.\d+$/);
+    expect(install!.env?.SHELLCHECK_SHA256).toMatch(/^[0-9a-f]{64}$/);
+    expect(install!.run).toContain('https://github.com/koalaman/shellcheck/releases/download/');
+    // The checksum check runs before the binary is unpacked or executed.
+    const run = install!.run!;
+    expect(run.indexOf('sha256sum -c')).toBeGreaterThan(-1);
+    expect(run.indexOf('sha256sum -c')).toBeLessThan(run.indexOf('tar '));
+  });
+
+  test('runs the unit-tested gate script with the verified binary, and installs nothing else', () => {
+    const steps = job.steps ?? [];
+    const gate = steps.find((s) => (s.run ?? '').includes('.github/scripts/shellcheck.sh'));
+    expect(gate).toBeDefined();
+    expect(gate!.env?.SHELLCHECK_BIN).toBe('${{ runner.temp }}/shellcheck');
+    for (const s of steps) expect(s.run ?? '').not.toMatch(/\bbun\s+install\b|apt-get|brew /);
+    expect(existsSync(join(ROOT, '.github', 'scripts', 'shellcheck.sh'))).toBe(true);
+    expect(existsSync(join(ROOT, '.github', 'shellcheck-excludes.json'))).toBe(true);
+  });
+
+  test('the gate scans scripts/, docker/ and .github/scripts at severity warning, ignoring any .shellcheckrc', () => {
+    const script = readFileSync(join(ROOT, '.github', 'scripts', 'shellcheck.sh'), 'utf-8');
+    for (const g of ['scripts/*.sh', 'docker/*.sh', '.github/scripts/*.sh']) expect(script).toContain(g);
+    expect(script).toContain('--norc');
+    expect(script).toContain('--severity=warning');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Round 3 — secret-scan's config source (logic: tests/secret-scan.test.ts).
+// ---------------------------------------------------------------------------
+describe('security.yml — secret-scan reads its allowlist from outside the PR', () => {
+  const sec = workflows.find((w) => w.file === 'security.yml')!;
+  const steps = sec.wf.jobs['secret-scan']?.steps ?? [];
+
+  test('the scan step runs the unit-tested script with the default branch as the config source', () => {
+    const scan = steps.find((s) => (s.run ?? '').includes('.github/scripts/secret-scan.sh'));
+    expect(scan).toBeDefined();
+    expect(scan!.env?.CONFIG_REF).toBe('${{ github.event.repository.default_branch }}');
+    expect(scan!.env?.GITLEAKS_BIN).toBe('${{ runner.temp }}/gitleaks');
+  });
+
+  test('no step hands gitleaks the checked-out (PR-controlled) config', () => {
+    for (const s of steps) expect(s.run ?? '').not.toContain('--config .github/gitleaks.toml');
+    const script = readFileSync(join(ROOT, '.github', 'scripts', 'secret-scan.sh'), 'utf-8');
+    expect(script).not.toMatch(/--config[ =]\.github\/gitleaks\.toml/);
+  });
+
+  test('the checkout keeps full history so the default branch is available to read the config from', () => {
+    const co = steps.find((s) => (s.uses ?? '').startsWith('actions/checkout'));
+    expect(String(co?.with?.['fetch-depth'])).toBe('0');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Round 3 — contributor safety.
+// ---------------------------------------------------------------------------
+describe('contributor-facing files', () => {
+  const read = (p: string) => (existsSync(join(ROOT, p)) ? readFileSync(join(ROOT, p), 'utf-8') : '');
+
+  test('CONTRIBUTING.md covers review, protected paths, untrusted issue text and security reports', () => {
+    const c = read('CONTRIBUTING.md');
+    expect(c.length).toBeGreaterThan(500);
+    expect(c).toContain('.github/path-guard.json');
+    expect(c).toMatch(/open an issue first/i);
+    expect(c).toMatch(/untrusted/i);
+    expect(c).toContain('SECURITY.md');
+    expect(c).toMatch(/code owner|CODEOWNERS/);
+  });
+
+  test('the issue chooser disables blank issues and links private vulnerability reporting', () => {
+    const cfg = parseYaml(read('.github/ISSUE_TEMPLATE/config.yml')) as { blank_issues_enabled?: unknown; contact_links?: Array<{ name: string; url: string; about: string }> };
+    expect(cfg.blank_issues_enabled).toBe(false);
+    const sec = (cfg.contact_links ?? []).find((l) => /security/i.test(l.name));
+    expect(sec?.url).toBe('https://github.com/chrimar3/agent-athens/security/advisories/new');
+    expect(sec?.about.length).toBeGreaterThan(20);
+  });
+
+  test('with blank issues off there is at least one issue form, and it warns against posting vulnerabilities', () => {
+    const dir = join(ROOT, '.github', 'ISSUE_TEMPLATE');
+    const forms = readdirSync(dir).filter((f) => /\.ya?ml$/.test(f) && f !== 'config.yml');
+    expect(forms.length).toBeGreaterThan(0);
+    for (const f of forms) {
+      const raw = readFileSync(join(dir, f), 'utf-8');
+      const form = parseYaml(raw) as { name?: string; description?: string; body?: Array<{ type: string; id?: string; validations?: { required?: boolean } }> };
+      expect(form.name).toBeTruthy();
+      expect(form.description).toBeTruthy();
+      expect(Array.isArray(form.body)).toBe(true);
+      expect(raw).toMatch(/SECURITY\.md|security\/advisories/);
+      expect(raw).toMatch(/untrusted/i);
+    }
+  });
+
+  test('the PR template carries a security checklist', () => {
+    const t = read('.github/pull_request_template.md');
+    expect(t).toMatch(/- \[ \]/);
+    expect(t).toMatch(/protected path/i);
+    expect(t).toMatch(/secret/i);
+    expect(t).toContain('SECURITY.md');
+  });
+
+  test('README links SECURITY.md and CONTRIBUTING.md', () => {
+    const r = read('README.md');
+    expect(r).toMatch(/\]\(SECURITY\.md\)/);
+    expect(r).toMatch(/\]\(CONTRIBUTING\.md\)/);
+  });
+
+  test('the new contributor files are on the protected-path list', () => {
+    const shipped: string[] = JSON.parse(readFileSync(join(ROOT, '.github', 'path-guard.json'), 'utf-8')).protected;
+    for (const p of ['CONTRIBUTING.md', '.github/ISSUE_TEMPLATE/**', '.github/pull_request_template.md', 'tests/shellcheck-gate.test.ts', 'tests/secret-scan.test.ts']) {
+      expect(shipped).toContain(p);
     }
   });
 });

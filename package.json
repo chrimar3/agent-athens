@@ -67,5 +67,8 @@
     "js-yaml": "^4.3.2",
     "semver": "^7.8.5",
     "ws": "^8.21.0"
-  }
+  },
+  "trustedDependencies": [
+    "puppeteer"
+  ]
 }
