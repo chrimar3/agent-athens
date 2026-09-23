@@ -1,4 +1,7 @@
-import { escapeJsonForHtml } from '../utils/html-json';
+import { escapeJsonForHtml, decodeJsonLdEntities } from '../utils/html-json';
+import { DateTime } from 'luxon';
+import { displayTitle } from '../utils/display-title';
+import { escapeHtml } from '../utils/html-escape';
 /**
  * Hub Page Generator
  *
@@ -167,7 +170,7 @@ export function injectPullQuotes(html: string, quotes: string[]): string {
   const gridContent = html.substring(gridTagEnd, gridSectionEnd);
 
   // Split on date group header boundaries (lookahead preserves the delimiter)
-  const segments = gridContent.split(/(?=<h2 class="date-group-header">)/);
+  const segments = gridContent.split(/(?=<h2 class="date-group-header"[\s>])/);
 
   let cumulative = 0;
   let quoteIdx = 0;
@@ -216,15 +219,14 @@ export function renderComparisonRow(
   const slug = generateEventSlug(event);
   const dateStr = formatDateOnly(event.startDate, locale);
   const price = formatTablePrice(event, locale);
-  const title = event.title.length > 60
-    ? event.title.substring(0, 57) + '...'
-    : event.title;
+  const shown = displayTitle(event.title, event.venue.name);
+  const title = escapeHtml(shown.length > 60 ? shown.substring(0, 57) + '...' : shown);
   const linkPrefix = locale === 'en' ? '/en/events' : '/events';
   const pickCell = hasPick
     ? `<td class="pick-star">★</td>`
     : '';
 
-  return `<tr><td><a href="${linkPrefix}/${slug}/">${title}</a></td><td>${event.venue.name}</td><td>${dateStr}</td><td>${price}</td>${pickCell}</tr>`;
+  return `<tr><td><a href="${linkPrefix}/${slug}/">${title}</a></td><td>${escapeHtml(event.venue.name)}</td><td>${dateStr}</td><td>${price}</td>${pickCell}</tr>`;
 }
 
 /**
@@ -289,7 +291,7 @@ export function renderFaqSchema(faqs: HubFaq[], locale: Locale = 'el'): string {
     }))
   };
 
-  return `<script type="application/ld+json">\n${escapeJsonForHtml(JSON.stringify(schema))}\n</script>`;
+  return `<script type="application/ld+json">\n${escapeJsonForHtml(decodeJsonLdEntities(JSON.stringify(schema)))}\n</script>`;
 }
 
 /**
@@ -417,6 +419,20 @@ export function renderHubPage(
   );
 
   let html = baseHtml;
+
+  // Weekend hub: jump links to each day's group (headers carry id="d-<date>").
+  if (config.slug === 'this-weekend') {
+    const todayIso = DateTime.now().setZone('Europe/Athens').toISODate()!;
+    const days = [...new Set(displayEvents.map(e => e.startDate.slice(0, 10)).filter(d => d >= todayIso))].sort();
+    if (days.length > 1) {
+      const links = days.map(d => {
+        const label = DateTime.fromISO(d, { zone: 'Europe/Athens' }).setLocale(locale === 'en' ? 'en' : 'el').toFormat('ccc d');
+        return `<a href="#d-${d}" class="time-chip">${label}</a>`;
+      }).join('');
+      const navLabel = locale === 'en' ? 'Jump to a day' : 'Μετάβαση σε ημέρα';
+      html = html.replace('<section class="card-grid"', `<nav class="time-chips day-jumps" aria-label="${navLabel}">${links}</nav>\n<section class="card-grid"`);
+    }
+  }
 
   // Inject pull quote asides between date groups in the card grid
   const pullQuotes = getPullQuotes(config.slug, locale);
@@ -555,7 +571,8 @@ export function renderHubPage(
   </div>
 </section>`;
 
-  html = html.replace(/<main id="main-content"[^>]*>/, (match) => `${match}\n${tableHtml}`);
+  // The overview table follows the card grid (below): above it, the table
+  // pushed the first card ~2,100px down on phones. It stays inside <main>.
 
   // Part 3: Event Blocks (inject after card grid </section>)
   const enrichedEvents = sortedEvents
@@ -624,12 +641,12 @@ export function renderHubPage(
     const afterCardGrid = html.indexOf('</section>', cardGridEndIndex);
     if (afterCardGrid !== -1) {
       const insertPoint = afterCardGrid + '</section>'.length;
-      const injection = `${seeAllHtml}\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}\n${crossLinksHtml}`;
+      const injection = `${seeAllHtml}\n${tableHtml}\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}\n${crossLinksHtml}`;
       html = html.substring(0, insertPoint) + injection + html.substring(insertPoint);
     }
   } else {
     // No card grid (0 events case) — inject before </main>
-    const injection = `${seeAllHtml}\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}\n${crossLinksHtml}`;
+    const injection = `${seeAllHtml}\n${tableHtml}\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}\n${crossLinksHtml}`;
     html = html.replace('</main>', `${injection}\n</main>`);
   }
 
@@ -652,7 +669,7 @@ export function renderHubPage(
     isCornerstone: config.cornerstone === true,
     hubCanonicalUrl,
   });
-  const graphBlock = `<script type="application/ld+json">\n${escapeJsonForHtml(JSON.stringify(graphEnvelope))}\n</script>`;
+  const graphBlock = `<script type="application/ld+json">\n${escapeJsonForHtml(decodeJsonLdEntities(JSON.stringify(graphEnvelope)))}\n</script>`;
   html = html.replace('</head>', `${graphBlock}\n</head>`);
 
   return html;
@@ -815,7 +832,7 @@ export function renderOverflowPage(
     isCornerstone: config.cornerstone === true,
     hubCanonicalUrl,
   });
-  const overflowGraphBlock = `<script type="application/ld+json">\n${escapeJsonForHtml(JSON.stringify(overflowGraph))}\n</script>`;
+  const overflowGraphBlock = `<script type="application/ld+json">\n${escapeJsonForHtml(decodeJsonLdEntities(JSON.stringify(overflowGraph)))}\n</script>`;
   html = html.replace('</head>', `${overflowGraphBlock}\n</head>`);
 
   return html;

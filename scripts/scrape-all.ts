@@ -512,6 +512,22 @@ export interface TheaterDateRange {
  * athinorama's source HTML labels, not our data vocabulary — our run-end token
  * lives in config/parsing-tokens.json.
  */
+/**
+ * athinorama music cards print "DD/MM" with no year. A past day/month rolls
+ * to next year only when the result is within the same 10-month window as
+ * parseTheaterDateRange; anything further is a stale card (a date that just
+ * passed, or last December's leftovers read in January) and is dropped.
+ */
+export function parseMusicDayMonth(day: number, month: number, refDate: Date): string | null {
+  const refYear = refDate.getFullYear();
+  const refMonth = refDate.getMonth() + 1;
+  const passed = month < refMonth || (month === refMonth && day < refDate.getDate());
+  const iso = `${passed ? refYear + 1 : refYear}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  const windowEnd = new Date(refDate);
+  windowEnd.setMonth(windowEnd.getMonth() + 10);
+  return new Date(`${iso}T12:00:00Z`) <= windowEnd ? iso : null;
+}
+
 export function parseTheaterDateRange(card: string, refDate: Date): TheaterDateRange {
   const currentYear = refDate.getFullYear();
   const currentMonth = refDate.getMonth() + 1;
@@ -650,16 +666,9 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
           const dateMatch = card.match(/<strong>\s*(\d{1,2})\/(\d{1,2})\s*<\/strong>/);
           if (!dateMatch) continue;
 
-          const day = parseInt(dateMatch[1]);
-          const month = parseInt(dateMatch[2]);
-
-          let year = currentYear;
-          if (month < currentMonth || (month === currentMonth && day < now.getDate())) {
-            year = currentYear + 1;
-          }
-
-          startDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-          if (startDate < today) continue;
+          const parsed = parseMusicDayMonth(parseInt(dateMatch[1]), parseInt(dateMatch[2]), now);
+          if (!parsed || parsed < today) continue;
+          startDate = parsed;
         }
 
         // For mixed venues scraped from theater guide, use 'other' so categorizer decides
@@ -1664,7 +1673,7 @@ async function scrapeMegaronAdapter(): Promise<ScrapedEvent[]> {
     title: e.title,
     description: e.description,
     start_date: e.start_date,
-    time: e.time,
+    time: e.time ?? '', // '' → date-only start_date; enrich-time backfills from the detail page
     type: e.type as 'concert' | 'theater' | 'exhibition' | 'performance' | 'workshop' | 'cinema' | 'other',
     genres: JSON.stringify(['Classical', 'Concert']),
     venue_name: e.venue_name,
@@ -1911,3 +1920,4 @@ if (import.meta.main) {
     fail(err instanceof Error ? err.message : String(err), 'rerun with --dry-run --source <id> to isolate the failing source');
   });
 }
+

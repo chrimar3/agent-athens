@@ -1,5 +1,7 @@
 // Homepage-specific render functions
-// Answer capsule, hub navigation grid, and terminal CTA
+// Answer capsule, hub navigation grid, and time shortcuts
+
+import { STRINGS } from '../i18n/strings';
 
 export interface CapsuleStats {
   total: number;
@@ -63,7 +65,7 @@ export function renderHomepageCapsule(stats: CapsuleStats): string {
     <a href="/this-weekend/">Σαββατοκύριακο (${stats.weekend})</a> ·
     <a href="/concerts/">Συναυλίες (${stats.concerts})</a> ·
     <a href="/theatre/">Θέατρο (${stats.theater})</a> ·
-    <a href="/open/">Ελεύθερη Είσοδος (${stats.open})</a>
+    <a href="/open/">${STRINGS.el.openEntry} (${stats.open})</a>
   </p>
 </section>`;
 }
@@ -76,7 +78,7 @@ export function renderHubNavGrid(hubs: HubNavItem[]): string {
         <span class="hub-dot" style="background:${getDotColor(hub)}"></span>
         <span class="hub-card-body">
           <span class="hub-card-title">${hub.titleEl}</span>
-          <span class="hub-card-count">${hub.eventCount} εκδηλώσεις →</span>
+          <span class="hub-card-count">${hub.eventCount} ${hub.eventCount === 1 ? STRINGS.el.eventWordOne : STRINGS.el.hubEventCount} →</span>
         </span>
       </a>`).join('');
 
@@ -87,15 +89,20 @@ export function renderHubNavGrid(hubs: HubNavItem[]): string {
 </section>`;
 }
 
-export function renderTerminalCta(hubs: HubNavItem[]): string {
-  if (hubs.length === 0) return '';
+// Short labels — the hub titles are long SEO strings ("Εκδηλώσεις Αύριο στην Αθήνα").
+const TIME_CHIPS: Array<{ slug: string; label: string }> = [
+  { slug: 'today', label: 'Σήμερα' },
+  { slug: 'tomorrow', label: 'Αύριο' },
+  { slug: 'this-weekend', label: 'Σαββατοκύριακο' },
+  { slug: 'this-week', label: 'Αυτή την εβδομάδα' },
+];
 
-  const links = hubs
-    .map(h => `<a href="${h.path}">${h.titleEl} (${h.eventCount})</a>`)
-    .join(' · ');
-
-  return `<div class="terminal-cta">
-  <p class="terminal-cta-heading">Ανακαλύψτε εκδηλώσεις ανά κατηγορία:</p>
-  <p class="terminal-cta-links">${links}</p>
-</div>`;
+/** First thing on the homepage: jump straight to a time window. Counts come from the hubs. */
+export function renderTimeChips(hubs: HubNavItem[]): string {
+  const chips = TIME_CHIPS
+    .map(c => ({ ...c, hub: hubs.find(h => h.slug === c.slug) }))
+    .filter(c => c.hub && c.hub.eventCount > 0)
+    .map(c => `<a href="${c.hub!.path}" class="time-chip">${c.label} <span class="time-chip__count">${c.hub!.eventCount}</span></a>`);
+  if (chips.length === 0) return '';
+  return `<nav class="time-chips" aria-label="Πότε θέλετε να βγείτε;">${chips.join('')}</nav>`;
 }

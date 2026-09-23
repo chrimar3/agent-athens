@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, setDefaultTimeout, describe, expect, test } from 'bun:test';
 import puppeteer, { type Browser, type Page } from 'puppeteer';
 import { renderSearchOverlay, renderSearchScript } from '../../src/templates/search-overlay';
-import { renderSavedEventsScript, renderSavedPageScript } from '../../src/templates/action-bar';
+import { renderSavedEventsScript, renderSavedPageScript, renderSavedPageBody } from '../../src/templates/action-bar';
 import { join } from 'path';
 
 // Opt-in: uses the installed Chrome, no browser download or external network.
@@ -28,7 +28,7 @@ describe.skipIf(process.env.AA_BROWSER_TESTS !== '1')('discovery in a real brows
       const locale = en ? 'en' : 'el';
       return new Response(`<!doctype html><html lang="${locale}"><head><style>[aria-hidden="true"], [hidden] { display: none; }</style></head><body>
         <button class="nav-search-btn">Search</button>${renderSearchOverlay(locale)}
-        <div id="saved-events-list"></div><div id="saved-empty">Empty</div>
+        ${renderSavedPageBody(locale)}
         ${renderSavedEventsScript()}${renderSavedPageScript(locale)}${renderSearchScript(locale)}</body></html>`, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
     } });
     browser = await puppeteer.launch({ headless: true, executablePath: process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', args: ['--no-sandbox'] });

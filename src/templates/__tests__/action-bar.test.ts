@@ -112,7 +112,9 @@ describe("renderCardSaveButton", () => {
 
   test("has aria-pressed and aria-label", () => {
     expect(html).toContain('aria-pressed="false"');
-    expect(html).toContain('aria-label="Save"');
+    // Greek by default (the site root is Greek); English when asked.
+    expect(html).toContain('aria-label="Αποθήκευση εκδήλωσης"');
+    expect(renderCardSaveButton("card-1", "card-slug", "Concert Title", false, {}, "en")).toContain('aria-label="Save event"');
   });
 
   test("uses 16px icon", () => {
@@ -267,7 +269,7 @@ describe("generateIcs — RFC 5545 invariants (migrated from IIFE-string asserts
   });
 
   test("uses TZID=Europe/Athens for DTSTART and DTEND", () => {
-    const ics = generateIcs(makeCalEvent({}), CANONICAL);
+    const ics = generateIcs(makeCalEvent({ endDate: "2026-06-15T23:00:00" }), CANONICAL);
     expect(ics).toMatch(/DTSTART;TZID=Europe\/Athens:\d{8}T\d{6}/);
     expect(ics).toMatch(/DTEND;TZID=Europe\/Athens:\d{8}T\d{6}/);
   });
@@ -299,13 +301,16 @@ describe("generateIcs — RFC 5545 invariants (migrated from IIFE-string asserts
     expect(ics).toContain("DTEND;VALUE=DATE:20261001");
   });
 
-  test("non-exhibition: DTEND falls back to start + 3h", () => {
+  // ICS may omit DTEND (RFC 5545); an invented +3h end is not written. GCal
+  // and Outlook links still carry the resolver's +3h because their formats
+  // require an end.
+  test("non-exhibition without a known end: no invented DTEND", () => {
     const ics = generateIcs(
       makeCalEvent({ type: "concert", startDate: "2026-06-15T20:00:00" }),
       CANONICAL,
     );
     expect(ics).toContain("DTSTART;TZID=Europe/Athens:20260615T200000");
-    expect(ics).toContain("DTEND;TZID=Europe/Athens:20260615T230000");
+    expect(ics).not.toContain("DTEND");
   });
 
   test("timePeak overrides startDate's time component in DTSTART", () => {
@@ -470,9 +475,10 @@ describe("date-agreement (anti-drift gate): all three calendar targets derive fr
     const event = makeCalEvent({
       type: "concert",
       startDate: "2026-06-15T20:00:00",
+      endDate: "2026-06-15T23:00:00",
     });
     const resolved = resolveEventTimes(event)!;
-    // Resolver: end 23:00:00 Athens local (start + 3h)
+    // Resolver: the real end, 23:00:00 Athens local
     expect(resolved.end).toEqual({ Y: 2026, M: 6, D: 15, H: 23, Mi: 0, S: 0 });
 
     const ics = generateIcs(event, CANONICAL);
@@ -516,5 +522,28 @@ describe("CALENDAR_ICON", () => {
     expect(CALENDAR_ICON).toContain('width="20"');
     expect(CALENDAR_ICON).toContain("<rect");
     expect(CALENDAR_ICON).toContain('aria-hidden="true"');
+  });
+});
+
+describe("save buttons carry what /saved/ needs", () => {
+  test("grid and list cards emit date, venue and price on the save button", async () => {
+    const { renderEventCard } = await import("../page");
+    const { renderEventCardList } = await import("../card-variants");
+    const { sampleConcert } = await import("../../../tests/fixtures/events");
+    for (const html of [renderEventCard(sampleConcert), renderEventCardList(sampleConcert)]) {
+      const btn = html.match(/<button class="card-save-btn"[^>]*>/)![0];
+      expect(btn).toContain(`data-event-start="${sampleConcert.startDate}"`);
+      expect(btn).toContain(`data-event-venue="${escapeAttr(sampleConcert.venue.name)}"`);
+      expect(btn).toContain(`data-event-price-type="${sampleConcert.price.type}"`);
+    }
+  });
+});
+
+describe("saved titles are display titles", () => {
+  test("card and action-bar save buttons store the cleaned title", () => {
+    const meta = { venue: "Αρχιτεκτονική" };
+    const noisy = "$ULEE LIVE ΑΘΗΝΑ // 25.09.2026 // ΑΡΧΙΤΕΚΤΟΝΙΚΗ";
+    expect(renderCardSaveButton("id", "slug", noisy, false, meta)).toContain('data-event-title="$ULEE LIVE ΑΘΗΝΑ"');
+    expect(renderActionBarHtml("id", "slug", noisy, CANONICAL, "el", meta)).toContain('data-event-title="$ULEE LIVE ΑΘΗΝΑ"');
   });
 });

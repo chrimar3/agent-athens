@@ -50,6 +50,8 @@ export interface Event {
   timeDoors?: string;    // Door opening time (e.g., "21:00")
   timePeak?: string;     // Peak/main event time (e.g., "22:00")
   timeSource?: string;   // Where time came from: 'scraped_listing' | 'scraped_detail' | null
+  mergedInto?: string;   // Dedup survivor id; set ⇒ this row is a merged loser
+  priceSource?: string;  // 'direct' | 'venue_default' | 'unknown' — venue_default amounts are not shown (toPublishable)
   // Exhibition-specific fields
   openingHours?: Record<string, string>;  // Day-of-week → hours, e.g., {"mon": "closed", "tue": "10:00-18:00"}
   closedDays?: string;                     // "Monday" or "Monday, Tuesday"

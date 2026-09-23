@@ -18,7 +18,8 @@ interface ScrapedEvent {
   title: string;
   description: string;
   start_date: string;
-  time: string;
+  /** Null when the source states no clock time — never default one. */
+  time: string | null;
   url: string;
   venue_name: string;
   type: EventType;
@@ -80,7 +81,19 @@ export async function scrapeMegaron(): Promise<ScrapedEvent[]> {
     }
 
     const html = await response.text();
+    const deduped = parseMegaronListing(html);
+    info(SOURCE_ID, `Completed: ${deduped.length} events`);
+    return deduped;
+  } catch (error) {
+    logError(SOURCE_ID, `Scrape failed: ${error}`);
+  }
 
+  return events;
+}
+
+/** Parse the /el/events listing HTML into one ScrapedEvent per card (deduped by URL + date). */
+export function parseMegaronListing(html: string): ScrapedEvent[] {
+    const events: ScrapedEvent[] = [];
     // Split by event card class to get individual card sections
     const cards = html.split(/class="tease tease--event-calendar"/);
 
@@ -128,7 +141,7 @@ export async function scrapeMegaron(): Promise<ScrapedEvent[]> {
         title: rawTitle,
         description: '',
         start_date: startDate,
-        time: '20:30',
+        time: null,
         url: eventUrl,
         venue_name: 'Μέγαρο Μουσικής Αθηνών',
         type,
@@ -145,13 +158,26 @@ export async function scrapeMegaron(): Promise<ScrapedEvent[]> {
       return true;
     });
 
-    info(SOURCE_ID, `Completed: ${deduped.length} events (${events.length} before dedup)`);
     return deduped;
-  } catch (error) {
-    logError(SOURCE_ID, `Scrape failed: ${error}`);
-  }
+}
 
-  return events;
+export function toDbEvent(event: ScrapedEvent): Partial<Event> {
+  return {
+    id: generateEventId(event.title, event.start_date),
+    title: event.title,
+    description: event.description,
+    startDate: event.time ? `${event.start_date}T${event.time}:00+03:00` : event.start_date,
+    type: event.type,
+    genres: ['classical'],
+    venue: {
+      name: event.venue_name,
+      address: 'Βασιλίσσης Σοφίας & Κόκκαλη',
+      neighborhood: 'Kolonaki'
+    },
+    price: { type: event.price_type, currency: 'EUR' },
+    url: event.url,
+    source: 'megaron.gr'
+  };
 }
 
 async function main() {
@@ -176,22 +202,7 @@ async function main() {
 
   for (const event of scrapedEvents) {
     try {
-      const dbEvent: Partial<Event> = {
-        id: generateEventId(event.title, event.start_date),
-        title: event.title,
-        description: event.description,
-        startDate: `${event.start_date}T${event.time}:00+03:00`,
-        type: event.type,
-        genres: ['classical'],
-        venue: {
-          name: event.venue_name,
-          address: 'Βασιλίσσης Σοφίας & Κόκκαλη',
-          neighborhood: 'Kolonaki'
-        },
-        price: { type: event.price_type, currency: 'EUR' },
-        url: event.url,
-        source: 'megaron.gr'
-      };
+      const dbEvent = toDbEvent(event);
 
       const result = upsertEvent(dbEvent as Event);
       if (result.success) {

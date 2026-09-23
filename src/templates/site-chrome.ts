@@ -6,7 +6,23 @@
  * Injected by all page templates for consistent site framing.
  */
 import { STRINGS, type Locale } from '../i18n/strings';
-import { renderColophonTrigger, renderColophonDialog, renderColophonScript } from './colophon';
+import { renderColophonDialog, renderColophonScript } from './colophon';
+
+/**
+ * Header trigger for the colophon dialog, in the page language. Carries the
+ * same hooks as colophon.ts renderColophonTrigger (class colophon-trigger,
+ * data-colophon-open, aria-controls) — the colophon script binds to those.
+ * Visible label stays "About" (S159 decision); a judge flagged it as a
+ * duplicate of the nav About link — renaming is the user's call. The
+ * accessible name must contain the visible word (WCAG 2.5.3).
+ */
+function renderLocalisedColophonTrigger(locale: Locale): string {
+  const s = STRINGS[locale];
+  // No hreflang on the fallback link: the hreflang gate (S144/S176) is
+  // checked by grepping pages for "hreflang=".
+  return `<button class="colophon-trigger nav-colophon-btn" type="button" aria-label="${s.colophonTriggerAria}" aria-haspopup="dialog" aria-controls="colophon-dialog" data-colophon-open data-colophon-href="/en/colophon/">${s.colophonTrigger}</button>
+<noscript><a href="/en/colophon/" class="colophon-trigger-noscript">${s.colophonTrigger}</a></noscript>`;
+}
 
 // Routing: Greek renders at the bare root (/saved/, /about/), English under /en/.
 // (Do NOT use utils/locale-url.ts — it encodes an abandoned English-first posture
@@ -43,7 +59,7 @@ export function renderSiteNav(locale: Locale = 'el'): string {
       </nav>
     </div>
     <div class="site-header-right">
-      ${renderColophonTrigger()}
+      ${renderLocalisedColophonTrigger(locale)}
       <button class="nav-search-btn" aria-label="${s.navSearch}" type="button">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
@@ -82,12 +98,15 @@ export function renderSiteFooter(locale: Locale = 'el'): string {
   const prefix = localePrefix(locale);
   // Venues has no /en/ counterpart yet — omit on English (see renderHamburgerMenu).
   const venuesItem = locale === 'en' ? '' : `\n          <li><a href="/venues/">${s.navVenues}</a></li>`;
+  // Footer copy still Greek on /en/ pending Editorial (specs/en-nav-copy-checkpoint.md)
+  // is tagged lang="el" while it stays Greek (WCAG 3.1.2).
+  const greekOnEn = (text: string): string => (locale === 'en' && /[\u0370-\u03FF]/.test(text) ? ' lang="el"' : '');
   return `<footer class="site-footer" role="contentinfo">
   <div class="site-footer-inner">
     <div class="footer-grid">
       <div class="footer-col footer-brand">
         <a href="${homeHref(locale)}" class="site-logo">agent athens</a>
-        <p class="footer-tagline">${s.footerTagline}</p>
+        <p class="footer-tagline"${greekOnEn(s.footerTagline)}>${s.footerTagline}</p>
       </div>
       <div class="footer-col">
         <h3 class="footer-heading">${s.footerExplore}</h3>
@@ -109,8 +128,8 @@ export function renderSiteFooter(locale: Locale = 'el'): string {
     </div>
 
     <div class="footer-ai-callout">
-      <p class="footer-ai-title">${s.footerAiCalloutTitle}</p>
-      <p>${s.footerAiCalloutBody}
+      <p class="footer-ai-title"${greekOnEn(s.footerAiCalloutTitle)}>${s.footerAiCalloutTitle}</p>
+      <p${greekOnEn(s.footerAiCalloutBody)}>${s.footerAiCalloutBody}
         <a href="/llms.txt">llms.txt</a>
       </p>
     </div>
@@ -120,7 +139,9 @@ export function renderSiteFooter(locale: Locale = 'el'): string {
     </div>
   </div>
 </footer>
-${renderColophonDialog()}`;
+<div lang="en">
+${renderColophonDialog()}
+</div>`;
 }
 
 /**

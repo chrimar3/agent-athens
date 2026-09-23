@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { renderHomepageCapsule, renderHubNavGrid, renderTerminalCta } from '../src/templates/homepage';
+import { renderHomepageCapsule, renderHubNavGrid, renderTimeChips } from '../src/templates/homepage';
 import type { CapsuleStats, HubNavItem } from '../src/templates/homepage';
 import { renderPage } from '../src/templates/page';
 import { buildPageMetadata } from '../src/utils/urls';
@@ -46,12 +46,12 @@ describe('Homepage Answer Capsule', () => {
     expect(html).toContain('Σαββατοκύριακο (120)');
     expect(html).toContain('Συναυλίες (85)');
     expect(html).toContain('Θέατρο (60)');
-    expect(html).toContain('Ελεύθερη Είσοδος (140)');
+    expect(html).toContain('Ελεύθερη είσοδος (140)');
   });
 
-  test('uses "Ελεύθερη Είσοδος" not "δωρεάν"', () => {
+  test('uses "Ελεύθερη είσοδος" not "δωρεάν"', () => {
     const html = renderHomepageCapsule(mockStats);
-    expect(html).toContain('Ελεύθερη Είσοδος');
+    expect(html).toContain('Ελεύθερη είσοδος');
     expect(html.toLowerCase()).not.toContain('δωρεάν');
   });
 });
@@ -86,25 +86,6 @@ describe('Homepage Hub Nav Grid', () => {
 
   test('returns empty string for empty hub list', () => {
     expect(renderHubNavGrid([])).toBe('');
-  });
-});
-
-describe('Homepage Terminal CTA', () => {
-  test('contains terminal-cta section', () => {
-    const html = renderTerminalCta(mockHubs);
-    expect(html).toContain('class="terminal-cta"');
-  });
-
-  test('contains category links with counts', () => {
-    const html = renderTerminalCta(mockHubs);
-    for (const hub of mockHubs) {
-      expect(html).toContain(`${hub.titleEl} (${hub.eventCount})`);
-      expect(html).toContain(`href="${hub.path}"`);
-    }
-  });
-
-  test('returns empty string for empty hub list', () => {
-    expect(renderTerminalCta([])).toBe('');
   });
 });
 
@@ -193,5 +174,33 @@ describe('Homepage @graph envelope (S139)', () => {
     const html = renderHomepage();
     const matches = html.match(/<script type="application\/ld\+json">/g);
     expect(matches?.length).toBe(1);
+  });
+});
+
+describe('Homepage time shortcuts', () => {
+  const timeHubs: HubNavItem[] = [
+    ...mockHubs,
+    { slug: 'tomorrow', titleEl: 'Εκδηλώσεις Αύριο', titleEn: 'Tomorrow', path: '/tomorrow/', eventCount: 4, type: 'tomorrow' },
+    { slug: 'this-week', titleEl: 'Αυτή την εβδομάδα', titleEn: 'This week', path: '/this-week/', eventCount: 0, type: 'this-week' },
+  ];
+
+  test('links today → tomorrow → weekend in that order, with the hubs\' own counts', () => {
+    const html = renderTimeChips(timeHubs);
+    const hrefs = [...html.matchAll(/href="([^"]+)"/g)].map(m => m[1]);
+    expect(hrefs).toEqual(['/today/', '/tomorrow/', '/this-weekend/']);
+    expect(html).toContain('35');
+    expect(html).toContain('120');
+  });
+
+  test('hubs with no events are skipped (this-week has 0 here)', () => {
+    expect(renderTimeChips(timeHubs)).not.toContain('/this-week/');
+  });
+
+  test('is a labelled navigation landmark', () => {
+    expect(renderTimeChips(timeHubs)).toMatch(/<nav[^>]+aria-label="[^"]+"/);
+  });
+
+  test('renders nothing when no time hub has events', () => {
+    expect(renderTimeChips([])).toBe('');
   });
 });

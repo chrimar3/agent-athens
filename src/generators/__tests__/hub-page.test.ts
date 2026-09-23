@@ -14,6 +14,15 @@ import {
   injectPullQuotes,
 } from '../hub-page';
 import { sampleConcert, sampleFreeExhibition, getTodayEvent } from '../../../tests/fixtures/events';
+import { _setEditorialContentForTests } from '../../utils/editorial-content';
+
+// Real editorial config holds only "[PLACEHOLDER]" seed copy, which must never
+// render; content-bearing tests inject real-looking text instead.
+const SYNTHETIC_EDITORIAL = {
+  pullQuotes: [{ textEl: 'Η Αθήνα ζει τη νύχτα.', textEn: 'Athens lives at night.', hubs: ['concerts'], season: null }],
+  featuredEvents: {},
+  sectionEditorials: { concerts: { textEl: 'Από το ρεμπέτικο στο jazz.', textEn: 'From rebetiko to jazz.' } },
+};
 import { extractSingleJsonLdBlock, getGraph, findEntity, findEntityByType } from '../../../tests/helpers/graph-helpers';
 import type { Event, HubConfig, HubFaq } from '../../types';
 
@@ -117,6 +126,15 @@ describe('Hub template structure', () => {
     expect(html).not.toBeNull();
     expect(html!).toContain('class="hub-answer-capsule"');
     expect(html!).toContain(todayHubConfig.answerCapsuleEl);
+  });
+
+  test('event cards come before the comparison table (phones reach listings first)', () => {
+    const html = renderHubPage(todayHubConfig, events, allEvents)!;
+    const firstCard = html.indexOf('class="card-grid"');
+    const table = html.indexOf('class="hub-comparison-table-section"');
+    expect(firstCard).toBeGreaterThan(-1);
+    expect(table).toBeGreaterThan(firstCard);
+    expect(html.indexOf('</main>')).toBeGreaterThan(table); // still inside <main> for extraction
   });
 
   test('Hub HTML contains comparison table', () => {
@@ -823,11 +841,22 @@ describe('Pull quote injection', () => {
     expect(quoteCount).toBe(2);
   });
 
-  test('Concerts hub page includes pull quotes from editorial config', () => {
-    const events = makeConcertEvents(15);
-    const html = renderHubPage(concertsHubConfig, events, events);
-    // config/editorial-content.json has pull quotes for "concerts" hub
-    expect(html!).toContain('class="pull-quote"');
+  test('Concerts hub page includes pull quotes from editorial content', () => {
+    _setEditorialContentForTests(SYNTHETIC_EDITORIAL);
+    try {
+      const events = makeConcertEvents(15);
+      const html = renderHubPage(concertsHubConfig, events, events);
+      expect(html!).toContain('class="pull-quote"');
+      expect(html!).toContain('Η Αθήνα ζει τη νύχτα.');
+    } finally {
+      _setEditorialContentForTests(null);
+    }
+  });
+
+  test('placeholder seed copy never reaches a hub page', () => {
+    const events = makeConcertEvents(15).map((e, i) => ({ ...e, fullDescription: `Full description ${i}. Detail.` }));
+    const html = renderHubPage(concertsHubConfig, events, events)!;
+    expect(html).not.toContain('PLACEHOLDER');
   });
 });
 
@@ -837,9 +866,13 @@ describe('Section editorial', () => {
       ...e,
       fullDescription: `Full description for concert ${i}. With detail sentences.`,
     }));
-    const html = renderHubPage(concertsHubConfig, events, events);
-    // config/editorial-content.json has section editorial for "concerts"
-    expect(html!).toContain('class="section-editorial"');
+    _setEditorialContentForTests(SYNTHETIC_EDITORIAL);
+    try {
+      const html = renderHubPage(concertsHubConfig, events, events);
+      expect(html!).toContain('class="section-editorial"');
+    } finally {
+      _setEditorialContentForTests(null);
+    }
   });
 
   test('Hub without editorial config does not render section editorial', () => {

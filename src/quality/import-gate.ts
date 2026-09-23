@@ -105,8 +105,10 @@ export function checkImportDuplicate(
 
     // Same matcher as the merge pass — venue canonicalization + 4 layers.
     const pairs = findDuplicates([candidateRow, ...existing], getVenueConfig());
+    // same_slot never blocks: a skipped insert is irreversible, and that layer
+    // is only trusted inside the reversible mark-duplicates pass.
     const hit = pairs.find(
-      (p) => p.eventA === event.id || p.eventB === event.id
+      (p) => (p.eventA === event.id || p.eventB === event.id) && p.layer !== 'same_slot'
     );
     if (!hit) return null;
 

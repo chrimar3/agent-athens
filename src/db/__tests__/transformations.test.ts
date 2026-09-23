@@ -857,3 +857,26 @@ describe("rowToEvent — comedy-format @type derivation at the loader", () => {
     expect(event.tags).toEqual([]);
   });
 });
+
+describe("rowToEvent — dedup marker", () => {
+  const base = { id: "loser", title: "T", start_date: "2026-10-01", type: "concert", venue_name: "V", price_type: "with-ticket", source: "s" };
+
+  test("carries merged_into so listings can drop marked duplicates", () => {
+    expect(rowToEvent({ ...base, merged_into: "survivor" }).mergedInto).toBe("survivor");
+  });
+
+  test("live rows have no mergedInto", () => {
+    expect(rowToEvent({ ...base, merged_into: null }).mergedInto).toBeUndefined();
+  });
+});
+
+describe("rowToEvent — faithful round trip (scripts re-upsert what it returns)", () => {
+  const base = { id: "e", title: "T", start_date: "2026-10-01", type: "concert", venue_name: "V", source: "s",
+    price_type: "with-ticket", price_amount: 25, price_currency: "EUR", price_range: null };
+
+  test("carries price_source and keeps the stored amount", () => {
+    const ev = rowToEvent({ ...base, price_source: "venue_default" });
+    expect(ev.priceSource).toBe("venue_default");
+    expect(ev.price.amount).toBe(25);
+  });
+});

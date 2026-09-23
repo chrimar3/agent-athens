@@ -23,7 +23,7 @@ const MAX_RETRIES = 3;
 // Sources that support time extraction from detail pages
 // NOTE: more.com requires JavaScript rendering (Puppeteer) - time extraction for more.com
 // should be done in scrape-more-enhanced.ts at scrape time, not here
-const SUPPORTED_SOURCES = ['athinorama.gr', 'ticketservices'];
+const SUPPORTED_SOURCES = ['athinorama.gr', 'ticketservices', 'megaron.gr'];
 
 interface EventToEnrich {
   id: string;
@@ -478,10 +478,37 @@ function extractTimeMore(html: string): TimeResult | null {
 }
 
 /**
+ * megaron.gr detail pages list every performance as "<weekday> D.M.YYYY - HH:MM"
+ * inside the "ΗΜΕΡΕΣ ΚΑΙ ΩΡΕΣ" block; multi-date runs give each night its own
+ * time. Only the time printed against `isoDate` is returned — the listing page
+ * has no times, so a miss must stay null rather than borrow another night's.
+ */
+export function extractTimeMegaron(html: string, isoDate: string): TimeResult | null {
+  const text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  const start = text.indexOf('ΗΜΕΡΕΣ ΚΑΙ ΩΡΕΣ');
+  if (start === -1) return null;
+  const end = text.indexOf('ΔΙΑΡΚΕΙΑ', start);
+  const block = text.slice(start, end === -1 ? start + 3000 : end);
+
+  const [y, m, d] = isoDate.slice(0, 10).split('-').map(Number);
+  const match = block.match(new RegExp(`(?<![\\d.])${d}\\.${m}\\.${y}\\s*-\\s*([0-2]?\\d):([0-5]\\d)`));
+  if (!match) return null;
+
+  return {
+    timeDoors: normalizeTime(parseInt(match[1], 10), parseInt(match[2], 10)),
+    timePeak: null,
+    confidence: 'high',
+    method: 'megaron_dates_block'
+  };
+}
+
+/**
  * Main extraction dispatcher - routes to source-specific extractor
  */
-function extractTime(html: string, source: string): TimeResult | null {
+function extractTime(html: string, source: string, startDate: string): TimeResult | null {
   switch (source) {
+    case 'megaron.gr':
+      return extractTimeMegaron(html, startDate);
     case 'athinorama.gr':
       return extractTimeAthinorama(html);
     case 'ticketservices':
@@ -635,7 +662,7 @@ async function enrichEventTime(
   }
 
   // Extract time using source-specific logic
-  const result = extractTime(html, event.source);
+  const result = extractTime(html, event.source, event.start_date);
 
   if (!result || !result.timeDoors) {
     if (verbose) {
@@ -806,4 +833,6 @@ async function main() {
   }
 }
 
-main().catch(console.error);
+if (import.meta.main) {
+  main().catch(console.error);
+}

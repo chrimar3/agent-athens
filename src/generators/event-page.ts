@@ -1,5 +1,6 @@
 import { escapeHtml } from '../utils/html-escape';
-import { escapeJsonForHtml } from '../utils/html-json';
+import { displayTitle } from '../utils/display-title';
+import { escapeJsonForHtml, decodeJsonLdEntities } from '../utils/html-json';
 /**
  * Individual Event Page Generator
  *
@@ -23,7 +24,6 @@ import { formatDateOnly, formatPrice } from '../utils/i18n-date';
 import { STRINGS, type Locale } from '../i18n/strings';
 import { getAthensTimezone, formatSchemaDate, VENUE_TYPE_MAP } from '../enrichment/quality-gates';
 import { resolveEventSchemaType } from '../utils/comedy-format';
-import { stripInfoTable } from '../utils/description-utils';
 import { generateEventMetaDescription } from '../utils/meta-descriptions';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { getVenueIdentity } from '../utils/venue-identity';
@@ -34,15 +34,15 @@ import { displayNeighborhood } from '../utils/neighborhoods';
 import { buildContainedInPlace, resolveEventStatus, getCountryCode, getRegionName, getLocalityName, buildSiteOrganizationGraphMember } from '../utils/schema-geo';
 import { extractHost } from '../utils/ticket-source-classifier';
 import { buildOfferOrOmit } from '../ticketing/offer-builder';
-import { classifyEventLifecycle, shouldNoindexEvent, isRunImplyingType, resolveEffectiveEnd, getAthensTodayStr } from '../utils/event-lifecycle';
+import { classifyEventLifecycle, shouldNoindexEvent, isRunImplyingType, resolveEffectiveEnd, getAthensTodayStr, selectListable } from '../utils/event-lifecycle';
 import { validateEventSchema, logValidationSummary, type SchemaValidationResult } from '../utils/schema-validator';
-import { getOgImage } from '../utils/og-image-fallback';
+import { schemaText } from '../utils/schema-text';
 import { renderSiteNav, renderSiteFooter, renderHamburgerMenu, renderHamburgerScript, renderFaviconLinks, renderFontLinks, renderCssLink } from '../templates/site-chrome';
 import { resolveCtaForEvent } from '../ticketing/cta';
 import { renderSearchOverlay, renderSearchScript } from '../templates/search-overlay';
 import { BADGE_LABELS, LIGHT_TEXT_BADGES, TYPE_ICONS } from '../templates/page';
 import { getPerformerSameAs } from '../utils/performer-sameAs';
-import { renderActionBarHtml, renderCardSaveButton, renderSavedEventsScript, renderSaveButtonScript, renderCardSaveScript, renderShareButtonScript, escapeAttr, CALENDAR_ICON } from '../templates/action-bar';
+import { renderActionBarHtml, renderCardSaveButton, saveMetaFor, renderSavedEventsScript, renderSaveButtonScript, renderCardSaveScript, renderShareButtonScript, escapeAttr, CALENDAR_ICON } from '../templates/action-bar';
 import { renderCornerstoneLinksHtml } from '../utils/cornerstone-links';
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
@@ -169,6 +169,21 @@ export function generateEventSlug(event: Event): string {
   return `${idPrefix}-${venueSlug}-${titleSlug}`;
 }
 
+/**
+ * Per-event OG card path. og-image.ts renders the card for every imageless
+ * pageable event at exactly this path, so both sides must derive it here. Any
+ * other slug derivation (e.g. raw slugify without the transliteration fallback)
+ * points og:image at a file that is never written.
+ */
+export function eventOgImagePath(event: Event): string {
+  return `/images/og/events/${generateEventSlug(event)}.png`;
+}
+
+/** og:image / JSON-LD image: own photo → venue photo → generated per-event card. */
+export function resolveEventOgImage(event: Event): string {
+  return event.imageLocal || event.imageUrl || event.venueImage || eventOgImagePath(event);
+}
+
 /** Pair selected prose with its known language; a page locale is not a translation. */
 function schemaDescription(event: Event, locale: Locale): { description: string; inLanguage?: string } {
   // Keep the same enrichment precedence as the visible page. fullDescriptionGr
@@ -184,7 +199,7 @@ function schemaDescription(event: Event, locale: Locale): { description: string;
   } else if (event.fullDescriptionEn && description === event.fullDescriptionEn) {
     inLanguage = 'en';
   }
-  return { description, ...(inLanguage ? { inLanguage } : {}) };
+  return { description: descriptionPlainText(schemaText(description)), ...(inLanguage ? { inLanguage } : {}) };
 }
 
 /** Source attribution accepts HTTP(S) URLs without credentials or control characters. */
@@ -218,7 +233,7 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
   const schema: Record<string, any> = {
     '@context': 'https://schema.org',
     '@type': schemaType,
-    'name': event.title,
+    'name': schemaText(event.title),
     ...schemaDescription(event, locale),
     'startDate': startDate,
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
@@ -226,7 +241,7 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     'url': `${BASE_URL}${locale === 'en' ? '/en' : ''}/events/${eventSlug}/`,
     'location': {
       '@type': VENUE_TYPE_MAP[schemaType] || 'EventVenue',
-      'name': event.venue.name,
+      'name': schemaText(event.venue.name),
       'address': {
         '@type': 'PostalAddress',
         // Phase-2 B4 (visibility 2026-07-08): whitelist config is now the
@@ -316,7 +331,7 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
   // omit → no schema.offers; isAccessibleForFree:false (already set above) carries the with-ticket signal.
 
   // Add image if available
-  const ogImage = getOgImage(event);
+  const ogImage = resolveEventOgImage(event);
   if (ogImage) {
     schema.image = ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`;
   }
@@ -471,7 +486,7 @@ function buildEventGraphEnvelope(event: Event, locale: Locale = 'el', pagedVenue
     '@type': 'WebPage',
     '@id': eventCanonicalUrl + '#webpage',
     url: eventCanonicalUrl,
-    name: event.title,
+    name: schemaText(event.title),
     inLanguage: locale,
     mainEntity: { '@id': eventEntity['@id'] },
     publisher: { '@id': BASE_URL + '/#organization' },
@@ -521,6 +536,136 @@ function generateEventSchema(
   return JSON.stringify(envelope, null, 2);
 }
 
+// ── Description rendering ──
+// Enriched descriptions carry markdown key/value tables ("| Aspect | Details |").
+// They render as semantic tables (header row <th scope="col">, first cell of
+// each body row <th scope="row">) with every cell escaped — nothing is dropped
+// and no source markup reaches the page. "| Info |" tables duplicate the
+// practical block and stay in the crawler-only hidden block, as before.
+
+type DescriptionBlock =
+  | { kind: 'prose'; text: string }
+  | { kind: 'table'; header: string[]; rows: string[][] };
+
+// GFM: outer pipes are optional; a separator row needs at least one pipe so a
+// bare "---" rule under a line that happens to contain "|" is not a table.
+const TABLE_ROW = /\|/;
+const TABLE_SEPARATOR = /^(?=.*\|)\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)*\|?\s*$/;
+
+function tableCells(line: string): string[] {
+  const inner = line.trim().replace(/^\|/, '').replace(/\|$/, '');
+  return inner.split('|').map(cell => cell.replace(/\*\*(.+?)\*\*/g, '$1').trim());
+}
+
+function parseDescriptionBlocks(text: string): DescriptionBlock[] {
+  const blocks: DescriptionBlock[] = [];
+  for (const chunk of text.split('\n\n')) {
+    const lines = chunk.split('\n');
+    let prose: string[] = [];
+    const flushProse = () => {
+      const joined = prose.join('\n').trim();
+      if (joined) blocks.push({ kind: 'prose', text: joined });
+      prose = [];
+    };
+    let i = 0;
+    while (i < lines.length) {
+      if (TABLE_ROW.test(lines[i]) && i + 1 < lines.length && TABLE_SEPARATOR.test(lines[i + 1])) {
+        flushProse();
+        const header = tableCells(lines[i]);
+        const rows: string[][] = [];
+        i += 2;
+        while (i < lines.length && TABLE_ROW.test(lines[i])) rows.push(tableCells(lines[i++]));
+        blocks.push({ kind: 'table', header, rows });
+      } else {
+        prose.push(lines[i++]);
+      }
+    }
+    flushProse();
+  }
+  return blocks;
+}
+
+function renderDescriptionTable(block: Extract<DescriptionBlock, { kind: 'table' }>, langAttr: string): string {
+  const width = Math.max(block.header.length, ...block.rows.map(r => r.length));
+  const pad = (cells: string[]) => [...cells, ...Array(width - cells.length).fill('')];
+  const thead = block.header.some(Boolean)
+    ? `<thead><tr>${pad(block.header).map(c => `<th scope="col">${escapeHtml(c)}</th>`).join('')}</tr></thead>`
+    : '';
+  const tbody = block.rows.map(row => {
+    const [first, ...rest] = pad(row);
+    return `<tr><th scope="row">${escapeHtml(first)}</th>${rest.map(c => `<td>${escapeHtml(c)}</td>`).join('')}</tr>`;
+  }).join('');
+  return `<table${langAttr} class="edp-description-table">${thead}<tbody>${tbody}</tbody></table>`;
+}
+
+/**
+ * Description for structured data: table blocks become "Key: value" lines
+ * (JSON-LD is plain text). Text without a table is returned unchanged.
+ */
+export function descriptionPlainText(text: string): string {
+  const blocks = parseDescriptionBlocks(text);
+  if (!blocks.some(b => b.kind === 'table')) return text;
+  return blocks.map(b => b.kind === 'prose'
+    ? b.text
+    : b.rows.map(([first, ...rest]) => {
+        const value = rest.filter(Boolean).join(' · ');
+        return value ? `${first}: ${value}` : first;
+      }).join('\n')
+  ).join('\n\n');
+}
+
+const HIDDEN_METADATA_STYLE = 'position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0';
+
+/**
+ * Dominant script of a prose string: Greek letters vs Latin letters. The page
+ * locale says nothing about the prose (fullDescriptionGr can hold legacy
+ * English, raw source descriptions can be Greek on /en/ pages), so WCAG 3.1.2
+ * language-of-parts keys on the text itself.
+ */
+function proseLanguage(text: string): Locale | undefined {
+  const greek = (text.match(/[Ͱ-Ͽἀ-῿]/g) || []).length;
+  const latin = (text.match(/[A-Za-z]/g) || []).length;
+  if (greek + latin === 0) return undefined;
+  return greek >= latin ? 'el' : 'en';
+}
+
+function langOverride(text: string, pageLocale: Locale): string {
+  const lang = proseLanguage(text);
+  return lang && lang !== pageLocale ? ` lang="${lang}"` : '';
+}
+
+export function renderDescriptionHtml(text: string, pageLocale: Locale): { visibleHtml: string; hiddenHtml: string } {
+  const langAttr = langOverride(text, pageLocale);
+  const visible: string[] = [];
+  const hidden: string[] = [];
+  for (const block of parseDescriptionBlocks(text)) {
+    if (block.kind === 'prose') {
+      visible.push(`<p${langAttr}>${escapeHtml(block.text)}</p>`);
+    } else if ((block.header[0] || '').toLowerCase() === 'info') {
+      hidden.push(renderDescriptionTable(block, ''));
+    } else {
+      visible.push(renderDescriptionTable(block, langAttr));
+    }
+  }
+  const hiddenHtml = hidden.length
+    ? `<div class="sr-only" aria-hidden="true" style="${HIDDEN_METADATA_STYLE}">${hidden.join('')}</div>`
+    : '';
+  return { visibleHtml: visible.join('\n'), hiddenHtml };
+}
+
+/**
+ * Multi-venue placeholder ("Πολλαπλοί Χώροι" and casing/accent variants) is a
+ * pseudo-venue, not a place: its slug collides with a real venue's page and
+ * Maps cannot resolve it. English surfaces gloss it; nothing links or maps it.
+ */
+function isMultiVenuePlaceholder(event: Event): boolean {
+  return normalizeGreek(event.venue.name).includes('πολλαπλοι χωροι');
+}
+
+function localizedVenueName(event: Event, locale: Locale): string {
+  return locale === 'en' && isMultiVenuePlaceholder(event) ? 'Multiple venues' : event.venue.name;
+}
+
 /**
  * Render the event detail HTML template (Phase 3 redesign)
  *
@@ -538,7 +683,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   // here is the cleanup path.
   const localePrefix = locale === 'en' ? '/en' : '';
   const canonicalUrl = `${BASE_URL}${localePrefix}/events/${slug}/`;
-  const ogImage = getOgImage(event);
+  const ogImage = resolveEventOgImage(event);
   const practicalBlock = generatePracticalBlock(event, null, locale);
   const schemaType = resolveEventSchemaType(event); // S175: comedy-format derivation above EventType→@type
 
@@ -587,12 +732,12 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   let descriptionHtml: string;
   let hiddenMetadataHtml = '';
   if (hasFullDescription) {
-    const { narrative, metadataHtml } = stripInfoTable(String(descriptionSource));
+    const rendered = renderDescriptionHtml(String(descriptionSource), locale);
     const fallbackLabel = isEnglishFallback ? '<p class="edp-lang-notice">Περιγραφή στα Αγγλικά</p>\n' : '';
-    descriptionHtml = fallbackLabel + narrative.split('\n\n').map(para => `<p>${escapeHtml(para.trim())}</p>`).join('\n');
-    hiddenMetadataHtml = metadataHtml;
+    descriptionHtml = fallbackLabel + rendered.visibleHtml;
+    hiddenMetadataHtml = rendered.hiddenHtml;
   } else {
-    descriptionHtml = `<p>${escapeHtml(event.description)}</p>`;
+    descriptionHtml = `<p${langOverride(event.description, locale)}>${escapeHtml(event.description)}</p>`;
   }
 
   // Read-more for long descriptions
@@ -606,12 +751,8 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   const venueSlug = getVenueIdentity(event.venue).slug;
   const venueHasPage = pagedVenueSlugs ? pagedVenueSlugs.has(venueSlug) : true;
 
-  // Multi-venue placeholder ("Πολλαπλοί Χώροι" and casing/accent variants) is a
-  // pseudo-venue, not a place: its slug collides with a real venue's page, Maps
-  // cannot resolve it, and on /en/ the raw Greek string was every cold-tourist
-  // judge's top friction. Gloss it on English pages; never link or map it.
-  const isPlaceholderVenue = normalizeGreek(event.venue.name).includes('πολλαπλοι χωροι');
-  const venueDisplayName = locale === 'en' && isPlaceholderVenue ? 'Multiple venues' : event.venue.name;
+  const isPlaceholderVenue = isMultiVenuePlaceholder(event);
+  const venueDisplayName = localizedVenueName(event, locale);
   const venueLinkable = venueHasPage && !isPlaceholderVenue;
 
   const navLinks = [
@@ -669,7 +810,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
     ? `<div class="edp-mobile-bar">
     <div class="edp-mobile-bar-inner">
       <div class="edp-mobile-bar-info">
-        <div class="edp-mobile-bar-title">${escapeHtml(event.title)}</div>
+        <div class="edp-mobile-bar-title">${escapeHtml(displayTitle(event.title, event.venue?.name))}</div>
         <div class="edp-mobile-bar-price">${priceDisplay}</div>
       </div>
       <a href="${cta.href}" class="edp-cta" rel="noopener" target="_blank">${mobileLabel}</a>
@@ -696,7 +837,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   // on already-decoded text) then escapeAttr so emission is uniformly correct
   // regardless of the row's encoding state. Composer stays plain-text.
   const metaDescription = escapeAttr(he.decode(generateEventMetaDescription(event)));
-  const safeMetaTitle = escapeAttr(he.decode(event.title));
+  const safeMetaTitle = escapeAttr(displayTitle(event.title, event.venue.name));
   // Title/meta carry the glossed venue on /en/ (JSON-LD keeps the DB name —
   // structured data stays the data-layer truth).
   const safeVenueName = escapeAttr(he.decode(venueDisplayName));
@@ -745,7 +886,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
 
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
-  ${escapeJsonForHtml(schemaJson)}
+  ${escapeJsonForHtml(decodeJsonLdEntities(schemaJson))}
   </script>
 ${renderAnalytics()}
 </head>
@@ -767,7 +908,7 @@ ${renderAnalytics()}
         <span class="edp-type-badge${lightText ? ' edp-type-badge--light-text' : ''}">${typeLabel}</span>
         ${exhibitionIsOpen ? `<span class="edp-open-badge">${t.currentlyOpen}</span>` : ''}
         <header>
-          <h1 class="edp-title">${escapeHtml(event.title)}</h1>
+          <h1 class="edp-title">${escapeHtml(displayTitle(event.title, event.venue?.name))}</h1>
           <div class="edp-meta">
             <span class="edp-meta-date"><time datetime="${event.startDate}">${dateDisplay}</time></span>
             <span class="edp-meta-item">${venueLinkable ? `<a href="/venues/${venueSlug}/">${escapeHtml(venueDisplayName)}</a>` : escapeHtml(venueDisplayName)}</span>
@@ -775,7 +916,7 @@ ${renderAnalytics()}
           </div>
           ${ctaHtml}
           ${(() => {
-            const actionBar = renderActionBarHtml(event.id, slug, event.title, canonicalUrl, locale);
+            const actionBar = renderActionBarHtml(event.id, slug, event.title, canonicalUrl, locale, saveMetaFor(event));
             const gcalUrl = buildGCalUrl(event, canonicalUrl);
             const outlookUrl = buildOutlookUrl(event, canonicalUrl);
             if (!gcalUrl || !outlookUrl) return actionBar;
@@ -806,7 +947,7 @@ ${renderAnalytics()}
 
       <section class="edp-description${needsReadMore ? ' is-collapsed' : ''}">
         ${descriptionHtml}
-        ${hasFullDescription ? '<div class="edp-enriched-badge">AI-enriched content</div>' : ''}
+        ${hasFullDescription ? `<div class="edp-enriched-badge"${locale === 'en' ? '' : ' lang="en"'}>AI-enriched content</div>` : ''}
       </section>
       ${needsReadMore ? `<button class="edp-read-more" type="button" data-more="${t.readMore}" data-less="${t.readLess}">${t.readMore}</button>` : ''}
       ${hiddenMetadataHtml}
@@ -888,7 +1029,8 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
   const priceText = formatPrice(event, locale);
 
   const slug = generateEventSlug(event);
-  const href = `/events/${slug}/`;
+  // English pages exist only for events with an English description.
+  const href = locale === 'en' && event.fullDescriptionEn ? `/en/events/${slug}/` : `/events/${slug}/`;
   // Badge follows the page locale — a Greek ΦΕΣΤΙΒΑΛ chip beside the hero's
   // English CONCERT chip was a component-consistency ding from every ct judge.
   const badgeLabel = locale === 'en'
@@ -897,9 +1039,12 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
   const colorVar = `var(--color-${event.type.replace('_', '-')})`;
   const lightText = LIGHT_TEXT_BADGES.has(event.type) ? ' card-badge--light-text' : '';
   const icon = TYPE_ICONS[event.type] || TYPE_ICONS.other;
-  const venueText = event.venue.neighborhood
-    ? `${event.venue.name} · ${escapeHtml(displayNeighborhood(event.venue.neighborhood))}`
-    : event.venue.name;
+  // Neighborhoods are stored in English; displayNeighborhood translates to Greek.
+  const neighborhood = event.venue.neighborhood
+    ? (locale === 'en' ? event.venue.neighborhood : displayNeighborhood(event.venue.neighborhood))
+    : '';
+  const venueName = localizedVenueName(event, locale);
+  const venueText = neighborhood ? `${venueName} · ${neighborhood}` : venueName;
 
   const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
 
@@ -907,20 +1052,20 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
   <article class="event-card">
     ${imgSrc
       ? `<div class="card-image-wrapper" data-type="${event.type}">
-      <img class="card-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(event.title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img class="card-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
-      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn))}
+      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn), saveMetaFor(event), locale)}
     </div>`
       : `<div class="card-image-wrapper" data-type="${event.type}">
       ${getEventTile(event.id) ?? ''}
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
-      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn))}
+      ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn), saveMetaFor(event), locale)}
     </div>`}
     <div class="card-body">
-      <h3 class="card-title"><a href="${href}" class="card-link">${escapeHtml(event.title)}</a></h3>
+      <h3 class="card-title"><a href="${href}" class="card-link">${escapeHtml(displayTitle(event.title, event.venue?.name))}</a></h3>
       <span class="card-date"><time datetime="${event.startDate}">${dateStr}</time></span>
       <span class="card-venue">${escapeHtml(venueText)}</span>
       <span class="card-price">${priceText}</span>
@@ -975,14 +1120,21 @@ export function selectRelatedEvents(venueEvents: Event[], currentEventId: string
   // the dedup arc (merged_into) and are NOT touched here. Running exhibitions
   // (past start, future end) legitimately appear — the card carries its own
   // "Σε εξέλιξη" state; that is not a past-listing defect.
-  const seenKeys = new Set<string>();
-  return venueEvents
-    .filter(e => e.id !== currentEventId)
-    .filter(e => classifyEventLifecycle(e) === 'upcoming')
+  // The rail is a listing: upcoming, one row per merged_into duplicate group
+  // (selectListable, same rule as hubs), never the current event's own group.
+  const current = venueEvents.find(e => e.id === currentEventId);
+  const currentGroup = current?.mergedInto ?? currentEventId;
+  const railKey = (e: Event): string => {
+    const title = normalizeGreek(e.title.trim().toLowerCase());
+    return isRunImplyingType(e.type) ? title : `${title}|${e.startDate.slice(0, 10)}`;
+  };
+  // Seeded with the current event so its own unmerged same-title rows fold away.
+  const seenKeys = new Set<string>(current ? [railKey(current)] : []);
+  return selectListable(venueEvents.filter(e => classifyEventLifecycle(e) === 'upcoming'))
+    .filter(e => e.id !== currentEventId && e.id !== currentGroup && e.mergedInto !== currentGroup)
     .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
     .filter(e => {
-      const title = normalizeGreek(e.title.trim().toLowerCase());
-      const key = isRunImplyingType(e.type) ? title : `${title}|${e.startDate.slice(0, 10)}`;
+      const key = railKey(e);
       if (seenKeys.has(key)) return false;
       seenKeys.add(key);
       return true;

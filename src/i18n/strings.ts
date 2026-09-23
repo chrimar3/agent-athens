@@ -71,6 +71,9 @@ export interface UIStrings {
   unsaveEvent: string;
   savedEvents: string;
   savedEventsEmpty: string;
+  savedUpcoming: string;
+  savedPast: string;
+  savedBrowseWeekend: string;
   savedEventsDesc: string;
   shareEvent: string;
   linkCopied: string;
@@ -118,6 +121,37 @@ export interface UIStrings {
   // Hub page surfaces
   filterNoResults: string;   // in-page filter empty-state (/en/)
   relatedPages: string;      // "Related Pages" section heading
+  relatedThisWeek: string;
+  relatedOpenEvents: string;
+  relatedAllEvents: string;
+  relatedOpenOfType: string; // '{type}' is replaced with a filterTypeLabels value
+
+  // Listing cards (page.ts prepareCardData / renderEventCard, card-variants.ts)
+  badgeLabels: Record<string, string>; // keyed by EventType; card badge text
+  nowRunning: string;        // started, end date still ahead
+  fromDate: string;          // "Από <date>" for runs with no end date
+  saveEventAria: string;     // card save button, not yet saved
+  unsaveEventAria: string;   // card save button, saved
+  eventWordOne: string;      // singular of hubEventCount
+
+  // Listing page frame (page.ts renderPage)
+  lastUpdated: string;
+  athensTime: string;
+  dateTimeLocale: string;    // Intl locale for the last-updated stamp
+  emptyListing: string;
+  emptyListingSchedule: string;
+  eventsInAthens: string;    // og/twitter description: "<n> events in Athens"
+
+  // Homepage hero (card-variants.ts renderHeroSection)
+  heroToday: string;
+  heroWeekend: string;
+  heroComingDays: string;
+  seeAll: string;
+
+  // Colophon trigger in the header. Not "About": the site's own About link
+  // sits next to it, and two About entries read as a duplicate.
+  colophonTrigger: string;
+  colophonTriggerAria: string;
 }
 
 export const STRINGS: Record<Locale, UIStrings> = {
@@ -225,6 +259,9 @@ export const STRINGS: Record<Locale, UIStrings> = {
     unsaveEvent: 'Αποθηκευμένο',
     savedEvents: 'Αποθηκευμένα',
     savedEventsEmpty: 'Δεν έχετε αποθηκευμένες εκδηλώσεις ακόμα.',
+    savedUpcoming: 'Επόμενες',
+    savedPast: 'Έχουν περάσει',
+    savedBrowseWeekend: 'Δείτε τι γίνεται το Σαββατοκύριακο →',
     savedEventsDesc: 'Τα αποθηκευμένα σας events — agent athens πολιτιστικές εκδηλώσεις Αθήνα',
     shareEvent: 'Κοινοποίηση',
     linkCopied: 'Ο σύνδεσμος αντιγράφηκε!',
@@ -284,6 +321,45 @@ export const STRINGS: Record<Locale, UIStrings> = {
     },
     filterNoResults: 'Δεν βρέθηκαν εκδηλώσεις με αυτά τα φίλτρα.',
     relatedPages: 'Σχετικές Σελίδες',
+    relatedThisWeek: 'Εκδηλώσεις αυτής της εβδομάδας',
+    relatedOpenEvents: 'Εκδηλώσεις με ελεύθερη είσοδο',
+    relatedAllEvents: 'Όλες οι εκδηλώσεις',
+    relatedOpenOfType: '{type} με ελεύθερη είσοδο',
+
+    badgeLabels: {
+      concert: 'ΣΥΝΑΥΛΙΑ',
+      dj_set: 'DJ SET',
+      exhibition: 'ΕΚΘΕΣΗ',
+      cinema: 'ΣΙΝΕΜΑ',
+      screening: 'ΠΡΟΒΟΛΗ',
+      theater: 'ΘΕΑΤΡΟ',
+      festival: 'ΦΕΣΤΙΒΑΛ',
+      performance: 'ΠΑΡΑΣΤΑΣΗ',
+      show: 'ΣΟΟΥ',
+      workshop: 'ΕΡΓΑΣΤΗΡΙΟ',
+      tech: 'TECH',
+      other: 'ΑΛΛΟ',
+    },
+    nowRunning: 'Σε εξέλιξη',
+    fromDate: 'Από',
+    saveEventAria: 'Αποθήκευση εκδήλωσης',
+    unsaveEventAria: 'Αφαίρεση αποθηκευμένης εκδήλωσης',
+    eventWordOne: 'εκδήλωση',
+
+    lastUpdated: 'Τελευταία ενημέρωση',
+    athensTime: 'ώρα Αθήνας',
+    dateTimeLocale: 'el-GR',
+    emptyListing: 'Δεν βρέθηκαν εκδηλώσεις που να ταιριάζουν με αυτά τα κριτήρια. Ελέγξτε ξανά αύριο για ενημερώσεις!',
+    emptyListingSchedule: 'Το ημερολόγιό μας ενημερώνεται καθημερινά στις 8:00 π.μ. ώρα Αθήνας.',
+    eventsInAthens: 'εκδηλώσεις στην Αθήνα',
+
+    heroToday: 'Απόψε στην Αθήνα',
+    heroWeekend: 'Αυτό το Σαββατοκύριακο',
+    heroComingDays: 'Αυτές τις μέρες στην Αθήνα',
+    seeAll: 'Δείτε όλα',
+
+    colophonTrigger: 'About',
+    colophonTriggerAria: 'About — ο δημιουργός του ιστότοπου (κείμενο στα αγγλικά)',
   },
 
   en: {
@@ -390,6 +466,9 @@ export const STRINGS: Record<Locale, UIStrings> = {
     unsaveEvent: 'Saved',
     savedEvents: 'Saved Events',
     savedEventsEmpty: 'You have no saved events yet.',
+    savedUpcoming: 'Coming up',
+    savedPast: 'Already happened',
+    savedBrowseWeekend: 'See what’s on this weekend →',
     savedEventsDesc: 'Your saved events — agent athens cultural events Athens',
     shareEvent: 'Share',
     linkCopied: 'Link copied!',
@@ -451,5 +530,44 @@ export const STRINGS: Record<Locale, UIStrings> = {
     },
     filterNoResults: 'No events match these filters.',
     relatedPages: 'Related Pages',
+    relatedThisWeek: 'Events this week',
+    relatedOpenEvents: 'Free entry events',
+    relatedAllEvents: 'All events',
+    relatedOpenOfType: '{type} with free entry',
+
+    badgeLabels: {
+      concert: 'CONCERT',
+      dj_set: 'DJ SET',
+      exhibition: 'EXHIBITION',
+      cinema: 'CINEMA',
+      screening: 'SCREENING',
+      theater: 'THEATRE',
+      festival: 'FESTIVAL',
+      performance: 'PERFORMANCE',
+      show: 'SHOW',
+      workshop: 'WORKSHOP',
+      tech: 'TECH',
+      other: 'OTHER',
+    },
+    nowRunning: 'Now running',
+    fromDate: 'From',
+    saveEventAria: 'Save event',
+    unsaveEventAria: 'Remove saved event',
+    eventWordOne: 'event',
+
+    lastUpdated: 'Last updated',
+    athensTime: 'Athens time',
+    dateTimeLocale: 'en-GB',
+    emptyListing: 'No events match these criteria. Check back tomorrow for updates!',
+    emptyListingSchedule: 'Our calendar is updated daily at 8:00 a.m. Athens time.',
+    eventsInAthens: 'events in Athens',
+
+    heroToday: 'Tonight in Athens',
+    heroWeekend: 'This weekend',
+    heroComingDays: 'These days in Athens',
+    seeAll: 'See all',
+
+    colophonTrigger: 'About',
+    colophonTriggerAria: 'About — open colophon',
   },
 };

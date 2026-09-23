@@ -52,6 +52,7 @@ const DEFAULT_LAYER_THRESHOLDS: Record<MatchLayer, number> = {
   containment: 0.75,
   token_overlap: 0.75,
   artist_extraction: 0.6,
+  same_slot: 0.9,
 };
 
 const confIdx = cliArgs.indexOf('--min-confidence');
@@ -75,6 +76,7 @@ const excludedLayers = new Set<string>(
 // suddenly matching widely) without waiting on the 20% circuit breaker.
 const LAYER_MERGE_CAPS: Partial<Record<MatchLayer, number>> = {
   artist_extraction: 5,
+  same_slot: 5,
 };
 
 const SAFETY_THRESHOLD = 0.20; // Abort if > 20% of events would be merged

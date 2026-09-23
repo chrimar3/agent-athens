@@ -7,9 +7,13 @@
  *
  * Index includes: events, venues (deduplicated), categories (with counts).
  * All text fields have a normalized (*N) counterpart for accent-insensitive Greek search.
+ * Titles and venue names are entity-decoded: the overlay renders them with
+ * textContent, and pre-S154 rows store `&amp;`/`&#171;` literally. Slugs keep
+ * deriving from the stored strings (no URL churn).
  */
 
 import { readFileSync, existsSync } from 'fs';
+import he from 'he';
 import { writeFileIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
 import { computePagedVenueSlugs } from './venue-page';
@@ -17,6 +21,7 @@ import type { Event } from '../types';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { getAthensTodayStr, resolveEffectiveEnd } from '../utils/event-lifecycle';
 import { displayNeighborhood } from '../utils/neighborhoods';
+import { displayTitle, decodeFully } from '../utils/display-title';
 import { generateEventSlug, slugify } from './event-page';
 import { getVenueIdentity } from '../utils/venue-identity';
 import { filterEventsByCategory, type CategoryConfig } from '../templates/category-page';
@@ -93,11 +98,11 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
   // Build event records
   const eventRecords: EventRecord[] = events.map(event => ({
     id: event.id,
-    title: event.title,
-    titleN: normalizeGreek(event.title),
+    title: displayTitle(event.title, event.venue.name),
+    titleN: normalizeGreek(displayTitle(event.title, event.venue.name)),
     type: event.type,
-    venue: event.venue.name,
-    venueN: normalizeGreek(event.venue.name),
+    venue: decodeFully(event.venue.name),
+    venueN: normalizeGreek(decodeFully(event.venue.name)),
     neighborhood: displayNeighborhood(event.venue.neighborhood || ''),
     neighborhoodN: normalizeGreek(event.venue.neighborhood || ''),
     date: formatShortGreekDate(event.startDate),
@@ -121,8 +126,8 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
       existing.eventCount++;
     } else {
       venueMap.set(slug, {
-        name: event.venue.name,
-        nameN: normalizeGreek(event.venue.name),
+        name: he.decode(event.venue.name),
+        nameN: normalizeGreek(he.decode(event.venue.name)),
         neighborhood: displayNeighborhood(event.venue.neighborhood || ''),
         neighborhoodN: normalizeGreek(event.venue.neighborhood || ''),
         slug,
@@ -164,9 +169,9 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
     })
     .slice(0, 5)
     .map(e => ({
-      title: e.title,
+      title: he.decode(e.title),
       slug: generateEventSlug(e),
-      venue: e.venue.name,
+      venue: he.decode(e.venue.name),
       date: formatShortGreekDate(e.startDate),
       startDate: e.startDate,
       hasEnglish: Boolean(e.fullDescriptionEn),

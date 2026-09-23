@@ -1,0 +1,304 @@
+{
+  "judge": "judge-A",
+  "inspected": [
+    "Local build dist/ served at http://localhost:4791 (built 2026-09-23 00:23 EEST); live https://agentathens.com for compression, caching, freshness and throttled load tests",
+    "Puppeteer (Chrome) at 1280x900 and 375x812 on: /, /this-weekend, /concerts/, /en/today, /en/concerts/, /saved/, 4 event pages (megaron concert b08c230a, athinorama theater 43363624, RA dj_set 0464785d, onassis exhibition 6379dca3); axe-core wcag2a/2aa/21aa/22aa; screenshots; LCP/CLS observers; tap-target scan",
+    "Interaction script: search overlay (Greek, unaccented Greek, Latin, 'jazz'), save -> /saved/ round trip, calendar links, keyboard tab order, search dialog focus trap + Escape focus return, filter pill ARIA",
+    "Throttled live load (150ms RTT, 1.6 Mbps, 4x CPU) for / and one event page",
+    "sqlite3 -readonly data/events.db: visible-population counts by type/source/price_source/time_source, 2027 dates, megaron defaults, event_concerns A0 exclusions, scrape_stats",
+    "Mapped all 615 visible-status upcoming rows to dist/events/<id>-*/index.html (354 have pages); parsed description sections of all 354 published pages",
+    "Source verification via WebFetch: megaron.gr (Brahms/Lugansky, Quatuor Modigliani, Met Opera Cosi, Akouo allios), halfnote.gr (Chico Pinheiro), athinorama.gr (13os Athlos, Koinos logos, Tito & Tarantula, Giannis Kotsiras, Pyx Lax), onassis.org via r.jina.ai (Cavafy Archive address); ra.co 403, viva.gr and more.com timed out (not verified)",
+    "Sitemap audit script over all 813 sitemap URLs (existence, robots, canonical); JSON-LD extraction on 4 event pages; robots.txt, llms.txt",
+    "logs/pipeline-2026-09-10..22.log, data/scoreboard.json, data/kpi.db table counts, data/search-visibility-log.csv, gh issue list, gh run list, .github/workflows/ci.yml",
+    "Tests: bun test src/utils src/generators src/templates -> 1392 pass / 0 fail (git status hash identical before/after); bunx tsc --noEmit -> no errors. A scratch mutation run was blocked by the permission system, so guard strength was judged by reading the tests",
+    "Docs: .claude/CLAUDE.md referenced paths (all 21 exist), docs/INTENT.md, docs/design-system.md header, docs/known-issues.md entries, docs/session-log.md S229-S231, README.md"
+  ],
+  "aspects": [
+    {
+      "aspect": "Data accuracy",
+      "score": 5,
+      "evidence": [
+        "Correct against source: Brahms/Lugansky 20.11 20:30 (megaron.gr), Quatuor Modigliani 7.10 20:30, Chico Pinheiro 9-10 Oct 22:00 and 11-12 Oct 21:30 (halfnote.gr), 13os Athlos 25/9 21:00 Stathmos, Koinos logos 25/9 21:00 run to 11/10, Tito & Tarantula 25/9 20:30",
+        "WRONG VENUE on homepage 'tonight': Giannis Kotsiras (3c22cba4) and PYX LAX (909a5bc5) are shown at 'Άλσος · Pedion Areos / Kypseli, Evelpidon 4', but athinorama.gr says 'Άλσος Νέας Σμύρνης, Ελευθερίου Βενιζέλου και Εφέσου'; both marked Sold out at source while site shows 'Με εισιτήριο'. Root cause: config/athens-venues.json maps bare 'Άλσος' to Pedion Areos. The event's own EN description says 'Alsos of Nea Smyrni', so the page contradicts itself",
+        "WRONG TIME: Met Opera Cosi fan tutte (98ae980c) published at 20:30; megaron.gr says '11.10.2026, 20:00' (and it is a recorded screening, typed Συναυλία). All 113 visible megaron rows sit at T20:30 (query: substr(start_date,12,5) for source='megaron.gr' -> only 20:30); fix script scripts/fix-megaron-default-times.ts exists but was never applied",
+        "Ακούω αλλιώς (9fa0f746): DB 20:30, megaron.gr '9.10.2026 - 18:00' (currently hidden by an A0 concern, so not published)",
+        "Good guards: venue_default prices (237 rows, e.g. every megaron row = 25.0) are stripped by src/utils/publishable.ts:19-21; athinorama rollover suspects held back (event-populations.ts); 0 same-date duplicate titles among 354 published pages",
+        "Cavafy Archive rows (b702d953 published) show Onassis Stegi, Syggrou 107-109; onassis.org content fetched via r.jina.ai gives 'Φρυνίχου 16Β, 10558 Αθήνα' (partially verified; the page was a 404 shell)",
+        "Non-Athens event listed: 'WANG LIVE ΛΑΡΙΣΑ // 20.11.2026 // CIRCUS' on dist/venues/circus-entertainment-hub/index.html",
+        "ONX exhibition page description is the fragment 'What Remains'"
+      ],
+      "top_defects": [
+        {"defect": "Ambiguous venue names ('Άλσος') canonicalize to the wrong venue; published events send people to the wrong park", "fix": "Make 'Άλσος' ambiguous in athens-venues.json and resolve by source address; re-resolve the 6 upcoming Άλσος rows; add a synthetic-fixture test", "effort": "S"},
+        {"defect": "113 megaron rows carry the invented 20:30 default (Met Opera shown 20:30, actually 20:00)", "fix": "Apply fix-megaron-default-times.ts then enrich-time.ts; build gate refusing any source whose times are >90% one value", "effort": "S"},
+        {"defect": "Sold-out status at source is not captured, so sold-out gigs show 'Με εισιτήριο' with a ticket CTA", "fix": "Parse 'Sold out' from athinorama/more listings into eventStatus/offer availability and render a sold-out badge", "effort": "M"}
+      ],
+      "what_would_make_it_8": "A daily sampled source-vs-page check (10 random published events re-fetched and diffed on date/time/venue) with zero wrong venues/times, plus the megaron and Άλσος fixes applied."
+    },
+    {
+      "aspect": "Coverage & freshness",
+      "score": 4,
+      "evidence": [
+        "Only 354 upcoming events published (withpage mapping); homepage chips on Wed 23 Sep: Σήμερα 4, Αύριο 3, Σαββατοκύριακο 29, εβδομάδα 42 — far below a real Athens week",
+        "Published by type: concert 141, theater 101, dj_set 73, exhibition 4, cinema 3, festival 8; 'Σε εξέλιξη' section shows a single running exhibition (Kruger)",
+        "261 of 615 visible-status upcoming rows have no page: 193 hidden by A0 concerns written during enrichment (e.g. Drumcode Athens / Adam Beyer at Bolivar Sat 26 Sep hidden because the enrichment note said 'ticket-merchant-unverified'; Athens Baroque Festival 24-27 Sep hidden by 'venue-mismatch'), 165 athinorama rollover suspects",
+        "Scrapers run daily and succeed (scrape_stats: 10 sources x 18 runs since 1 Sep, 1 failure); but yield canary tripped for snfcc (6 vs mean 20.4, issue #20) and clubber quarantined; image download 0/118 on 2026-09-22",
+        "Deploy gaps: logs show state=ready deploys only on 14, 20, 21, 22 Sep; 15-19 Sep deploy-gate REFUSED (dirty tree) — site stale for 5 days",
+        "Live /today at 00:40 on 23 Sep still shows 'Τρίτη 22 Σεπτεμβρίου' (static page is yesterday's until the ~10:25 deploy)",
+        "Past events removed correctly: selectUpcomingListing uses end_date for exhibitions (src/utils/event-populations.ts:26-31)"
+      ],
+      "top_defects": [
+        {"defect": "A0 enrichment concerns suppress the whole event, not just the risky description, hiding ~31% of upcoming events", "fix": "On A0, publish the event with facts only (title/date/venue/source link) and drop the enriched text", "effort": "S"},
+        {"defect": "Exhibitions and cinema almost absent (4 and 3)", "fix": "Add museum/gallery and cinema sources (athinorama art/cinema sections already scraped domain)", "effort": "L"},
+        {"defect": "Deploy gate blocks deploys for days when the working tree is dirty; 'today' pages stale overnight", "fix": "Build/deploy from a clean worktree of HEAD; schedule a 00:05 rebuild of time-window pages", "effort": "M"}
+      ],
+      "what_would_make_it_8": "Publish every verified upcoming event (facts-only when enrichment is doubtful), add exhibition/cinema sources, and guarantee a deploy every day including a post-midnight time-window rebuild."
+    },
+    {
+      "aspect": "Content quality",
+      "score": 4,
+      "evidence": [
+        "231 of 354 published event pages have an empty description (<section class=\"edp-description\"><p></p>), e.g. 13ος Άθλος, Quatuor Modigliani (DB description, full_description all NULL); by source: megaron concerts 44/62 empty, RA dj_sets 35/46, cometogether dj_sets 22/22, halfnote 17/18",
+        "Existing enriched texts are specific and mostly grounded (e.g. 1984 at Dipylon, O Evros Apenanti at Anesis — correct address Kifisias 14), but all are English; Greek pages label them 'Περιγραφή στα Αγγλικά'",
+        "Speculative crowd prose required by the template: Brahms page 'The crowd ... sorts itself by intent: subscribers..., piano students watching Lugansky's left hand'",
+        "Formulaic 'If you want X ... But if you want Y' construction recurs across descriptions (Brahms, Evros, 1984)",
+        "Hub copy is generic filler: this-weekend capsule mentions 'γκαλερί στο Κολωνάκι' while no gallery events are listed",
+        "ONX exhibition description is the scraped fragment 'What Remains'"
+      ],
+      "top_defects": [
+        {"defect": "Two thirds of event pages have no description at all", "fix": "Render the source's own short description or a factual generated line (who/what/when/where) when no enrichment exists; hide the empty section", "effort": "M"},
+        {"defect": "Greek pages carry English prose", "fix": "Generate a short factual Greek summary per event (or show source Greek text) and keep English on /en/", "effort": "M"},
+        {"defect": "Template-driven speculation about crowd/vibe", "fix": "Drop the vibe/crowd requirement from the gate unless sourced", "effort": "S"}
+      ],
+      "what_would_make_it_8": "Every published page has an accurate, sourced description in the page's language, with no invented crowd/vibe sentences."
+    },
+    {
+      "aspect": "Discovery & information architecture",
+      "score": 6,
+      "evidence": [
+        "Homepage leads with time chips (Σήμερα/Αύριο/Σαββατοκύριακο/Εβδομάδα), 'Απόψε' block, day-grouped list, category grid (__desk.png, home_mob_part3.png)",
+        "Hubs have Ημερομηνία/Τιμή/Ταξινόμηση filter pills linking to static filter pages with counts (concerts.html filter-bar)",
+        "Search overlay works: 'Μέγαρο' -> 6 results incl. venue, unaccented 'Μπραμς' finds 'Μπράμς, Λουγκάνσκυ', 'jazz' finds Half Note; Latin 'megaro' -> 0",
+        "Empty state present and useful (cloud-tech-today.html: 'Δεν βρέθηκαν εκδηλώσεις...' + related links)",
+        "Thin inventory undermines discovery (Σήμερα 4); 1,015 generated noindex hub/filter HTML files at dist root (e.g. cloud-tech-today, ai-tech) mostly empty",
+        "URL scheme inconsistent: /concerts vs /concert-today vs /dj_set-this-week (underscore)",
+        "Greek header shows both 'Σχετικά' and an English 'About' button (colophon) — confusing duplicate"
+      ],
+      "top_defects": [
+        {"defect": "Inconsistent hub/filter slugs (concerts vs concert-*, dj_set-*)", "fix": "Canonical slug per category with 301s", "effort": "M"},
+        {"defect": "Hundreds of empty generated filter pages for categories with no events", "fix": "Only generate filter pages with >=1 event", "effort": "S"},
+        {"defect": "Search does not match Latin transliteration", "fix": "Add greeklish normalization to the search index", "effort": "S"}
+      ],
+      "what_would_make_it_8": "Fuller inventory behind the same IA, consistent URLs, and no dead-end category combinations."
+    },
+    {
+      "aspect": "Event page & action layer",
+      "score": 7,
+      "evidence": [
+        "Event page: category badge, date/time/venue/price line, primary 'Βρείτε εισιτήρια' CTA, Save/Share/Calendar row, Practical info table, venue block with map link, 'Επόμενες εκδηλώσεις στο <venue>' rail (b08c230a desk screenshot)",
+        "Save works end to end: aria-pressed true, localStorage 'agent-athens-saved', /saved/ lists 'Μπράμς, Λουγκάνσκυ Παρ 20 Νοε · 20:30 · ... Αφαίρεση'",
+        "Calendar: Google template link, per-event .ics, Outlook deeplink with +02:00 offset",
+        "Mobile sticky bottom bar with title + 'Εισιτήρια' (_events_43363624..._mob.png)",
+        "Gaps: 65% of pages have no description; price amount hidden for venue_default rows (e.g. Tito & Tarantula source says 28€); sold-out not shown; RA dj page has no ticket CTA"
+      ],
+      "top_defects": [
+        {"defect": "No sold-out/availability state", "fix": "Capture availability and disable/relabel CTA", "effort": "M"},
+        {"defect": "Decision info thin: empty descriptions and missing prices", "fix": "Show source-stated price ranges (direct parse) and a factual summary", "effort": "M"},
+        {"defect": "Wrong venue/map on some pages (Άλσος)", "fix": "See Data accuracy", "effort": "S"}
+      ],
+      "what_would_make_it_8": "Every page gives price, availability and a one-paragraph 'what is this' so the save/ticket actions are backed by enough information to decide."
+    },
+    {
+      "aspect": "Visual design & brand",
+      "score": 6,
+      "evidence": [
+        "Coherent dark theme, Manrope, yellow accent, consistent pills and cards matching docs/design-system.md tokens (--bg-primary #0d0d0d, --accent-primary #f5e642)",
+        "Event hero with blurred image and clear hierarchy (b08c230a desk)",
+        "Generated text posters render zero-width spaces as tofu boxes: 'ONX.▒Exhibition.▒NY.▒2026' (_this_weekend_desk.png)",
+        "Many cards show an empty dark thumbnail with only a category badge (theater rows in home_mob_part1/2.png) next to text-poster and real-image cards — inconsistent media treatment",
+        "Stray doubled quotes in titles: '‘\"Η Μουσική είναι Γυναίκα\": Ελένη Γουρζή' (home_mob_part3.png)"
+      ],
+      "top_defects": [
+        {"defect": "Tofu glyphs in satori posters", "fix": "Strip U+200B/format chars before poster rendering", "effort": "S"},
+        {"defect": "Empty thumbnail boxes for image-less events", "fix": "Always render the text-poster fallback (or no thumb) consistently", "effort": "S"},
+        {"defect": "Raw source titles with stray punctuation", "fix": "Extend displayTitle normalization to quotes", "effort": "S"}
+      ],
+      "what_would_make_it_8": "Uniform, glitch-free media treatment for image-less events and cleaned display titles."
+    },
+    {
+      "aspect": "Mobile experience",
+      "score": 7,
+      "evidence": [
+        "No horizontal overflow at 375px on all 10 pages audited (overflowX none)",
+        "Compact list rows with 44px save button, horizontal-scroll time chips, sticky ticket bar on event pages",
+        "axe target-size violation only on hub cross-links (224x22px) on /concerts/ and /en/concerts/",
+        "Live throttled mobile (150ms/1.6Mbps/4x CPU): homepage FCP 1220ms LCP 1404ms; event page LCP 1504ms",
+        "Homepage HTML 475KB uncompressed (95KB brotli live), 318KB of it inline SVG posters"
+      ],
+      "top_defects": [
+        {"defect": "Heavy HTML from inlined SVG posters", "fix": "Emit posters as cached external SVG/WebP files", "effort": "M"},
+        {"defect": "Hub cross-link targets 22px tall", "fix": "Min-height 24px/padding on .hub-cross-links a", "effort": "S"},
+        {"defect": "Empty thumbnail boxes waste space in rows", "fix": "Consistent fallback", "effort": "S"}
+      ],
+      "what_would_make_it_8": "Halve page weight by externalizing posters and fix remaining small targets."
+    },
+    {
+      "aspect": "Accessibility",
+      "score": 8,
+      "evidence": [
+        "axe-core (wcag2a/2aa/21aa/22aa) on 10 pages x 2 viewports: 0 violations except target-size (1 node) on two hubs",
+        "Skip link first in tab order ('Μετάβαση στο περιεχόμενο'); visible 2px solid focus outline on every tabbed element",
+        "Search dialog traps focus and returns focus to .nav-search-btn on Escape",
+        "html lang=el / lang=en per locale; English description blocks wrapped in lang=\"en\"; English 'About' button has explanatory Greek aria-label",
+        "All images have alt; save buttons use aria-pressed; prefers-reduced-motion present (3 rules in design-system.css)",
+        "Filter pills (.filter-pill) have no aria-expanded/aria-haspopup before or after click"
+      ],
+      "top_defects": [
+        {"defect": "Filter pill disclosure state not exposed", "fix": "Toggle aria-expanded + aria-controls on .filter-pill", "effort": "S"},
+        {"defect": "22px hub cross-link targets", "fix": "Increase to 24px", "effort": "S"},
+        {"defect": "Screen-reader pass not evidenced (only automated + keyboard checked)", "fix": "Add a VoiceOver walkthrough to the release checklist", "effort": "S"}
+      ],
+      "what_would_make_it_8": "Already at 8; for 9, a documented screen-reader pass and zero automated violations."
+    },
+    {
+      "aspect": "Performance",
+      "score": 7,
+      "evidence": [
+        "Live throttled LCP 1.4-1.5s, CLS ~0 locally (0.000-0.012) despite imgs lacking width/height (aspect-ratio CSS)",
+        "Live served with brotli (homepage 94,902 bytes transferred); HTML cache-control max-age=0 must-revalidate",
+        "Two render-blocking resources on every page: Google Fonts CSS and design-system.css (94KB); CSS is hash-versioned but cached only max-age=3600",
+        "Inline SVG posters: 318KB of 469KB homepage, 324KB of concerts.html, 201KB on the ONX event page — uncacheable, repeated per page",
+        "Images lazy-loaded (16/17 on homepage)"
+      ],
+      "top_defects": [
+        {"defect": "Inline satori SVG posters bloat every listing page", "fix": "Write posters to /images/posters/<id>.svg and reference with <img>", "effort": "M"},
+        {"defect": "Versioned CSS cached 1h", "fix": "Cache-Control immutable, 1y for ?v= assets in netlify.toml", "effort": "S"},
+        {"defect": "External Google Fonts render-blocking", "fix": "Self-host Manrope subset with preload", "effort": "S"}
+      ],
+      "what_would_make_it_8": "Listing pages under ~40KB brotli with posters externalized and immutable static caching."
+    },
+    {
+      "aspect": "Search & AI citability",
+      "score": 6,
+      "evidence": [
+        "Sitemap audit: 813 URLs, 0 missing files, 0 noindex, canonical mismatch only for root (trailing slash)",
+        "robots.txt explicitly allows GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot etc.; llms.txt present (91 lines) but mixes English labels with Greek descriptions",
+        "Event JSON-LD typed (MusicEvent/TheaterEvent/ExhibitionEvent) with venue @id, timezone offsets, eventStatus; but no offers (ticket URL exists), no performer, endDate equals startDate (20:30 to 20:30), inLanguage 'en' on a Greek-named event, description = title for stubs",
+        "Greek hubs noindex ('dormant locale', generate-site.ts:1126-1137) and hreflang dropped globally; Greek and English event pages both indexable with self-canonicals and identical English description",
+        "Answer capsules on hubs and homepage ('Η Αθήνα έχει 354 επερχόμενες πολιτιστικές εκδηλώσεις') — the claim overstates coverage"
+      ],
+      "top_defects": [
+        {"defect": "Event schema omits offers/performer and has zero-length endDate", "fix": "Emit Offer{url, availability, price when direct}; omit endDate when unknown", "effort": "S"},
+        {"defect": "Duplicate EL/EN event pages without hreflang", "fix": "Restore hreflang pairs or canonicalize one locale", "effort": "M"},
+        {"defect": "65% of event pages have no citable body text", "fix": "Factual summary per event", "effort": "M"}
+      ],
+      "what_would_make_it_8": "Rich-result-complete Event markup on every page plus citable factual text and clean locale signals."
+    },
+    {
+      "aspect": "Internationalisation",
+      "score": 5,
+      "evidence": [
+        "UI chrome fully localized in both locales; dates locale-correct ('Παρασκευή 20 Νοεμβρίου' vs 'Friday 20 November 2026')",
+        "Greek pages: English descriptions; English meta descriptions with US date format ('13ος Άθλος — Σταθμός Θέατρο, Metaxourgeio — Sep 25, 2026 — Tickets available Cultural events in Athens on Agent Athens.'); Latin neighbourhood '(Ilisia)' and English addresses",
+        "English pages keep Greek titles and venue names untransliterated ('Μπράμς, Λουγκάνσκυ ... Μέγαρο Μουσικής Αθηνών')",
+        "EN coverage: 313 dist/en/events vs 806 Greek event pages",
+        "hreflang absent on event pages; JSON-LD inLanguage 'en' on Greek page"
+      ],
+      "top_defects": [
+        {"defect": "Greek meta descriptions/addresses in English", "fix": "Locale-aware meta template and Greek address/neighbourhood fields", "effort": "S"},
+        {"defect": "No Latin title/venue on English pages", "fix": "Add transliterated/English venue names from venues config", "effort": "M"},
+        {"defect": "Half the events lack an English page", "fix": "Generate EN twin for every published event", "effort": "M"}
+      ],
+      "what_would_make_it_8": "Each locale reads natively end to end (text, meta, addresses, schema), with full EN parity and hreflang."
+    },
+    {
+      "aspect": "Code quality & architecture",
+      "score": 6,
+      "evidence": [
+        "bunx tsc --noEmit clean under strict: true",
+        "Population logic extracted and tested (src/utils/event-populations.ts, publishable.ts) with clear doc comments",
+        "Monoliths: src/generate-site.ts 1890 lines, src/generators/event-page.ts 1350 lines; 99 any/as any in src",
+        "scripts/ has 102 .ts scripts plus 123 in scripts/_archive; tsconfig include omits scripts/ so pipeline scripts are not type-checked",
+        "Comments heavy with session archaeology (S144, S179, 'S(this)') rather than constraints",
+        "Venue canonicalization is a flat name->venue map (athens-venues.json) with no ambiguity model, producing the Άλσος collision"
+      ],
+      "top_defects": [
+        {"defect": "generate-site.ts orchestrates everything in one file", "fix": "Split into population, pages, sitemaps, gates modules", "effort": "M"},
+        {"defect": "scripts/ outside typecheck", "fix": "Add scripts/**/* to tsconfig include", "effort": "S"},
+        {"defect": "Venue resolution has no ambiguity handling", "fix": "Support ambiguous names requiring address match", "effort": "M"}
+      ],
+      "what_would_make_it_8": "Smaller cohesive build modules, whole-repo typecheck, and a venue resolver that cannot silently pick the wrong homonym."
+    },
+    {
+      "aspect": "Testing & verification",
+      "score": 7,
+      "evidence": [
+        "230 *.test.ts files; bun test src/utils src/generators src/templates: 1392 pass, 0 fail, 3218 expect() (46s); git tree unchanged",
+        "Prod DB guard preload in bunfig.toml blocks tests from opening data/events.db",
+        "Guards pinned with synthetic fixtures, e.g. src/utils/__tests__/publishable.test.ts:15-18 asserts venue_default amount is null (would fail if the guard were removed)",
+        "tests/browser/ has 8 browser suites; CI (ci.yml) runs tests + typecheck on every PR; recent runs green",
+        "Build gates: event-count floor, performer QID, price vocabulary, dormant-locale noindex",
+        "Not caught by any test: venue homonyms (no Άλσος test), invented megaron time shipped for months, empty-description pages, source-vs-page accuracy"
+      ],
+      "top_defects": [
+        {"defect": "No end-to-end accuracy check against sources", "fix": "Nightly sampled re-fetch diff of published facts", "effort": "M"},
+        {"defect": "No gate on 'value shared by >90% of a source' (default times/prices)", "fix": "Build warning/fail on degenerate per-source distributions", "effort": "S"},
+        {"defect": "Browser tests opt-in (AA_BROWSER_TESTS) and not in CI", "fix": "Run them in CI", "effort": "S"}
+      ],
+      "what_would_make_it_8": "Add data-truth checks (source diff, degenerate-value gate, venue homonym fixtures) and run browser tests in CI."
+    },
+    {
+      "aspect": "Operations & reliability",
+      "score": 5,
+      "evidence": [
+        "Daily launchd pipeline with phases, 7-day rolling gz backups with integrity check (~/agent-athens-backups, 9 files), deploy-gate, yield canary that files GitHub issues (#13, #20), health report",
+        "Deploys only on 14, 20, 21, 22 Sep (grep state=ready); 15-19 Sep '[deploy-gate] REFUSED — dist/ does not correspond to committed HEAD' — 5 days without deploy",
+        "'Pipeline completed successfully' printed after 'Downloaded: 0 | Failed: 118' images and 'ERROR: Auto-enrichment failed' (Claude CLI weekly limit) — 47 such enrichment failures 10-19 Sep",
+        "Pipeline pushes straight to main: 'remote: Bypassed rule violations ... Changes must be made through a pull request' (pipeline-2026-09-22.log:4403-4408)",
+        "scrape_stats events_new/events_updated are 0 in all 2,314 rows",
+        "Backups on the same machine only; deploy took 23 minutes (10:02 -> 10:25)"
+      ],
+      "top_defects": [
+        {"defect": "Deploy gate can silently stall publishing for days", "fix": "Build from a clean HEAD worktree and alert when no deploy in 24h", "effort": "M"},
+        {"defect": "Success reported despite phase failures", "fix": "Exit/alert non-zero summary when image/enrichment phases fail wholesale", "effort": "S"},
+        {"defect": "Off-machine backup absent", "fix": "Copy nightly backup to cloud storage", "effort": "S"}
+      ],
+      "what_would_make_it_8": "Guaranteed daily deploy with a missed-deploy alert, honest run status, and off-site backups."
+    },
+    {
+      "aspect": "Measurement",
+      "score": 3,
+      "evidence": [
+        "data/scoreboard.json: \"citations\": null, \"crawlers\": null — hard-coded in scripts/assemble-scoreboard.ts:81-82,249-250 (issue #21 open)",
+        "data/kpi.db counts: bwt_ai_citations 0, manual_citation_log 0, server_log_ai_bots 0, gsc_queries_long 0, bwt_grounding_queries 0, tracked_prompts 5, ga4_ai_referrals 18",
+        "search-visibility-log.csv has daily rows but latest (2026-09-22) is gsc_status=stale, reason request_timeout",
+        "Counts disagree across sensors for the same day: health report Visible 713, scoreboard upcoming_events 1122 / total 5669, pipeline summary Upcoming 880 / total 19591, site 354",
+        "Session log S229 notes the citation artifact 'reports an all-error run while its wrapper marks success'"
+      ],
+      "top_defects": [
+        {"defect": "No working citation or crawler telemetry (INTENT focus #1)", "fix": "Wire kpi.db citation panel + Netlify log/edge-function bot counting into scoreboard", "effort": "M"},
+        {"defect": "Inconsistent population counts", "fix": "One shared population function feeding every report", "effort": "S"},
+        {"defect": "Stale sensors not alarmed", "fix": "Scoreboard marks and alerts on stale/failed sensors", "effort": "S"}
+      ],
+      "what_would_make_it_8": "Daily scoreboard with live citation and AI-crawler numbers, one consistent population count, and alerts when a sensor goes stale."
+    },
+    {
+      "aspect": "Documentation & institutional memory",
+      "score": 6,
+      "evidence": [
+        "All 21 paths referenced in .claude/CLAUDE.md exist; commands match scripts",
+        "docs/session-log.md entries are candid about open items (S231 lists megaron --apply pending, WANG LIVE ΛΑΡΙΣΑ, duplicate rails)",
+        "docs/known-issues.md entries carry dated status updates (e.g. 'EN Cornerstones 404' marked resolved in S163 update)",
+        ".claude/notes/ledger.md is 12,037 lines — impractical as the 'START HERE' document",
+        "docs/SYSTEM-REFERENCE.md 'Last updated: February 2026', claims '11 scrapers'; docs/design-system.md (3,105 lines) header says 'Ready for implementation'",
+        "Session log S231 claims '429 listed events'; current build publishes 354"
+      ],
+      "top_defects": [
+        {"defect": "Ledger too large to be the entry point", "fix": "Ask the user about a curated top-20 Mistakes summary (policy is the user's)", "effort": "M"},
+        {"defect": "SYSTEM-REFERENCE stale since February", "fix": "Refresh or generate the numeric parts", "effort": "M"},
+        {"defect": "Hard-coded counts in docs drift", "fix": "Link to computed reports instead", "effort": "S"}
+      ],
+      "what_would_make_it_8": "A short, current architecture reference and a navigable mistakes index, with counts only where computed."
+    }
+  ],
+  "overall_notes": "Engineering discipline is high: tests, CI, build gates, a DB guard, backups, a yield canary, and a candid session log. The product a user meets is thin and sometimes wrong. On a Wednesday it lists 4 events for today and 354 upcoming in total, with 4 exhibitions and 3 films. 65% of event pages have no description, and the ones that do are in English on Greek pages. Two of the three 'tonight' homepage concerts I checked (Kotsiras, Pyx Lax) point to the wrong park, Άλσος Pedion Areos instead of Άλσος Nea Smyrni, and are sold out at the source. Measurement, which INTENT names as focus #1, has no working citation or crawler numbers, and the sensors disagree on basic counts. Highest-leverage fixes: (1) publish facts-only instead of hiding the 193 events flagged by A0 enrichment concerns, and add a factual summary in the page's language to the empty pages; (2) fix venue homonym resolution (Άλσος) and apply the megaron time reset, backed by a sampled source-vs-page diff; (3) wire citation and crawler telemetry into the scoreboard, give every report one population count, and alert on missed deploys and stale sensors."
+}

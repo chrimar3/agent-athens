@@ -245,3 +245,43 @@ export function shouldNoindexEvent(event: {
   const phase = getLifecyclePhase(event);
   return phase === 'cooling' || phase === 'archive';
 }
+
+/**
+ * Listings (homepage, hubs, venue rails, search, counts) exclude dedup losers.
+ * Their pages still emit — URL disposition awaits the GEO ruling in
+ * specs/dedup-url-disposition-proposal.md.
+ */
+export function isListable(event: { mergedInto?: string }): boolean {
+  return !event.mergedInto;
+}
+
+/**
+ * One listing per duplicate group within the CURRENT population: the survivor
+ * when it is current, otherwise the soonest current loser. Survivors are often
+ * an earlier, finished run of the same production, so dropping every loser
+ * would erase current runs from all listings.
+ */
+export function selectListable<T extends { id: string; startDate: string; mergedInto?: string }>(events: T[]): T[] {
+  const present = new Set(events.map(e => e.id));
+  const standIn = new Map<string, T>(); // survivor id → soonest current loser
+  for (const e of events) {
+    if (!e.mergedInto || present.has(e.mergedInto)) continue;
+    const best = standIn.get(e.mergedInto);
+    if (!best || e.startDate < best.startDate) standIn.set(e.mergedInto, e);
+  }
+  return events.filter(e => isListable(e) || standIn.get(e.mergedInto!) === e);
+}
+
+/**
+ * athinorama prints DD/MM with no year, and its parsers roll forward at most
+ * 10 months; a row dated more than 300 days after its first scrape came from
+ * a stale card (a passed date rolled a year, or last December read in
+ * January). Kept out of listings and pages rather than published as fact.
+ */
+export function isRolloverSuspect(event: { source?: string; createdAt?: string; startDate: string }): boolean {
+  if (event.source !== 'athinorama.gr' || !event.createdAt) return false;
+  const created = Date.parse(`${event.createdAt.slice(0, 10)}T12:00:00Z`);
+  const start = Date.parse(`${event.startDate.slice(0, 10)}T12:00:00Z`);
+  if (Number.isNaN(created) || Number.isNaN(start)) return false;
+  return (start - created) / 86_400_000 > 300;
+}

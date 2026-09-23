@@ -533,6 +533,7 @@ div#main-content {
 
 .date-group-header {
   grid-column: 1 / -1;
+  scroll-margin-top: 128px; /* clear the sticky site header + filter bar on #d-<date> jumps */
   position: sticky;
   top: 64px;
   z-index: var(--z-sticky);
@@ -563,7 +564,66 @@ div#main-content {
 }
 
 @media (max-width: 767px) {
-  .date-group { grid-template-columns: 1fr; }
+  .date-group { grid-template-columns: 1fr; gap: 0; }
+}
+
+/* Phones: compact rows (96×128 thumbnail · text · 44px save) instead of
+   ~560px portrait cards. The wrapper dissolves (display: contents) so its
+   image, badge and save button become grid cells of the card itself; the
+   card-link ::before overlay still covers the row, and media keeps
+   pointer-events: none so taps fall through to the link. */
+@media (max-width: 767px) {
+  .event-card {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) 44px;
+    grid-template-areas: "thumb body save";
+    column-gap: var(--space-sm-md);
+    align-items: start;
+    padding: var(--space-sm-md) 0;
+    border-bottom: 1px solid var(--border-whisper);
+  }
+  .event-card .card-image-wrapper { display: contents; }
+  .event-card .card-image,
+  .event-card .card-image-wrapper > svg,
+  .event-card .card-placeholder-icon {
+    grid-area: thumb;
+    position: relative;
+    inset: auto;
+    transform: none;
+    width: 96px;
+    height: 128px;
+    border-radius: var(--radius-md);
+    background: var(--bg-elevated);
+  }
+  .event-card .card-badge {
+    grid-area: thumb;
+    /* The thumb cell stretches to the row; anchor to the 128px image, not the row. */
+    align-self: start;
+    justify-self: start;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    margin: calc(128px - 6px - 1.75em) 0 0 6px;
+    padding: var(--space-xs) 6px;
+    letter-spacing: 0;
+    max-width: 88px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .event-card .card-badge-open { display: none; } /* the date line already says "Ανοιχτή" */
+  .event-card .card-save-btn {
+    grid-area: save;
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    backdrop-filter: none;
+  }
+  .event-card .card-body { grid-area: body; padding: 0; }
+  .event-card .card-title { font-size: var(--type-body-lg); }
 }
 
 /* F7 orphan-grid (corrected 2026-07-05, DN-ratified Option A): a lone card must
@@ -874,8 +934,9 @@ div#main-content {
 
 .footer-copyright {
   font-size: var(--type-ui);  /* was --type-caption (11px) — bumped to 12px minimum */
-  color: var(--text-muted);
+  color: var(--text-tertiary); /* --text-muted measured 4.25:1 */
 }
+.footer-ai-callout p a { text-decoration: underline; } /* links in text must not rely on colour alone */
 
 @media (max-width: 767px) {
   .site-footer { padding: var(--space-lg) var(--space-md) 20px; margin-top: var(--space-xl); }
@@ -1036,6 +1097,26 @@ div#main-content {
   line-height: 1.8;
   margin-bottom: var(--space-md);
 }
+/* Tables from enrichment markdown (rendered by event-page.ts) */
+.edp-description-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-md) 0;
+  font-size: var(--type-small);
+}
+.edp-description-table th,
+.edp-description-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: var(--space-sm) var(--space-sm-md);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.edp-description-table thead th { color: var(--text-secondary); font-weight: var(--font-weight-medium); }
+.edp-description-table tbody th { color: var(--text-secondary); font-weight: var(--font-weight-regular); }
+@media (max-width: 767px) {
+  .edp-description-table { display: block; overflow-x: auto; }
+}
+
 .edp-description.is-collapsed {
   max-height: 7.2em;
   overflow: hidden;
@@ -1466,13 +1547,37 @@ div#main-content {
 
 .saved-events-container { max-width: 800px; margin: 0 auto; }
 
+.saved-section + .saved-section { margin-top: var(--space-xl-2xl); }
+
+.saved-section__title {
+  font-size: var(--type-small);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding-left: var(--space-sm);
+  border-left: 2px solid var(--accent-primary);
+  margin: 0 0 var(--space-sm);
+}
+
 .saved-event-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-md);
   padding: var(--space-md) 0;
   border-bottom: 1px solid var(--border-whisper);
 }
+
+.saved-event-body { min-width: 0; }
+
+.saved-event-meta {
+  margin: 4px 0 0;
+  font-size: var(--type-small);
+  color: var(--text-tertiary);
+}
+
+.saved-section--past .saved-event-item a { color: var(--text-secondary); }
 
 .saved-event-item a {
   color: var(--text-primary);
@@ -1484,8 +1589,10 @@ div#main-content {
 .saved-event-remove {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--text-tertiary);
   cursor: pointer;
+  min-height: 44px;
+  flex-shrink: 0;
   padding: var(--space-xs);
   font-size: var(--type-small);
   font-family: inherit;
@@ -1497,6 +1604,14 @@ div#main-content {
   text-align: center;
   padding: 64px var(--space-md);
   color: var(--text-secondary);
+}
+
+.saved-empty-state__cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--accent-primary);
+  font-weight: 500;
 }
 
 .saved-empty-state svg {
@@ -1664,7 +1779,7 @@ div#main-content {
 }
 .category-nav-item[aria-current="page"] {
   background: var(--accent-primary);
-  color: white;
+  color: var(--text-on-bright); /* dark on accent, per design-system.md — white was 1.28:1 */
 }
 
 /* When a panel is open, lift filter-bar above backdrop (z:199)
@@ -2462,6 +2577,8 @@ div#main-content {
 .search-input-wrapper {
   display: flex; align-items: center; gap: var(--space-sm-md);
   padding: var(--space-md) var(--space-md-lg);
+  /* keep clear of the absolutely positioned 36px close button */
+  padding-right: calc(var(--space-sm-md) + 36px + var(--space-sm));
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -2479,6 +2596,8 @@ div#main-content {
   color: var(--text-primary);
 }
 .search-input::placeholder { color: var(--text-tertiary); }
+/* the site renders its own clear button */
+.search-input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; display: none; }
 .search-input:focus-visible { outline: none; box-shadow: 0 1px 0 0 var(--focus-ring); }
 
 .search-results { padding: var(--space-sm) 0; }
@@ -2734,7 +2853,42 @@ div#main-content {
 .hub-stats a { color: var(--text-secondary); text-decoration: none; }
 .hub-stats a:hover { color: var(--accent-primary); text-decoration: underline; }
 
+/* Phones: the intro and a 3-line H1 pushed the first event to ~940px on an
+   812px screen. Tighten type and padding; no text is hidden. */
+@media (max-width: 767px) {
+  .page-header h1 { font-size: var(--type-h2); line-height: 1.2; }
+  .hub-answer-capsule { padding: var(--space-md); margin-bottom: var(--space-md); }
+  .answer-capsule-text { font-size: var(--type-body); }
+}
+
 /* Hub Navigation Grid (homepage) */
+.time-chips {
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: 0 0 var(--space-lg);
+  padding-bottom: 2px;
+}
+.time-chips::-webkit-scrollbar { display: none; }
+
+.time-chip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  border: 1px solid var(--border-default);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.time-chip:hover { border-color: var(--border-active); }
+.time-chip__count { color: var(--accent-primary); font-variant-numeric: tabular-nums; }
+
 .hub-nav-section { margin-bottom: var(--space-lg); }
 .hub-nav-heading {
   font-size: var(--type-small);
@@ -2771,26 +2925,6 @@ div#main-content {
 .hub-card-body { display: flex; flex-direction: column; min-width: 0; }
 .hub-card-title { font-size: var(--type-small); font-weight: var(--font-weight-bold); }
 .hub-card-count { font-size: 0.75rem; color: var(--text-tertiary); }
-
-/* Terminal CTA (homepage footer navigation) */
-.terminal-cta {
-  text-align: center;
-  padding: var(--space-lg);
-  background: var(--bg-elevated);
-  border-radius: var(--radius-md);
-  margin: var(--space-xl) 0;
-}
-.terminal-cta-heading {
-  font-size: var(--type-small);
-  color: var(--text-tertiary);
-  margin-bottom: var(--space-sm);
-}
-.terminal-cta-links a {
-  color: var(--accent-primary);
-  text-decoration: none;
-  font-size: var(--type-small);
-}
-.terminal-cta-links a:hover { text-decoration: underline; }
 
 /* Mobile: 2-col hub grid, cap visible cards */
 @media (max-width: 767px) {

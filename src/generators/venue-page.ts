@@ -1,5 +1,5 @@
 import { escapeHtml } from '../utils/html-escape';
-import { escapeJsonForHtml } from '../utils/html-json';
+import { escapeJsonForHtml, decodeJsonLdEntities } from '../utils/html-json';
 /**
  * Venue Page Generator
  *
@@ -283,7 +283,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   ${schemaJson ? `
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
-  ${escapeJsonForHtml(schemaJson)}
+  ${escapeJsonForHtml(decodeJsonLdEntities(schemaJson))}
   </script>
   ` : ''}
 
@@ -468,7 +468,7 @@ function generateVenueIndex(venues: VenueData[]): void {
       })),
     },
   };
-  const venuesJsonLdScript = `<script type="application/ld+json">\n${escapeJsonForHtml(JSON.stringify(venuesJsonLd, null, 2))}\n  </script>`;
+  const venuesJsonLdScript = `<script type="application/ld+json">\n${escapeJsonForHtml(decodeJsonLdEntities(JSON.stringify(venuesJsonLd, null, 2)))}\n  </script>`;
 
   const html = `<!DOCTYPE html>
 <html lang="el">
