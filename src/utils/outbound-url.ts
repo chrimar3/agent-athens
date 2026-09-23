@@ -345,6 +345,8 @@ export interface CurlOptions {
   headers?: Record<string, string>;
   maxBytes?: number;
   timeoutMs?: number;
+  /** Write the response status line and headers before the body (curl -D -). Default false. */
+  dumpHeaders?: boolean;
 }
 
 /**
@@ -365,6 +367,7 @@ export function buildCurlArgs(url: URL, pinnedAddress: string, opts: CurlOptions
     '--max-time', String(seconds),
   ];
   if (!isIP(host)) args.push('--resolve', `${host}:${port}:${pinned}`);
+  if (opts.dumpHeaders) args.push('-D', '-');
   for (const [k, v] of Object.entries(opts.headers ?? {})) args.push('-H', `${k}: ${v}`);
   args.push('--', url.href);
   return args;
@@ -407,4 +410,155 @@ export async function safeCurlText(
   } finally {
     clearTimeout(timer);
   }
+}
+
+// ---------------------------------------------------------------------------
+// Scraper helpers: refused targets, first-party hrefs, curl redirects and
+// headless-browser request interception.
+// ---------------------------------------------------------------------------
+
+const REFUSED_CODES: ReadonlySet<OutboundErrorCode> = new Set(['invalid-url', 'scheme', 'credentials', 'blocked-address', 'redirect-invalid']);
+
+/** True when the guard refused the target itself: retrying or falling back to curl cannot help. */
+export function isRefusedTarget(e: unknown): boolean {
+  return e instanceof OutboundUrlError && REFUSED_CODES.has(e.code);
+}
+
+/**
+ * Resolve an href scraped from a first-party page against that site's fixed
+ * origin (e.g. 'https://ra.co'). Returns the absolute URL only when it stays
+ * on that origin; null otherwise. Guards against "@evil.example/x",
+ * "//evil.example/x", "javascript:..." and absolute off-site links, which
+ * plain string concatenation (`${origin}${href}`) turns into another host.
+ */
+export function sameOriginUrl(href: string | null | undefined, origin: string): string | null {
+  if (typeof href !== 'string' || href.trim() === '') return null;
+  let url: URL;
+  try {
+    url = new URL(href.trim(), origin + '/');
+  } catch {
+    return null;
+  }
+  if (url.origin !== new URL(origin).origin || url.username || url.password) return null;
+  return url.href;
+}
+
+/** Host names that never mean a public web site. */
+const LOCAL_SUFFIXES = ['.localhost', '.local', '.localdomain', '.internal', '.lan', '.home.arpa', '.intranet', '.corp'];
+/** Schemes that stay inside the browser process (no network request leaves it). */
+const IN_PROCESS_SCHEMES = new Set(['data:', 'blob:', 'about:']);
+
+/**
+ * DNS-free check for one browser request URL. Returns why it is refused, or
+ * null. http(s) hosts must not be an IP literal in a blocked range,
+ * "localhost", a single-label name or a local-only suffix. data:, blob: and
+ * about: are allowed (they never leave the browser); every other scheme
+ * (file:, ftp:, chrome:, ...) is refused.
+ */
+export function quickBlockReason(input: string): string | null {
+  let url: URL;
+  try {
+    url = new URL(input);
+  } catch {
+    return 'not a valid absolute URL';
+  }
+  if (IN_PROCESS_SCHEMES.has(url.protocol)) return null;
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return `scheme ${url.protocol} not allowed`;
+  if (url.username || url.password) return 'embedded credentials';
+  const host = url.hostname.replace(/^\[|\]$/g, '').toLowerCase().replace(/\.$/, '');
+  if (!host) return 'no host';
+  if (isIP(host)) return isBlockedAddress(host) ? `address ${host} is not public` : null;
+  if (host === 'localhost' || !host.includes('.') || LOCAL_SUFFIXES.some(s => host.endsWith(s))) {
+    return `host ${host} is local`;
+  }
+  return null;
+}
+
+/** The slice of a Puppeteer request the interceptor uses. */
+export interface InterceptedRequest {
+  url(): string;
+  isNavigationRequest(): boolean;
+  abort(errorCode?: string): Promise<void>;
+  continue(): Promise<void>;
+}
+
+/** The slice of a Puppeteer page the interceptor uses. */
+export interface InterceptablePage {
+  setRequestInterception(value: boolean): Promise<void>;
+  on(event: 'request', handler: (request: InterceptedRequest) => void): unknown;
+}
+
+/**
+ * Turn on request interception for a headless-browser page so neither the
+ * scraper's navigations nor the page's own scripts reach local services:
+ * every request gets quickBlockReason (scheme + host literal, no DNS), and
+ * navigations (the documents the scraper reads) also get a DNS check
+ * (assertPublicUrl). Subresources are not resolved, to keep this cheap.
+ *
+ * Residual risk: Chrome resolves the host again itself, so a DNS answer
+ * that changes between the two lookups is not caught.
+ */
+export async function guardPageRequests(
+  page: InterceptablePage,
+  opts: { resolver?: Resolver; log?: (message: string) => void } = {},
+): Promise<void> {
+  const log = opts.log ?? ((m: string) => console.warn(m));
+  await page.setRequestInterception(true);
+  page.on('request', (request) => {
+    void (async () => {
+      const target = request.url();
+      let reason = quickBlockReason(target);
+      if (!reason && request.isNavigationRequest() && /^https?:/i.test(target)) {
+        try {
+          await assertPublicUrl(target, { resolver: opts.resolver });
+        } catch (e) {
+          reason = (e as Error).message;
+        }
+      }
+      if (reason) {
+        log(`   🛡️ blocked browser request to ${target.slice(0, 100)} (${reason})`);
+        await request.abort('blockedbyclient').catch(() => {});
+      } else {
+        await request.continue().catch(() => {});
+      }
+    })();
+  });
+}
+
+/**
+ * Like safeCurlText, but follows up to `maxRedirects` redirects, validating
+ * every hop with assertPublicUrl and pinning each hop's address (curl itself
+ * never follows a redirect). Use where a scraper used `curl -L`.
+ */
+export async function safeCurlTextFollow(
+  input: string,
+  opts: CurlOptions & { maxRedirects?: number; resolver?: Resolver; spawn?: (args: string[]) => SpawnedProcess } = {},
+): Promise<string> {
+  const maxRedirects = opts.maxRedirects ?? OUTBOUND_DEFAULTS.maxRedirects;
+  let current = input;
+  for (let hop = 0; ; hop++) {
+    const raw = await safeCurlText(current, { ...opts, dumpHeaders: true });
+    const split = raw.search(/\r?\n\r?\n/);
+    const head = split >= 0 ? raw.slice(0, split) : raw;
+    const body = split >= 0 ? raw.slice(split).replace(/^\r?\n\r?\n/, '') : '';
+    const status = Number(/^HTTP\/[\d.]+\s+(\d{3})/.exec(head)?.[1] ?? 0);
+    const location = /^location:\s*(.+)$/im.exec(head)?.[1]?.trim();
+    if (!REDIRECT_STATUSES.has(status) || !location) return body;
+    if (hop >= maxRedirects) throw new OutboundUrlError('redirect-limit', `more than ${maxRedirects} redirects`);
+    try {
+      current = new URL(location, current).href;
+    } catch {
+      throw new OutboundUrlError('redirect-invalid', 'redirect Location is not a valid URL');
+    }
+  }
+}
+
+/**
+ * safeFetch returning a standard Response (status, headers, buffered body),
+ * for call sites written against fetch(): `.text()`, `.json()` and
+ * `.arrayBuffer()` keep working. Same guard, caps and redirect re-checks.
+ */
+export async function safeFetchResponse(input: string | URL, opts: OutboundOptions = {}): Promise<Response> {
+  const res = await safeFetch(input, opts);
+  return new Response(opts.method === 'HEAD' ? null : res.body, { status: res.status, headers: res.headers });
 }

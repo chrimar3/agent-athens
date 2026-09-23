@@ -23,8 +23,9 @@ import { join } from 'path';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
 import { normalizeDateField } from '../src/utils/date-format';
-import { normalizePriceType } from '../src/db/database';
+import { normalizePriceType, stripMarkupChars } from '../src/db/database';
 import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
+import { safeCurlTextFollow, guardPageRequests } from '../src/utils/outbound-url';
 
 const CHROME_PATH = chromePath();
 
@@ -92,15 +93,14 @@ function isAITechEvent(title: string, description?: string): boolean {
 
 async function fetchWithTimeout(url: string, timeoutMs = 15000): Promise<string | null> {
   try {
-    const proc = Bun.spawn([
-      'curl', '-s', '-L', '--max-time', String(Math.floor(timeoutMs / 1000)),
-      '-H', 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-      url
-    ], { stdout: 'pipe', stderr: 'pipe' });
-
-    const text = await new Response(proc.stdout).text();
-    const exitCode = await proc.exited;
-    return (exitCode === 0 && text.length > 0) ? text : null;
+    // Outbound guard (was `curl -L`): feed links are data, so every hop is
+    // validated (http/https, public address, pinned) and size/time are bounded.
+    const text = await safeCurlTextFollow(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+      timeoutMs,
+      maxBytes: 20 * 1024 * 1024,
+    });
+    return text.length > 0 ? text : null;
   } catch {
     return null;
   }
@@ -571,6 +571,7 @@ async function scrapeEventbrite(): Promise<DiscoveredEvent[]> {
     });
 
     const page = await browser.newPage();
+    await guardPageRequests(page); // page scripts: no local/private targets
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36');
 
     for (const url of urls) {
@@ -693,6 +694,7 @@ async function scrapeMeetup(): Promise<DiscoveredEvent[]> {
     });
 
     const page = await browser.newPage();
+    await guardPageRequests(page); // page scripts: no local/private targets
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
 
     for (const url of groupUrls) {
@@ -804,6 +806,7 @@ async function scrapeLuma(): Promise<DiscoveredEvent[]> {
     });
 
     const page = await browser.newPage();
+    await guardPageRequests(page); // page scripts: no local/private targets
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
 
     for (const url of searchUrls) {
@@ -1048,14 +1051,14 @@ async function main() {
       try {
         stmt.run({
           $id: generateEventId(e.title, e.start_date, e.venue_name),
-          $title: e.title,
+          $title: stripMarkupChars(e.title),
           $description: e.description || '',
           $start_date: normalizeDateField(e.time ? `${e.start_date}T${e.time}:00` : e.start_date),
           $end_date: e.end_date ? normalizeDateField(e.end_date) : null,
           $time_doors: e.time || null,
           $type: e.event_type,
           $genres: JSON.stringify(['AI', 'Tech']),
-          $venue_name: e.venue_name,
+          $venue_name: stripMarkupChars(e.venue_name),
           $url: e.url,
           $price_type: normalizePriceType(e.price_type),
           $price_amount: e.price_amount,

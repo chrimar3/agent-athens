@@ -38,7 +38,7 @@ export function renderEventCardList(event: Event, locale: Locale = 'el'): string
       <h3 class="card-title"><a href="${href}" class="card-link">${escapeHtml(displayTitle(event.title, event.venue?.name))}</a></h3>
       <span class="card-date">${dateStr}</span>
       <span class="card-venue">${escapeHtml(venueText)}</span>
-      <span class="card-price">${priceText}</span>
+      <span class="card-price">${escapeHtml(priceText)}</span>
     </div>
     ${renderCardSaveButton(event.id, slug, event.title, Boolean(event.fullDescriptionEn), saveMetaFor(event), locale)}
   </article>`;
@@ -69,7 +69,7 @@ export function renderFeatureCard(event: Event, locale: Locale = 'el'): string {
       <span class="card-date">${dateStr}</span>
       <span class="card-venue">${escapeHtml(venueText)}</span>
       ${shortDesc ? `<p class="feature-description">${escapeHtml(shortDesc)}</p>` : ''}
-      <span class="card-price">${priceText}</span>
+      <span class="card-price">${escapeHtml(priceText)}</span>
     </div>
   </article>`;
 }
@@ -264,7 +264,7 @@ export function renderFeaturedEventCard(
       <p class="featured-editorial-vignette">${vignette}</p>
       <span class="card-date">${dateStr}</span>
       <span class="card-venue">${escapeHtml(venueText)}</span>
-      <span class="card-price">${priceText}</span>
+      <span class="card-price">${escapeHtml(priceText)}</span>
     </div>
   </article>`;
 }

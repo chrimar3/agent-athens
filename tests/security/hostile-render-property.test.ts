@@ -10,7 +10,10 @@ import { load } from 'cheerio';
 import { sampleConcert, sampleFreeExhibition } from '../fixtures/events';
 import { renderEventDetailPage, renderRelatedEventCard } from '../../src/generators/event-page';
 import { generatePracticalBlock } from '../../src/generators/practical-block';
-import { renderComparisonRow, renderEventBlock } from '../../src/generators/hub-page';
+import { renderComparisonRow, renderEventBlock, renderHubPage } from '../../src/generators/hub-page';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { DateTime } from 'luxon';
 import { renderEventCard } from '../../src/templates/page';
 import { renderEventCardList, renderFeatureCard, renderFeaturedEventCard, renderHeroSection } from '../../src/templates/card-variants';
 import { IMG_FALLBACK_ONERROR } from '../../src/templates/image-fallback';
@@ -32,7 +35,20 @@ const PAYLOADS = [
   "' onclick='alert(1)",
   '&quot; onclick=&quot;alert(1)',
   'https://www.viva.gr/\nx',
+  // '€' reaches the raw price-range display branch (price.range must contain it).
+  '€10 <img src=x onerror=alert(1)><x-pwn></x-pwn>',
+  '€ "><script data-pwn>alert(1)</script>',
+  "€5' onmouseover='alert(1)",
+  // Substitution patterns: must never reach a String.replace() replacement string.
+  "$' $` $& <x-pwn></x-pwn>",
 ];
+
+// A date inside the coming weekend window (Athens), so the /en/this-weekend
+// answer capsule is computed from these events' titles.
+const ATHENS_TODAY = DateTime.now().setZone('Europe/Athens').startOf('day');
+const WEEKEND_DAY = ATHENS_TODAY.plus({ days: 7 - ATHENS_TODAY.weekday }).toISODate()!; // Sunday, never before today
+const WEEKEND_HUB = (JSON.parse(readFileSync(join(import.meta.dir, '../../config/hub-pages.json'), 'utf-8')).hubs as any[])
+  .find(h => h.slug === 'this-weekend');
 
 function hostileEvent(base: Event, p: string, i: number): Event {
   return {
@@ -43,7 +59,7 @@ function hostileEvent(base: Event, p: string, i: number): Event {
     fullDescription: `Full ${p}. Second ${p}. Third ${p}.`,
     fullDescriptionEn: `Full EN ${p}. Second ${p}. Third ${p}.`,
     fullDescriptionGr: `Πλήρες ${p}. Δεύτερο ${p}.`,
-    startDate: '2099-01-01T21:00:00+02:00',
+    startDate: `${WEEKEND_DAY}T21:00:00`,
     endDate: base.type === 'exhibition' ? '2099-03-01' : undefined,
     url: p,
     ticketUrl: p,
@@ -75,6 +91,8 @@ const URL_ATTRS = ['href', 'src', 'action', 'formaction', 'poster', 'xlink:href'
 function assertSafe(html: string, where: string): void {
   const $ = load(html);
   expect({ where, injected: $('x-pwn, script[data-pwn], [autofocus]').length }).toEqual({ where, injected: 0 });
+  // "$'" / "$`" reaching a String.replace() replacement string splices the page into itself.
+  expect({ where, documents: (html.match(/<\/html>/g) ?? []).length <= 1 }).toEqual({ where, documents: true });
   $('*').each((_, el) => {
     const attrs = (el as any).attribs as Record<string, string>;
     for (const [name, value] of Object.entries(attrs)) {
@@ -110,6 +128,18 @@ describe('hostile values in every event field render as inert data', () => {
         assertSafe(renderEventBlock(e, 'en'), 'hub block en');
         assertSafe(renderEventBlock(e, 'el'), 'hub block el');
       }
+      // Hub pages, incl. the computed /en/this-weekend capsule and its meta-description fallback.
+      // venue.website is attached from config/athens-venues.json at build time, never
+      // from scraped data, so the hub graph (offer seller URL) gets a config-shaped value.
+      const weekend = [sampleConcert, sampleFreeExhibition, sampleConcert].map((b, k) => {
+        const e = hostileEvent(b, p, i + 400 + k);
+        return { ...e, venue: { ...e.venue, website: 'https://www.example.org/' } };
+      });
+      const capsuleHtml = renderHubPage({ ...WEEKEND_HUB, metaDescriptionEn: undefined }, weekend, weekend, undefined, 'en');
+      expect(capsuleHtml).toContain('answer-capsule-text');
+      expect(load(capsuleHtml!)('.answer-capsule-text').text()).toContain('from Title');
+      assertSafe(capsuleHtml!, 'hub /en/this-weekend');
+      assertSafe(renderHubPage(WEEKEND_HUB, weekend, weekend, undefined, 'el')!, 'hub /this-weekend el');
     });
   });
 });

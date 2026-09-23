@@ -266,7 +266,8 @@ export function prepareCardData(event: Event, locale: Locale = 'el'): CardData {
     }
   }
 
-  // Price — text only, no links (detail page has full info)
+  // Price — text only, no links (detail page has full info). priceText is
+  // plain text (price.range is scraped); card templates escape it at emission.
   let priceText: string;
   if (event.price.type === 'open') {
     priceText = t.openEntry;
@@ -318,7 +319,7 @@ export function renderEventCard(event: Event, locale: Locale = 'el'): string {
   // is the authoritative emission surface. The visible price span carries
   // display text only; numeric price + availability live on the JSON-LD
   // item.offers object (built via buildOfferOrOmit, same gating logic).
-  const priceHtml = `<span class="card-price"><span>${priceText}</span></span>`;
+  const priceHtml = `<span class="card-price"><span>${escapeHtml(priceText)}</span></span>`;
 
   return `
   <article class="event-card" data-price="${numericPrice}" data-type="${event.type}" data-price-type="${event.price.type}">
@@ -350,7 +351,7 @@ export function renderEventCard(event: Event, locale: Locale = 'el'): string {
  * against Europe/Athens: pages are built once a day, so a build-time "today"
  * would be wrong after midnight. Without JS the absolute date still reads.
  */
-function renderDayLabelScript(locale: Locale): string {
+export function renderDayLabelScript(locale: Locale): string {
   const labels = STRINGS[locale].filterTimeLabels;
   const words = [labels['today'], labels['tomorrow']];
   return `<script>

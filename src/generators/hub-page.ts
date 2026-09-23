@@ -392,8 +392,12 @@ export function renderHubPage(
     answerCapsule = resolveTokens(rawCapsule);
   }
 
+  // answerCapsule is plain text: the /en/this-weekend capsule is built from
+  // scraped event titles, so it is escaped here, at emission, like every
+  // other event-derived string (escapeHtml decodes first, so config copy
+  // with a literal "&" renders unchanged).
   const capsuleHtml = `<section class="hub-answer-capsule">
-  <p class="answer-capsule-text">${answerCapsule}</p>
+  <p class="answer-capsule-text">${escapeHtml(answerCapsule)}</p>
   <p class="hub-stats">${filteredEvents.length} ${t.hubEventCount}</p>
 </section>`;
   const preFilterBarContent = (categoryNav || '') + capsuleHtml;
@@ -459,9 +463,11 @@ export function renderHubPage(
     ? (config.metaDescriptionEn ? resolveTokens(config.metaDescriptionEn).substring(0, 155) : answerCapsule.substring(0, 155))
     : (config.metaDescriptionEl ? resolveTokens(config.metaDescriptionEl).substring(0, 155) : rawCapsule.substring(0, 155));
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${hubTitle}</title>`);
+  // hubDescription can fall back to the computed (event-title-bearing) capsule.
+  const hubDescriptionAttr = escapeHtml(hubDescription);
   html = html.replace(
     /<meta name="description" content="[^"]*">/,
-    `<meta name="description" content="${hubDescription}">`
+    () => `<meta name="description" content="${hubDescriptionAttr}">`
   );
   // Also override keywords to use hub-specific terms
   const hubKeywords = `${config.titleEl}, ${config.titleEn}, Αθήνα, Athens, εκδηλώσεις, events, πολιτισμός, culture`;
@@ -477,7 +483,7 @@ export function renderHubPage(
   );
   html = html.replace(
     /<meta property="og:description" content="[^"]*">/,
-    `<meta property="og:description" content="${hubDescription}">`
+    () => `<meta property="og:description" content="${hubDescriptionAttr}">`
   );
   html = html.replace(
     /<meta name="twitter:title" content="[^"]*">/,
@@ -485,7 +491,7 @@ export function renderHubPage(
   );
   html = html.replace(
     /<meta name="twitter:description" content="[^"]*">/,
-    `<meta name="twitter:description" content="${hubDescription}">`
+    () => `<meta name="twitter:description" content="${hubDescriptionAttr}">`
   );
   // Override OG image with per-hub branded image
   html = html.replace(
@@ -647,7 +653,7 @@ export function renderHubPage(
   } else {
     // No card grid (0 events case) — inject before </main>
     const injection = `${seeAllHtml}\n${tableHtml}\n${eventBlocksHtml}\n${faqHtml}\n${seasonalHtml}\n${crossLinksHtml}`;
-    html = html.replace('</main>', `${injection}\n</main>`);
+    html = html.replace('</main>', () => `${injection}\n</main>`);
   }
 
   // S139: per-page @graph envelope (replaces prior separate CollectionPage +
@@ -670,7 +676,7 @@ export function renderHubPage(
     hubCanonicalUrl,
   });
   const graphBlock = `<script type="application/ld+json">\n${escapeJsonForHtml(decodeJsonLdEntities(JSON.stringify(graphEnvelope)))}\n</script>`;
-  html = html.replace('</head>', `${graphBlock}\n</head>`);
+  html = html.replace('</head>', () => `${graphBlock}\n</head>`);
 
   return html;
 }
@@ -833,7 +839,7 @@ export function renderOverflowPage(
     hubCanonicalUrl,
   });
   const overflowGraphBlock = `<script type="application/ld+json">\n${escapeJsonForHtml(decodeJsonLdEntities(JSON.stringify(overflowGraph)))}\n</script>`;
-  html = html.replace('</head>', `${overflowGraphBlock}\n</head>`);
+  html = html.replace('</head>', () => `${overflowGraphBlock}\n</head>`);
 
   return html;
 }

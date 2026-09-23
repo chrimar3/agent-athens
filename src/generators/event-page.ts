@@ -810,7 +810,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
     <div class="edp-mobile-bar-inner">
       <div class="edp-mobile-bar-info">
         <div class="edp-mobile-bar-title">${escapeHtml(displayTitle(event.title, event.venue?.name))}</div>
-        <div class="edp-mobile-bar-price">${priceDisplay}</div>
+        <div class="edp-mobile-bar-price">${escapeHtml(priceDisplay)}</div>
       </div>
       <a href="${escapeAttr(ctaHref)}" class="edp-cta" rel="noopener" target="_blank">${mobileLabel}</a>
     </div>
@@ -911,7 +911,7 @@ ${renderAnalytics()}
           <div class="edp-meta">
             <span class="edp-meta-date"><time datetime="${event.startDate}">${dateDisplay}</time></span>
             <span class="edp-meta-item">${venueLinkable ? `<a href="/venues/${venueSlug}/">${escapeHtml(venueDisplayName)}</a>` : escapeHtml(venueDisplayName)}</span>
-            <span class="edp-meta-item">${priceDisplay}</span>
+            <span class="edp-meta-item">${escapeHtml(priceDisplay)}</span>
           </div>
           ${ctaHtml}
           ${(() => {
@@ -931,7 +931,7 @@ ${renderAnalytics()}
               <a class="cal-disclosure__option" href="${escapeAttr(outlookUrl)}" target="_blank" rel="noopener">${t.calendarOutlook}</a>
             </div>
           </details>`;
-            return actionBar.replace('</div>', `${calendarDisclosure}</div>`);
+            return actionBar.replace('</div>', () => `${calendarDisclosure}</div>`);
           })()}
         </header>
       </div>
@@ -1067,7 +1067,7 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
       <h3 class="card-title"><a href="${href}" class="card-link">${escapeHtml(displayTitle(event.title, event.venue?.name))}</a></h3>
       <span class="card-date"><time datetime="${event.startDate}">${dateStr}</time></span>
       <span class="card-venue">${escapeHtml(venueText)}</span>
-      <span class="card-price">${priceText}</span>
+      <span class="card-price">${escapeHtml(priceText)}</span>
     </div>
   </article>`;
 }

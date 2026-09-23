@@ -107,12 +107,36 @@ export function normalizeGenres(value: string | null | undefined): string {
 }
 
 /**
+ * Defence in depth for scraped display text (titles, venue names, price
+ * ranges): drop '<' and '>' so a value can never form a tag, whatever a
+ * template later does with it. Output escaping stays the primary defence.
+ * Other characters, including '&' and quotes, are kept; the row is never
+ * rejected. Scrapers decode entities before this runs (decodeEventFields),
+ * so an entity-encoded tag on a source page is stripped too.
+ */
+export function stripMarkupChars(value: string): string;
+export function stripMarkupChars(value: string | null): string | null;
+export function stripMarkupChars(value: string | null | undefined): string | null | undefined;
+export function stripMarkupChars(value: string | null | undefined): string | null | undefined {
+  return typeof value === 'string' ? value.replace(/[<>]/g, '') : value;
+}
+
+/**
+ * Event types are slugs ("concert", "dj_set"). A value of any other shape is
+ * not a type — it would reach class names, data attributes and CSS variables
+ * — so it reads as 'other'. Legacy slug values pass through unchanged.
+ */
+export function safeEventTypeSlug(value: unknown): string {
+  return typeof value === 'string' && /^[A-Za-z][A-Za-z0-9_-]{0,39}$/.test(value) ? value : 'other';
+}
+
+/**
  * Convert Event object to database row
  */
 export function eventToRow(event: Event): Record<string, any> {
   return {
     $id: event.id,
-    $title: event.title,
+    $title: stripMarkupChars(event.title),
     // G5 (F2b ride-along): NULL, never '' — keeps the enrichment write path
     // from unwinding the S186 normalization.
     $description: event.description || null,
@@ -122,7 +146,7 @@ export function eventToRow(event: Event): Record<string, any> {
     $type: event.type,
     $genres: JSON.stringify(event.genres),
     $tags: JSON.stringify(filterEntityTags(event.tags, loadDefaultExclusionSet())),
-    $venue_name: event.venue.name,
+    $venue_name: stripMarkupChars(event.venue.name),
     $venue_address: event.venue.address,
     $venue_neighborhood: event.venue.neighborhood || null,
     $venue_lat: event.venue.coordinates?.lat || null,
@@ -131,7 +155,7 @@ export function eventToRow(event: Event): Record<string, any> {
     $price_type: normalizePriceType(event.price.type),
     $price_amount: event.price.amount || null,
     $price_currency: event.price.currency || "EUR",
-    $price_range: event.price.range || null,
+    $price_range: stripMarkupChars(event.price.range) || null,
     // URL columns hold canonical http(s) URLs only; a bad value drops the field, not the row.
     $url: safeHttpUrl(event.url),
     $source: event.source,
@@ -187,12 +211,13 @@ export function rowToEvent(row: any): Event {
   // consumer (schema-graph-builders reads event['@type'] directly).
   const genres: string[] = JSON.parse(row.genres || "[]");
   const tags: string[] = JSON.parse(row.tags || "[]");
+  const type = safeEventTypeSlug(row.type) as Event['type'];
 
   return {
     "@context": "https://schema.org",
     "@type": resolveEventSchemaType({
       title: row.title,
-      type: row.type,
+      type,
       tags,
       genres,
       venue: { name: row.venue_name },
@@ -206,7 +231,7 @@ export function rowToEvent(row: any): Event {
     hasNativeGreek: Boolean(fullDescGr),
     startDate: row.start_date,
     endDate: row.end_date,
-    type: row.type,
+    type,
     genres,
     tags,
     venue: {

@@ -44,7 +44,9 @@ describe('scanHtmlForArtifacts', () => {
   test('no false positives that would block a legitimate daily build', () => {
     expect(scanHtmlForArtifacts(page('<h1>Rock | --- | Night</h1>'))).toEqual([]);          // title with pipes
     expect(scanHtmlForArtifacts(page('<p>A |----| B | C</p>'))).toEqual([]);                 // prose, no table header row
-    expect(scanHtmlForArtifacts(page('<p>x</p><script>var s = "[PLACEHOLDER]";</script>'))).toEqual([]); // script text
+    // script text: the placeholder rule ignores it (the inline-script allowlist rule, tested in
+    // tests/security/published-output-gate.test.ts, separately refuses an unlisted script body).
+    expect(scanHtmlForArtifacts(page('<p>x</p><script>var s = "[PLACEHOLDER]";</script>')).filter(i => !/template allowlist/.test(i))).toEqual([]);
   });
 
   test('catches the misses: entity in a JSON-LD description, LD script with extra attributes', () => {

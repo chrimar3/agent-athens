@@ -12,8 +12,10 @@
 
 import { readdirSync, readFileSync } from 'fs';
 import { join, relative } from 'path';
+import { createHash } from 'crypto';
 import he from 'he';
 import { IMG_FALLBACK_ONERROR } from '../templates/image-fallback';
+import { INLINE_SCRIPT_HASHES } from './inline-script-allowlist';
 
 const LD_BLOCK = /<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g;
 const SCRIPT_BLOCK = /<script\b[\s\S]*?<\/script>/g;
@@ -42,9 +44,20 @@ export function scanHtmlForArtifacts(html: string): string[] {
 }
 
 // ---------------------------------------------------------------------------
-// Output safety: URL schemes, inline handlers, script sources.
+// Output safety: URL schemes, inline handlers, script sources, inline script
+// bodies, frames and active elements.
 // Scraped and AI-written values reach href/src attributes and JSON-LD, so the
-// emitted pages themselves are checked before deploy.
+// emitted pages themselves are checked before deploy. Rules:
+//   - href/src/action/... use http(s), mailto, tel or a relative URL
+//   - no on* handler except IMG_FALLBACK_ONERROR on <img>; no srcdoc
+//   - <script src> only same-origin or ALLOWED_SCRIPT_HOSTS over https
+//   - an inline executable <script> body must be on INLINE_SCRIPT_ALLOWLIST
+//     (sha256 of the templates' own scripts, inline-script-allowlist.ts)
+//   - JSON data blocks must parse, hold no "<script", "</script" or "<!--",
+//     and no URL-valued key (url, sameAs, image, @id, ...) with a
+//     javascript:/vbscript: value
+//   - <iframe> only to the OpenStreetMap embed the venue pages use
+//   - no <meta http-equiv="refresh">, <object>, <embed>, <base>, <frame>, <frameset>
 // ---------------------------------------------------------------------------
 
 /** External script hosts the templates emit (src/config/analytics.ts). */
@@ -63,6 +76,13 @@ const FIX_URL = 'fix: build data-driven URLs with safeHttpUrl/firstSafeImageSrc 
 const FIX_HANDLER = 'fix: move behaviour into a script; the only allowed handler is IMG_FALLBACK_ATTR (src/templates/image-fallback.ts)';
 const FIX_SCRIPT_HOST = 'fix: remove the tag, or add the host to ALLOWED_SCRIPT_HOSTS (src/validators/published-artifacts.ts) after review';
 const FIX_SCRIPT_URL = 'fix: validate the value with safeHttpUrl (src/utils/safe-url.ts) before it is serialised';
+const FIX_INLINE_SCRIPT = 'fix: if a template script changed, update its hash in src/validators/inline-script-allowlist.ts (run bun test tests/security/inline-script-allowlist.test.ts for the new value); otherwise event data is reaching HTML unescaped — escape it with escapeHtml/escapeAttr at emission';
+const FIX_JSON_BLOCK = 'fix: serialise JSON-LD with JSON.stringify + escapeJsonForHtml (src/utils/html-json.ts)';
+const FIX_ACTIVE_ELEMENT = 'fix: templates emit no frames, meta refresh, plugins or <base>; data reaching HTML unescaped produced it — escape it with escapeHtml/escapeAttr at emission';
+/** The one frame the templates emit: the venue-page map (src/generators/venue-page.ts). */
+const ALLOWED_IFRAME = /^https:\/\/www\.openstreetmap\.org\/export\/embed\.html\?/;
+const FORBIDDEN_ELEMENTS = new Set(['object', 'embed', 'base', 'frame', 'frameset', 'applet']);
+const SCRIPT_TAG_IN_JSON = /<\/?script/i;
 
 function parseAttributes(raw: string): [string, string | undefined][] {
   return [...raw.matchAll(ATTRIBUTE)].map(m => [m[1].toLowerCase(), m[2] ?? m[3] ?? m[4]]);
@@ -94,7 +114,8 @@ function scriptHostIssue(src: string): string | null {
 function jsonHasDangerousUrl(value: unknown, key = ''): boolean {
   if (typeof value === 'string') {
     const v = value.replace(/[\t\n\r]/g, '').trim();
-    // Only URL-valued keys: prose such as a streetAddress is not followed as a link.
+    // Only URL-valued keys: prose such as a streetAddress is not followed as a
+    // link, and refusing it would let one scraped address block every deploy.
     return URL_ISH_KEY.test(key) && /^(?:javascript|vbscript):/i.test(v);
   }
   if (Array.isArray(value)) return value.some(v => jsonHasDangerousUrl(v, key));
@@ -104,17 +125,32 @@ function jsonHasDangerousUrl(value: unknown, key = ''): boolean {
   return false;
 }
 
-function scriptContentIssue(type: string | undefined, content: string): string | null {
+function scriptContentIssues(type: string | undefined, content: string, hasSrc: boolean): string[] {
   if (type && JSON_SCRIPT_TYPE.test(type.trim())) {
+    const issues: string[] = [];
+    if (SCRIPT_TAG_IN_JSON.test(content)) issues.push(`"<script" inside a ${type} block (${FIX_JSON_BLOCK})`);
+    // "<!--" in JSON-LD is reported by scanHtmlForArtifacts; other JSON blocks are checked here.
+    if (!/ld\+json/i.test(type) && content.includes('<!--')) issues.push(`"<!--" inside a ${type} block (${FIX_JSON_BLOCK})`);
     let parsed: unknown;
     try {
       parsed = JSON.parse(content);
     } catch {
-      return DANGEROUS_SCHEME_IN_SCRIPT.test(content) ? `javascript: URL inside a ${type} block (${FIX_SCRIPT_URL})` : null;
+      issues.push(`${type} block does not parse as JSON (${FIX_JSON_BLOCK})`);
+      if (DANGEROUS_SCHEME_IN_SCRIPT.test(content)) issues.push(`javascript: URL inside a ${type} block (${FIX_SCRIPT_URL})`);
+      return issues;
     }
-    return jsonHasDangerousUrl(parsed) ? `javascript: URL inside a ${type} block (${FIX_SCRIPT_URL})` : null;
+    if (jsonHasDangerousUrl(parsed)) issues.push(`javascript: URL inside a ${type} block (${FIX_SCRIPT_URL})`);
+    return issues;
   }
-  return DANGEROUS_SCHEME_IN_SCRIPT.test(content) ? `javascript: URL inside an inline <script> (${FIX_SCRIPT_URL})` : null;
+  // A browser ignores the body of a <script src>; the src itself is checked by scriptHostIssue.
+  if (hasSrc) return [];
+  const issues: string[] = [];
+  if (DANGEROUS_SCHEME_IN_SCRIPT.test(content)) issues.push(`javascript: URL inside an inline <script> (${FIX_SCRIPT_URL})`);
+  const sha256 = createHash('sha256').update(content).digest('hex');
+  if (!INLINE_SCRIPT_HASHES.has(sha256)) {
+    issues.push(`inline <script> not on the template allowlist (sha256 ${sha256}, starts "${content.trim().slice(0, 60).replace(/\s+/g, ' ')}") (${FIX_INLINE_SCRIPT})`);
+  }
+  return issues;
 }
 
 /** Output-safety issues in one page; each names what was found and where to fix it. */
@@ -128,8 +164,7 @@ export function scanHtmlForUnsafeOutput(html: string): string[] {
       const issue = scriptHostIssue(src);
       if (issue) issues.add(issue);
     }
-    const issue = scriptContentIssue(attrs.get('type'), m[2]);
-    if (issue) issues.add(issue);
+    for (const issue of scriptContentIssues(attrs.get('type'), m[2], src !== undefined)) issues.add(issue);
   }
 
   // Markup outside script/style bodies and comments is what the browser parses as tags.
@@ -140,7 +175,14 @@ export function scanHtmlForUnsafeOutput(html: string): string[] {
 
   for (const tag of markup.matchAll(START_TAG)) {
     const tagName = tag[1].toLowerCase();
-    for (const [name, value = ''] of parseAttributes(tag[2])) {
+    const attrs = parseAttributes(tag[2]);
+    const attr = (n: string) => he.decode(attrs.find(([k]) => k === n)?.[1] ?? '', { isAttributeValue: true }).trim();
+    if (FORBIDDEN_ELEMENTS.has(tagName)) issues.add(`<${tagName}> element (${FIX_ACTIVE_ELEMENT})`);
+    if (tagName === 'iframe' && !ALLOWED_IFRAME.test(attr('src'))) {
+      issues.add(`<iframe> to "${attr('src').slice(0, 80)}" — only the OpenStreetMap embed is allowed (${FIX_ACTIVE_ELEMENT})`);
+    }
+    if (tagName === 'meta' && /refresh/i.test(attr('http-equiv'))) issues.add(`<meta http-equiv="refresh"> (${FIX_ACTIVE_ELEMENT})`);
+    for (const [name, value = ''] of attrs) {
       if (/^on[a-z]+$/.test(name)) {
         const allowed = tagName === 'img' && name === 'onerror' && he.decode(value, { isAttributeValue: true }) === IMG_FALLBACK_ONERROR;
         if (!allowed) issues.add(`inline event handler ${name}= on <${tagName}> (${FIX_HANDLER})`);

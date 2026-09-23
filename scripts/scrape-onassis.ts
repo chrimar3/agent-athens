@@ -24,6 +24,7 @@ import { createHash } from 'crypto';
 import type { Event, EventType } from '../src/types';
 import { SCHEMA_TYPE_MAP } from '../src/enrichment/quality-gates';
 import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
+import { guardPageRequests } from '../src/utils/outbound-url';
 
 const SOURCE_ID = 'onassis';
 const BASE_URL = 'https://www.onassis.org';
@@ -232,6 +233,7 @@ export async function scrapeOnassis(): Promise<ScrapedExhibition[]> {
 
   try {
     const page = await browser.newPage();
+    await guardPageRequests(page); // page scripts: no local/private targets
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
 
     // /el/exhibitions is dead (404); the listing lives at /el/whats-on.

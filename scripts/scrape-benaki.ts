@@ -15,6 +15,7 @@ import type { Event } from '../src/types';
 import { SCHEMA_TYPE_MAP } from '../src/enrichment/quality-gates';
 import type { DomDocument } from './dom-eval-types';
 import { chromeLaunchArgs } from './lib/chrome-path';
+import { guardPageRequests } from '../src/utils/outbound-url';
 
 // Browser surface for page.evaluate() callbacks — module-local on purpose;
 // see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
@@ -105,6 +106,7 @@ export async function scrapeBenaki(): Promise<ScrapedExhibition[]> {
 
   try {
     const page = await browser.newPage();
+    await guardPageRequests(page); // page scripts: no local/private targets
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
 
     // Try the exhibitions page
