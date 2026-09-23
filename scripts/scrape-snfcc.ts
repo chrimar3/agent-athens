@@ -22,6 +22,7 @@ import { normalizeDateField } from '../src/utils/date-format';
 import { normalizePriceType, stripMarkupChars } from '../src/db/database';
 import type { DomDocument, DomAnchor } from './dom-eval-types';
 import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
+import { prepareUrlWrite } from './lib/url-columns';
 import { guardPageRequests, sameOriginUrl } from '../src/utils/outbound-url';
 
 // Browser surface for page.evaluate() callbacks — module-local on purpose;
@@ -574,7 +575,7 @@ function saveEvents(events: ScrapedExhibition[], dryRun: boolean): number {
   const db = new Database(DB_PATH);
   let saved = 0;
 
-  const stmt = db.prepare(`
+  const stmt = prepareUrlWrite(db, `
     INSERT INTO events (
       id, title, description, start_date, end_date, type, genres,
       venue_name, url, price_type, price_amount, price_range, source,

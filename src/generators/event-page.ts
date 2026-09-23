@@ -1,6 +1,7 @@
 import { escapeHtml } from '../utils/html-escape';
 import { safeHttpUrl, firstSafeImageSrc } from '../utils/safe-url';
-import { IMG_FALLBACK_ATTR } from '../templates/image-fallback';
+import { IMG_FALLBACK_ATTR, renderImageFallbackScript } from '../templates/image-fallback';
+import { isSafeSlug, parseSlugHistory, SLUG_PATTERN } from '../validators/persisted-state';
 import { displayTitle } from '../utils/display-title';
 import { escapeJsonForHtml, decodeJsonLdEntities } from '../utils/html-json';
 /**
@@ -888,6 +889,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   ${escapeJsonForHtml(decodeJsonLdEntities(schemaJson))}
   </script>
 ${renderAnalytics()}
+${renderImageFallbackScript()}
 </head>
 <body>
   ${renderSiteNav(locale)}
@@ -1231,9 +1233,15 @@ export function loadSlugHistory(): Map<string, string[]> {
   }
 
   try {
-    const data = JSON.parse(readFileSync(historyPath, 'utf-8'));
-    return new Map(Object.entries(data));
+    // Read-back state feeds _redirects: keep only ids with slugs matching
+    // SLUG_PATTERN (src/validators/persisted-state.ts); report what was dropped.
+    const { value, dropped } = parseSlugHistory(JSON.parse(readFileSync(historyPath, 'utf-8')));
+    if (dropped > 0) {
+      console.warn(`  ⚠️  .slug-history.json: dropped ${dropped} malformed entr${dropped === 1 ? 'y' : 'ies'} (slugs must match ${SLUG_PATTERN})`);
+    }
+    return value;
   } catch {
+    console.warn('  ⚠️  .slug-history.json does not parse; starting a fresh slug history');
     return new Map();
   }
 }
@@ -1269,11 +1277,19 @@ export function generateRedirects(
   previousHistory: Map<string, string[]>
 ): string[] {
   const redirects: string[] = [];
+  let invalid = 0;
 
   for (const [eventId, currentSlug] of currentSlugs) {
     const previousSlugs = previousHistory.get(eventId) || [];
     for (const oldSlug of previousSlugs) {
       if (oldSlug !== currentSlug) {
+        // Emission check: each slug becomes a path token in _redirects, so a
+        // value outside SLUG_PATTERN (whitespace, newline, '*', ':') could
+        // add a rule. Drop it; loadSlugHistory already filters on load.
+        if (!isSafeSlug(oldSlug) || !isSafeSlug(currentSlug)) {
+          invalid++;
+          continue;
+        }
         // Force (301!) so a lingering un-swept dist/events/{oldSlug}/ directory
         // cannot shadow the rule — Netlify serves a matching static file before a
         // NON-forced redirect (the shadowing trap generateArchiveGoneRules defeats
@@ -1284,6 +1300,7 @@ export function generateRedirects(
     }
   }
 
+  if (invalid > 0) console.warn(`  ⚠️  generateRedirects: dropped ${invalid} redirect${invalid === 1 ? '' : 's'} with a slug outside ${SLUG_PATTERN}`);
   return redirects;
 }
 
@@ -1324,6 +1341,7 @@ export function generateArchiveGoneRules(
   const preserved = opts.preservedUrls ?? new Set<string>();
   const todayMs = new Date(getAthensTodayStr() + 'T00:00:00Z').getTime();
   const rules: string[] = [];
+  let invalid = 0;
 
   for (const event of events) {
     // Lower bound: only past-expired (>45d) events — same classifier the page
@@ -1336,12 +1354,18 @@ export function generateArchiveGoneRules(
     const daysPast = Math.floor((todayMs - effEndMs) / 86_400_000);
     if (daysPast > ARCHIVE_410_WINDOW_DAYS) continue;
 
-    const url = `/events/${generateEventSlug(event)}/`;
+    const slug = generateEventSlug(event);
+    if (!isSafeSlug(slug)) {
+      invalid++;
+      continue;
+    }
+    const url = `/events/${slug}/`;
     if (preserved.has(url)) continue;
 
     rules.push(`${url} /410.html 410!`);
   }
 
+  if (invalid > 0) console.warn(`  ⚠️  generateArchiveGoneRules: dropped ${invalid} rule${invalid === 1 ? '' : 's'} with a slug outside ${SLUG_PATTERN}`);
   return rules;
 }
 

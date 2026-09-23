@@ -17,6 +17,7 @@ import { Database } from 'bun:sqlite';
 import { join } from 'path';
 import { safeFetch, safeCurlText, OutboundUrlError } from '../src/utils/outbound-url';
 import { extractOgImage } from '../src/utils/image-extractor';
+import { prepareUrlWrite } from './lib/url-columns';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const RATE_LIMIT_MS = 1000; // 1 request per second
@@ -126,7 +127,7 @@ function updateEventImage(
   imageUrl: string | null,
   imageSource: string
 ): boolean {
-  const stmt = db.prepare(`
+  const stmt = prepareUrlWrite(db, `
     UPDATE events
     SET image_url = $imageUrl,
         image_source = $imageSource,

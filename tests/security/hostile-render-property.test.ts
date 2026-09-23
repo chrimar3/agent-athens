@@ -16,7 +16,6 @@ import { join } from 'path';
 import { DateTime } from 'luxon';
 import { renderEventCard } from '../../src/templates/page';
 import { renderEventCardList, renderFeatureCard, renderFeaturedEventCard, renderHeroSection } from '../../src/templates/card-variants';
-import { IMG_FALLBACK_ONERROR } from '../../src/templates/image-fallback';
 import { scanHtmlForArtifacts } from '../../src/validators/published-artifacts';
 import type { Event } from '../../src/types';
 
@@ -96,8 +95,9 @@ function assertSafe(html: string, where: string): void {
   $('*').each((_, el) => {
     const attrs = (el as any).attribs as Record<string, string>;
     for (const [name, value] of Object.entries(attrs)) {
+      // No inline handler at all: the image fallback is a delegated listener (the enforced CSP blocks handlers).
       if (name.startsWith('on')) {
-        expect({ where, tag: (el as any).name, name, value }).toEqual({ where, tag: 'img', name: 'onerror', value: IMG_FALLBACK_ONERROR });
+        expect({ where, tag: (el as any).name, name, value }).toBeUndefined();
       }
       if (URL_ATTRS.includes(name)) {
         expect({ where, name, value, safe: SAFE_URL.test(value.trim()) }).toEqual({ where, name, value, safe: true });

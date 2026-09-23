@@ -55,7 +55,10 @@ describe('inline event handlers', () => {
     '<body onload="x()">',
   ]) test(`fails: ${bad.slice(0, 50)}`, () => fails(page(bad)));
 
-  test('the one template image-fallback handler passes', () => passes(page(`<img src="/images/a.webp" ${IMG_FALLBACK_ATTR}><span style="display:none">i</span>`)));
+  test('the template image-fallback marker passes; the old inline onerror fallback now fails', () => {
+    passes(page(`<img src="/images/a.webp" ${IMG_FALLBACK_ATTR}><span style="display:none">i</span>`));
+    fails(page(`<img src="/images/a.webp" onerror="this.style.display='none';this.nextElementSibling.style.display=''"><span>i</span>`));
+  });
   test('handler-like text that is escaped or inside an attribute value passes', () => {
     passes(page('<p>&lt;img src=x onerror=alert(1)&gt;</p><a href="/x/" title="onclick=alert(1)">x</a><!-- <div onclick="x()"> -->'));
   });

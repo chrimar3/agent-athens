@@ -23,7 +23,7 @@ import { computeFilterCounts, renderFilterBar, renderFilterBarScript } from './f
 import type { HubIdentity } from '../utils/hub-identity';
 import { renderCardSaveButton, renderSavedEventsScript, renderCardSaveScript, saveMetaFor, escapeAttr } from './action-bar';
 import { firstSafeImageSrc } from '../utils/safe-url';
-import { IMG_FALLBACK_ATTR } from './image-fallback';
+import { IMG_FALLBACK_ATTR, renderImageFallbackScript } from './image-fallback';
 import { BASE_URL, pageUrl } from '../config/site-url';
 import { renderAnalytics } from '../config/analytics';
 
@@ -148,6 +148,7 @@ export function renderPage(metadata: PageMetadata, events: Event[], allEvents?: 
   ${renderCssLink()}
 
 ${renderAnalytics()}
+${renderImageFallbackScript()}
 </head>
 <body${allEvents ? ' class="has-filter-bar"' : ''}>
   ${renderSiteNav(locale)}

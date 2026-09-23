@@ -19,6 +19,7 @@ import { Database } from 'bun:sqlite';
 import { join } from 'path';
 import puppeteer from 'puppeteer-core';
 import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
+import { prepareUrlWrite } from './lib/url-columns';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const CHROME_PATH = chromePath();
@@ -340,7 +341,7 @@ async function main() {
   await page.setViewport({ width: 1280, height: 800 });
   await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
 
-  const updateStmt = db.prepare(`
+  const updateStmt = prepareUrlWrite(db, `
     UPDATE events
     SET url = $url, price_amount = $price, price_range = $range, updated_at = $updated
     WHERE id = $id
@@ -387,7 +388,7 @@ async function main() {
         }
 
         if (!dryRun) {
-          db.prepare(`UPDATE events SET url = $url, price_range = $range, updated_at = $updated WHERE id = $id`).run({
+          prepareUrlWrite(db, `UPDATE events SET url = $url, price_range = $range, updated_at = $updated WHERE id = $id`).run({
             $id: event.id,
             $url: result.finalUrl,
             $range: 'TBA',
@@ -452,7 +453,7 @@ async function main() {
 
         // Still update the URL even if no price
         if (!dryRun && result.finalUrl !== event.url) {
-          db.prepare(`UPDATE events SET url = $url, updated_at = $updated WHERE id = $id`).run({
+          prepareUrlWrite(db, `UPDATE events SET url = $url, updated_at = $updated WHERE id = $id`).run({
             $id: event.id,
             $url: result.finalUrl,
             $updated: new Date().toISOString()

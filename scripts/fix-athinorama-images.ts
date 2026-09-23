@@ -18,6 +18,7 @@
 import { Database } from 'bun:sqlite';
 import { join } from 'path';
 import { safeFetch, OutboundUrlError } from '../src/utils/outbound-url';
+import { prepareUrlWrite } from './lib/url-columns';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const RATE_LIMIT_MS = 1500; // 1.5s between requests
@@ -109,7 +110,7 @@ async function main() {
   if (dryRun) console.log('   [DRY RUN MODE]');
   console.log('');
 
-  const updateStmt = db.prepare(`
+  const updateStmt = prepareUrlWrite(db, `
     UPDATE events
     SET image_url = ?,
         image_source = 'athinorama_body_fix',

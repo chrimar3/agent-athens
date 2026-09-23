@@ -99,8 +99,39 @@ describe('integrity-check.sh', () => {
     expect(snapshot().code).toBe(0);
     writeFileSync(join(repo, 'data/scoreboard.json'), '{"n":2}\n');
     git('commit', '-qam', 'chore: daily pipeline update');
-    git('branch', '-f', 'pipeline-data', 'HEAD');
+    git('branch', '-f', 'some-feature', 'HEAD');
     git('pack-refs', '--all');
+    expect(verify().code).toBe(0);
+  });
+
+  test('a pipeline-data commit touching code is quarantined, rolled back and not published', () => {
+    git('branch', 'pipeline-data', 'HEAD');
+    expect(snapshot().code).toBe(0);
+    const before = git('rev-parse', 'pipeline-data').out.trim();
+    // Build a commit on pipeline-data with plumbing, as the pipeline does.
+    writeFileSync(join(repo, 'scripts/job.ts'), 'console.log("planted")\n');
+    git('add', 'scripts/job.ts');
+    const tree = git('write-tree').out.trim();
+    git('checkout', '-q', 'HEAD', '--', 'scripts/job.ts');
+    const bad = git('commit-tree', tree, '-p', before, '-m', 'chore: daily pipeline update').out.trim();
+    git('update-ref', 'refs/heads/pipeline-data', bad);
+    writeFileSync(join(repo, '.pipeline-publish-ready'), '{}');
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('pipeline-data commit');
+    expect(git('rev-parse', 'pipeline-data').out.trim()).toBe(before);
+    expect(existsSync(join(repo, '.pipeline-publish-ready'))).toBe(false);
+    expect(git('branch', '--list', 'quarantine/pipeline-data-*').out).toContain('quarantine/pipeline-data-');
+  });
+
+  test('a data-only pipeline-data commit passes', () => {
+    git('branch', 'pipeline-data', 'HEAD');
+    expect(snapshot().code).toBe(0);
+    writeFileSync(join(repo, 'data/scoreboard.json'), '{"n":3}\n');
+    git('add', 'data/scoreboard.json');
+    const tree = git('write-tree').out.trim();
+    const ok = git('commit-tree', tree, '-p', git('rev-parse', 'pipeline-data').out.trim(), '-m', 'chore: daily pipeline update').out.trim();
+    git('update-ref', 'refs/heads/pipeline-data', ok);
     expect(verify().code).toBe(0);
   });
 

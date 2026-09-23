@@ -9,8 +9,9 @@
 #   1. nothing in .git that steers git changed — config, hooks, commondir,
 #      info/, worktrees/, alternates, HEAD … (checked before running any git,
 #      because git config can make git itself execute commands);
-#   2. commits made during the run touch only data paths (a commit can carry
-#      any content without touching the working tree);
+#   2. commits made during the run — on the checked-out branch and on the
+#      pipeline-data branch the publish run pushes — touch only data paths
+#      (a commit can carry any content without touching the working tree);
 #   3. no new file appeared at the repo root (e.g. a planted CLAUDE.md, which
 #      agent sessions load as instructions, or .npmrc, which package installs
 #      obey).
@@ -91,12 +92,37 @@ quarantine() {  # $1 reason, $2 pre-run HEAD ("" = do not run git), $3 new root 
     exit 1
 }
 
+# New commits on refs/heads/pipeline-data (pushed later by the publish run)
+# must each be a root or single-parent commit touching only data paths.
+check_pipeline_data() {  # $1 pre-run sha of pipeline-data ("" if it did not exist)
+    local pre="$1" post range c files
+    post="$(cd "$REPO" && git rev-parse -q --verify refs/heads/pipeline-data 2>/dev/null || true)"
+    [ -n "$post" ] && [ "$post" != "$pre" ] || return 0
+    if [ -n "$pre" ]; then range="$pre..$post"; else range="$post"; fi
+    for c in $(cd "$REPO" && git rev-list "$range" 2>/dev/null); do
+        if [ "$(cd "$REPO" && git rev-list --parents -n 1 "$c" | wc -w)" -gt 2 ]; then
+            quarantine_pdata "pipeline-data commit $c is a merge" "$pre"
+        fi
+        files="$(cd "$REPO" && git diff-tree --no-commit-id --name-only -r --root "$c" | grep -Ev "$DATA_PATHS_RE" || true)"
+        [ -z "$files" ] || quarantine_pdata "pipeline-data commit $c changes non-data files: $(echo "$files" | head -5 | tr '\n' ' ')" "$pre"
+    done
+}
+
+quarantine_pdata() {  # $1 reason, $2 pre-run sha: keep the evidence, roll the branch back, then quarantine
+    local ts; ts="$(date +%Y%m%d-%H%M%S)"
+    (cd "$REPO" && git branch -f "quarantine/pipeline-data-$ts" refs/heads/pipeline-data >/dev/null 2>&1
+     if [ -n "$2" ]; then git update-ref refs/heads/pipeline-data "$2"; else git update-ref -d refs/heads/pipeline-data; fi)
+    rm -f "$REPO/.pipeline-publish-ready"   # nothing from this run may be published
+    quarantine "$1 (branch rolled back; evidence on quarantine/pipeline-data-$ts)" "" ""
+}
+
 case "$MODE" in
     snapshot)
         [ -n "$STATE_FILE" ] || { echo "usage: $0 snapshot STATE_FILE" >&2; exit 2; }
         mkdir -p "$(dirname "$STATE_FILE")"
         head="$(cd "$REPO" && git rev-parse HEAD)" || { echo "integrity-check: git rev-parse HEAD failed in $REPO" >&2; exit 2; }
-        { printf 'head=%s\ngitmeta=%s\n' "$head" "$(hash_git_meta)"
+        pdata="$(cd "$REPO" && git rev-parse -q --verify refs/heads/pipeline-data 2>/dev/null || true)"
+        { printf 'head=%s\ngitmeta=%s\npdata=%s\n' "$head" "$(hash_git_meta)" "$pdata"
           root_entries | sed 's/^/root=/'; } > "$STATE_FILE"
         ;;
     verify)
@@ -109,6 +135,7 @@ case "$MODE" in
         [ -z "$new_root" ] || quarantine "new file(s) at the repo root: $(echo "$new_root" | tr '\n' ' ')" "$pre_head" "$new_root"
         bad="$(cd "$REPO" && git diff --name-only "$pre_head" HEAD 2>/dev/null | grep -Ev "$DATA_PATHS_RE" || true)"
         [ -z "$bad" ] || quarantine "a commit made during the run changes non-data files: $(echo "$bad" | head -5 | tr '\n' ' ')" "$pre_head" ""
+        check_pipeline_data "$(sed -n 's/^pdata=//p' "$STATE_FILE")"
         rm -f "$STATE_FILE"
         echo "integrity-check: PASS ($JOB)"
         ;;

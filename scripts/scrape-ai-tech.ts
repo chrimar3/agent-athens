@@ -25,6 +25,7 @@ import puppeteer from 'puppeteer-core';
 import { normalizeDateField } from '../src/utils/date-format';
 import { normalizePriceType, stripMarkupChars } from '../src/db/database';
 import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
+import { prepareUrlWrite } from './lib/url-columns';
 import { safeCurlTextFollow, guardPageRequests } from '../src/utils/outbound-url';
 
 const CHROME_PATH = chromePath();
@@ -1028,7 +1029,7 @@ async function main() {
     const db = new Database(DB_PATH);
     let saved = 0;
 
-    const stmt = db.prepare(`
+    const stmt = prepareUrlWrite(db, `
       INSERT INTO events (
         id, title, description, start_date, end_date, time_doors, type, genres,
         venue_name, url, price_type, price_amount, source,

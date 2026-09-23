@@ -68,3 +68,43 @@ export function firstSafeImageSrc(...candidates: unknown[]): string | null {
   }
   return null;
 }
+
+/** Event fields that carry a URL and are published in HTML and JSON. */
+export interface EventUrlFields {
+  url?: string;
+  ticketUrl?: string;
+  ticketUrlResolved?: string | null;
+  imageUrl?: string;
+  imageLocal?: string;
+  venueImage?: string;
+}
+
+/**
+ * Replaces each URL field with its safeHttpUrl / safeImageSrc form, or clears
+ * it when the value is not a safe URL. The build applies this once to every
+ * event it loads, so the JSON files (api/*.json, data/events.json, the search
+ * index) carry the same checked values the HTML templates emit. Returns the
+ * number of fields cleared.
+ */
+export function sanitizeEventUrlFields(event: EventUrlFields): number {
+  let cleared = 0;
+  const http = (v: string | null | undefined) => {
+    if (v === undefined || v === null || v === '') return v;
+    const safe = safeHttpUrl(v);
+    if (safe === null) cleared++;
+    return safe;
+  };
+  const image = (v: string | undefined) => {
+    if (v === undefined || v === '') return v;
+    const safe = safeImageSrc(v);
+    if (safe === null) cleared++;
+    return safe ?? undefined;
+  };
+  if ('url' in event) event.url = http(event.url) ?? undefined;
+  if ('ticketUrl' in event) event.ticketUrl = http(event.ticketUrl) ?? undefined;
+  if ('ticketUrlResolved' in event) event.ticketUrlResolved = http(event.ticketUrlResolved) ?? null;
+  if ('imageUrl' in event) event.imageUrl = image(event.imageUrl);
+  if ('imageLocal' in event) event.imageLocal = image(event.imageLocal);
+  if ('venueImage' in event) event.venueImage = image(event.venueImage);
+  return cleared;
+}

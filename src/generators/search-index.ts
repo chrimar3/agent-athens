@@ -14,6 +14,8 @@
 
 import { firstSafeImageSrc } from '../utils/safe-url';
 import { readFileSync, existsSync } from 'fs';
+import { isIsoTimestamp } from '../validators/persisted-state';
+import { toPublishedJson } from '../utils/write-if-changed';
 import he from 'he';
 import { writeFileIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
@@ -186,7 +188,7 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
       const prev = JSON.parse(readFileSync(indexPath, 'utf-8'));
       const prevWithoutGen = { ...prev, generated: '' };
       const nextWithoutGen = { events: eventRecords, venues: venueRecords, categories: categoryRecords, popular, generated: '' };
-      if (JSON.stringify(prevWithoutGen) === JSON.stringify(nextWithoutGen) && typeof prev.generated === 'string') {
+      if (JSON.stringify(prevWithoutGen) === JSON.stringify(nextWithoutGen) && isIsoTimestamp(prev.generated)) {
         generated = prev.generated;
       }
     } catch {}
@@ -200,5 +202,5 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
     generated,
   };
 
-  writeFileIfChangedSync(indexPath, JSON.stringify(index));
+  writeFileIfChangedSync(indexPath, toPublishedJson(index));
 }

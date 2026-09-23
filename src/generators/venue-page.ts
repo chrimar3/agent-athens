@@ -19,6 +19,7 @@ import { slugify, generateEventSlug } from './event-page';
 import { getVenueIdentity } from '../utils/venue-identity';
 import { findVenueConfig } from '../quality/location-filter';
 import { renderEventCardList } from '../templates/card-variants';
+import { renderImageFallbackScript } from '../templates/image-fallback';
 import { renderSavedEventsScript, renderCardSaveScript, escapeAttr } from '../templates/action-bar';
 import { safeImageSrc } from '../utils/safe-url';
 import { formatSchemaDate } from '../enrichment/quality-gates';
@@ -292,6 +293,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   ` : ''}
 
 ${renderAnalytics()}
+${renderImageFallbackScript()}
 </head>
 <body>
   ${renderSiteNav('el')}

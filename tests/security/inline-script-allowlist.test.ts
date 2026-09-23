@@ -18,6 +18,7 @@ import { renderCardSaveScript, renderSaveButtonScript, renderSavedEventsScript, 
 import { renderFilterBarScript } from '../../src/templates/filter-bar';
 import { renderHamburgerScript } from '../../src/templates/site-chrome';
 import { renderDayLabelScript } from '../../src/templates/page';
+import { renderImageFallbackScript } from '../../src/templates/image-fallback';
 
 const SCRIPT = /<script\b((?:[^>"']|"[^"]*"|'[^']*')*)>([\s\S]*?)<\/script\s*>/gi;
 
@@ -37,6 +38,7 @@ const EMITTERS: Record<string, string> = {
   "renderSavedPageScript('el')": renderSavedPageScript('el'),
   "renderSavedPageScript('en')": renderSavedPageScript('en'),
   'renderEventDetailScript': renderEventDetailScript(),
+  'renderImageFallbackScript': renderImageFallbackScript(),
   'static/root-files/tonight.html': readFileSync(join(import.meta.dir, '../../static/root-files/tonight.html'), 'utf-8'),
 };
 

@@ -8,18 +8,22 @@
  * homepage, overflow pages, search index, JSON API files and sitemaps.
  * Properties, per page:
  *   - no element or attribute that a payload created (x-pwn, data-pwn, autofocus)
- *   - no on* handler except the shared image fallback
+ *   - no on* handler at all (the enforced CSP in dist/_headers blocks them)
  *   - URL attributes are http(s), relative, fragment, mailto or tel
  *   - no <iframe> off the OpenStreetMap embed, no meta refresh, object, embed or base
  *   - every JSON-LD block parses; no executable script carries a payload
- * JSON files must parse; XML files must not gain elements.
+ * JSON files must parse and every URL-valued field must be http(s) or
+ * site-relative; XML files must not gain elements. The build also starts from
+ * hostile persisted state (dist/.slug-history.json, manifests), which must not
+ * add a rule to _redirects or reach <lastmod>.
  */
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
 import { readFileSync, rmSync } from 'fs';
 import { relative } from 'path';
 import { load } from 'cheerio';
-import { IMG_FALLBACK_ONERROR } from '../../src/templates/image-fallback';
-import { buildHostileSite, listFiles, type HostileSite } from './helpers/hostile-site';
+import { buildHostileSite, listFiles, KEPT_OLD_SLUG, type HostileSite } from './helpers/hostile-site';
+import { scanJson, scanRedirects } from '../../src/validators/published-artifacts';
+import { renderHeadersFile } from '../../src/generators/security-headers';
 
 let site: HostileSite;
 let files: string[] = [];
@@ -68,7 +72,7 @@ function htmlProblems(html: string): string[] {
     const attrs = ((el as any).attribs ?? {}) as Record<string, string>;
     for (const [name, value] of Object.entries(attrs)) {
       if (name.includes('pwn') || name === 'autofocus') problems.push(`<${tag} ${name}>`);
-      if (name.startsWith('on') && !(tag === 'img' && name === 'onerror' && value === IMG_FALLBACK_ONERROR)) {
+      if (name.startsWith('on')) {
         problems.push(`<${tag} ${name}="${value.slice(0, 40)}">`);
       }
       if (URL_ATTRS.has(name)) {
@@ -125,6 +129,58 @@ describe('whole-build crawl over a hostile fixture database', () => {
       try { JSON.parse(readFileSync(f, 'utf-8')); } catch { bad.push(relative(site.dist, f)); }
     }
     expect(bad).toEqual([]);
+  });
+
+  test('every JSON URL field is http(s) or site-relative, and no JSON file carries "<script"', () => {
+    const URL_KEYS = /^(?:url|ticketUrl|ticketUrlResolved|imageUrl|imageLocal|venueImage|thumb|image|sameAs|@id|website)$/;
+    const SAFE = /^(?:https?:\/\/[^\s"'<>`\\/]+[^\s"'<>`\\]*|\/(?![\/\\])[^\s"'<>`\\]*|)$/;
+    const bad: string[] = [];
+    const walk = (v: unknown, key: string, where: string) => {
+      if (typeof v === 'string') {
+        if (URL_KEYS.test(key) && !SAFE.test(v) && !/^[a-z0-9-]+\/?$/.test(v)) bad.push(`${where} ${key}=${v.slice(0, 50)}`);
+      } else if (Array.isArray(v)) v.forEach(x => walk(x, key, where));
+      else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) walk(x, k, where);
+    };
+    const jsonFiles = files.filter(f => f.endsWith('.json') && !/\/\.[^/]+$/.test(f));
+    for (const f of jsonFiles) {
+      const text = readFileSync(f, 'utf-8');
+      if (/<\/?script/i.test(text)) bad.push(`${relative(site.dist, f)} contains "<script"`);
+      walk(JSON.parse(text), '', relative(site.dist, f));
+      const gate = scanJson(text);
+      if (gate.length) bad.push(`${relative(site.dist, f)} gate: ${gate[0].slice(0, 80)}`);
+    }
+    expect(jsonFiles.some(f => f.endsWith('api/today.json') || f.endsWith('api/this-weekend.json'))).toBe(true);
+    expect(bad.slice(0, 12)).toEqual([]);
+  });
+
+  test('the hostile values reached the JSON as data, not as links', () => {
+    // Titles keep the payload (escaped as \u003c); URL fields lost it.
+    const text = readFileSync(`${site.dist}/api/events.json`, 'utf-8');
+    expect(text).toContain('\\u003cscript data-pwn>');
+    expect(text).not.toMatch(/"(?:url|ticketUrl|imageUrl|imageLocal)"\s*:\s*"javascript:/);
+  });
+
+  test('_redirects holds only generator rules; hostile slug history adds none', () => {
+    const text = readFileSync(`${site.dist}/_redirects`, 'utf-8');
+    expect(scanRedirects(text)).toEqual([]);
+    expect(text).not.toContain('attacker.example');
+    expect(text).not.toMatch(/^\/\*/m);
+    // The one well-formed previous slug still redirects to the current page.
+    expect(text).toMatch(new RegExp(`^/events/${KEPT_OLD_SLUG}/\\* /events/[a-z0-9-]+/:splat 301!$`, 'm'));
+    expect(site.output).toMatch(/\.slug-history\.json: dropped \d+ malformed entr/);
+    expect(site.output).toMatch(/content-hashes\.json: dropped \d+ malformed entr/);
+    expect(site.output).toMatch(/event-set-hashes\.json: dropped \d+ malformed entr/);
+  });
+
+  test('hostile manifest dates never reach sitemaps', () => {
+    for (const f of files.filter(f => f.endsWith('.xml'))) {
+      const text = readFileSync(f, 'utf-8');
+      for (const m of text.matchAll(/<lastmod>([^<]*)<\/lastmod>/g)) expect(m[1]).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
+  });
+
+  test('_headers is exactly the generated enforced script CSP', () => {
+    expect(readFileSync(`${site.dist}/_headers`, 'utf-8')).toBe(renderHeadersFile());
   });
 
   test('XML files gain no elements from data', () => {

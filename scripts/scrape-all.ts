@@ -46,6 +46,7 @@ import { ACTIVE_SOURCE_IDS } from '../src/config/active-source-ids';
 import { checkImportDuplicate } from '../src/quality/import-gate';
 import type { Event } from '../src/types';
 import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
+import { prepareUrlWrite } from './lib/url-columns';
 import { safeFetch, safeFetchResponse, safeCurlText, isRefusedTarget, sameOriginUrl, guardPageRequests, OutboundUrlError } from '../src/utils/outbound-url';
 
 // Browser surface for page.evaluate() callbacks — module-local on purpose;
@@ -1449,7 +1450,7 @@ export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Data
   // silently drop a genuinely new event.
   const existsStmt = db.prepare('SELECT 1 FROM events WHERE id = ?');
 
-  const stmt = db.prepare(`
+  const stmt = prepareUrlWrite(db, `
     INSERT INTO events (
       id, title, description, start_date, end_date, time_doors, time_source, type, genres,
       venue_name, url, price_type, price_amount, price_range, source,

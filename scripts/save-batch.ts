@@ -28,6 +28,7 @@ import { classifyEvent, getWordTarget, structureToTier } from '../src/enrichment
 import { isTicketDomain, isVenueWebsiteHost } from '../src/ticketing/validator';
 import { getVenueByName } from '../src/ticketing/venue-registry';
 import { safeHttpUrl } from '../src/utils/safe-url';
+import { prepareUrlWrite } from './lib/url-columns';
 
 const DB_PATH = 'data/events.db';
 const REPO_ROOT = resolve(import.meta.dir, '..');
@@ -342,7 +343,7 @@ export function saveBatch(
         const accept = isTicketDomain(ticketCandidate) || isVenueWebsiteHost(ticketCandidate, venueRecord);
         if (accept) {
           try {
-            db.prepare(`
+            prepareUrlWrite(db, `
               UPDATE events SET
                 ticket_url = ?,
                 ticket_url_status = 'ai_discovered',

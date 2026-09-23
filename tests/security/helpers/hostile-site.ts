@@ -9,7 +9,7 @@
  * event-count floor gate without being rendered (they are past-expired).
  */
 import { Database } from 'bun:sqlite';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, statSync, symlinkSync } from 'fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, statSync, symlinkSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { tmpdir } from 'os';
 import { DateTime } from 'luxon';
@@ -141,10 +141,42 @@ function seed(dbPath: string, today: string, day: string): void {
   db.close();
 }
 
+/**
+ * Persisted state from an earlier (compromised) run, planted before the
+ * build: dist/ and data/ survive between builds, so the generator must treat
+ * what it reads back as input. Slug-history values try to add _redirects
+ * rules; manifest dates try to break out of <lastmod> and JSON-LD.
+ */
+export const HOSTILE_SLUG_HISTORY: Record<string, unknown> = {
+  'hostile-1': ['old /x 200\n/* https://attacker.example/:splat 302!\n/y', 'hostile-kept-old-slug', 'UPPER-Case', '../../etc', 'a b'],
+  'hostile-3': '/* https://attacker.example/ 302!',
+  'hostile-5': [{ slug: 'x' }, 'x/* https://attacker.example/:splat 200!'],
+  'filler-0': ['https://attacker.example/'],
+};
+/** The one valid previous slug in HOSTILE_SLUG_HISTORY; it must still yield a 301. */
+export const KEPT_OLD_SLUG = 'hostile-kept-old-slug';
+
+function plantHostileState(root: string): void {
+  mkdirSync(join(root, 'dist'), { recursive: true });
+  writeFileSync(join(root, 'dist/.slug-history.json'), JSON.stringify(HOSTILE_SLUG_HISTORY));
+  writeFileSync(join(root, 'dist/.og-cache.json'), JSON.stringify({ '../../x': 'abc', 'ok-slug': '</script>' }));
+  const badManifest = {
+    version: 1,
+    generatedAt: '<x-pwn>',
+    entries: {
+      index: { hash: 'zz</lastmod><x-pwn/>', lastModified: '</lastmod><x-pwn data-pwn/>' },
+      today: { hash: '0123456789abcdef', lastModified: '"}]<x-pwn>' },
+    },
+  };
+  writeFileSync(join(root, 'data/content-hashes.json'), JSON.stringify(badManifest));
+  writeFileSync(join(root, 'data/event-set-hashes.json'), JSON.stringify(badManifest));
+}
+
 /** Copies the repo to a temp dir, seeds the hostile DB and runs the real generator there. */
 export function buildHostileSite(): HostileSite {
   const root = mkdtempSync(join(tmpdir(), 'aa-hostile-site-'));
   copyRepo(root);
+  plantHostileState(root);
   const athensToday = DateTime.now().setZone('Europe/Athens').startOf('day');
   const friday = athensToday.plus({ days: 5 - athensToday.weekday });
   const weekendDay = friday.plus({ days: 2 }).toISODate()!; // Sunday: never before today

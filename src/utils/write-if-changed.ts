@@ -1,6 +1,14 @@
 import { existsSync, statSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
 
+/** JSON for a published .json file: "<" is written as \u003c, so the file
+ * never contains "<script" or "<!--" in any context that parses it as HTML.
+ * JSON.parse returns the same value. The published-output gate
+ * (src/validators/published-artifacts.ts) fails on either sequence. */
+export function toPublishedJson(value: unknown, space?: number): string {
+  return JSON.stringify(value, null, space).replace(/</g, '\\u003c');
+}
+
 interface WriteStats {
   written: number;
   skipped: number;
@@ -111,13 +119,14 @@ export function writeJsonApiIfChangedSync(
   payload: Record<string, any>
 ): boolean {
   if (!payload.meta || typeof payload.meta.lastUpdate !== 'string') {
-    return writeFileIfChangedSync(filePath, JSON.stringify(payload, null, 2));
+    return writeFileIfChangedSync(filePath, toPublishedJson(payload, 2));
   }
 
   if (existsSync(filePath)) {
     try {
       const prev = JSON.parse(readFileSync(filePath, 'utf-8'));
-      if (prev.meta && typeof prev.meta.lastUpdate === 'string') {
+      // Carried-forward state: only an ISO timestamp from the previous file is reused.
+      if (prev.meta && typeof prev.meta.lastUpdate === 'string' && /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2}))?$/.test(prev.meta.lastUpdate)) {
         const prevStripped = { ...prev, meta: { ...prev.meta, lastUpdate: '__X__' } };
         const nextStripped = { ...payload, meta: { ...payload.meta, lastUpdate: '__X__' } };
         if (JSON.stringify(prevStripped) === JSON.stringify(nextStripped)) {
@@ -127,7 +136,7 @@ export function writeJsonApiIfChangedSync(
     } catch {}
   }
 
-  return writeFileIfChangedSync(filePath, JSON.stringify(payload, null, 2));
+  return writeFileIfChangedSync(filePath, toPublishedJson(payload, 2));
 }
 
 export function getWriteStats(): WriteStats {

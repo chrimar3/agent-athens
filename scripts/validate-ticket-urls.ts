@@ -25,6 +25,7 @@ import Database from 'bun:sqlite';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { safeFetch, OutboundUrlError } from '../src/utils/outbound-url';
+import { prepareUrlWrite } from './lib/url-columns';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 
@@ -279,7 +280,7 @@ function generateMissingUrls(
   let doorOnly = 0;
   let noMatch = 0;
 
-  const updateStmt = db.prepare(`
+  const updateStmt = prepareUrlWrite(db, `
     UPDATE events
     SET ticket_url = ?, ticket_url_status = 'generated', updated_at = datetime('now')
     WHERE id = ?

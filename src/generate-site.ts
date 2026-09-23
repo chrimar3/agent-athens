@@ -3,7 +3,7 @@
 // Main site generator - generates all combinatorial pages
 
 import { readFileSync, mkdirSync, existsSync, readdirSync, statSync, rmSync } from 'fs';
-import { writeFileIfChangedSync, writeHtmlIfChangedSync, copyFileIfChangedSync, writeJsonApiIfChangedSync, getWriteStats, resetWriteStats, formatWriteStats } from './utils/write-if-changed';
+import { writeFileIfChangedSync, writeHtmlIfChangedSync, copyFileIfChangedSync, writeJsonApiIfChangedSync, getWriteStats, resetWriteStats, formatWriteStats, toPublishedJson } from './utils/write-if-changed';
 import { HREFLANG_GATE_OPEN } from './utils/hreflang';
 import { join, dirname } from 'path';
 import { Database } from 'bun:sqlite';
@@ -39,6 +39,9 @@ import { buildDataFeed, writeDataFeed } from './generators/datafeed';
 import { renderHomepageCapsule, renderHubNavGrid, renderTimeChips } from './templates/homepage';
 import type { CapsuleStats, HubNavItem } from './templates/homepage';
 import { BASE_URL } from './config/site-url';
+import { safeImageSrc, safeHttpUrl, sanitizeEventUrlFields } from './utils/safe-url';
+import { sanitizeHashManifest, sanitizeAriaAggregate } from './validators/persisted-state';
+import { renderHeadersFile } from './generators/security-headers';
 import { renderAnalytics } from './config/analytics';
 import { proofMetrics } from './utils/proof-metrics';
 import { renderProofBody } from './templates/proof-body';
@@ -179,6 +182,14 @@ async function main() {
   // (verified_athens + pass_through, spec FR-B) and rollover hold-back live in
   // selectPublishedPopulation so each stage is under test.
   const allEvents = getAllEvents();
+  // Every URL field is checked once here, so JSON outputs (api/*.json,
+  // data/events.json, search-index.json) carry the same safe values the HTML
+  // templates emit. Rows with a non-http(s) value lose that field only.
+  {
+    let cleared = 0;
+    for (const event of allEvents) cleared += sanitizeEventUrlFields(event);
+    if (cleared > 0) console.warn(`  ⚠️  Cleared ${cleared} unsafe URL field${cleared === 1 ? '' : 's'} (non-http(s) or malformed) before emission`);
+  }
   const { selectPublishedPopulation, selectUpcomingListing } = await import('./utils/event-populations');
   const { events: locationFiltered, rolloverHeld } = selectPublishedPopulation(allEvents);
   console.log(`🕰️  Held back ${rolloverHeld} athinorama rows dated >300 days after first scrape (rollover suspects)`);
@@ -285,7 +296,7 @@ async function main() {
   // Attach venue fallback image to each event (computed at load time)
   // Use pageableEvents since past-active events also need images for their pages
   for (const event of pageableEvents) {
-    const venueImg = venueImageMap.get(event.venue.name);
+    const venueImg = safeImageSrc(venueImageMap.get(event.venue.name));
     if (venueImg) event.venueImage = venueImg;
   }
 
@@ -296,7 +307,8 @@ async function main() {
   const { getVenueByName, getAllVenues, normalizeVenueKey, getActiveReachableVenueKeys } = await import('./ticketing/venue-registry');
   for (const event of pageableEvents) {
     const venueRecord = getVenueByName(event.venue.name);
-    if (venueRecord?.website) event.venue.website = venueRecord.website;
+    const website = safeHttpUrl(venueRecord?.website);
+    if (website) event.venue.website = website;
     if (venueRecord?.sameAs && venueRecord.sameAs.length > 0) {
       event.venue.sameAs = venueRecord.sameAs;
     }
@@ -365,7 +377,7 @@ async function main() {
   }
   writeFileIfChangedSync(
     join(normalizedPath, 'events.json'),
-    JSON.stringify(events, null, 2)
+    toPublishedJson(events, 2)
   );
 
   // Generate search index
@@ -596,7 +608,9 @@ async function main() {
     await import('./sitemap/content-hasher');
   const { gateCornerstoneHashes } = await import('./utils/gate-cornerstones');
   const eventSetManifestPath = join(import.meta.dir, '../data/event-set-hashes.json');
-  const eventSetManifest = loadEventSetManifest(eventSetManifestPath);
+  // Read-back state (JSON-LD dates): keep only {hex hash, YYYY-MM-DD} entries.
+  const { value: eventSetManifest, dropped: eventSetDropped } = sanitizeHashManifest(loadEventSetManifest(eventSetManifestPath));
+  if (eventSetDropped > 0) console.warn(`  ⚠️  event-set-hashes.json: dropped ${eventSetDropped} malformed entr${eventSetDropped === 1 ? 'y' : 'ies'}`);
   const GATED_CORNERSTONES = ['this-weekend', 'today', 'this-month', 'open'] as const;
   const cornerstoneInputs = GATED_CORNERSTONES.flatMap(slug => {
     const config = hubPagesConfig.hubs.find(h => h.slug === slug);
@@ -760,6 +774,10 @@ async function main() {
   // Initialize _redirects (sitemap redirect only — /en/* redirect removed for bilingual pages)
   const redirectsPath = join(DIST_DIR, '_redirects');
   writeFileIfChangedSync(redirectsPath, `https://agentathens.netlify.app/*  ${BASE_URL}/:splat  301!\n/sitemap.xml  /sitemap-index.xml  301\n/en  /en/today  302\n/en/  /en/today  302\n`);
+
+  // Enforced script CSP (src/generators/security-headers.ts): hashes come from
+  // the inline-script allowlist, never from the pages just written.
+  writeFileIfChangedSync(join(DIST_DIR, '_headers'), renderHeadersFile());
 
   // Save slug history and generate redirects (for changed slugs)
   saveSlugHistory(currentSlugs, previousSlugHistory);
@@ -1183,7 +1201,9 @@ async function main() {
   console.log('\n🔐 Computing content hashes...');
   const { loadManifest, hashContent, resolveLastModified, saveManifest } = await import('./sitemap/content-hasher');
   const { generateSplitSitemaps } = await import('./sitemap/generate-sitemaps');
-  const previousManifest = loadManifest();
+  // Read-back state (sitemap <lastmod>): keep only {hex hash, YYYY-MM-DD} entries.
+  const { value: previousManifest, dropped: manifestDropped } = sanitizeHashManifest(loadManifest());
+  if (manifestDropped > 0) console.warn(`  ⚠️  content-hashes.json: dropped ${manifestDropped} malformed entr${manifestDropped === 1 ? 'y' : 'ies'}`);
   const newManifest = { version: 1 as const, generatedAt: '', entries: {} as Record<string, { hash: string; lastModified: string }> };
 
   let unchangedCount = 0;
@@ -1320,12 +1340,13 @@ async function main() {
   const { validatePublishedArtifacts } = await import('./validators/published-artifacts');
   const artifactReport = validatePublishedArtifacts(DIST_DIR);
   if (artifactReport.failures.length > 0) {
-    console.error(`\n❌ Published-artifact invariant FAILED: ${artifactReport.failures.length} page(s)`);
+    console.error(`\n❌ Published-artifact invariant FAILED: ${artifactReport.failures.length} file(s)`);
     for (const f of artifactReport.failures.slice(0, 15)) console.error(`   ${f.file}: ${f.issues.join('; ')}`);
-    console.error('\nFix: sanitise at the source (toPublishable for descriptions, editorial-content for copy, the schema emitter for names) — see src/validators/published-artifacts.ts.');
+    console.error('\nFix: sanitise at the source (toPublishable for descriptions, editorial-content for copy, the schema emitter for names, safe-url.ts for URLs); each issue names its fix — rules in src/validators/published-artifacts.ts.');
     process.exit(1);
   }
-  console.log(`  ✓ published-artifact invariant: ${artifactReport.scanned} pages clean`);
+  const checkedTypes = Object.entries(artifactReport.byType).sort((a, b) => b[1] - a[1]).map(([t, n]) => `${n} ${t}`).join(', ');
+  console.log(`  ✓ published-artifact invariant: ${artifactReport.scanned} pages clean; every deployed file checked (${checkedTypes})`);
 
   // Build-time invariant: dormant-locale bare-root pages must be noindex AND
   // absent from every sitemap; any sitemap URL must stay indexable. Output-keyed
@@ -1391,7 +1412,9 @@ async function main() {
   const ariaAggregatePath = join(import.meta.dir, '../data/build-aria-aggregate.json');
   if (existsSync(ariaAggregatePath)) {
     try {
-      ariaAggregate = JSON.parse(readFileSync(ariaAggregatePath, 'utf8'));
+      const { value, dropped } = sanitizeAriaAggregate(JSON.parse(readFileSync(ariaAggregatePath, 'utf8')), ariaAggregate);
+      if (dropped > 0) console.warn(`[aria] build-aria-aggregate.json: ${dropped} malformed field${dropped === 1 ? '' : 's'} replaced with the zero aggregate`);
+      ariaAggregate = value;
     } catch (e) {
       console.warn('[aria] could not parse build-aria-aggregate.json; using zero-aggregate');
     }
@@ -1771,7 +1794,7 @@ function copyStaticRootFiles(): void {
   if (!existsSync(staticRootDir)) return;
   // Reserved names are generated by the build; never allow a static file to clobber them.
   const RESERVED = new Set([
-    '_redirects', 'robots.txt', 'llms.txt', '404.html', '410.html', 'index.html',
+    '_redirects', '_headers', 'robots.txt', 'llms.txt', '404.html', '410.html', 'index.html',
     'sitemap-index.xml', 'sitemap-events.xml', 'sitemap-venues.xml', 'sitemap-editorial.xml',
   ]);
   let copied = 0;
