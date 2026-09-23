@@ -6,10 +6,16 @@
 # fails CLOSED: an API error, a truncated file list or an unreadable glob list
 # exits 1 and never prints PASS.
 #
-# It reads the protected globs from the BASE branch's .github/path-guard.json
+# It reads the protected globs from the DEFAULT branch's .github/path-guard.json
 # (never the PR's copy — a PR editing the list must not be judged by its own
-# edit) and the changed files from the PR API. Any match on either the new or
-# the previous filename → red check + a comment naming each path + `needs-input`.
+# edit — and not the PR base either: a PR opened against an older side branch
+# with a shorter list must still be judged by main's list) and the changed
+# files from the PR API. Any match on either the new or the previous filename →
+# red check + a comment naming each path + `needs-input`.
+#
+# `edited` is in the trigger types because retargeting a PR's base fires it:
+# without it, a green result computed against an old base would carry over to
+# the same head SHA after the PR is pointed at main.
 #
 # Trigger is `pull_request_target`, so the workflow DEFINITION and the checked-out
 # tree both come from the base branch: a PR cannot neuter the guard by editing
@@ -20,6 +26,7 @@ name: path-guard
 
 on:
   pull_request_target:
+    types: [opened, synchronize, reopened, edited]
 
 # Read-only by default; the write scopes the guard needs to comment and label
 # are granted to the path-guard job alone, so a job added later does not
@@ -47,4 +54,5 @@ jobs:
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
           BASE: ${{ github.event.pull_request.base.ref }}
+          GLOBS_REF: ${{ github.event.repository.default_branch }}
         run: bash .github/scripts/path-guard.sh

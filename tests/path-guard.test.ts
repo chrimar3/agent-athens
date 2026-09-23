@@ -105,7 +105,7 @@ function runGuard(gh: string, env: Record<string, string> = {}) {
     cwd: ROOT,
     stdout: 'pipe',
     stderr: 'pipe',
-    env: { ...process.env, REPO, PR, BASE, GH_BIN: gh, ...env },
+    env: { ...process.env, REPO, PR, BASE, GLOBS_REF: 'main', GH_BIN: gh, ...env },
   });
   const dec = (b: Uint8Array) => new TextDecoder().decode(b);
   return { code: r.exitCode, out: dec(r.stdout), err: dec(r.stderr) };
@@ -267,13 +267,25 @@ describe('path-guard.sh — fails closed on every error path', () => {
     expect(r.err).toContain('path-guard: REFUSED');
   });
 
-  test('missing PR/REPO/BASE env → exit 1, REFUSED', () => {
+  test('missing PR/REPO/BASE/GLOBS_REF env → exit 1, REFUSED', () => {
     const { gh } = fakeGh({ globs: GLOBS, files: [{ filename: 'src/app.ts' }] });
-    for (const blank of ['REPO', 'PR', 'BASE']) {
+    for (const blank of ['REPO', 'PR', 'BASE', 'GLOBS_REF']) {
       const r = runGuard(gh, { [blank]: '' });
       expect(r.code).toBe(1);
       expect(r.err).toContain('path-guard: REFUSED');
     }
+  });
+});
+
+describe('path-guard.sh — the glob list comes from the default branch', () => {
+  test('a PR against an older side branch is judged by the default branch\'s list (ref=GLOBS_REF, never ref=BASE)', () => {
+    const { gh, log } = fakeGh({ globs: GLOBS, files: [{ filename: 'src/app.ts' }] });
+    const r = runGuard(gh, { BASE: 'old-side-branch', GLOBS_REF: 'main' });
+    expect(r.code).toBe(0);
+    const contents = calls(log).filter((l) => l.includes('contents/.github/path-guard.json'));
+    expect(contents).toHaveLength(1);
+    expect(contents[0]).toContain('ref=main');
+    expect(contents[0]).not.toContain('old-side-branch');
   });
 });
 
@@ -336,6 +348,24 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'scripts/db-read.ts',
     'tests/db-read.test.ts',
     'tests/auto-enrich-guard-selftest.test.ts',
+    // Round 2: the enrichment chain the unattended session runs, and the guards
+    // those scripts rely on (a PR that loosens one needs the owner's review).
+    'scripts/save-batch.ts',
+    'scripts/write-description.ts',
+    'scripts/write-tags.ts',
+    'scripts/auto-gate-check.ts',
+    'scripts/generate-enrichment-brief.ts',
+    'src/utils/batch-output-path.ts',
+    'src/utils/outbound-url.ts',
+    'src/utils/safe-url.ts',
+    'src/ingest/allowed-senders.ts',
+    'src/validators/published-artifacts.ts',
+    'scripts/lib/chrome-path.ts',
+    'tests/generate-enrichment-brief.test.ts',
+    'tests/phase3-weekly-guard.test.ts',
+    'tests/trusted-issue-thread.test.ts',
+    '.github/scripts/trusted-issue-thread.sh',
+    '.github/audit-ignore.json',
   ];
   /** Listed by name in path-guard.json even where a broader glob already covers
    *  them, so narrowing that glob later cannot silently drop them. */
@@ -358,6 +388,20 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/auto-enrich-guard-selftest.test.ts',
     'tests/docker-hardening.test.ts',
     'tests/security/**',
+    'scripts/save-batch.ts',
+    'scripts/write-description.ts',
+    'scripts/write-tags.ts',
+    'scripts/auto-gate-check.ts',
+    'scripts/generate-enrichment-brief.ts',
+    'src/utils/batch-output-path.ts',
+    'src/utils/outbound-url.ts',
+    'src/utils/safe-url.ts',
+    'src/ingest/allowed-senders.ts',
+    'src/validators/published-artifacts.ts',
+    'scripts/lib/chrome-path.ts',
+    'tests/generate-enrichment-brief.test.ts',
+    'tests/phase3-weekly-guard.test.ts',
+    'tests/trusted-issue-thread.test.ts',
   ];
   const MUST_NOT_PROTECT = [
     '.claude/notes/ledger.md',
@@ -373,10 +417,13 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     // does not have. They stay on MUST_PROTECT because the glob list must still
     // refuse them; only the existence precondition skips them.
     // .claude/agents/ and docker/ do not exist yet; they are protected ahead of
-    // first use. SECURITY.md may land in a separate PR.
+    // first use. SECURITY.md may land in a separate PR. The round-2 guard
+    // modules below exist on the regular branch but not in this one; they are
+    // listed now so the list is right when the branches meet.
     const allowMissing = new Set([
       'data/events.db', '.env', '.claude/settings.local.json', 'config/athens-venues.json',
       '.claude/agents/reviewer.md', 'docker/Dockerfile', 'SECURITY.md',
+      'src/utils/outbound-url.ts', 'src/utils/safe-url.ts', 'src/ingest/allowed-senders.ts', 'scripts/lib/chrome-path.ts',
     ]);
     for (const p of MUST_PROTECT) {
       if (allowMissing.has(p)) continue;
@@ -429,7 +476,7 @@ describe('.github/workflows/path-guard.yml — the required check wiring', () =>
     expect(jp.contents).toBe('read');
   });
 
-  test('the job runs the unit-tested script with REPO/PR/BASE in env', () => {
+  test('the job runs the unit-tested script with REPO/PR/BASE/GLOBS_REF in env', () => {
     const steps = wf.jobs['path-guard'].steps;
     const runStep = steps.find((s: { run?: string }) => typeof s.run === 'string' && s.run.includes('path-guard.sh'));
     expect(runStep).toBeDefined();
@@ -437,6 +484,7 @@ describe('.github/workflows/path-guard.yml — the required check wiring', () =>
     expect(runStep.env.REPO).toContain('github.repository');
     expect(runStep.env.PR).toContain('pull_request.number');
     expect(runStep.env.BASE).toContain('base.ref');
+    expect(runStep.env.GLOBS_REF).toContain('repository.default_branch');
     expect(runStep.env.GH_TOKEN).toContain('github.token');
   });
 

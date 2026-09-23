@@ -1,0 +1,19 @@
+{
+  "_comment": "Advisories the blocking dependency-audit job (.github/scripts/dependency-audit.sh) skips. Each entry is one advisory that has no fix reachable by a low-risk upgrade, with the reason it is acceptable for now and a review_by date: after that date the job fails until the entry is re-reviewed (renewed with a fresh reason, or removed after the upgrade). Moderate/low advisories are not blocking and are not listed here. Protected by .github/path-guard.json (.github/**).",
+  "ignore": [
+    {
+      "id": "GHSA-jmr9-qjv8-65gv",
+      "package": "extract-zip",
+      "severity": "high",
+      "reason": "Every extract-zip release (<=2.0.1) is affected; no fix exists. It is reached only through @puppeteer/browsers 2.x when puppeteer's install step unpacks its own Chrome-for-Testing archive from Google's download host over HTTPS; scraped or mailed input never reaches it. The fix is puppeteer 25 (@puppeteer/browsers 3 drops extract-zip), a major upgrade left for a reviewed Dependabot PR.",
+      "review_by": "2026-12-31"
+    },
+    {
+      "id": "GHSA-7pqw-9j4j-h8q3",
+      "package": "extract-zip",
+      "severity": "high",
+      "reason": "Same package and path as GHSA-jmr9-qjv8-65gv (symlink entries in an archive): only puppeteer's own browser download is ever unpacked, from Google's host, never an attacker-supplied archive. Cleared by the same puppeteer 25 upgrade.",
+      "review_by": "2026-12-31"
+    }
+  ]
+}

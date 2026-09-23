@@ -5,9 +5,14 @@
 # `bun` rather than `npm`: the lockfile is bun.lock, which the npm ecosystem
 # does not update, and ci installs with --frozen-lockfile.
 #
-# Every PR this opens touches a protected path (package.json, bun.lock or
-# .github/workflows/), so path-guard marks it needs-input and the owner merges
-# it by hand after review.
+# Every PR this opens touches a protected path (package.json, bun.lock,
+# .github/workflows/ or docker/), so path-guard marks it needs-input and the
+# owner merges it by hand after review.
+#
+# `docker` covers docker/Dockerfile: the digest-pinned base image (and the
+# Chromium it carries) would otherwise never get an update PR. The CLI
+# versions pinned as ARGs in that Dockerfile are not tracked by Dependabot;
+# bump them by hand.
 version: 2
 updates:
   - package-ecosystem: "bun"
@@ -27,4 +32,13 @@ updates:
       day: "monday"
     groups:
       github-actions:
+        patterns: ["*"]
+
+  - package-ecosystem: "docker"
+    directory: "/docker"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      docker:
         patterns: ["*"]

@@ -48,16 +48,24 @@
     "@google-analytics/data": "^6.1.0",
     "@resvg/resvg-js": "^2.6.2",
     "@types/luxon": "^3.7.1",
-    "cheerio": "^1.1.2",
+    "cheerio": "^1.2.0",
     "he": "^1.2.0",
     "imap-simple": "^5.1.0",
     "luxon": "^3.7.2",
-    "mailparser": "^3.7.5",
+    "mailparser": "^3.9.28",
     "node-ical": "^0.21.0",
-    "puppeteer": "^24.36.1",
-    "puppeteer-core": "^24.36.0",
+    "puppeteer": "^24.43.1",
+    "puppeteer-core": "^24.43.1",
     "satori": "^0.19.2",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.4",
     "yaml": "^2.8.3"
+  },
+  "overrides": {
+    "basic-ftp": "^5.3.1",
+    "brace-expansion": "^2.1.4",
+    "ip-address": "^10.7.2",
+    "js-yaml": "^4.3.2",
+    "semver": "^7.8.5",
+    "ws": "^8.21.0"
   }
 }

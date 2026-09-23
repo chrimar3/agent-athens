@@ -18,10 +18,16 @@
 #
 # Actions are pinned to full commit SHAs (a moved tag cannot change what runs);
 # Dependabot (.github/dependabot.yml) bumps the SHA and the version comment.
+#
+# Also runs on every push to main (security loop round 2): the daily pipeline
+# pushes its artifact commit to main directly, so without this a regression
+# landing that way would only surface on the next PR.
 name: ci
 
 on:
   pull_request:
+  push:
+    branches: [main]
 
 # The job runs PR-controlled code (bun install, tests), so the token must be
 # read-only and must not be left in the checkout for that code to find.

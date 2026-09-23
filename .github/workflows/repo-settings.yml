@@ -1,0 +1,38 @@
+# Weekly check that main is protected the way the review design assumes.
+#
+# The required checks (ci, path-guard, secret-scan, dependency-audit) and the
+# PR requirement only protect main if a repository RULESET enforces them. That
+# setting lives in GitHub, not in this repo, so this job reads it back every
+# week with the job's own read-only token and fails (the owner gets the usual
+# failed-workflow notification) if any piece is missing.
+#
+# It reads GET /repos/{owner}/{repo}/rules/branches/main, which reports the
+# rules in effect from RULESETS. Classic branch protection is not reported by
+# that endpoint, so the owner must configure a ruleset (Settings → Rules →
+# Rulesets → target main) with: "Require a pull request before merging" and
+# "Require status checks to pass" listing ci, path-guard, secret-scan and
+# dependency-audit. See .github/scripts/check-branch-rules.sh.
+name: repo-settings
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  branch-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Check the main branch ruleset
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: main
+        run: bash .github/scripts/check-branch-rules.sh

@@ -10,11 +10,14 @@
 # printing PASS. A guard that reports "clean" when the API is down is worse than
 # no guard, because branch protection then goes green.
 #
-# Reads the protected globs from the BASE branch's .github/path-guard.json, never
-# the PR's copy: a PR that edits the list must not be judged by its own edit.
+# Reads the protected globs from the DEFAULT branch's .github/path-guard.json
+# (GLOBS_REF), never the PR's copy: a PR that edits the list must not be judged
+# by its own edit. Not the PR's base either (security loop round 2): a PR opened
+# against an older side branch with a shorter list is still judged by main's.
 # Makes API calls only — it never needs (and must never be given) PR code.
 #
-# Env: REPO (owner/name), PR (number), BASE (branch), GH_BIN (default `gh`).
+# Env: REPO (owner/name), PR (number), BASE (the PR's base branch, for
+# messages), GLOBS_REF (the default branch), GH_BIN (default `gh`).
 # Exit: 0 = no protected path touched; 1 = touched, or refused.
 set -u
 
@@ -22,6 +25,7 @@ GH="${GH_BIN:-gh}"
 REPO="${REPO:-}"
 PR="${PR:-}"
 BASE="${BASE:-}"
+GLOBS_REF="${GLOBS_REF:-}"
 
 # The GitHub files API stops at 3000 entries per PR with no error and no marker,
 # so beyond that the list is silently incomplete and cannot clear a PR.
@@ -35,6 +39,7 @@ refuse() {
 [ -n "$REPO" ] || refuse "REPO is empty — the workflow must pass github.repository"
 [ -n "$PR" ]   || refuse "PR is empty — the workflow must pass the pull request number"
 [ -n "$BASE" ] || refuse "BASE is empty — the workflow must pass the base branch"
+[ -n "$GLOBS_REF" ] || refuse "GLOBS_REF is empty — the workflow must pass github.event.repository.default_branch"
 case "$PR" in
   ''|*[!0-9]*) refuse "PR '$PR' is not a number" ;;
 esac
@@ -43,21 +48,21 @@ command -v jq >/dev/null 2>&1 || refuse "jq is not on PATH"
 WORK="$(mktemp -d)" || refuse "could not create a temp dir"
 trap 'rm -rf "$WORK"' EXIT
 
-# --- protected globs, read from BASE (never from the PR) ---------------------
-if ! "$GH" api "repos/$REPO/contents/.github/path-guard.json?ref=$BASE" --jq .content \
+# --- protected globs, read from the default branch (never from the PR) -------
+if ! "$GH" api "repos/$REPO/contents/.github/path-guard.json?ref=$GLOBS_REF" --jq .content \
      > "$WORK/globs.b64" 2>"$WORK/err"; then
-  refuse "could not read .github/path-guard.json from $BASE: $(head -1 "$WORK/err")"
+  refuse "could not read .github/path-guard.json from $GLOBS_REF: $(head -1 "$WORK/err")"
 fi
 base64 -d < "$WORK/globs.b64" > "$WORK/globs.json" 2>/dev/null \
-  || refuse "the .github/path-guard.json payload from $BASE did not base64-decode"
+  || refuse "the .github/path-guard.json payload from $GLOBS_REF did not base64-decode"
 jq -r '.protected[]' < "$WORK/globs.json" > "$WORK/globs.txt" 2>"$WORK/err" \
-  || refuse "$BASE:.github/path-guard.json is not JSON with a .protected list"
+  || refuse "$GLOBS_REF:.github/path-guard.json is not JSON with a .protected list"
 
 GLOBS=()
 while IFS= read -r g; do
   [ -n "$g" ] && GLOBS+=("$g")
 done < "$WORK/globs.txt"
-[ ${#GLOBS[@]} -gt 0 ] || refuse "the protected glob list in $BASE:.github/path-guard.json is empty"
+[ ${#GLOBS[@]} -gt 0 ] || refuse "the protected glob list in $GLOBS_REF:.github/path-guard.json is empty"
 
 # --- how many files GitHub says changed --------------------------------------
 if ! "$GH" api "repos/$REPO/pulls/$PR" --jq '.changed_files' > "$WORK/count" 2>"$WORK/err"; then
@@ -115,7 +120,7 @@ printf 'path-guard: REFUSED — %d protected path(s) touched (failing closed):\n
 printf '  %s\n' "${HITS[@]}" >&2
 
 BODY="$(printf '**path-guard: this PR touches protected paths.** Propose changes to them via an issue instead of a PR.\n\n%s\nProtected globs: `.github/path-guard.json` on `%s`. Labeled `needs-input`.' \
-  "$(printf -- '- %s\n' "${HITS[@]}")" "$BASE")"
+  "$(printf -- '- %s\n' "${HITS[@]}")" "$GLOBS_REF")"
 
 "$GH" pr comment "$PR" --repo "$REPO" --body "$BODY" \
   || echo "path-guard: could not post the PR comment (the check still fails)" >&2

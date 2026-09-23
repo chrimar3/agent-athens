@@ -7,12 +7,16 @@
 # token and no licence key). The allowlist lives in .github/gitleaks.toml and
 # covers scraped third-party HTML only. Meant to be a required check.
 #
-# dependency-audit — `bun audit` against the committed lockfile, failing on
-# high or critical advisories. It runs weekly and on PRs that change
-# package.json or bun.lock (Dependabot PRs included). NOT a required check yet:
-# the lockfile carries known advisories (mostly transitive, through puppeteer
-# and sharp) that Dependabot updates must clear first; make it required once
-# it is green.
+# dependency-audit — `bun audit` against the committed lockfile, BLOCKING on
+# any high or critical advisory not listed in .github/audit-ignore.json (each
+# entry: advisory id, package, reason, review_by date; an expired or malformed
+# entry fails the job too). The logic lives in .github/scripts/dependency-
+# audit.sh (tests/dependency-audit.test.ts). It runs weekly (catching new
+# advisories against an unchanged lockfile) and on PRs that change
+# package.json or bun.lock (Dependabot PRs included). Security loop round 2
+# cleared the lockfile from 53 advisories (1 critical, 26 high) to 2 listed
+# high ones with no fix; it is meant to be a required check (the weekly
+# repo-settings workflow verifies that).
 #
 # Both jobs run PR code read-only: a contents:read token, not persisted.
 name: security
@@ -107,5 +111,5 @@ jobs:
         run: bun install --frozen-lockfile --ignore-scripts
 
       - if: steps.scope.outputs.run == 'true'
-        name: Audit dependencies (fail on high or critical)
-        run: bun audit --audit-level=high
+        name: Audit dependencies (fail on unlisted high or critical)
+        run: bash .github/scripts/dependency-audit.sh

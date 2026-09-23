@@ -12,6 +12,12 @@
  *   - the required `ci` job runs the src/ tests as well as tests/;
  *   - secret scanning and a dependency audit exist, Dependabot covers the
  *     lockfile and the actions, and CODEOWNERS routes every path to the owner.
+ * Security loop round 2: ci also runs on push to main; path-guard re-runs when
+ * a PR is edited (base retargeted) and reads its globs from the default branch;
+ * CodeQL (javascript-typescript) is the only other job with a write scope
+ * (security-events, to upload results); a weekly read-only job checks the main
+ * branch ruleset; the audit is blocking with a documented ignore list; and
+ * Dependabot covers the container definition in /docker.
  */
 import { describe, test, expect } from 'bun:test';
 import { readFileSync, readdirSync, existsSync } from 'fs';
@@ -42,7 +48,7 @@ function triggers(wf: Workflow): string[] {
 
 describe('workflows — token scope', () => {
   test('precondition: the expected workflows exist', () => {
-    expect(files).toEqual(expect.arrayContaining(['ci.yml', 'path-guard.yml', 'security.yml']));
+    expect(files).toEqual(expect.arrayContaining(['ci.yml', 'path-guard.yml', 'security.yml', 'codeql.yml', 'repo-settings.yml']));
   });
 
   for (const { file, wf } of workflows) {
@@ -50,11 +56,13 @@ describe('workflows — token scope', () => {
       expect(wf.permissions).toEqual({ contents: 'read' });
     });
 
-    test(`${file}: no job is granted a write scope, except path-guard's comment/label`, () => {
+    test(`${file}: no job is granted a write scope, except path-guard's comment/label and CodeQL's result upload`, () => {
       for (const [name, job] of Object.entries(wf.jobs)) {
         for (const [scope, level] of Object.entries(job.permissions ?? {})) {
           if (level !== 'write') continue;
-          const allowed = file === 'path-guard.yml' && name === 'path-guard' && ['pull-requests', 'issues'].includes(scope);
+          const allowed =
+            (file === 'path-guard.yml' && name === 'path-guard' && ['pull-requests', 'issues'].includes(scope)) ||
+            (file === 'codeql.yml' && name === 'analyze' && scope === 'security-events');
           expect(`${file}:${name}:${scope}=${level} allowed=${allowed}`).toContain('allowed=true');
         }
       }
@@ -130,6 +138,67 @@ describe('ci.yml — the required ci job', () => {
   test('typechecks', () => {
     expect(runs).toContain('bun run typecheck');
   });
+
+  test('runs on pull requests AND on pushes to main (the pipeline pushes to main directly)', () => {
+    const on = (ci.wf.on ?? ci.wf[true as unknown as string]) as Record<string, { branches?: string[] } | null>;
+    expect(Object.keys(on)).toContain('pull_request');
+    expect(on.push?.branches).toEqual(['main']);
+  });
+});
+
+describe('path-guard.yml — base changes and the glob source', () => {
+  const pg = workflows.find((w) => w.file === 'path-guard.yml')!;
+  const on = (pg.wf.on ?? pg.wf[true as unknown as string]) as Record<string, { types?: string[] }>;
+
+  test('re-runs when a PR is opened, pushed to, reopened or edited (a retargeted base fires `edited`)', () => {
+    expect([...(on.pull_request_target?.types ?? [])].sort()).toEqual(['edited', 'opened', 'reopened', 'synchronize']);
+  });
+
+  test('reads the protected globs from the default branch, not the PR base or head', () => {
+    const step = (pg.wf.jobs['path-guard'].steps ?? []).find((s) => (s.run ?? '').includes('path-guard.sh'))!;
+    expect(step.env?.GLOBS_REF).toBe('${{ github.event.repository.default_branch }}');
+    const script = readFileSync(join(ROOT, '.github', 'scripts', 'path-guard.sh'), 'utf-8');
+    expect(script).toContain('contents/.github/path-guard.json?ref=$GLOBS_REF');
+    expect(script).not.toContain('contents/.github/path-guard.json?ref=$BASE');
+  });
+});
+
+describe('codeql.yml — SAST', () => {
+  const cq = workflows.find((w) => w.file === 'codeql.yml')!;
+  const job = cq.wf.jobs.analyze;
+  const uses = (job.steps ?? []).map((s) => s.uses ?? '');
+
+  test('analyzes javascript-typescript with the pinned codeql-action init/analyze pair', () => {
+    const init = (job.steps ?? []).find((s) => (s.uses ?? '').startsWith('github/codeql-action/init@'));
+    expect(init?.with?.languages).toBe('javascript-typescript');
+    expect(uses.some((u) => u.startsWith('github/codeql-action/analyze@'))).toBe(true);
+    const sha = (u: string) => u.split('@')[1];
+    expect(sha(uses.find((u) => u.startsWith('github/codeql-action/init@'))!)).toBe(sha(uses.find((u) => u.startsWith('github/codeql-action/analyze@'))!));
+  });
+
+  test('least privilege: contents read plus security-events write, nothing else', () => {
+    expect(job.permissions).toEqual({ contents: 'read', 'security-events': 'write' });
+  });
+
+  test('runs on PRs, on pushes to main and weekly', () => {
+    const on = (cq.wf.on ?? cq.wf[true as unknown as string]) as Record<string, unknown>;
+    expect(Object.keys(on)).toEqual(expect.arrayContaining(['pull_request', 'push', 'schedule']));
+  });
+});
+
+describe('repo-settings.yml — the weekly ruleset check', () => {
+  const rs = workflows.find((w) => w.file === 'repo-settings.yml')!;
+
+  test('is scheduled, read-only, and runs the unit-tested checker against main with the job token', () => {
+    const on = (rs.wf.on ?? rs.wf[true as unknown as string]) as Record<string, unknown>;
+    expect(Object.keys(on)).toContain('schedule');
+    for (const job of Object.values(rs.wf.jobs)) expect(job.permissions ?? { contents: 'read' }).toEqual({ contents: 'read' });
+    const steps = Object.values(rs.wf.jobs).flatMap((j) => j.steps ?? []);
+    const run = steps.find((s) => (s.run ?? '').includes('check-branch-rules.sh'));
+    expect(run).toBeDefined();
+    expect(run!.env?.GH_TOKEN).toBe('${{ github.token }}');
+    expect(run!.env?.BRANCH).toBe('main');
+  });
 });
 
 describe('security.yml — secret scan and dependency audit', () => {
@@ -154,13 +223,26 @@ describe('security.yml — secret scan and dependency audit', () => {
     for (const a of cfg.allowlists ?? []) {
       expect(a.regexes ?? []).toEqual([]);
       expect(a.commits ?? []).toEqual([]);
-      for (const p of a.paths ?? []) expect(p).toMatch(/^\^data\/[a-z-]+\/.*\\\.html/);
+      for (const p of a.paths ?? []) expect(p).toMatch(/^\^(data\/[a-z-]+|tests\/fixtures)\/.*\\\.html/);
     }
   });
 
-  test('dependency-audit runs bun audit', () => {
-    const runs = (sec.wf.jobs['dependency-audit']?.steps ?? []).map((s) => s.run ?? '').join('\n');
-    expect(runs).toContain('bun audit');
+  test('the allowlist covers the scraped test fixtures (a third-party page with its site\'s own browser key)', () => {
+    const cfg = Bun.TOML.parse(readFileSync(join(ROOT, '.github', 'gitleaks.toml'), 'utf-8')) as { allowlists?: Array<{ paths?: string[] }> };
+    const paths = (cfg.allowlists ?? []).flatMap((a) => a.paths ?? []).map((p) => new RegExp(p));
+    expect(paths.some((re) => re.test('tests/fixtures/cometogether-listing.html'))).toBe(true);
+    expect(paths.some((re) => re.test('tests/fixtures/sub/dir/x.ts'))).toBe(false);
+  });
+
+  test('dependency-audit is blocking: it runs the ignore-list-aware audit script and never continues on error', () => {
+    const job = sec.wf.jobs['dependency-audit'] as Job & { 'continue-on-error'?: unknown };
+    const runs = (job.steps ?? []).map((s) => s.run ?? '').join('\n');
+    expect(runs).toContain('bash .github/scripts/dependency-audit.sh');
+    expect(job['continue-on-error']).toBeUndefined();
+    for (const s of job.steps ?? []) expect((s as { 'continue-on-error'?: unknown })['continue-on-error']).toBeUndefined();
+    const script = readFileSync(join(ROOT, '.github', 'scripts', 'dependency-audit.sh'), 'utf-8');
+    expect(script).toContain('--audit-level=high');
+    expect(existsSync(join(ROOT, '.github', 'audit-ignore.json'))).toBe(true);
   });
 });
 
@@ -169,9 +251,11 @@ describe('.github/dependabot.yml', () => {
   const cfg = existsSync(p) ? parseYaml(readFileSync(p, 'utf-8')) : { updates: [] };
   const updates = (cfg.updates ?? []) as Array<{ 'package-ecosystem': string; schedule?: { interval?: string }; groups?: object }>;
 
-  test('covers the package lockfile and the actions, weekly and grouped', () => {
+  test('covers the package lockfile, the actions and the container definition, weekly and grouped', () => {
     const ecos = updates.map((u) => u['package-ecosystem']);
     expect(ecos).toContain('github-actions');
+    const docker = (updates as Array<{ 'package-ecosystem': string; directory?: string }>).find((u) => u['package-ecosystem'] === 'docker');
+    expect(docker?.directory).toBe('/docker');
     expect(ecos.some((e) => e === 'bun' || e === 'npm')).toBe(true);
     for (const u of updates) {
       expect(u.schedule?.interval).toBe('weekly');
