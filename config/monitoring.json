@@ -10,7 +10,6 @@
   },
   "push": {
     "enabled": true,
-    "server": "https://ntfy.sh",
-    "topic": "agentathens-deadman-04118827a9792c841fe0f93211efa3f1"
+    "server": "https://ntfy.sh"
   }
 }

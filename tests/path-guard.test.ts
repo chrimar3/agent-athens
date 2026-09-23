@@ -313,6 +313,43 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'docs/INTENT.md',
     'docs/MASTER-ENRICHMENT-TEMPLATE.md',
     '.env',
+    // Agent instructions loaded by sessions (slash commands, skills, subagents).
+    '.claude/commands/pre-enrich-check.md',
+    '.claude/skills/claude-code-mastery/SKILL.md',
+    '.claude/agents/reviewer.md',
+    // Code deployed to production with the site.
+    'netlify/functions/go.ts',
+    'netlify/edge-functions/edge-probe.ts',
+    'docker/Dockerfile',
+    // Disclosure channel and review routing.
+    'SECURITY.md',
+    '.github/CODEOWNERS',
+    '.github/dependabot.yml',
+    '.github/gitleaks.toml',
+    // Security tests: a PR weakening a guard must not also edit its test.
+    'tests/db-guard-hook.test.ts',
+    'tests/settings-security-pins.test.ts',
+    'tests/path-guard.test.ts',
+    'tests/netlify-headers.test.ts',
+    'tests/workflow-security.test.ts',
+    'scripts/__tests__/deploy-gate.test.ts',
+  ];
+  /** Listed by name in path-guard.json even where a broader glob already covers
+   *  them, so narrowing that glob later cannot silently drop them. */
+  const MUST_LIST_EXPLICITLY = [
+    '.claude/commands/**',
+    '.claude/skills/**',
+    '.claude/agents/**',
+    'netlify/**',
+    'docker/**',
+    'SECURITY.md',
+    '.github/CODEOWNERS',
+    'tests/db-guard-hook.test.ts',
+    'tests/settings-security-pins.test.ts',
+    'tests/path-guard.test.ts',
+    'tests/netlify-headers.test.ts',
+    'tests/workflow-security.test.ts',
+    'scripts/__tests__/deploy-gate.test.ts',
   ];
   const MUST_NOT_PROTECT = [
     '.claude/notes/ledger.md',
@@ -327,7 +364,12 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     // Gitignored or generated files that a fresh checkout (CI, a scratch clone)
     // does not have. They stay on MUST_PROTECT because the glob list must still
     // refuse them; only the existence precondition skips them.
-    const allowMissing = new Set(['data/events.db', '.env', '.claude/settings.local.json', 'config/athens-venues.json']);
+    // .claude/agents/ and docker/ do not exist yet; they are protected ahead of
+    // first use. SECURITY.md may land in a separate PR.
+    const allowMissing = new Set([
+      'data/events.db', '.env', '.claude/settings.local.json', 'config/athens-venues.json',
+      '.claude/agents/reviewer.md', 'docker/Dockerfile', 'SECURITY.md',
+    ]);
     for (const p of MUST_PROTECT) {
       if (allowMissing.has(p)) continue;
       expect(existsSync(join(ROOT, p))).toBe(true);
@@ -340,6 +382,10 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     expect(r.code).toBe(1);
     for (const p of MUST_PROTECT) expect(r.err).toContain(p);
     expect(r.err).toContain(`${MUST_PROTECT.length} protected path(s) touched`);
+  });
+
+  test('the guard, publishing and security-test paths are listed by name', () => {
+    for (const g of MUST_LIST_EXPLICITLY) expect(shipped).toContain(g);
   });
 
   test('the deliberately-unprotected paths still pass', () => {
@@ -367,9 +413,12 @@ describe('.github/workflows/path-guard.yml — the required check wiring', () =>
     expect(Object.keys(triggers)).toContain('pull_request_target');
   });
 
-  test('permissions allow commenting and labelling', () => {
-    expect(wf.permissions['pull-requests']).toBe('write');
-    expect(wf.permissions.issues).toBe('write');
+  test('workflow-level token is read-only; only the path-guard job may comment and label', () => {
+    expect(wf.permissions).toEqual({ contents: 'read' });
+    const jp = wf.jobs['path-guard'].permissions;
+    expect(jp['pull-requests']).toBe('write');
+    expect(jp.issues).toBe('write');
+    expect(jp.contents).toBe('read');
   });
 
   test('the job runs the unit-tested script with REPO/PR/BASE in env', () => {

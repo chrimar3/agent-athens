@@ -8,10 +8,12 @@
 // Three signals → pure classifier (src/watchdog/classifier.ts) → FOUR delivery layers
 // on breach: (1) osascript notification, (2) msmtp email, (3) heartbeat row,
 // (4) ntfy.sh push (off-machine; the unguessable topic is the only access control,
-// so no stored credential). If the email send itself fails, layer (1) escalates with
-// a distinct "EMAIL DELIVERY FAILED" notification and layer (3) records email_ok=false
-// — we never silently lose the alert, and we never add a second EMAIL transport (one
-// SMTP path, no GUI/TCC-flaky fallback; the push layer is a different axis, not email).
+// so the topic is a secret read from $AGENTATHENS_NTFY_TOPIC or the untracked file
+// ~/.config/agentathens/ntfy-topic — never from the tracked config). If the email
+// send itself fails, layer (1) escalates with a distinct "EMAIL DELIVERY FAILED"
+// notification and layer (3) records email_ok=false — we never silently lose the
+// alert, and we never add a second EMAIL transport (one SMTP path, no
+// GUI/TCC-flaky fallback; the push layer is a different axis, not email).
 //
 // Everything is epoch-ms end to end: each adapter normalizes its timestamp (ISO-UTC
 // deploy log, date-only/offset sitemap lastmod) to epoch-ms BEFORE the classifier, so
@@ -57,9 +59,41 @@ export interface MonitoringConfig {
   notify: { enabled: boolean };
   email: { enabled: boolean; recipient: string; msmtp_account: string };
   // Layer 4 — off-machine push via ntfy. Optional so older configs stay valid.
-  // The topic name is the ONLY access control: it must stay unguessable (random
-  // hex suffix) and must never appear in alert bodies or logs beyond this config.
-  push?: { enabled: boolean; server?: string; topic: string };
+  // No topic here: the repo is public and the topic name is the ONLY access
+  // control, so it comes from resolvePushTopic() (env or untracked file) and
+  // must never appear in alert bodies or logs.
+  push?: { enabled: boolean; server?: string };
+}
+
+export const NTFY_TOPIC_ENV = "AGENTATHENS_NTFY_TOPIC";
+/** Override for the topic file path (tests point it at a temp dir). */
+export const NTFY_TOPIC_FILE_ENV = "AGENTATHENS_NTFY_TOPIC_FILE";
+const ntfyTopicFile = (): string =>
+  process.env[NTFY_TOPIC_FILE_ENV] || join(homedir(), ".config", "agentathens", "ntfy-topic");
+// ntfy topic names: letters, digits, `_` and `-`, at most 64 chars. Anything
+// else (a slash, a query string) would change the request URL, so it is refused.
+const NTFY_TOPIC_RE = /^[A-Za-z0-9_-]{1,64}$/;
+
+/** The push topic: $AGENTATHENS_NTFY_TOPIC, else the untracked topic file.
+ *  Never throws. On failure `detail` says where to put it; the rejected value
+ *  itself is never echoed (it may be a near-miss of the real secret). */
+export function resolvePushTopic(): { topic: string } | { topic: null; detail: string } {
+  const file = ntfyTopicFile();
+  let raw = process.env[NTFY_TOPIC_ENV]?.trim() || "";
+  if (!raw) {
+    try {
+      if (existsSync(file)) raw = readFileSync(file, "utf-8").trim();
+    } catch {
+      raw = "";
+    }
+  }
+  if (!raw) {
+    return { topic: null, detail: `push topic not configured — set $${NTFY_TOPIC_ENV} or write it to ${file}` };
+  }
+  if (!NTFY_TOPIC_RE.test(raw)) {
+    return { topic: null, detail: `push topic rejected — must match ${NTFY_TOPIC_RE} (check $${NTFY_TOPIC_ENV} / ${file})` };
+  }
+  return { topic: raw };
 }
 
 function loadConfig(): MonitoringConfig {
@@ -313,9 +347,10 @@ function sendEmail(cfg: MonitoringConfig, subject: string, body: string): { ok: 
 /** Layer 4 — off-machine push via ntfy (https://ntfy.sh). A DIFFERENT AXIS from
  *  email, so it does not violate the "never a second email transport" rule above:
  *  it reaches the operator's phone/browser when they are away from this machine.
- *  No auth, no stored secret — the unguessable random topic in monitoring.json is
- *  the only access control, which is exactly why the alert body must carry no
- *  secrets (status + reasons only; the topic itself never goes in a body).
+ *  No auth — the unguessable random topic (resolvePushTopic: env or untracked
+ *  file, never the public repo) is the only access control, which is exactly why
+ *  the alert body must carry no secrets (status + reasons only; the topic itself
+ *  never goes in a body). No topic → skipped, and main() logs that once per run.
  *  Same { ok, skipped, detail } contract as sendEmail. NEVER throws/rejects —
  *  that non-throw guarantee is the fault isolation that keeps a push failure
  *  from crashing or silencing the other delivery layers. `fetchFn` is injectable
@@ -331,8 +366,9 @@ export async function sendPush(
     // guard lives here too so no caller can push during DEADMAN_DRY_RUN=1.
     if (process.env.DEADMAN_DRY_RUN === "1") return { ok: false, skipped: true, detail: "dry-run" };
     if (!cfg.push?.enabled) return { ok: false, skipped: true, detail: "push disabled in config" };
-    const topic = cfg.push.topic?.trim();
-    if (!topic) return { ok: false, skipped: true, detail: "push topic not configured" };
+    const resolved = resolvePushTopic();
+    if (resolved.topic === null) return { ok: false, skipped: true, detail: resolved.detail };
+    const topic = resolved.topic;
     const server = (cfg.push.server || "https://ntfy.sh").replace(/\/+$/, "");
     const res = await fetchFn(`${server}/${topic}`, {
       method: "POST",

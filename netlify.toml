@@ -25,14 +25,39 @@
   to = "/index.html"
   status = 200
 
-# Headers for better caching and security
+# Site-wide security headers. Pinned by tests/netlify-headers.test.ts.
+#
+# X-XSS-Protection was removed: modern browsers ignore it and the old filter it
+# enabled could itself be abused. CSP is the replacement.
+#
+# Content-Security-Policy (ENFORCED) carries only directives that cannot block
+# a resource the pages load: no plugins, no <base> rewrites, no framing, forms
+# post to this origin only, and http:// subresources are upgraded.
+#
+# Content-Security-Policy-Report-Only is the target strict policy. Browsers log
+# its violations to the console without blocking anything (no report endpoint
+# exists). Third-party loads, from the templates: GA4 (googletagmanager.com
+# script; google-analytics.com / analytics.google.com beacons), Google Fonts
+# (fonts.googleapis.com stylesheet, fonts.gstatic.com files), the OpenStreetMap
+# embed on venue pages (frame), and event images hotlinked from source sites
+# (any https host). The pages still rely on inline <script> blocks and inline
+# onerror= handlers, which this policy does not allow; they must move to
+# external files (or get hashes) before script-src can be enforced. Inline
+# style= attributes are pervasive, so style-src keeps 'unsafe-inline'.
+#
+# HSTS: one year with includeSubDomains, no preload — preload is hard to undo
+# and every subdomain would have to serve HTTPS first.
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Content-Security-Policy = "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"
+    Content-Security-Policy-Report-Only = "default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.openstreetmap.org; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
 
 [[headers]]
   for = "/api/*.json"

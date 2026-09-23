@@ -21,18 +21,23 @@ name: path-guard
 on:
   pull_request_target:
 
+# Read-only by default; the write scopes the guard needs to comment and label
+# are granted to the path-guard job alone, so a job added later does not
+# inherit them. Actions are pinned to full commit SHAs (see ci.yml).
 permissions:
   contents: read
-  pull-requests: write
-  issues: write
 
 jobs:
   path-guard:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
     steps:
       # Default ref under pull_request_target is the BASE branch, NOT the PR head.
       # Never add `ref:` here.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
 

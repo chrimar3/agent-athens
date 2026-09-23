@@ -1,0 +1,22 @@
+# gitleaks config for the `secret-scan` job (.github/workflows/security.yml).
+#
+# Default rules, plus one allowlist: copies of third-party web pages. The
+# scrapers save source pages verbatim, and those pages embed the source sites'
+# own public browser keys (e.g. Google Maps keys). They are not this project's
+# credentials, and flagging them would bury a real finding. Everything else in
+# the repo — code, config, docs, specs, logs, the rest of data/ — is scanned.
+#
+# Protected by .github/path-guard.json (.github/**): a PR cannot widen this
+# allowlist to hide its own secret.
+
+title = "agent-athens"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Scraped third-party HTML (source sites' own public browser keys)"
+paths = [
+  '''^data/event-pages/[^/]+\.html$''',
+  '''^data/html-to-parse/[^/]+\.html?$''',
+]

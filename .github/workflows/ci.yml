@@ -1,12 +1,23 @@
 # Required PR check `ci` (agent-layer Phase 3). Branch protection on main
 # requires this job by NAME — renaming the job silently drops the gate.
 #
-# Steps mirror the local gates: `bun test tests/` (the suite the pipeline and
-# the pre-commit hook run) then `bun run typecheck` (tsc --noEmit, same as
-# scripts/precommit-tsc.sh). No schema-validation step: the repo has no
-# standalone validator — schema completeness is checked inside the site build
-# (src/generate-site.ts), which needs the gitignored data/events.db and so
-# cannot run here. Build-state tests skip themselves when dist/ is absent.
+# Steps mirror the local gates: the test suite, then `bun run typecheck`
+# (tsc --noEmit, same as scripts/precommit-tsc.sh). No schema-validation step:
+# the repo has no standalone validator — schema completeness is checked inside
+# the site build (src/generate-site.ts), which needs the gitignored
+# data/events.db and so cannot run here. Build-state tests skip themselves when
+# dist/ is absent.
+#
+# Test scope: every *.test.ts under tests/ and src/ (the template, generator
+# and escaping tests live in src/**/__tests__), plus the deploy-gate and
+# pre-commit seams in scripts/__tests__. Left out: src/db/__tests__/
+# migrations.test.ts, which copies the production data/events.db and cannot
+# run without it, and the scraper tests in scripts/__tests__, which need the
+# network. The file list is built with find because `bun test` has no exclude
+# flag in the pinned bun version.
+#
+# Actions are pinned to full commit SHAs (a moved tag cannot change what runs);
+# Dependabot (.github/dependabot.yml) bumps the SHA and the version comment.
 name: ci
 
 on:
@@ -21,14 +32,20 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
-      - uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: "1.3.0"
       - run: bun install --frozen-lockfile
-      # scripts/__tests__ holds the deploy-gate and pre-commit seam tests; the
-      # scraper tests there need the network and stay out of CI.
-      - run: bun test tests/ scripts/__tests__/deploy-gate.test.ts scripts/__tests__/precommit-tsc.test.ts
+      - name: Test (tests/, src/, and the deploy-gate and pre-commit seams)
+        run: |
+          set -euo pipefail
+          mapfile -t FILES < <(find tests src -name '*.test.ts' -not -path '*/node_modules/*' \
+            | grep -v -x -F 'src/db/__tests__/migrations.test.ts' | sort)
+          echo "running ${#FILES[@]} test files from tests/ and src/"
+          # An empty list would make `bun test` run everything, network tests included.
+          [ "${#FILES[@]}" -gt 100 ] || { echo "ci: only ${#FILES[@]} test files found — refusing (check the find above)" >&2; exit 1; }
+          bun test "${FILES[@]/#/./}" ./scripts/__tests__/deploy-gate.test.ts ./scripts/__tests__/precommit-tsc.test.ts
       - run: bun run typecheck
