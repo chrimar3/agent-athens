@@ -81,13 +81,15 @@ describe('docker/aa-run.sh least privilege', () => {
     expect(line).toContain('GITRW=no');
   });
 
-  test('the scrape run holds no publishing token; the publish run sees no secrets or .env', () => {
+  test('the scrape run holds no publishing token or API keys; the publish run gets only the Search Console key', () => {
     expect(policy('scrape')).not.toMatch(/GH_TOKEN|NETLIFY_AUTH_TOKEN|CLAUDE_CODE_OAUTH_TOKEN/);
     for (const name of ['enrichment', 'visibility', 'site', 'test|shell']) {
       expect(policy(name)).not.toMatch(/GH_TOKEN|NETLIFY_AUTH_TOKEN/);
     }
-    expect(policy('publish')).toContain('SECRETS=no');
+    expect(policy('scrape')).toContain('SECRETS=no');
+    expect(policy('publish')).toContain('SECRETS=gsc');
     expect(policy('publish')).toContain('DOTENV=no');
+    expect(wrapper).toContain('gcp-kpi-reader.json:/home/pwuser/.config/agentathens/gcp-kpi-reader.json:ro');
   });
 
   test('freshness defers publishing to a separate run when the pipeline supports it', () => {

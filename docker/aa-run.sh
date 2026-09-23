@@ -42,12 +42,13 @@ GIT_ID="GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL"
 # integrity-check.sh flags any other new root entry.
 RW_TOP="data dist logs node_modules temp tmp temp-descriptions temp-briefs temp-research"
 
-# Per run: TOKENS, SECRETS (mount ~/.config/agentathens read-only), DOTENV
-# (repo .env visible), GITRW (may commit).
+# Per run: TOKENS, SECRETS (yes = mount ~/.config/agentathens read-only;
+# gsc = only the Search Console key file; no = an empty folder), DOTENV (repo
+# .env visible), GITRW (may commit).
 job_policy() {
     case "$1" in
-        scrape)     TOKENS="$GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=yes ;;
-        publish)    TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID $GIT_ID"; SECRETS=no; DOTENV=no; GITRW=yes ;;
+        scrape)     TOKENS="$GIT_ID"; SECRETS=no; DOTENV=yes; GITRW=yes ;;
+        publish)    TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID $GIT_ID"; SECRETS=gsc; DOTENV=no; GITRW=yes ;;
         verify-live) TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no ;;
         legacy)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN $GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=yes ;;
         daily)      TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN $GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=yes ;;
@@ -231,6 +232,11 @@ run_container() {
     job_policy "$policy" || fail "internal: no policy '$policy'" "report this" 2
     export AA_SECRETS_DIR="$EMPTY_DIR"
     [ "$SECRETS" = "yes" ] && export AA_SECRETS_DIR="$SECRETS_DIR"
+    local secret_mounts=()
+    # The publish run submits sitemaps to Search Console: that one key file only.
+    if [ "$SECRETS" = "gsc" ] && [ -f "$SECRETS_DIR/gcp-kpi-reader.json" ]; then
+        secret_mounts+=(-v "$SECRETS_DIR/gcp-kpi-reader.json:/home/pwuser/.config/agentathens/gcp-kpi-reader.json:ro")
+    fi
 
     # Only this run's tokens. The env file is parsed, never sourced.
     local env_flags=() line key lineno=0
@@ -258,6 +264,7 @@ run_container() {
             mounts+=(-v "$REPO/$entry:/workspace/$entry:ro")
         fi
     done < <(ls -A1 "$REPO")
+    mounts+=(${secret_mounts[@]+"${secret_mounts[@]}"})
     # The one file under a read-only folder that the pipeline writes.
     [ -f "$REPO/docs/DECISIONS-QUEUE.md" ] && mounts+=(-v "$REPO/docs/DECISIONS-QUEUE.md:/workspace/docs/DECISIONS-QUEUE.md")
     if [ "$GITRW" = "yes" ]; then

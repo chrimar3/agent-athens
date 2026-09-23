@@ -38,6 +38,17 @@ fail if any of that is weakened.
 protected-paths PR; until that is merged, freshness runs as one step holding
 both tokens.)
 
+The API-key folder is mounted only where it is used: the scrape run gets none
+of it, the publish run gets only the Search Console key (sitemap submission),
+`visibility` gets the folder read-only.
+
+**Host runs are refused.** Once the protected-paths PR is merged,
+`scripts/daily-automated.sh` and `scripts/auto-enrich.sh` exit with code 9
+unless they run in the container (`AA_CONTAINER=1`, set by the image) or you
+set `AA_ALLOW_HOST_RUN=1` for a one-off run. Your existing launchd jobs will
+start failing (and the deadman watchdog will tell you) until you finish the
+setup below and run `docker/install-launchd.sh --apply`.
+
 Backups are taken **on the Mac** before each freshness/enrichment run: a plain
 copy of `data/events.db` into `~/agent-athens-backups`, which no container can
 see or change. The copy waits for other runs to finish, is recorded in

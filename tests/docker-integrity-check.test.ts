@@ -3,7 +3,7 @@
 // root file, a commit touching code, or a changed .git/config quarantines and
 // pauses all jobs.
 import { beforeEach, describe, expect, test } from 'bun:test';
-import { existsSync, mkdtempSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { existsSync, mkdtempSync, readFileSync, writeFileSync, mkdirSync, symlinkSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
@@ -96,10 +96,10 @@ describe('integrity-check.sh', () => {
   }
 
   test('ordinary commit and ref updates in .git are not flagged', () => {
+    git('branch', '-f', 'some-feature', 'HEAD');
     expect(snapshot().code).toBe(0);
     writeFileSync(join(repo, 'data/scoreboard.json'), '{"n":2}\n');
     git('commit', '-qam', 'chore: daily pipeline update');
-    git('branch', '-f', 'some-feature', 'HEAD');
     git('pack-refs', '--all');
     expect(verify().code).toBe(0);
   });
@@ -130,9 +130,42 @@ describe('integrity-check.sh', () => {
     writeFileSync(join(repo, 'data/scoreboard.json'), '{"n":3}\n');
     git('add', 'data/scoreboard.json');
     const tree = git('write-tree').out.trim();
+    git('reset', '-q'); // the pipeline uses a temporary index; the real one stays untouched
     const ok = git('commit-tree', tree, '-p', git('rev-parse', 'pipeline-data').out.trim(), '-m', 'chore: daily pipeline update').out.trim();
     git('update-ref', 'refs/heads/pipeline-data', ok);
     expect(verify().code).toBe(0);
+  });
+
+  test('changes staged for the next commit are quarantined', () => {
+    expect(snapshot().code).toBe(0);
+    writeFileSync(join(repo, 'scripts/job.ts'), 'console.log("planted")\n');
+    git('add', 'scripts/job.ts');
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('staged');
+  });
+
+  test('another branch or the stash moving is quarantined', () => {
+    git('branch', 'feature', 'HEAD');
+    expect(snapshot().code).toBe(0);
+    writeFileSync(join(repo, 'data/scoreboard.json'), '{"x":1}\n');
+    git('add', 'data/scoreboard.json');
+    const tree = git('write-tree').out.trim();
+    git('reset', '-q');
+    const c = git('commit-tree', tree, '-p', 'feature', '-m', 'x').out.trim();
+    git('update-ref', 'refs/heads/feature', c);
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('branch, tag or the stash');
+  });
+
+  test('a symlink planted in a writable folder is quarantined', () => {
+    expect(snapshot().code).toBe(0);
+    mkdirSync(join(repo, 'logs'), { recursive: true });
+    symlinkSync('/tmp', join(repo, 'logs/deploy-cadence-ALERT.log'));
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('symlink');
   });
 
   test('a new git hook is quarantined', () => {

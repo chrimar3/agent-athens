@@ -14,7 +14,10 @@
 #      (a commit can carry any content without touching the working tree);
 #   3. no new file appeared at the repo root (e.g. a planted CLAUDE.md, which
 #      agent sessions load as instructions, or .npmrc, which package installs
-#      obey).
+#      obey);
+#   4. nothing was staged for your next commit, no other branch, tag or the
+#      stash moved, and no symlink appeared in the folders runs may write
+#      (a later Mac-side job could otherwise write through it into $HOME).
 #
 #   docker/integrity-check.sh snapshot STATE_FILE
 #   docker/integrity-check.sh verify   STATE_FILE JOB
@@ -92,6 +95,30 @@ quarantine() {  # $1 reason, $2 pre-run HEAD ("" = do not run git), $3 new root 
     exit 1
 }
 
+# What is staged for the owner's next commit (the pipeline itself commits
+# through a temporary index, so this must not change during a run).
+staged_hash() {
+    (cd "$REPO" && git diff --cached --binary 2>/dev/null) | shasum -a 256 | awk '{print $1}'
+}
+
+# Every local ref except the checked-out branch (covered by the commit check),
+# pipeline-data (covered below), remote-tracking refs and quarantine branches.
+other_refs_hash() {
+    local current
+    current="$(cd "$REPO" && git symbolic-ref -q HEAD || echo DETACHED)"
+    (cd "$REPO" && git for-each-ref --format='%(refname) %(objectname)' refs/heads refs/tags refs/stash 2>/dev/null) \
+        | grep -vE "^($current|refs/heads/pipeline-data|refs/heads/quarantine/[^ ]*) " | shasum -a 256 | awk '{print $1}'
+}
+
+# Symlinks in the folders runs may write. A Mac-side job writing a log or
+# data file through one would land wherever the link points.
+find_rw_symlinks() {
+    local d
+    for d in data dist logs temp tmp temp-descriptions temp-briefs temp-research; do
+        [ -d "$REPO/$d" ] && find "$REPO/$d" -type l 2>/dev/null
+    done
+}
+
 # New commits on refs/heads/pipeline-data (pushed later by the publish run)
 # must each be a root or single-parent commit touching only data paths.
 check_pipeline_data() {  # $1 pre-run sha of pipeline-data ("" if it did not exist)
@@ -122,7 +149,8 @@ case "$MODE" in
         mkdir -p "$(dirname "$STATE_FILE")"
         head="$(cd "$REPO" && git rev-parse HEAD)" || { echo "integrity-check: git rev-parse HEAD failed in $REPO" >&2; exit 2; }
         pdata="$(cd "$REPO" && git rev-parse -q --verify refs/heads/pipeline-data 2>/dev/null || true)"
-        { printf 'head=%s\ngitmeta=%s\npdata=%s\n' "$head" "$(hash_git_meta)" "$pdata"
+        { printf 'head=%s\ngitmeta=%s\npdata=%s\nstaged=%s\nrefs=%s\n' "$head" "$(hash_git_meta)" "$pdata" \
+              "$(staged_hash)" "$(other_refs_hash)"
           root_entries | sed 's/^/root=/'; } > "$STATE_FILE"
         ;;
     verify)
@@ -136,6 +164,12 @@ case "$MODE" in
         bad="$(cd "$REPO" && git diff --name-only "$pre_head" HEAD 2>/dev/null | grep -Ev "$DATA_PATHS_RE" || true)"
         [ -z "$bad" ] || quarantine "a commit made during the run changes non-data files: $(echo "$bad" | head -5 | tr '\n' ' ')" "$pre_head" ""
         check_pipeline_data "$(sed -n 's/^pdata=//p' "$STATE_FILE")"
+        [ "$(staged_hash)" = "$(sed -n 's/^staged=//p' "$STATE_FILE")" ] \
+            || quarantine "changes were staged for your next commit during the run (inspect 'git diff --cached')" "" ""
+        [ "$(other_refs_hash)" = "$(sed -n 's/^refs=//p' "$STATE_FILE")" ] \
+            || quarantine "a branch, tag or the stash other than the pipeline's own moved during the run (compare 'git for-each-ref')" "" ""
+        links="$(find_rw_symlinks)"
+        [ -z "$links" ] || quarantine "symlink(s) appeared in folders runs may write: $(echo "$links" | head -5 | tr '\n' ' ')" "" ""
         rm -f "$STATE_FILE"
         echo "integrity-check: PASS ($JOB)"
         ;;
