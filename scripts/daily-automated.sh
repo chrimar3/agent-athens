@@ -21,6 +21,21 @@
 # Exit codes: 0 success (a deferred run counts as success) · 1 failure or a
 # gate refused · 3 publish mode found no deferred build to publish.
 #
+# Git (security loop round 3): the pipeline NEVER commits to or pushes main.
+# Its allowlisted data artifacts are committed to the separate branch
+# `pipeline-data` with git plumbing (temporary GIT_INDEX_FILE, hash-object,
+# update-index, write-tree, commit-tree, update-ref), so HEAD, main, the real
+# index and the working tree are never touched, and the only ref it pushes is
+# refs/heads/pipeline-data. main needs no bypass for the pipeline token: main's
+# ruleset can require a PR with no bypass actors, and the pipeline token only
+# needs permission to push pipeline-data. Every deploy goes through
+# scripts/deploy-gate.sh, whose origin gate requires HEAD to be origin/main or
+# an ancestor of it (no local commits at all).
+#
+# publish mode prints ONE line on stdout after the deploy is verified
+# state=ready, for the host wrapper to record as the last known-good deploy:
+#   PUBLISH-RESULT deploy_id=<id> dist_hash=<64 hex> state=ready
+#
 # @see specs/001-data-pipeline/tasks.md (Task 6.3)
 # @see docs/LAUNCHD-SETUP.md
 
@@ -44,13 +59,16 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 LOG_DIR="$PROJECT_DIR/logs"
 STATE_FILE="$PROJECT_DIR/data/state/pipeline-state.json"
 
-# The ONLY ref the pipeline is ever allowed to push. Guarded by the push-gate
-# in run_deploy (scripts/__tests__/deploy-gate.test.ts pins both).
-readonly PRODUCTION_BRANCH="main"
+# The ONLY ref the pipeline is ever allowed to commit to or push (the data
+# artifacts' branch; never main). Guarded by the push-gate in run_deploy
+# (scripts/__tests__/deploy-gate.test.ts pins both).
+readonly PIPELINE_DATA_BRANCH="pipeline-data"
 
 # Deferred publish (AA_DEFER_PUBLISH=1): the producing run leaves this marker
-# (JSON: headSha, builtSha, distHash, createdAt) for `publish` mode, which is
-# the only step that needs the GitHub and Netlify credentials.
+# (JSON: headSha, builtSha, distHash, pipelineDataSha, createdAt) for
+# `publish` mode, which is the only step that needs the GitHub and Netlify
+# credentials. pipelineDataSha is the pipeline-data commit to push ("" when
+# there is none).
 PUBLISH_MARKER="$PROJECT_DIR/.pipeline-publish-ready"
 
 # Ensure we're in project directory
@@ -576,7 +594,8 @@ run_health_check() {
 # Phase 4c: Scoreboard (Phase 8 v0). Reads the report run_health_check just
 # wrote plus events.db (read-only) and writes data/scoreboard.json. Runs BEFORE
 # run_deploy because that phase owns the commit+push — a step after it would
-# only reach main the next day. The file rides run_deploy's PIPELINE_ALLOWLIST.
+# only reach the pipeline-data branch the next day. The file rides run_deploy's
+# PIPELINE_ALLOWLIST.
 run_scoreboard() {
     log_phase "SCOREBOARD"
     log "Assembling data/scoreboard.json from health report + events.db..."
@@ -598,9 +617,10 @@ run_scoreboard() {
 # Phase 5: Deploy
 #
 # Also the body of `publish` mode (publishing=1): the deferred build is
-# re-verified (marker, deploy gate, published-artifact gate) and then shipped
-# through the same origin-gate / push-gate / Netlify code below. With
-# AA_DEFER_PUBLISH=1 a producing run stops after the artifact commit.
+# re-verified (marker, full deploy gate incl. the origin gate, published-
+# artifact gate) and then shipped through the same push-gate / Netlify code
+# below. With AA_DEFER_PUBLISH=1 a producing run stops after the artifact
+# commit. Nothing here commits to, moves or pushes main.
 run_deploy() {
     log_phase "DEPLOYMENT"
 
@@ -611,25 +631,33 @@ run_deploy() {
 
     local publishing=0
     local gate_args=()
+    # The pipeline-data commit this run (or the deferred run) recorded; the
+    # push-gate refuses to push anything else.
+    local pd_expected=""
     if [[ "$PIPELINE_MODE" == "publish" ]]; then
         publishing=1
         gate_args=(--allow-descendant)
         local marker_rc=0
         check_publish_marker || marker_rc=$?
         [[ "$marker_rc" -eq 0 ]] || return "$marker_rc"
+        pd_expected=$(jq -r '.pipelineDataSha // empty' "$PUBLISH_MARKER" 2>/dev/null) || pd_expected=""
+    elif [[ "${AA_DEFER_PUBLISH:-}" == "1" ]]; then
+        # Deferred producing run: it never deploys and holds no credentials, so
+        # the gate checks its local predicate only; publish runs the full gate.
+        gate_args=(--local-only)
     fi
 
-    # Step 0: Clean-tree deploy gate (Option 3 Phase 1, 2026-07-07). Refuses
-    # unless dist/.build-provenance == HEAD, built from a clean SOURCE scope,
-    # and the source scope is clean NOW. Runs BEFORE the Step-1 artifact
-    # commit so strict sha equality holds (the build upstream stamped the
-    # same HEAD this gate sees). Closes the 2026-07-06 23:17Z breach where a
-    # local build from an uncommitted tree was auto-deployed. Guard tests:
+    # Step 0: deploy gate (scripts/deploy-gate.sh). Refuses unless
+    # dist/.build-provenance == HEAD, built from a clean SOURCE scope, the
+    # source scope is clean NOW, the dist hash still matches, and — unless
+    # this is a deferred run (local predicate only) — HEAD is reviewed code:
+    # origin/main or an ancestor of it (the origin gate). Closes the 2026-07-06 23:17Z breach where a local
+    # build from an uncommitted tree was auto-deployed. Guard tests:
     # scripts/__tests__/deploy-gate.test.ts.
-    # publish mode passes --allow-descendant: its HEAD is the deferred run's
-    # artifact commit on top of the stamped sha (see deploy-gate.sh).
+    # publish mode passes --allow-descendant: HEAD may have been fast-forwarded
+    # to newer reviewed commits since the stamped build (see deploy-gate.sh).
     if ! bash "$SCRIPT_DIR/deploy-gate.sh" ${gate_args[@]+"${gate_args[@]}"} >> "$LOG_FILE" 2>&1; then
-        log_error "[deploy-gate] REFUSED — dist/ does not correspond to committed HEAD (see log for the named condition). Skipping deploy."
+        log_error "[deploy-gate] REFUSED — dist/ does not correspond to reviewed, committed HEAD (see log for the named condition, e.g. [origin-gate]). Nothing pushed or deployed."
         return 1
     fi
     log "[deploy-gate] PASS — dist/ corresponds to committed HEAD"
@@ -644,107 +672,71 @@ run_deploy() {
         log "[publish] published-artifact gate PASS on dist/"
     fi
 
-    # Step 1: Commit and push pipeline outputs (dist/ is gitignored)
+    # Step 1: artifact commit on the pipeline-data branch (dist/ is gitignored).
     #
-    # Explicit-allowlist staging (replaces prior `git add -A`). Pipeline must
-    # NEVER commit files outside this list, regardless of working-tree state.
-    # See specs/daily-pipeline-staging-audit.md (2026-05-04) — `git add -A`
-    # caused recurring WIP contamination (e.g. adbaef38e, 72ce32c73, 5d49315a1).
-    # Most other pipeline outputs (events.db, health-reports/, *.csv, *.db-wal)
-    # are gitignored — only these three artefacts survive to a commit.
+    # Explicit allowlist (replaced a stage-everything call that caused
+    # recurring WIP contamination: adbaef38e, 72ce32c73, 5d49315a1 — see
+    # specs/daily-pipeline-staging-audit.md, 2026-05-04). The pipeline must
+    # NEVER commit files outside this list. Most other pipeline outputs
+    # (events.db, health-reports/, *.csv, *.db-wal) are gitignored.
     local PIPELINE_ALLOWLIST=(
         "data/event-set-hashes.json"
         "data/build-completeness.json"
         "data/scoreboard.json"
     )
 
-    local artifact_committed=0
     if [[ $publishing -eq 0 ]]; then
         log "Checking for pipeline-output changes..."
-        # staging:begin (block extracted VERBATIM by tests/daily-pipeline-staging.test.ts — keep both markers)
-        # One call for the whole list is fatal on any pathspec that matches no
-        # file (exit 128) and stages NOTHING, so a single absent artefact silently
-        # dropped all three from that day's commit (issue #5). Stage per path so
-        # the others still land, and log each failure instead of swallowing it.
-        for f in "${PIPELINE_ALLOWLIST[@]}"; do
-            git add -- "$f" >> "$LOG_FILE" 2>&1 || log_error "[staging] git add failed for $f (continuing)"
-        done
-        # staging:end
+        commit_pipeline_data \
+            || log_error "[staging] no artifact commit this run (non-fatal, continuing) — see the [staging] lines above"
+        pd_expected=$(git rev-parse --verify -q "refs/heads/$PIPELINE_DATA_BRANCH^{commit}" 2>/dev/null) || pd_expected=""
 
-        # Defense-in-depth guard: if anything outside the allow-list ended up in
-        # the index (e.g. developer had work pre-staged when pipeline fired), abort
-        # and reset rather than commit unintended files.
-        local UNEXPECTED=""
-        while IFS= read -r staged; do
-            local is_allowed=0
-            for allowed in "${PIPELINE_ALLOWLIST[@]}"; do
-                if [[ "$staged" == "$allowed" ]]; then
-                    is_allowed=1
-                    break
-                fi
-            done
-            if [[ $is_allowed -eq 0 ]]; then
-                UNEXPECTED="$UNEXPECTED $staged"
-            fi
-        done < <(git diff --cached --name-only)
-
-        if [[ -n "$UNEXPECTED" ]]; then
-            log_error "Pipeline staging guard tripped — unexpected staged files:$UNEXPECTED"
-            log_error "Aborting commit to prevent WIP contamination. Resetting index."
-            git reset HEAD -- >> "$LOG_FILE" 2>&1 || true
-        elif git diff --cached --quiet; then
-            log "No pipeline-output changes to commit"
-        else
-            git commit -m "chore: daily pipeline update $(date +%Y-%m-%d)" || true
-            artifact_committed=1
-        fi
-
-        # Deferred publish: the gate passed and the allowlisted artifacts are
-        # committed locally; stop before anything that needs the GitHub or
-        # Netlify credentials. `publish` mode re-verifies and ships.
+        # Deferred publish: the local gate passed and the allowlisted artifacts
+        # are committed on the pipeline-data branch; stop before anything that
+        # needs the GitHub or Netlify credentials. `publish` mode re-verifies
+        # and ships.
         if [[ "${AA_DEFER_PUBLISH:-}" == "1" ]]; then
-            write_publish_marker || return 1
+            write_publish_marker "$pd_expected" || return 1
             return 0
         fi
     fi
 
-    # Step 1b: only reviewed code may ship. Fails closed (no push, no deploy).
-    if ! verify_origin_ancestry; then
-        return 1
-    fi
-
-    # Step 1c: push. A producing run pushes after its artifact commit (as
-    # before); publish mode pushes whatever pipeline commits are still ahead.
-    local push_wanted=$artifact_committed
-    if [[ $publishing -eq 1 ]]; then
-        local ahead
-        ahead=$(git rev-list --count "refs/remotes/origin/$PRODUCTION_BRANCH..HEAD" 2>/dev/null) || ahead=0
-        [[ "$ahead" -gt 0 ]] && push_wanted=1
-    fi
-    if [[ $push_wanted -eq 1 ]]; then
+    # Step 1b: push the pipeline-data branch (never main). A producing run
+    # pushes what it just committed; publish mode pushes the commit the
+    # deferred run recorded. Nothing to do when origin already has it.
+    local pd_remote_sha
+    pd_remote_sha=$(git rev-parse --verify -q "refs/remotes/origin/$PIPELINE_DATA_BRANCH^{commit}" 2>/dev/null) || pd_remote_sha=""
+    if [[ -z "$pd_expected" ]]; then
+        log "No $PIPELINE_DATA_BRANCH commit to push"
+    elif [[ "$pd_expected" == "$pd_remote_sha" ]]; then
+        log "$PIPELINE_DATA_BRANCH ${pd_expected:0:12} is already on origin; nothing to push"
+    else
         # push-gate:begin (block extracted VERBATIM by scripts/__tests__/deploy-gate.test.ts — keep both markers)
         #
-        # Pushing a branch NAME sends the LOCAL ref of that name — a valid
-        # refspec (exit 0) even when HEAD is on a different branch entirely.
-        # 2026-07 incident: repo sat on a feature branch for 3 days, the
-        # commit above landed there daily, while a STALE local production ref
-        # was pushed and "Pipeline outputs pushed to git" logged every time.
-        # Compare resolved SHAs, not branch names: the invariant that matters
-        # is "the ref we push IS the commit we just made", SHA equality states
-        # it directly, and it stays correct under detached HEAD and this
-        # repo's worktrees where name comparison misleads.
-        local head_sha branch_sha
-        head_sha=$(git rev-parse HEAD 2>/dev/null) || head_sha=""
-        branch_sha=$(git rev-parse "refs/heads/$PRODUCTION_BRANCH" 2>/dev/null) || branch_sha=""
-        if [[ -z "$head_sha" || -z "$branch_sha" || "$head_sha" != "$branch_sha" ]]; then
-            log_error "[push-gate] REFUSED — HEAD (${head_sha:-unresolvable}) != refs/heads/$PRODUCTION_BRANCH (${branch_sha:-unresolvable}). The artifact commit did not land on $PRODUCTION_BRANCH; pushing would ship a stale ref while reporting success. SKIPPING push (non-fatal, continuing to deploy) — reconcile the branch and push manually."
+        # Push ONLY refs/heads/$PIPELINE_DATA_BRANCH, as an explicit full
+        # refspec: a bare branch NAME pushes the LOCAL ref of that name even
+        # when it is not what this run made (2026-07 incident: a stale local
+        # production ref was pushed daily while "pushed" was logged). Compare
+        # resolved SHAs: the ref we push must be the artifact commit this run
+        # (or the deferred run's marker) recorded. Every commit origin does not
+        # have yet must also pass the pipeline-data content gate. A SHA
+        # mismatch skips the push (non-fatal, continuing to deploy); content
+        # outside the allowlist is a tamper signal and stops the run before the
+        # deploy.
+        local pd_sha
+        pd_sha=$(git rev-parse --verify -q "refs/heads/$PIPELINE_DATA_BRANCH^{commit}" 2>/dev/null) || pd_sha=""
+        if [[ -z "$pd_expected" || -z "$pd_sha" || "$pd_sha" != "$pd_expected" ]]; then
+            log_error "[push-gate] REFUSED — refs/heads/$PIPELINE_DATA_BRANCH (${pd_sha:-unresolvable}) != the artifact commit this run recorded (${pd_expected:-none}); pushing would ship a ref this run did not make. SKIPPING push (non-fatal, continuing to deploy) — inspect the branch and push it manually."
+        elif ! check_pipeline_data_commits "$pd_sha"; then
+            log_error "[push-gate] REFUSED — $PIPELINE_DATA_BRANCH carries commit(s) that are not pipeline artifact commits:$PD_GATE_BAD. Nothing pushed or deployed: treat this as tampering. Inspect refs/heads/$PIPELINE_DATA_BRANCH, reset it to origin/$PIPELINE_DATA_BRANCH (git update-ref refs/heads/$PIPELINE_DATA_BRANCH origin/$PIPELINE_DATA_BRANCH), then re-run the producing job."
+            return 1
         else
             local push_timeout_file
             push_timeout_file=$(mktemp)
             if [[ -z "$push_timeout_file" ]]; then
                 log_error "Git push failed — cannot create watchdog status file; skipping push (non-fatal, continuing to deploy)"
             else
-                GIT_TERMINAL_PROMPT=0 git -c credential.helper='!gh auth git-credential' push origin "$PRODUCTION_BRANCH" >> "$LOG_FILE" 2>&1 &
+                GIT_TERMINAL_PROMPT=0 git -c credential.helper='!gh auth git-credential' push origin "refs/heads/$PIPELINE_DATA_BRANCH:refs/heads/$PIPELINE_DATA_BRANCH" >> "$LOG_FILE" 2>&1 &
                 local PUSH_PID=$!
                 # Same AWAKE-TICK policy as deploy-watchdog: no epoch deadline
                 # that could mistake a suspended laptop for a stalled push.
@@ -775,7 +767,7 @@ run_deploy() {
                 elif [[ "$push_exit" -ne 0 ]]; then
                     log_error "Git push failed — non-interactive auth/transport failure (exit $push_exit); see git diagnostics in $LOG_FILE (non-fatal, continuing to deploy)"
                 else
-                    log "Pipeline outputs pushed to git"
+                    log "Pipeline outputs pushed to git ($PIPELINE_DATA_BRANCH ${pd_sha:0:12})"
                 fi
                 rm -f "$push_timeout_file"
             fi
@@ -862,6 +854,12 @@ run_deploy() {
         local DEPLOY_ID
         DEPLOY_ID=$(tr -d '\000-\010\013\014\016-\037' <"$deploy_tmp" \
             | jq -r '.deploy_id // .id // empty' 2>/dev/null)
+        # The id is interpolated into JSON for the API calls below and printed
+        # in the publish result line: accept a plain token only.
+        if [[ -n "$DEPLOY_ID" && ! "$DEPLOY_ID" =~ ^[0-9A-Za-z]{1,64}$ ]]; then
+            log_error "[deploy] the CLI returned a deploy id that is not a plain token (cli_exit=$cli_exit); failing — check the deploy in Netlify"
+            return 1
+        fi
 
         if [ -z "$DEPLOY_ID" ]; then
             # PARSE-OR-FAIL FALLBACK (2026-05-21 follow-on to S142):
@@ -916,6 +914,7 @@ run_deploy() {
             if [[ $publishing -eq 1 ]]; then
                 rm -f "$PUBLISH_MARKER"
                 log "[publish] deferred build published (deploy $DEPLOY_ID); marker removed"
+                print_publish_result "$DEPLOY_ID"
             fi
             return 0
         fi
@@ -943,29 +942,48 @@ run_deploy() {
     done
 }
 
+# publish mode: ONE stable stdout line for the host wrapper, which records it
+# as the last known-good deploy (the deadman responder restores from that
+# record). Printed only when both fields are plain tokens, so no value can
+# smuggle in a second line. Must not go through log(): that tees a
+# timestamped copy to stdout too.
+print_publish_result() {
+    local id="$1" hash
+    hash=$(sed -n 's/^distHash=//p' "$PROJECT_DIR/dist/.build-provenance" 2>/dev/null | head -1)
+    if [[ "$id" =~ ^[0-9A-Za-z]{1,64}$ && "$hash" =~ ^[0-9a-f]{64}$ ]]; then
+        printf 'PUBLISH-RESULT deploy_id=%s dist_hash=%s state=ready\n' "$id" "$hash"
+        log "[publish] result line printed for the host record (deploy $id, dist ${hash:0:12})"
+    else
+        log_error "[publish] the deploy is live but its id or the stamp's dist hash is not a plain token; no result line printed, so the host will not record it as known-good. Check dist/.build-provenance and the deploy in Netlify."
+    fi
+}
+
 # Deferred publish (AA_DEFER_PUBLISH=1): record which build is waiting. Values
-# come from the stamp the deploy gate just verified and from HEAD after the
-# artifact commit; `publish` mode refuses unless dist/ still matches them.
+# come from the stamp the deploy gate just verified, HEAD (unchanged by the
+# artifact commit) and the pipeline-data commit ($1, "" when there is none);
+# `publish` mode refuses unless dist/ still matches them.
 write_publish_marker() {
+    local pd_sha="${1:-}"
     local stamp="$PROJECT_DIR/dist/.build-provenance"
     local built_sha dist_hash head_sha created
     built_sha=$(sed -n 's/^sha=//p' "$stamp" 2>/dev/null | head -1)
     dist_hash=$(sed -n 's/^distHash=//p' "$stamp" 2>/dev/null | head -1)
     head_sha=$(git rev-parse HEAD 2>/dev/null) || head_sha=""
     created=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-    if ! [[ "$built_sha" =~ ^[0-9a-f]{40}$ && "$dist_hash" =~ ^[0-9a-f]{64}$ && "$head_sha" =~ ^[0-9a-f]{40}$ ]]; then
-        log_error "[publish] cannot write $PUBLISH_MARKER — stamp or HEAD unreadable (sha='$built_sha' distHash='$dist_hash' HEAD='$head_sha'). Nothing pushed or deployed; rebuild and re-run."
+    if ! [[ "$built_sha" =~ ^[0-9a-f]{40}$ && "$dist_hash" =~ ^[0-9a-f]{64}$ && "$head_sha" =~ ^[0-9a-f]{40}$ ]] \
+        || ! [[ -z "$pd_sha" || "$pd_sha" =~ ^[0-9a-f]{40}$ ]]; then
+        log_error "[publish] cannot write $PUBLISH_MARKER — stamp, HEAD or $PIPELINE_DATA_BRANCH unreadable (sha='$built_sha' distHash='$dist_hash' HEAD='$head_sha' $PIPELINE_DATA_BRANCH='$pd_sha'). Nothing pushed or deployed; rebuild and re-run."
         return 1
     fi
-    if ! printf '{"headSha":"%s","builtSha":"%s","distHash":"%s","createdAt":"%s"}\n' \
-            "$head_sha" "$built_sha" "$dist_hash" "$created" > "$PUBLISH_MARKER.tmp" \
+    if ! printf '{"headSha":"%s","builtSha":"%s","distHash":"%s","pipelineDataSha":"%s","createdAt":"%s"}\n' \
+            "$head_sha" "$built_sha" "$dist_hash" "$pd_sha" "$created" > "$PUBLISH_MARKER.tmp" \
         || ! mv -f "$PUBLISH_MARKER.tmp" "$PUBLISH_MARKER"; then
         rm -f "$PUBLISH_MARKER.tmp"
         log_error "[publish] cannot write $PUBLISH_MARKER. Nothing pushed or deployed; check disk space/permissions and re-run."
         return 1
     fi
-    log "[publish] DEFERRED — deploy gate passed and artifacts committed; NOT pushed, NOT deployed (AA_DEFER_PUBLISH=1)."
-    log "[publish] Marker $PUBLISH_MARKER: head ${head_sha:0:9}, built ${built_sha:0:9}, dist ${dist_hash:0:12}. Ship it with: scripts/daily-automated.sh publish"
+    log "[publish] DEFERRED — deploy gate (local predicate) passed and artifacts committed to $PIPELINE_DATA_BRANCH; NOT pushed, NOT deployed (AA_DEFER_PUBLISH=1)."
+    log "[publish] Marker $PUBLISH_MARKER: head ${head_sha:0:9}, built ${built_sha:0:9}, dist ${dist_hash:0:12}, $PIPELINE_DATA_BRANCH ${pd_sha:0:9}. Ship it with: scripts/daily-automated.sh publish"
     return 0
 }
 
@@ -977,117 +995,145 @@ check_publish_marker() {
         return 3
     fi
     local stamp="$PROJECT_DIR/dist/.build-provenance"
-    local m_built m_dist s_built s_dist
+    local m_built m_dist m_pd s_built s_dist
     m_built=$(jq -r '.builtSha // empty' "$PUBLISH_MARKER" 2>/dev/null)
     m_dist=$(jq -r '.distHash // empty' "$PUBLISH_MARKER" 2>/dev/null)
+    m_pd=$(jq -r '.pipelineDataSha // empty' "$PUBLISH_MARKER" 2>/dev/null)
     s_built=$(sed -n 's/^sha=//p' "$stamp" 2>/dev/null | head -1)
     s_dist=$(sed -n 's/^distHash=//p' "$stamp" 2>/dev/null | head -1)
     if [[ -z "$m_built" || -z "$m_dist" || "$m_built" != "$s_built" || "$m_dist" != "$s_dist" ]]; then
         log_error "[publish] REFUSED — $PUBLISH_MARKER (built ${m_built:0:9}, dist ${m_dist:0:12}) does not match dist/.build-provenance (built ${s_built:0:9}, dist ${s_dist:0:12}): dist/ was rebuilt or replaced after the deferred run, or the marker is unreadable. Nothing pushed or deployed; re-run the deferred build, then publish."
         return 1
     fi
-    log "[publish] marker matches dist/ stamp (built ${s_built:0:9}, dist ${s_dist:0:12})"
+    if [[ -n "$m_pd" && ! "$m_pd" =~ ^[0-9a-f]{40}$ ]]; then
+        log_error "[publish] REFUSED — $PUBLISH_MARKER has a malformed pipelineDataSha (not a 40-hex commit id). Nothing pushed or deployed; re-run the deferred build, then publish."
+        return 1
+    fi
+    log "[publish] marker matches dist/ stamp (built ${s_built:0:9}, dist ${s_dist:0:12}, $PIPELINE_DATA_BRANCH ${m_pd:0:9})"
     return 0
 }
 
-# awake-bounded:begin (extracted VERBATIM by tests/daily-pipeline-deferred-publish.test.ts — keep both markers)
-# Run "$@" in the background with an AWAKE-time limit of $1 seconds (15 s
-# ticks of kernel-paused sleep, the same policy as the push and deploy
-# watchdogs: a suspended laptop is not a stalled command), then TERM, then
-# KILL after 4 more ticks. Returns the command's status, or 124 on timeout.
-run_awake_bounded() {
-    local limit="$1"; shift
-    local flag
-    flag=$(mktemp) || return 125
-    "$@" &
-    local pid=$!
-    ( ticks=0
-      while [ "$(( ticks * 15 ))" -lt "$limit" ]; do
-        kill -0 "$pid" 2>/dev/null || exit 0
-        sleep 15
-        ticks=$(( ticks + 1 ))
-      done
-      kill -0 "$pid" 2>/dev/null || exit 0
-      echo timeout > "$flag"
-      kill "$pid" 2>/dev/null
-      ticks=0
-      while [ "$ticks" -lt 4 ]; do
-        kill -0 "$pid" 2>/dev/null || exit 0
-        sleep 5
-        ticks=$(( ticks + 1 ))
-      done
-      kill -9 "$pid" 2>/dev/null
-    ) &
-    local wd=$! rc=0
-    wait "$pid" || rc=$?
-    kill "$wd" 2>/dev/null || true
-    wait "$wd" 2>/dev/null || true
-    [[ -s "$flag" ]] && rc=124
-    rm -f "$flag"
-    return "$rc"
-}
-# awake-bounded:end
-
-# Origin gate: production may only carry code that is on the remote
-# production branch (reviewed and merged) plus the pipeline's own
-# data-artifact commits. Called by run_deploy before the push AND the deploy.
-verify_origin_ancestry() {
-    # origin-gate:begin (extracted VERBATIM by tests/daily-pipeline-deferred-publish.test.ts — keep both markers)
-    #
-    # Fetch the remote tip (bounded, non-interactive), then require EVERY
-    # commit in origin/<branch>..HEAD to be a pipeline artifact commit: one
-    # parent, exactly the pipeline's commit message, authored by the identity
-    # this checkout commits as, touching ONLY PIPELINE_ALLOWLIST paths. Anything
-    # else refuses the push and the deploy. An unreachable remote refuses too
-    # (fail closed): without the remote tip nothing can be called reviewed.
-    local og_ref="refs/remotes/origin/$PRODUCTION_BRANCH" og_rc=0
-    run_awake_bounded "${FETCH_TIMEOUT:-120}" env GIT_TERMINAL_PROMPT=0 \
-        git -c credential.helper='!gh auth git-credential' fetch --quiet --no-tags \
-        origin "+refs/heads/$PRODUCTION_BRANCH:$og_ref" >> "$LOG_FILE" 2>&1 || og_rc=$?
-    if [[ "$og_rc" -ne 0 ]]; then
-        local og_what="failed (exit $og_rc)"
-        [[ "$og_rc" -eq 124 ]] && og_what="timed out after ${FETCH_TIMEOUT:-120}s of awake time"
-        log_error "[origin-gate] REFUSED — fetching origin/$PRODUCTION_BRANCH $og_what; cannot prove HEAD is reviewed code. Nothing pushed or deployed. Check network/credentials (git fetch origin $PRODUCTION_BRANCH) and re-run."
-        return 1
+# Artifact commit on refs/heads/$PIPELINE_DATA_BRANCH, built with git plumbing
+# in a TEMPORARY index (GIT_INDEX_FILE): HEAD, main, the real index and the
+# working tree are never touched, so a developer's staged work cannot leak
+# into it and main never moves. Parent: the local $PIPELINE_DATA_BRANCH tip
+# when it contains origin's (e.g. unpushed deferred commits), else origin's
+# tip, else none (root commit). The branch holds ONLY the allowlisted files.
+# Uses run_deploy's PIPELINE_ALLOWLIST. Returns 1 when no commit could be
+# made (the caller treats that as non-fatal).
+commit_pipeline_data() {
+    local pd_ref="refs/heads/$PIPELINE_DATA_BRANCH"
+    local pd_local pd_remote pd_parent="" pd_old
+    pd_local=$(git rev-parse --verify -q "$pd_ref^{commit}" 2>/dev/null) || pd_local=""
+    pd_remote=$(git rev-parse --verify -q "refs/remotes/origin/$PIPELINE_DATA_BRANCH^{commit}" 2>/dev/null) || pd_remote=""
+    if [[ -n "$pd_local" ]] && { [[ -z "$pd_remote" ]] || git merge-base --is-ancestor "$pd_remote" "$pd_local" 2>/dev/null; }; then
+        pd_parent="$pd_local"
+    elif [[ -n "$pd_remote" ]]; then
+        pd_parent="$pd_remote"
+        [[ -n "$pd_local" ]] && log_error "[staging] local $PIPELINE_DATA_BRANCH (${pd_local:0:12}) does not contain origin/$PIPELINE_DATA_BRANCH (${pd_remote:0:12}); building on origin's tip, the local-only commits are superseded"
     fi
+    pd_old="${pd_local:-0000000000000000000000000000000000000000}"
 
-    local og_commits
-    if ! og_commits=$(git rev-list "$og_ref..HEAD" 2>>"$LOG_FILE"); then
-        log_error "[origin-gate] REFUSED — cannot list $og_ref..HEAD. Nothing pushed or deployed; inspect the repository state and re-run."
-        return 1
-    fi
+    local pd_tmp pd_index pd_blob="" pd_tree pd_bad pd_new f
+    pd_tmp=$(mktemp -d 2>/dev/null) || { log_error "[staging] mktemp failed; no artifact commit"; return 1; }
+    pd_index="$pd_tmp/index"
+    if [[ -n "$pd_parent" ]]; then
+        GIT_INDEX_FILE="$pd_index" git read-tree "$pd_parent" >> "$LOG_FILE" 2>&1
+    else
+        GIT_INDEX_FILE="$pd_index" git read-tree --empty >> "$LOG_FILE" 2>&1
+    fi || { rm -rf "$pd_tmp"; log_error "[staging] could not seed the temporary index from ${pd_parent:-an empty tree}; no artifact commit"; return 1; }
 
-    local og_email og_msg_re='^chore: daily pipeline update [0-9]{4}-[0-9]{2}-[0-9]{2}$'
-    og_email=$(git var GIT_AUTHOR_IDENT 2>/dev/null | sed -n 's/.*<\([^>]*\)>.*/\1/p')
-    local og_bad="" og_count=0 og_c og_why og_words og_msg og_ae og_path og_ok og_allowed
-    for og_c in $og_commits; do
-        og_count=$(( og_count + 1 ))
-        og_why=""
-        og_words=$(git rev-list --parents -n 1 "$og_c" | wc -w | tr -d ' ')
-        [[ "$og_words" == "2" ]] || og_why="$og_why not a single-parent commit;"
-        og_msg=$(git log -1 --no-show-signature --format=%B "$og_c")
-        [[ "$og_msg" =~ $og_msg_re ]] || og_why="$og_why message is not the pipeline's;"
-        og_ae=$(git log -1 --no-show-signature --format=%ae "$og_c")
-        [[ -n "$og_email" && "$og_ae" == "$og_email" ]] || og_why="$og_why author <$og_ae> is not <$og_email>;"
-        while IFS= read -r og_path; do
-            [[ -z "$og_path" ]] && continue
-            og_ok=0
-            for og_allowed in "${PIPELINE_ALLOWLIST[@]}"; do
-                if [[ "$og_path" == "$og_allowed" ]]; then og_ok=1; break; fi
-            done
-            [[ $og_ok -eq 1 ]] || og_why="$og_why touches $og_path;"
-        done < <(git diff-tree --no-commit-id --name-only -r "$og_c")
-        [[ -z "$og_why" ]] || og_bad="$og_bad ${og_c:0:12} ($og_why)"
+    # staging:begin (block extracted VERBATIM by tests/daily-pipeline-staging.test.ts — keep both markers)
+    # Stage per path, so one absent artefact cannot drop the others (issue #5:
+    # a single multi-path call is fatal on any pathspec that matches nothing),
+    # and log each failure instead of swallowing it. Regular files only: a
+    # symlink would commit whatever it points at.
+    for f in "${PIPELINE_ALLOWLIST[@]}"; do
+        { [[ -f "$f" && ! -L "$f" ]] \
+            && pd_blob=$(git hash-object -w -- "$f" 2>>"$LOG_FILE") \
+            && GIT_INDEX_FILE="$pd_index" git update-index --add --cacheinfo "100644,$pd_blob,$f" >> "$LOG_FILE" 2>&1; } \
+            || log_error "[staging] could not stage $f (continuing)"
     done
+    # staging:end
 
-    if [[ -n "$og_bad" ]]; then
-        log_error "[origin-gate] REFUSED — HEAD carries commit(s) not on origin/$PRODUCTION_BRANCH that are not pipeline artifact commits:$og_bad. Nothing pushed or deployed. Get that code reviewed and merged, bring local $PRODUCTION_BRANCH back to origin/$PRODUCTION_BRANCH plus pipeline commits only, and re-run."
+    pd_tree=$(GIT_INDEX_FILE="$pd_index" git write-tree 2>>"$LOG_FILE") || pd_tree=""
+    rm -rf "$pd_tmp"
+    [[ -n "$pd_tree" ]] || { log_error "[staging] git write-tree failed; no artifact commit"; return 1; }
+
+    # Defense in depth: the branch may only ever hold the allowlisted files
+    # (a parent carrying anything else is refused, not extended).
+    if ! pd_bad=$(pd_tree_only_allowlisted "$pd_tree"); then
+        log_error "Pipeline staging guard tripped — $PIPELINE_DATA_BRANCH would carry non-allowlisted entries: $pd_bad. No artifact commit; inspect $pd_ref and origin/$PIPELINE_DATA_BRANCH by hand."
         return 1
     fi
-    log "[origin-gate] PASS — $og_count local commit(s) ahead of origin/$PRODUCTION_BRANCH, all pipeline artifact commits"
+    if [[ -n "$pd_parent" && "$pd_tree" == "$(git rev-parse "$pd_parent^{tree}" 2>/dev/null)" ]]; then
+        log "No pipeline-output changes to commit"
+        return 0
+    fi
+
+    local pd_parent_args=()
+    [[ -n "$pd_parent" ]] && pd_parent_args=(-p "$pd_parent")
+    pd_new=$(git commit-tree "$pd_tree" ${pd_parent_args[@]+"${pd_parent_args[@]}"} \
+        -m "chore: daily pipeline update $(date +%Y-%m-%d)" 2>>"$LOG_FILE") || pd_new=""
+    [[ "$pd_new" =~ ^[0-9a-f]{40}$ ]] || { log_error "[staging] git commit-tree failed; no artifact commit"; return 1; }
+    if ! git update-ref -m "daily pipeline artifact commit" "$pd_ref" "$pd_new" "$pd_old" >> "$LOG_FILE" 2>&1; then
+        log_error "[staging] could not move $pd_ref to ${pd_new:0:12} (did it change during the run?); no artifact commit"
+        return 1
+    fi
+    log "Artifact commit ${pd_new:0:12} on $PIPELINE_DATA_BRANCH (HEAD, index and working tree untouched)"
     return 0
-    # origin-gate:end
 }
+
+# pipeline-data-gate:begin (extracted VERBATIM by scripts/__tests__/deploy-gate.test.ts — keep both markers)
+# Every entry of tree-ish $1 must be a regular file (mode 100644) at a
+# PIPELINE_ALLOWLIST path. Prints the offending entries; returns 1 if any, or
+# if the tree cannot be read (fail closed).
+pd_tree_only_allowlisted() {
+    local entry meta path ok allowed bad=0
+    git rev-parse --verify -q "$1^{tree}" >/dev/null 2>&1 || { printf 'unreadable tree %s' "$1"; return 1; }
+    while IFS= read -r -d '' entry; do
+        meta="${entry%%$'\t'*}"
+        path="${entry#*$'\t'}"
+        ok=0
+        if [[ "${meta%% *}" == "100644" ]]; then
+            for allowed in "${PIPELINE_ALLOWLIST[@]}"; do
+                if [[ "$path" == "$allowed" ]]; then ok=1; break; fi
+            done
+        fi
+        if [[ $ok -eq 0 ]]; then printf '%s (mode %s) ' "$path" "${meta%% *}"; bad=1; fi
+    done < <(git ls-tree -r -z "$1")
+    return "$bad"
+}
+
+# Every commit on the pipeline-data tip $1 that origin does not have yet must
+# be a pipeline artifact commit: root or single parent, exactly the
+# pipeline's message, a tree of allowlisted regular files only. Sets
+# PD_GATE_BAD to the reasons; returns 1 if any commit fails.
+check_pipeline_data_commits() {
+    local pd_tip="$1" pd_base="refs/remotes/origin/$PIPELINE_DATA_BRANCH" pd_range pd_commits
+    local c why words msg entries msg_re='^chore: daily pipeline update [0-9]{4}-[0-9]{2}-[0-9]{2}$'
+    PD_GATE_BAD=""
+    if git rev-parse --verify -q "$pd_base^{commit}" >/dev/null 2>&1; then
+        pd_range="$pd_base..$pd_tip"
+    else
+        pd_range="$pd_tip"
+    fi
+    if ! pd_commits=$(git rev-list "$pd_range" 2>/dev/null); then
+        PD_GATE_BAD=" cannot list $pd_range"
+        return 1
+    fi
+    for c in $pd_commits; do
+        why=""
+        words=$(git rev-list --parents -n 1 "$c" | wc -w | tr -d ' ')
+        [[ "$words" == "1" || "$words" == "2" ]] || why="$why merge commit;"
+        msg=$(git log -1 --no-show-signature --format=%B "$c")
+        [[ "$msg" =~ $msg_re ]] || why="$why message is not the pipeline's;"
+        entries=$(pd_tree_only_allowlisted "$c") || why="$why carries $entries;"
+        [[ -z "$why" ]] || PD_GATE_BAD="$PD_GATE_BAD ${c:0:12} ($why)"
+    done
+    [[ -z "$PD_GATE_BAD" ]]
+}
+# pipeline-data-gate:end
 
 # Phase 6b: GSC sitemap submission (Phase-3 T1, 2026-07-19). Google's
 # discovery of new event pages stalled (~Jul 1: 13/15 sampled event pages

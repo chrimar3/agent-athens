@@ -1,17 +1,35 @@
 #!/bin/bash
-# Gate-respecting standalone redeploy (Phase 2A). Used by the STALE_DEPLOY
-# responder and by humans. Refuses when the deploy-gate refuses; verifies
-# platform-side state=ready (CLI exit 0 ≠ published — banked gotcha,
-# mistakes.md:622+). Does NOT write deploy-cadence lines: only the pipeline's
-# run_deploy records cadence (manual success lines masked a real drought
-# once — S193).
+# Gate-respecting standalone redeploy (Phase 2A) — a MANUAL tool since
+# security loop round 3: the deadman STALE_DEPLOY responder no longer calls
+# it (it restores the last host-verified Netlify deploy instead, see
+# src/watchdog/responders.ts). Verifies platform-side state=ready (CLI exit 0
+# ≠ published — banked gotcha, mistakes.md:622+). Does NOT write
+# deploy-cadence lines: only the pipeline's run_deploy records cadence
+# (manual success lines masked a real drought once — S193). A deploy shipped
+# with this script is not in the host's verified-deploys record, so a later
+# STALE_DEPLOY responder may restore the last pipeline-verified deploy over it.
+#
+# Refuses, in this order, before anything reaches Netlify:
+#   exit 6  the host quarantine marker exists
+#           (${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/QUARANTINE):
+#           a container run failed its integrity check, so dist/ is suspect
+#   exit 2  scripts/deploy-gate.sh refuses (full predicate, origin gate
+#           included: HEAD must be reviewed code on origin/main)
+#   exit 7  the published-artifact gate fails on dist/
+# Then: exit 3 CLI failed · 4 no deploy id · 5 deploy not state=ready.
 set -o pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$DIR" || exit 1
-bash scripts/deploy-gate.sh || { echo "[redeploy] deploy-gate refused" >&2; exit 2; }
+QUARANTINE_MARKER="${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/QUARANTINE"
+if [ -e "$QUARANTINE_MARKER" ]; then
+    echo "[redeploy] REFUSED — quarantine marker $QUARANTINE_MARKER exists: a pipeline run failed its integrity check and dist/ may be hostile. Nothing deployed. Review the evidence it names, delete the marker, rebuild, then retry." >&2
+    exit 6
+fi
+bash scripts/deploy-gate.sh || { echo "[redeploy] deploy-gate refused — nothing deployed (see the named condition above)" >&2; exit 2; }
+bun run scripts/check-published-artifacts.ts dist || { echo "[redeploy] published-artifact gate failed on dist/ — nothing deployed; fix the source and rebuild" >&2; exit 7; }
 OUT=$(mktemp); ERR=$(mktemp)
 trap 'rm -f "$OUT" "$ERR"' EXIT
-netlify deploy --prod --no-build --dir=dist --message "Responder redeploy $(date +%Y-%m-%dT%H:%M)" --json >"$OUT" 2>"$ERR" &
+netlify deploy --prod --no-build --dir=dist --message "Gated redeploy $(date +%Y-%m-%dT%H:%M)" --json >"$OUT" 2>"$ERR" &
 PID=$!
 # Wall-clock watchdog (Phase-1 pattern): a hanging CLI ate ~44 min silently
 # on 2026-08-10; date +%s advances through sleep.

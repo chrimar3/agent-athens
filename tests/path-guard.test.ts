@@ -432,6 +432,15 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/trusted-issue-thread.test.ts',
     '.github/scripts/trusted-issue-thread.sh',
     '.github/audit-ignore.json',
+    // Security loop round 3: code that decides or performs production deploys.
+    'src/watchdog/responders.ts',
+    'src/watchdog/classifier.ts',
+    'scripts/deadman-watchdog.ts',
+    'scripts/check-published-artifacts.ts',
+    'src/utils/build-provenance.ts',
+    'tests/watchdog-responders.test.ts',
+    'tests/daily-pipeline-deferred-publish.test.ts',
+    'tests/daily-pipeline-staging.test.ts',
   ];
   /** Listed by name in path-guard.json even where a broader glob already covers
    *  them, so narrowing that glob later cannot silently drop them. */
@@ -468,6 +477,13 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/generate-enrichment-brief.test.ts',
     'tests/phase3-weekly-guard.test.ts',
     'tests/trusted-issue-thread.test.ts',
+    'src/watchdog/**',
+    'scripts/deadman-watchdog.ts',
+    'scripts/check-published-artifacts.ts',
+    'src/utils/build-provenance.ts',
+    'tests/watchdog-responders.test.ts',
+    'tests/daily-pipeline-deferred-publish.test.ts',
+    'tests/daily-pipeline-staging.test.ts',
   ];
   const MUST_NOT_PROTECT = [
     '.claude/notes/ledger.md',

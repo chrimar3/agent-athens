@@ -24,7 +24,7 @@ import { readFileSync, existsSync, appendFileSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { homedir } from "node:os";
 import { classifyDeadman, type DeadmanInputs, type DeadmanResult } from "../src/watchdog/classifier";
-import { planResponse, executeActions, type ResponderState } from "../src/watchdog/responders";
+import { planResponse, executeActions, hostStateDir, type ResponderState } from "../src/watchdog/responders";
 import { loadQuarantine, filterQuarantined } from "../src/utils/quarantine";
 import { findVenueConfig } from "../src/quality/location-filter";
 import { ACTIVE_SOURCE_IDS } from "../src/config/active-source-ids";
@@ -40,9 +40,13 @@ const dbPath = (): string => process.env.DEADMAN_DB_PATH || join(ROOT, "data", "
 // Lets the watchdog be verified against a degenerate DB without spamming channels.
 const DRY_RUN = process.env.DEADMAN_DRY_RUN === "1";
 const HEARTBEAT_CSV = join(ROOT, "logs", "deadman-heartbeat.csv");
-// Responder cooldown state (Phase 2A) — gitignored; deleting it merely
-// re-enables actions immediately, so it is safe to lose.
-const RESPONDER_STATE_PATH = join(ROOT, "data", "responder-state.json");
+// Responder cooldown state (Phase 2A); deleting it merely re-enables actions
+// immediately, so it is safe to lose. Kept in the HOST-only state dir
+// (AA_STATE_DIR, default ~/.config/agentathens-docker) since security loop
+// round 3: data/ is writable by pipeline containers, and cooldowns decide how
+// often the host acts. Resolved at call time so tests can point AA_STATE_DIR
+// at a temp dir.
+const responderStatePath = (): string => join(hostStateDir(), "responder-state.json");
 function loadResponderState(path: string): ResponderState {
   try {
     return JSON.parse(readFileSync(path, "utf8")) as ResponderState;
@@ -438,13 +442,16 @@ const result: DeadmanResult = classifyDeadman(inputs);
 const tsIso = new Date(nowMs).toISOString().replace(/\.\d+Z$/, "Z");
 
 // Responder layer (Phase 2A): scoped action BEFORE notification so the alert
-// arrives with its outcome ("redeploy attempted → verified ready"). Fault-
-// isolated like every adapter; DRY_RUN plans but never executes.
-const plannedActions = safe(() => planResponse(result, loadResponderState(RESPONDER_STATE_PATH), nowMs), []);
+// arrives with its outcome. Fault-isolated like every adapter; DRY_RUN plans
+// but never executes. STALE_DEPLOY never ships dist/: the responder restores
+// the last deploy the host recorded as verified (hostStateDir()/deploys.log)
+// or, without such a record, only alerts (src/watchdog/responders.ts).
+const plannedActions = safe(() => planResponse(result, loadResponderState(responderStatePath()), nowMs), []);
 const responderOutcomes = await executeActions(plannedActions, {
   dryRun: DRY_RUN,
-  statePath: RESPONDER_STATE_PATH,
+  statePath: responderStatePath(),
   projectDir: ROOT,
+  stateDir: hostStateDir(),
 }).catch(() => [] as Awaited<ReturnType<typeof executeActions>>);
 const responderLine =
   responderOutcomes

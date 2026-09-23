@@ -69,6 +69,13 @@
     ".github/ISSUE_TEMPLATE/**",
     ".github/pull_request_template.md",
     "tests/shellcheck-gate.test.ts",
-    "tests/secret-scan.test.ts"
+    "tests/secret-scan.test.ts",
+    "src/watchdog/**",
+    "scripts/deadman-watchdog.ts",
+    "scripts/check-published-artifacts.ts",
+    "src/utils/build-provenance.ts",
+    "tests/watchdog-responders.test.ts",
+    "tests/daily-pipeline-deferred-publish.test.ts",
+    "tests/daily-pipeline-staging.test.ts"
   ]
 }
