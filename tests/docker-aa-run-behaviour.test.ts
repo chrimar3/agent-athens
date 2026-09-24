@@ -26,6 +26,8 @@ const DOCKER_STUB = `#!/bin/bash
 # ENV lines: which token / mailbox variables (and the relay settings) are in
 # this docker process's own environment, with their values (fixture values).
 { echo "=== CALL"; echo "SECRETS_DIR_ENV \${AA_SECRETS_DIR:-}"
+  # Who holds the host-side dist/ lock while this docker command runs.
+  echo "DIST_LOCK \$(readlink "\${AA_STATE_DIR:-/nonexistent}/state/dist.lock" 2>/dev/null)"
   for k in $STUB_ENV_KEYS; do [ -n "\${!k+x}" ] && printf 'ENV %s=%s\\n' "$k" "\${!k}"; done
   for a in "$@"; do printf 'ARG %s\\n' "$a"; done; } >> "$STUB_DIR/docker.log"
 case "$1" in
@@ -196,7 +198,7 @@ function run(args: string[], extra: Record<string, string> = {}) {
   return { code: r.exitCode, out: r.stdout.toString() + r.stderr.toString() };
 }
 
-type Call = { args: string[]; secretsEnv: string; env: Record<string, string> };
+type Call = { args: string[]; secretsEnv: string; distLock: string; env: Record<string, string> };
 function calls(): Call[] {
   const log = join(stub, 'docker.log');
   if (!existsSync(log)) return [];
@@ -207,6 +209,7 @@ function calls(): Call[] {
       const lines = block.split('\n').filter(Boolean);
       return {
         secretsEnv: (lines.find((l) => l.startsWith('SECRETS_DIR_ENV ')) ?? '').slice('SECRETS_DIR_ENV '.length),
+        distLock: (lines.find((l) => l.startsWith('DIST_LOCK')) ?? '').slice('DIST_LOCK'.length).trim(),
         args: lines.filter((l) => l.startsWith('ARG ')).map((l) => l.slice(4)),
         env: Object.fromEntries(
           lines.filter((l) => l.startsWith('ENV ')).map((l) => [l.slice(4, l.indexOf('=')), l.slice(l.indexOf('=') + 1)]),
@@ -215,7 +218,7 @@ function calls(): Call[] {
     });
 }
 const after = (args: string[], flag: string) => args.flatMap((a, i) => (a === flag ? [args[i + 1]] : []));
-type Run = { name: string; service: string; job: string; jobArgs: string[]; tokens: string[]; gitConfig: string[]; aaFlags: string[]; mounts: string[]; secretsEnv: string; env: Record<string, string> };
+type Run = { name: string; service: string; job: string; jobArgs: string[]; tokens: string[]; gitConfig: string[]; aaFlags: string[]; mounts: string[]; secretsEnv: string; distLock: string; env: Record<string, string> };
 function runs(): Run[] {
   return calls()
     .filter((c) => c.args[0] === 'compose' && c.args.includes('run'))
@@ -232,6 +235,7 @@ function runs(): Run[] {
         aaFlags: envs.filter((e) => e.startsWith('AA_')).sort(),
         mounts: after(c.args, '-v'),
         secretsEnv: c.secretsEnv,
+        distLock: c.distLock,
         env: c.env,
       };
     });
@@ -537,12 +541,13 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
       expect(m.startsWith(`${repo}:`)).toBe(false); // never the repo root
       expect(target(m)).not.toBe('/workspace');
     }
-    // The data folders exist on the host now and are writable; node_modules
-    // is never the host's.
-    for (const d of ['temp', 'tmp', 'temp-descriptions', 'temp-briefs', 'temp-research', 'logs', 'data', 'dist']) {
+    // The data folders exist on the host now and are writable (dist/ only in
+    // the runs that build the site); node_modules is never the host's.
+    for (const d of ['temp', 'tmp', 'temp-descriptions', 'temp-briefs', 'temp-research', 'logs', 'data']) {
       expect(existsSync(join(repo, d))).toBe(true);
       expect(e.mounts).toContain(`${repo}/${d}:/workspace/${d}:rw`);
     }
+    expect(e.mounts).toContain(`${repo}/dist:/workspace/dist:ro`);
     expect(existsSync(join(repo, 'node_modules'))).toBe(false);
     expect(e.mounts.some((m) => target(m) === '/workspace/node_modules')).toBe(false);
     // Everything else read-only, each exactly once.
@@ -875,5 +880,137 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
   test('without scripts/publish-diff-gate.ts no gate runs', () => {
     expect(run(['freshness'], { STUB_DIFF_RC: '3' }).code).toBe(0);
     expect(runs().map((x) => x.job)).not.toContain('diff-gate');
+  });
+});
+
+
+// dist/ is writable only in the runs that build the site, and those runs never
+// overlap the diff gate and publish: publish uploads what the gate hashed.
+describe.skipIf(process.platform === 'win32')('docker/aa-run.sh dist/ access and the dist/ lock (stub docker)', () => {
+  const lockPath = () => join(state, 'state/dist.lock');
+  const lockTarget = () => {
+    try {
+      return Bun.spawnSync(['readlink', lockPath()]).stdout.toString().trim();
+    } catch {
+      return '';
+    }
+  };
+  /** A live process whose command line names aa-run.sh, standing in for another wrapper run. */
+  const otherWrapper = () => {
+    const dir = join(fx, 'other');
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'aa-run.sh'), 'sleep 30\ntrue\n');
+    return Bun.spawn(['bash', join(dir, 'aa-run.sh')]);
+  };
+
+  test('only the runs that build the site get dist/ writable', () => {
+    writeFileSync(join(state, 'deploys.log'), `2026-01-01T00:00:00Z ${DEPLOY_ID} ${HASH_A}\n`);
+    for (const job of [['enrichment'], ['visibility'], ['verify-live'], ['restore', DEPLOY_ID], ['test'], ['shell', '-c', 'true'], ['site'], ['build']]) {
+      expect(run(job).code).toBe(0);
+    }
+    run(['doctor']); // exit code depends on the host checks; the mount does not
+    const mode = Object.fromEntries(runs().map((r) => [r.job, distWritable(r) ? 'rw' : distReadOnly(r) ? 'ro' : 'none']));
+    expect(mode).toEqual({
+      enrichment: 'ro', visibility: 'ro', 'verify-live': 'ro', restore: 'ro', test: 'ro', shell: 'ro', site: 'rw', build: 'rw', doctor: 'ro',
+    });
+  });
+
+  test('freshness holds the dist/ lock from its build through the diff gate to the publish, then releases it', () => {
+    writeFileSync(join(repo, 'scripts/publish-diff-gate.ts'), '// fixture\n');
+    git('add', 'scripts/publish-diff-gate.ts');
+    git('commit', '-qm', 'diff gate');
+    expect(run(['freshness']).code).toBe(0);
+    const rs = runs();
+    expect(rs.map((x) => x.job)).toEqual(['ingest', 'freshness', 'build', 'diff-gate', 'publish']);
+    const [ingest, scrape, build, gate, publish] = rs;
+    expect(ingest.distLock).toBe('');
+    expect(scrape.distLock).toBe(''); // the 3-hour scrape does not block a site run
+    expect(build.distLock).toMatch(/^[0-9]+$/);
+    expect(gate.distLock).toBe(build.distLock);
+    expect(publish.distLock).toBe(build.distLock);
+    expect(existsSync(lockPath())).toBe(false);
+  });
+
+  test('site waits while a publish container runs, then goes ahead', () => {
+    busy('agent-athens-freshness-publish', 3);
+    const r = run(['site'], { AA_DIST_WAIT_POLL_SEC: '1' });
+    expect(r.code).toBe(0);
+    expect(r.out).toContain('waiting for agent-athens-freshness-publish to finish: it builds or publishes dist/');
+    expect(r.out).toContain('going ahead');
+    expect(runs().map((x) => x.job)).toEqual(['site']);
+  });
+
+  test('publish waits while a site or build container runs; after the wait limit it gives up (exit 14) and keeps the build hash', () => {
+    writeFileSync(join(state, 'build-hash'), `${HASH_A}\n`);
+    busy('agent-athens-site', 2);
+    const ok = run(['publish'], { AA_DIST_WAIT_POLL_SEC: '1' });
+    expect(ok.code).toBe(0);
+    expect(ok.out).toContain('waiting for agent-athens-site to finish');
+    expect(deploysLog()).toContain(DEPLOY_ID);
+
+    writeFileSync(join(state, 'build-hash'), `${HASH_A}\n`);
+    busy('agent-athens-build', 999);
+    const r = run(['publish'], { AA_DIST_WAIT_POLL_SEC: '1', AA_DIST_WAIT_MAX_SEC: '2' });
+    expect(r.code).toBe(14);
+    expect(r.out).toContain('agent-athens-build, another run that builds or publishes dist/, was still running');
+    expect(notifications()).toContain('Job publish did not run');
+    expect(runs().map((x) => x.job)).toEqual(['publish']); // no second publish run
+    expect(readFileSync(join(state, 'build-hash'), 'utf8').trim()).toBe(HASH_A); // not consumed
+    expect(existsSync(lockPath())).toBe(false);
+  });
+
+  test('a build waits while another aa-run.sh holds the dist/ lock (e.g. between its diff gate and publish)', () => {
+    const other = otherWrapper();
+    try {
+      mkdirSync(join(state, 'state'), { recursive: true });
+      symlinkSync(String(other.pid), lockPath());
+      const r = run(['build'], { AA_DIST_WAIT_POLL_SEC: '1', AA_DIST_WAIT_MAX_SEC: '2' });
+      expect(r.code).toBe(14);
+      expect(r.out).toContain(`aa-run.sh process ${other.pid}, another run that builds or publishes dist/`);
+      expect(runs()).toEqual([]);
+      expect(lockTarget()).toBe(String(other.pid)); // someone else's lock is left alone
+    } finally {
+      other.kill();
+    }
+  });
+
+  test('a lock left by a wrapper that is gone is removed', () => {
+    mkdirSync(join(state, 'state'), { recursive: true });
+    const dead = Bun.spawnSync(['bash', '-c', 'echo $$']).stdout.toString().trim(); // exited
+    symlinkSync(dead, lockPath());
+    const r = run(['site']);
+    expect(r.code).toBe(0);
+    expect(r.out).toContain(`removing the stale dist/ lock of aa-run.sh process ${dead}`);
+    expect(runs().map((x) => x.job)).toEqual(['site']);
+    expect(existsSync(lockPath())).toBe(false);
+  });
+
+  test('under a quarantine only the restore check shell may run (AA_RESTORE_UNDER_QUARANTINE=1), nothing else', () => {
+    writeFileSync(join(state, 'QUARANTINE'), 'Quarantined: fixture\n');
+    expect(run(['shell', '-c', 'true']).code).toBe(5);
+    expect(run(['enrichment'], { AA_RESTORE_UNDER_QUARANTINE: '1' }).code).toBe(5);
+    expect(run(['site'], { AA_RESTORE_UNDER_QUARANTINE: '1' }).code).toBe(5);
+    expect(runs()).toEqual([]);
+    const r = run(['shell', '-c', 'true'], { AA_RESTORE_UNDER_QUARANTINE: '1' });
+    expect(r.code).toBe(0);
+    expect(r.out).toContain('--force-under-quarantine');
+    const [s] = runs();
+    expect(s.job).toBe('shell');
+    expect(s.tokens).toEqual([]);
+    expect(distReadOnly(s) && gitReadOnly(s) && dotenvAbsent(s)).toBe(true);
+  });
+
+  test('runs that neither build nor publish dist/ ignore the lock', () => {
+    const other = otherWrapper();
+    try {
+      mkdirSync(join(state, 'state'), { recursive: true });
+      symlinkSync(String(other.pid), lockPath());
+      expect(run(['enrichment'], { AA_DIST_WAIT_MAX_SEC: '0' }).code).toBe(0);
+      expect(run(['visibility'], { AA_DIST_WAIT_MAX_SEC: '0' }).code).toBe(0);
+      expect(runs().map((x) => x.job)).toEqual(['enrichment', 'visibility']);
+      expect(lockTarget()).toBe(String(other.pid));
+    } finally {
+      other.kill();
+    }
   });
 });

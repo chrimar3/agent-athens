@@ -332,7 +332,7 @@ describe('docker/aa-run.sh least privilege', () => {
   });
 
   test('site and the diff gate run offline, without .env or tokens', () => {
-    expect(policy('site')).toBe('        site)       TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; NET=no; LIMIT=45 ;;');
+    expect(policy('site')).toBe('        site)       TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; DIST=rw; NET=no; LIMIT=45 ;;');
     expect(policy('diff-gate')).toMatch(/TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; DIST=ro; NET=no;/);
     expect(read('docker/entrypoint.sh')).toContain('diff-gate) exec bun run scripts/publish-diff-gate.ts dist /handoff/publish-stats.json "$@" ;;');
   });
@@ -378,12 +378,23 @@ describe('docker/aa-run.sh least privilege', () => {
 
   test('sealed build: scrape writes neither .git nor dist/; build is offline with git identity only; publish cannot write dist/', () => {
     expect(policy('scrape')).toMatch(/TOKENS=""; SECRETS=no; DOTENV=\$\{SCRAPE_DOTENV:-no\}; GITRW=no; DIST=ro;/);
-    expect(policy('build')).toMatch(/TOKENS="\$GIT_ID"; SECRETS=no; DOTENV=no; GITRW=yes; NET=no;/);
+    expect(policy('build')).toMatch(/TOKENS="\$GIT_ID"; SECRETS=no; DOTENV=no; GITRW=yes; DIST=rw; NET=no;/);
     expect(policy('publish')).toContain('DIST=ro');
     expect(wrapper).toContain('[ "$entry" = "dist" ] && [ "$DIST" = "ro" ] && mode=ro');
     expect(wrapper).toContain('[ "$NET" = "no" ] && service=pipeline-offline');
     expect(wrapper).toContain('[ "$NET" = "mail" ] && service=pipeline-mail');
     expect(wrapper).toMatch(/export AA_SKIP_BUILD=1[\s\S]*run_container scrape [\s\S]*run_container build [\s\S]*run_container publish /);
+  });
+
+  test('dist/ is read-only in every run except the ones that build the site', () => {
+    // Default read-only; writable only where a policy says DIST=rw.
+    expect(wrapper).toMatch(/job_policy\(\) \{\n(\s+#[^\n]*\n)*\s+DIST=ro; NET=proxy; SECRET_FILES=""\n/);
+    const lines = wrapper.split('\n').filter((l) => /^\s+[a-z|-]+\)\s+TOKENS=/.test(l));
+    const rw = lines.filter((l) => l.includes('DIST=rw')).map((l) => l.trim().split(')')[0]).sort();
+    expect(rw).toEqual(['build', 'daily', 'legacy', 'scrape-build', 'site']);
+    // Every run that builds dist/, and the diff gate and publish, takes the dist/ lock first.
+    expect(wrapper).toContain('if [ "$DIST" = "rw" ] || [ "$policy" = "diff-gate" ] || [ "$policy" = "publish" ]; then acquire_dist_lock; fi');
+    expect(wrapper).toMatch(/cleanup\(\) \{[\s\S]{0,80}release_dist_lock/);
   });
 
   test('a deploy is recorded only when its dist hash is the one the build run reported', () => {

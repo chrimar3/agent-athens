@@ -36,6 +36,10 @@
 #     holds the publishing tokens but never loads a web page and cannot write
 #     dist/; the Mac records a deploy only if the publish run's dist hash is
 #     the one the build run reported;
+#   - dist/ is writable only in the runs that build the site (build, site;
+#     older pipelines: scrape-build, legacy, daily), and those runs never
+#     overlap the diff gate and publish runs (a host-side lock held from the
+#     build or gate to the end of the upload);
 #   - every container run has a wall-clock limit (docker kill when it fires);
 #   - backups are copied on the Mac (plain file copy, nothing parsed) into
 #     ~/agent-athens-backups, which no container mounts;
@@ -51,6 +55,7 @@
 # 11 another run that writes the database was still running after 2 h;
 # 12 publish held by the diff gate (AA_ACCEPT_DIFF=1 docker/aa-run.sh publish
 # after review); 13 the diff gate itself failed (nothing published);
+# 14 another run that builds or publishes dist/ was still running after 2 h;
 # 124 a run hit its time limit.
 # 0 without running when the same job is already running.
 set -euo pipefail
@@ -86,31 +91,34 @@ RW_TOP="data dist logs node_modules temp tmp temp-descriptions temp-briefs temp-
 
 # Per run: TOKENS, SECRETS (yes = mount ~/.config/agentathens read-only;
 # files = only the key files named in SECRET_FILES; no = an empty folder),
-# DOTENV (repo .env visible), GITRW (may commit), DIST (ro = dist/ mounted
-# read-only), NET (proxy = internal network, out only through the egress
-# proxy; mail = the same, plus IMAP through the egress relay; no = the offline
-# compose service), LIMIT (wall-clock minutes; AA_JOB_TIMEOUT_MIN overrides
-# every run's limit).
+# DOTENV (repo .env visible), GITRW (may commit), DIST (rw = dist/ writable:
+# only the runs that build the site — build, site, and on older pipelines
+# scrape-build, legacy and daily; read-only for every other run), NET (proxy
+# = internal network, out only through the egress proxy; mail = the same, plus
+# IMAP through the egress relay; no = the offline compose service), LIMIT
+# (wall-clock minutes; AA_JOB_TIMEOUT_MIN overrides every run's limit).
 #   scrape       sealed-build pipeline: data phases only, never commits or builds
 #   scrape-build older pipeline: scrape + build + commit in one run
 #   build        builds dist/ and commits artifacts to pipeline-data, offline
 #   diff-gate    scripts/publish-diff-gate.ts over the built dist/, offline
 job_policy() {
-    DIST=rw; NET=proxy; SECRET_FILES=""
+    # dist/ is read-only unless a run builds the site (see run_container:
+    # those runs and the diff gate/publish never overlap).
+    DIST=ro; NET=proxy; SECRET_FILES=""
     case "$1" in
         scrape)     TOKENS=""; SECRETS=no; DOTENV=${SCRAPE_DOTENV:-no}; GITRW=no; DIST=ro; NET=${SCRAPE_NET:-proxy}; LIMIT=180 ;;
-        scrape-build) TOKENS="$GIT_ID"; SECRETS=no; DOTENV=${SCRAPE_DOTENV:-no}; GITRW=yes; NET=${SCRAPE_NET:-proxy}; LIMIT=180 ;;
-        build)      TOKENS="$GIT_ID"; SECRETS=no; DOTENV=no; GITRW=yes; NET=no; LIMIT=45 ;;
+        scrape-build) TOKENS="$GIT_ID"; SECRETS=no; DOTENV=${SCRAPE_DOTENV:-no}; GITRW=yes; DIST=rw; NET=${SCRAPE_NET:-proxy}; LIMIT=180 ;;
+        build)      TOKENS="$GIT_ID"; SECRETS=no; DOTENV=no; GITRW=yes; DIST=rw; NET=no; LIMIT=45 ;;
         ingest)     TOKENS="$MAIL_KEYS"; SECRETS=no; DOTENV=yes; GITRW=no; NET=mail; LIMIT=30 ;;
         restore)    TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=10 ;;
         diff-gate)  TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; DIST=ro; NET=no; LIMIT=15 ;;
         publish)    TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID $GIT_ID"; SECRETS=files; SECRET_FILES="gcp-kpi-reader.json"; DOTENV=no; GITRW=yes; DIST=ro; LIMIT=30 ;;
         verify-live) TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=10 ;;
-        legacy)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN $GIT_ID $MAIL_KEYS"; SECRETS=yes; DOTENV=yes; GITRW=yes; NET=mail; LIMIT=180 ;;
-        daily)      TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN $GIT_ID $MAIL_KEYS"; SECRETS=yes; DOTENV=yes; GITRW=yes; NET=mail; LIMIT=360 ;;
+        legacy)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN $GIT_ID $MAIL_KEYS"; SECRETS=yes; DOTENV=yes; GITRW=yes; DIST=rw; NET=mail; LIMIT=180 ;;
+        daily)      TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN $GIT_ID $MAIL_KEYS"; SECRETS=yes; DOTENV=yes; GITRW=yes; DIST=rw; NET=mail; LIMIT=360 ;;
         enrichment) TOKENS="CLAUDE_CODE_OAUTH_TOKEN"; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=90 ;;
         visibility) TOKENS=""; SECRETS=files; SECRET_FILES="bing-api-key gcp-kpi-reader.json"; DOTENV=no; GITRW=no; LIMIT=30 ;;
-        site)       TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; NET=no; LIMIT=45 ;;
+        site)       TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; DIST=rw; NET=no; LIMIT=45 ;;
         test|shell) TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=120 ;;
         doctor)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN $GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=no; LIMIT=10 ;;
         *) return 1 ;;
@@ -189,9 +197,19 @@ stop_egress() {
     fi
     "${COMPOSE[@]}" rm -s -f egress >/dev/null 2>&1 || true
 }
+# The dist/ lock (acquire_dist_lock below), released when this script exits.
+DIST_LOCK="$STATE_DIR/state/dist.lock"
+DIST_LOCK_HELD=no
+# shellcheck disable=SC2317,SC2329  # invoked by cleanup (EXIT trap)
+release_dist_lock() {
+    [ "$DIST_LOCK_HELD" = "yes" ] || return 0
+    [ "$(readlink "$DIST_LOCK" 2>/dev/null || true)" = "$$" ] && rm -f "$DIST_LOCK"
+    DIST_LOCK_HELD=no
+}
 # shellcheck disable=SC2317,SC2329  # invoked by the EXIT trap
 cleanup() {
     stop_watchdog
+    release_dist_lock
     stop_egress
     rmdir "$EMPTY_DIR" 2>/dev/null || true
 }
@@ -208,9 +226,16 @@ if [ "$JOB" = "image-refresh" ]; then
     exit $?
 fi
 
+# A quarantine pauses every job. One exception: docker/restore-backup.sh
+# --force-under-quarantine checks the backup in a `shell` run (no token, no
+# .env, dist/ and .git read-only) — the owner asked for exactly that one run
+# while the quarantine stays in place.
 if [ -f "$STATE_DIR/QUARANTINE" ]; then
     cat "$STATE_DIR/QUARANTINE" >&2
-    fail "jobs are paused by a quarantine" "review the evidence, see docs/security/incident-response.md, then delete $STATE_DIR/QUARANTINE" 5
+    if [ "$JOB" != "shell" ] || [ "${AA_RESTORE_UNDER_QUARANTINE:-}" != "1" ]; then
+        fail "jobs are paused by a quarantine" "review the evidence, see docs/security/incident-response.md, then delete $STATE_DIR/QUARANTINE" 5
+    fi
+    log "quarantine in place — running this shell only for docker/restore-backup.sh --force-under-quarantine"
 fi
 
 inside() { case "$1/" in "$2"/*) return 0 ;; esac; return 1; }  # $1 path inside dir $2
@@ -402,6 +427,72 @@ wait_for_db_writers() {
     [ "$waited" -eq 0 ] || log "no other database-writing run left after ${waited}s — going ahead"
 }
 
+# dist/ writers and dist/ publishers never overlap. Only the runs that build
+# the site get dist/ writable (DIST=rw: build, site; scrape-build, legacy and
+# daily on older pipelines); the diff gate hashes dist/ and publish uploads it
+# afterwards, so a build or site run in between would publish what the gate
+# never saw. Every aa-run.sh that starts such a run (DIST=rw, diff-gate or
+# publish) first takes one host-side lock and keeps it until it exits: a
+# freshness run holds it from its build through the diff gate to the publish,
+# a `publish` from its diff gate to the upload. The lock is a symlink in the
+# host-only state folder whose target is the holder's PID (created
+# atomically; one whose process is gone is removed). While another aa-run.sh
+# holds it, or a container of such a run is still up (one that outlived its
+# aa-run.sh), the run waits — every 30 s, for up to 2 h — then gives up with
+# an alert (exit 14).
+dist_containers_re() {
+    # On older pipelines the freshness container itself builds (scrape-build/legacy).
+    local fresh=""
+    [ "$SEALED" = "yes" ] || fresh="freshness|"
+    printf '^/agent-athens-(%sfreshness-build|freshness-diff-gate|freshness-publish|build|publish|publish-diff-gate|site|daily)$' "$fresh"
+}
+dist_lock_owner_alive() {  # $1 PID from the lock
+    case "$1" in ''|*[!0-9]*) return 1 ;; esac
+    ps -p "$1" -o command= 2>/dev/null | grep -q 'aa-run\.sh'
+}
+acquire_dist_lock() {
+    local poll="${AA_DIST_WAIT_POLL_SEC:-${AA_DB_WAIT_POLL_SEC:-30}}" max="${AA_DIST_WAIT_MAX_SEC:-${AA_DB_WAIT_MAX_SEC:-7200}}"
+    local waited=0 owner busy re msg
+    case "$poll" in ''|*[!0-9]*) poll=30 ;; esac
+    case "$max" in ''|*[!0-9]*) max=7200 ;; esac
+    [ "$poll" -ge 1 ] || poll=1
+    re="$(dist_containers_re)"
+    mkdir -p "$STATE_DIR/state"
+    while :; do
+        busy=""
+        if [ "$DIST_LOCK_HELD" != "yes" ]; then
+            if ln -sn "$$" "$DIST_LOCK" 2>/dev/null; then
+                DIST_LOCK_HELD=yes
+            elif [ -e "$DIST_LOCK" ] && [ ! -L "$DIST_LOCK" ]; then
+                fail "$DIST_LOCK is not the lock this script makes (a symlink)" "inspect it, remove it, then retry" 14
+            else
+                owner="$(readlink "$DIST_LOCK" 2>/dev/null || true)"
+                [ -n "$owner" ] || continue   # released just now: try again
+                if ! dist_lock_owner_alive "$owner"; then
+                    log "removing the stale dist/ lock of aa-run.sh process $owner (no longer running)"
+                    [ "$(readlink "$DIST_LOCK" 2>/dev/null || true)" = "$owner" ] && rm -f "$DIST_LOCK"
+                    continue
+                fi
+                busy="aa-run.sh process $owner"
+            fi
+        fi
+        if [ "$DIST_LOCK_HELD" = "yes" ]; then
+            busy="$(docker ps --format '{{.Names}}' --filter "name=$re" 2>/dev/null | head -1)"
+            [ -n "$busy" ] || break
+        fi
+        if [ "$waited" -ge "$max" ]; then
+            msg="$busy, another run that builds or publishes dist/, was still running after $((max / 60)) min"
+            bash "$HERE/integrity-check.sh" notify "Job $JOB did not run: $msg" >/dev/null 2>&1 || true
+            echo "aa-run: $msg" >&2
+            echo "aa-run: next: check it with 'docker ps' and its log in ~/.config/agentathens-docker/logs; the next scheduled $JOB runs as usual" >&2
+            exit 14
+        fi
+        [ "$waited" -eq 0 ] && log "waiting for $busy to finish: it builds or publishes dist/ (checking every ${poll}s, up to $((max / 60)) min)"
+        sleep "$poll"; waited=$((waited + poll))
+    done
+    [ "$waited" -eq 0 ] || log "no other run building or publishing dist/ left after ${waited}s — going ahead"
+}
+
 # Plain byte copy of the database before any run that writes it. Nothing on
 # the Mac parses the file (restores are checked inside the container by
 # docker/restore-backup.sh). Waits for other pipeline runs so the copy is not
@@ -538,6 +629,9 @@ compose_run() {
 run_container() {
     local policy="$1" name="$2"; shift 2
     job_policy "$policy" || fail "internal: no policy '$policy'" "report this" 2
+    # Before anything else (a publish consumes the build hash below): runs
+    # that build dist/ and runs that gate or upload it never overlap.
+    if [ "$DIST" = "rw" ] || [ "$policy" = "diff-gate" ] || [ "$policy" = "publish" ]; then acquire_dist_lock; fi
     export AA_SECRETS_DIR="$EMPTY_DIR"
     [ "$SECRETS" = "yes" ] && export AA_SECRETS_DIR="$SECRETS_DIR"
     local secret_mounts=() sf
@@ -626,7 +720,7 @@ run_container() {
         fi
         mode=ro
         case " $RW_TOP " in *" $entry "*) mode=rw ;; esac
-        # dist/ is written only by the build run; scrape and publish see it read-only.
+        # dist/ is writable only where DIST=rw (the runs that build the site).
         [ "$entry" = "dist" ] && [ "$DIST" = "ro" ] && mode=ro
         # The Netlify CLI keeps working files under .netlify/ while deploying;
         # only the publish run (no browser, no outside input) may write it.
