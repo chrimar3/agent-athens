@@ -770,6 +770,34 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/security/security-alert.test.ts',
     'tests/security/deadman-host-signals.test.ts',
     'tests/security/unattended-disallowed-tools.test.ts',
+    // Round 8: the publish-trust modules and the publish-trust roots' direct
+    // imports, the host jobs that read events.db through the untrusted-DB
+    // reader and its CLI, the default-branch config reader, round-8 tests.
+    'src/validators/verification-allowlist.ts',
+    'src/config/analytics.ts',
+    'src/ticketing/ticket-trust.ts',
+    'src/ticketing/validator.ts',
+    'src/ticketing/venue-registry.ts',
+    'src/utils/ticket-source-classifier.ts',
+    'src/db/url-columns.ts',
+    'src/config/site-url.ts',
+    'src/utils/tag-filter.ts',
+    'src/enrichment/quality-gates.ts',
+    'src/enrichment/word-counter.ts',
+    'src/enrichment/description-generator.ts',
+    'src/enrichment/enrichment-matrix.ts',
+    'scripts/untrusted-db-query.ts',
+    'scripts/daily-enrichment-check.sh',
+    'scripts/weekly-digest.ts',
+    'scripts/monitor-search-visibility.ts',
+    '.github/scripts/default-branch-file.sh',
+    'tests/branch-rules-check.test.ts',
+    'src/watchdog/untrusted-db.ts',
+    'src/watchdog/untrusted-db-runner.ts',
+    '.github/scripts/live-site-check.sh',
+    '.github/workflows/live-site-check.yml',
+    'tests/security/untrusted-db.test.ts',
+    'tests/security/publish-trust-protected.test.ts',
   ];
   /** Listed by name in path-guard.json even where a broader glob already covers
    *  them, so narrowing that glob later cannot silently drop them. */
@@ -827,6 +855,25 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/security/monitoring-labels.test.ts',
     'tests/security/no-click-redirect.test.ts',
     'scripts/security-alert.ts',
+    'src/validators/verification-allowlist.ts',
+    'src/config/analytics.ts',
+    'src/ticketing/ticket-trust.ts',
+    'src/ticketing/validator.ts',
+    'src/ticketing/venue-registry.ts',
+    'src/utils/ticket-source-classifier.ts',
+    'src/db/url-columns.ts',
+    'src/config/site-url.ts',
+    'src/utils/tag-filter.ts',
+    'src/enrichment/quality-gates.ts',
+    'src/enrichment/word-counter.ts',
+    'src/enrichment/description-generator.ts',
+    'src/enrichment/enrichment-matrix.ts',
+    'scripts/untrusted-db-query.ts',
+    'scripts/daily-enrichment-check.sh',
+    'scripts/weekly-digest.ts',
+    'scripts/monitor-search-visibility.ts',
+    '.github/scripts/default-branch-file.sh',
+    'tests/branch-rules-check.test.ts',
   ];
   const MUST_NOT_PROTECT = [
     '.claude/notes/ledger.md',
@@ -857,6 +904,8 @@ describe('.github/path-guard.json — the shipped glob list', () => {
       'netlify/functions/any-future-function.ts',
       // Round 8: likewise for edge functions (edge-probe.ts was removed).
       'netlify/edge-functions/any-future-edge-function.ts',
+      // Round 8: publish-trust modules that exist on the regular branch only.
+      'src/validators/verification-allowlist.ts', 'src/ticketing/ticket-trust.ts', 'src/db/url-columns.ts',
     ]);
     for (const p of MUST_PROTECT) {
       if (allowMissing.has(p)) continue;
