@@ -1,7 +1,19 @@
 {
   "deploy_stale_hours": 36,
   "enrich_stale_hours": 36,
-  "pipeline_health_labels": ["com.agentathens.daily", "com.agentathens.auto-enrich"],
+  "pipeline_health_labels": [
+    "com.agentathens.daily",
+    "com.agentathens.auto-enrich",
+    "com.agentathens.docker.visibility",
+    "com.agentathens.docker.freshness",
+    "com.agentathens.docker.enrichment",
+    "com.agentathens.docker.enrichment-13",
+    "com.agentathens.docker.enrichment-16",
+    "com.agentathens.docker.enrichment-19",
+    "com.agentathens.docker.verify-live",
+    "com.agentathens.docker.verify-live-20",
+    "com.agentathens.docker.image-refresh"
+  ],
   "notify": { "enabled": true },
   "email": {
     "enabled": true,

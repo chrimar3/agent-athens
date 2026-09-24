@@ -450,7 +450,9 @@ const tsIso = new Date(nowMs).toISOString().replace(/\.\d+Z$/, "Z");
 // arrives with its outcome. Fault-isolated like every adapter; DRY_RUN plans
 // but never executes. STALE_DEPLOY never ships dist/: the responder restores
 // the last deploy the host recorded as verified (hostStateDir()/deploys.log)
-// or, without such a record, only alerts (src/watchdog/responders.ts).
+// through the container job `docker/aa-run.sh restore <id>` (round 5: no host
+// Netlify login needed) or, without a record or the wrapper, only alerts
+// (src/watchdog/responders.ts).
 const plannedActions = safe(() => planResponse(result, loadResponderState(responderStatePath()), nowMs), []);
 const responderOutcomes = await executeActions(plannedActions, {
   dryRun: DRY_RUN,

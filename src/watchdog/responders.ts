@@ -13,10 +13,16 @@
  *  restores the last deploy the HOST recorded as verified — the newest line of
  *  $AA_STATE_DIR/deploys.log (default ~/.config/agentathens-docker), which the
  *  host wrapper appends from publish's `PUBLISH-RESULT` line and no container
- *  can write. The site id comes from Netlify's own record of that deploy, not
- *  from .netlify/state.json. With no usable record it only alerts, naming the
- *  manual commands. Restore is the rollback direction: it can only put a
- *  previously verified deploy back, never new content. */
+ *  can write. With no usable record it only alerts, naming the manual
+ *  commands. Restore is the rollback direction: it can only put a previously
+ *  verified deploy back, never new content.
+ *
+ *  Security loop round 5: the restore no longer uses the host's Netlify CLI
+ *  login. It runs the container job `bash docker/aa-run.sh restore <deploy_id>`
+ *  (exit 0 = the job restored the deploy and verified it live), so the host
+ *  needs no account-wide Netlify credential for the watchdog. Without
+ *  docker/aa-run.sh (container setup not installed) it only alerts. The job's
+ *  output is never copied into the alert: only its exit code is reported. */
 import { existsSync, readFileSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
@@ -75,9 +81,18 @@ export function lastKnownGoodDeploy(path: string): KnownGoodDeploy | null {
 }
 
 export const MANUAL_DEPLOY_RUNBOOK =
-  'Manual: list recent deploys with `netlify api listSiteDeploys --data \'{"site_id":"<site>","per_page":10}\'`, ' +
-  'restore a verified one with `netlify api restoreSiteDeploy --data \'{"site_id":"<site>","deploy_id":"<id>"}\'`, ' +
-  'or ship a fresh build with `bash scripts/redeploy.sh` (refuses under quarantine; runs the origin, deploy and published-artifact gates).';
+  'Manual: restore a verified deploy with `bash docker/aa-run.sh restore <deploy_id>` (container job, no host login). ' +
+  'With the host Netlify login only: list recent deploys with `netlify api listSiteDeploys --data \'{"site_id":"<site>","per_page":10}\'`, ' +
+  'restore with `netlify api restoreSiteDeploy --data \'{"site_id":"<site>","deploy_id":"<id>"}\'`, ' +
+  'or ship a fresh build with `bun run deploy` (scripts/redeploy.sh: refuses under quarantine; runs the origin, deploy and published-artifact gates).';
+
+/** The id format the container restore job accepts (Netlify deploy ids are
+ *  24 lowercase hex characters; up to 40 allowed). Anything else is refused
+ *  before it reaches the wrapper's argv. */
+const RESTORE_ID_RE = /^[0-9a-f]{24,40}$/;
+
+/** Wall-clock bound for the container restore job (image start + API calls). */
+const RESTORE_TIMEOUT_MS = 15 * 60_000;
 
 export function planResponse(result: DeadmanResult, state: ResponderState, nowMs: number): PlannedAction[] {
   const cooled = (k: ActionKind) => {
@@ -125,27 +140,10 @@ export function planResponse(result: DeadmanResult, state: ResponderState, nowMs
   return actions;
 }
 
-type NetlifyApi = (method: string, data: Record<string, string>) => Record<string, unknown>;
-
-function netlifyApi(cmd: string, timeoutMs: number): NetlifyApi {
-  return (method, data) => {
-    const p = Bun.spawnSync([cmd, 'api', method, '--data', JSON.stringify(data)], { timeout: timeoutMs });
-    if (p.exitCode !== 0) {
-      throw new Error(`netlify api ${method} exit=${p.exitCode}: ${new TextDecoder().decode(p.stderr).slice(0, 200)}`);
-    }
-    // Netlify responses occasionally carry raw control chars (see run_deploy).
-    // eslint-disable-next-line no-control-regex
-    const out = new TextDecoder().decode(p.stdout).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, '');
-    return JSON.parse(out) as Record<string, unknown>;
-  };
-}
-
-const publishedId = (site: Record<string, unknown>): string | undefined =>
-  (site.published_deploy as { id?: string } | undefined)?.id;
-
-/** RESTORE_KNOWN_GOOD: put the last host-verified deploy back live if it is
- *  not already. Reads only host-side state and Netlify's API. */
-function restoreKnownGood(stateDir: string, api: NetlifyApi): { ok: boolean; detail: string } {
+/** RESTORE_KNOWN_GOOD: have the container job put the last host-verified
+ *  deploy back live. Reads only host-side state; runs nothing but
+ *  `bash <projectDir>/docker/aa-run.sh restore <id>`. */
+function restoreKnownGood(stateDir: string, projectDir: string, timeoutMs: number): { ok: boolean; detail: string } {
   const record = join(stateDir, 'deploys.log');
   const good = lastKnownGoodDeploy(record);
   if (!good) {
@@ -154,29 +152,37 @@ function restoreKnownGood(stateDir: string, api: NetlifyApi): { ok: boolean; det
       detail: `alert only — no usable host record of a verified deploy (${record} missing, empty or malformed); nothing changed. ${MANUAL_DEPLOY_RUNBOOK}`,
     };
   }
-  const dep = api('getDeploy', { deploy_id: good.deployId });
-  const siteId = typeof dep.site_id === 'string' && /^[0-9A-Za-z-]{1,64}$/.test(dep.site_id) ? dep.site_id : '';
-  if (dep.state !== 'ready' || !siteId || (dep.id !== undefined && dep.id !== good.deployId)) {
+  if (!RESTORE_ID_RE.test(good.deployId)) {
     return {
       ok: false,
-      detail: `alert only — recorded deploy ${good.deployId} (${good.at}) is not a ready deploy on Netlify (state=${String(dep.state)}); nothing changed. ${MANUAL_DEPLOY_RUNBOOK}`,
+      detail: `alert only — the last recorded deploy id (${good.at}) is not 24-40 lowercase hex, so it is not passed to the restore job; nothing changed. ${MANUAL_DEPLOY_RUNBOOK}`,
     };
   }
-  const live = publishedId(api('getSite', { site_id: siteId }));
-  if (live === good.deployId) {
+  const aaRun = join(projectDir, 'docker', 'aa-run.sh');
+  if (!existsSync(aaRun)) {
+    return {
+      ok: false,
+      detail: `alert only — ${aaRun} is not installed (container setup, docker/README.md), so the last verified deploy ${good.deployId} (recorded ${good.at}) was not restored; nothing changed. ${MANUAL_DEPLOY_RUNBOOK}`,
+    };
+  }
+  const p = Bun.spawnSync(['bash', aaRun, 'restore', good.deployId], {
+    cwd: projectDir,
+    stdout: 'ignore',
+    stderr: 'ignore',
+    timeout: timeoutMs,
+    killSignal: 'SIGKILL',
+  });
+  if (p.exitCode === 0) {
     return {
       ok: true,
-      detail: `live site already serves the last verified deploy ${good.deployId} (recorded ${good.at}); nothing restored. The pipeline has not published since: check the publish job and the quarantine marker. ${MANUAL_DEPLOY_RUNBOOK}`,
+      detail: `restored the last verified deploy ${good.deployId} (recorded ${good.at}) with docker/aa-run.sh restore. If the live site was serving another deploy, the host never recorded it as verified — find out what published it.`,
     };
   }
-  api('restoreSiteDeploy', { site_id: siteId, deploy_id: good.deployId });
-  const now = publishedId(api('getSite', { site_id: siteId }));
-  return now === good.deployId
-    ? {
-        ok: true,
-        detail: `restored the last verified deploy ${good.deployId} (recorded ${good.at}); the live site was serving ${live ?? 'an unknown deploy'}, which the host never recorded as verified — find out what published it.`,
-      }
-    : { ok: false, detail: `restoreSiteDeploy ${good.deployId} did not take effect (live=${now ?? 'unknown'}). ${MANUAL_DEPLOY_RUNBOOK}` };
+  const how = p.exitCode === null ? `was killed after ${Math.round(timeoutMs / 1000)}s` : `failed with exit ${p.exitCode}`;
+  return {
+    ok: false,
+    detail: `docker/aa-run.sh restore ${good.deployId} ${how}; the live site may still serve an unverified deploy (see the aa-run log). ${MANUAL_DEPLOY_RUNBOOK}`,
+  };
 }
 
 export async function executeActions(
@@ -187,8 +193,8 @@ export async function executeActions(
     projectDir: string;
     /** Host-only state dir holding deploys.log (default hostStateDir()). */
     stateDir?: string;
-    /** Netlify CLI binary (tests pass a stub). */
-    netlifyCmd?: string;
+    /** Wall-clock bound for the container restore job (tests pass a short one). */
+    restoreTimeoutMs?: number;
   },
 ): Promise<ActionOutcome[]> {
   const { writeFileSync, mkdirSync } = await import('fs');
@@ -211,7 +217,7 @@ export async function executeActions(
     let detail = '';
     try {
       if (a.kind === 'RESTORE_KNOWN_GOOD') {
-        const r = restoreKnownGood(opts.stateDir ?? hostStateDir(), netlifyApi(opts.netlifyCmd ?? 'netlify', 120_000));
+        const r = restoreKnownGood(opts.stateDir ?? hostStateDir(), opts.projectDir, opts.restoreTimeoutMs ?? RESTORE_TIMEOUT_MS);
         ok = r.ok;
         detail = r.detail;
       } else if (a.kind === 'AUTH_CHECK') {

@@ -9,6 +9,13 @@
 # with this script is not in the host's verified-deploys record, so a later
 # STALE_DEPLOY responder may restore the last pipeline-verified deploy over it.
 #
+# Credentials (security loop round 5): this script — and `bun run deploy`,
+# which runs it — calls the netlify CLI on the Mac, so it needs the
+# host Netlify login (`netlify login`). Nothing scheduled depends on it: the
+# pipeline deploys from the container, and the watchdog's rollback runs the
+# container job `bash docker/aa-run.sh restore <deploy_id>`. Removing the
+# host login therefore only disables this manual path.
+#
 # Refuses, in this order, before anything reaches Netlify:
 #   exit 6  the host quarantine marker exists
 #           (${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/QUARANTINE):
@@ -18,6 +25,15 @@
 #   exit 7  the published-artifact gate fails on dist/
 # Then: exit 3 CLI failed · 4 no deploy id · 5 deploy not state=ready.
 set -o pipefail
+# replace-objects:begin (security loop round 5; pinned by scripts/__tests__/deploy-gate.test.ts)
+# Git must judge the real object graph. A refs/replace/* entry (writable by a
+# compromised container run through .git/refs) makes every git read — rev-list,
+# ls-tree, merge-base, show — substitute one object for another, while git push
+# still sends the real objects. Honoured, it would let the origin gate call an
+# unreviewed HEAD reviewed and the pipeline-data content gate pass a commit
+# carrying code. Exported before the first git call; child processes inherit it.
+export GIT_NO_REPLACE_OBJECTS=1
+# replace-objects:end
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$DIR" || exit 1
 QUARANTINE_MARKER="${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/QUARANTINE"

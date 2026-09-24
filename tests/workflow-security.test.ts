@@ -137,8 +137,13 @@ describe('ci.yml — the required ci job', () => {
   });
 
   test('runs the src/ tests as well as tests/ and the guard seams', () => {
-    expect(runs).toMatch(/find[^\n]*\btests\b[^\n]*\bsrc\b/);
-    expect(runs).toContain('scripts/__tests__/deploy-gate.test.ts');
+    // Round 5: the file list comes from the report checker's --list (find over
+    // tests/ and src/ plus the floor file's also_required seams).
+    expect(runs).toContain('bash .github/scripts/test-report-check.sh --list');
+    const checker = readFileSync(join(ROOT, '.github/scripts/test-report-check.sh'), 'utf-8');
+    expect(checker).toMatch(/find tests src -name '\*\.test\.ts'/);
+    const floor = JSON.parse(readFileSync(join(ROOT, '.github/scripts/test-report-floor.json'), 'utf-8'));
+    expect(floor.also_required).toContain('scripts/__tests__/deploy-gate.test.ts');
     expect(runs).toContain('bun test');
   });
 

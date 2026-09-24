@@ -43,6 +43,16 @@
 
 set -euo pipefail
 
+# replace-objects:begin (security loop round 5; pinned by scripts/__tests__/deploy-gate.test.ts)
+# Git must judge the real object graph. A refs/replace/* entry (writable by a
+# compromised container run through .git/refs) makes every git read — rev-list,
+# ls-tree, merge-base, show — substitute one object for another, while git push
+# still sends the real objects. Honoured, it would let the origin gate call an
+# unreviewed HEAD reviewed and the pipeline-data content gate pass a commit
+# carrying code. Exported before the first git call; child processes inherit it.
+export GIT_NO_REPLACE_OBJECTS=1
+# replace-objects:end
+
 # The only branch whose tip counts as reviewed code (main's ruleset requires a
 # PR). Not overridable: an env or flag here would be a one-line gate bypass.
 readonly PRODUCTION_BRANCH="main"

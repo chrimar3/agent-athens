@@ -33,6 +33,12 @@
 #   per-code exclusions for pre-existing findings in
 #   .github/shellcheck-excludes.json (.github/scripts/shellcheck.sh,
 #   tests/shellcheck-gate.test.ts). It installs and runs no project code.
+#
+# Security loop round 5: `bun test` exits 0 if a test file calls
+# process.exit(0), skipping every file after it. The test step therefore writes
+# a JUnit report and .github/scripts/test-report-check.sh refuses unless it is
+# complete, names every expected file, has no failures and meets the committed
+# floor in .github/scripts/test-report-floor.json.
 name: ci
 
 on:
@@ -59,12 +65,16 @@ jobs:
       - name: Test (tests/, src/, and the deploy-gate and pre-commit seams)
         run: |
           set -euo pipefail
-          mapfile -t FILES < <(find tests src -name '*.test.ts' -not -path '*/node_modules/*' \
-            | grep -v -x -F 'src/db/__tests__/migrations.test.ts' | sort)
-          echo "running ${#FILES[@]} test files from tests/ and src/"
+          # The file list comes from the report checker, so the files run and
+          # the files the report must name are the same set.
+          mapfile -t FILES < <(bash .github/scripts/test-report-check.sh --list)
+          echo "running ${#FILES[@]} test files"
           # An empty list would make `bun test` run everything, network tests included.
-          [ "${#FILES[@]}" -gt 100 ] || { echo "ci: only ${#FILES[@]} test files found — refusing (check the find above)" >&2; exit 1; }
-          bun test "${FILES[@]/#/./}" ./scripts/__tests__/deploy-gate.test.ts ./scripts/__tests__/precommit-tsc.test.ts
+          [ "${#FILES[@]}" -gt 100 ] || { echo "ci: only ${#FILES[@]} test files found — refusing (check test-report-check.sh --list)" >&2; exit 1; }
+          rm -f "$RUNNER_TEMP/junit.xml"
+          bun test --reporter=junit --reporter-outfile="$RUNNER_TEMP/junit.xml" "${FILES[@]/#/./}"
+      - name: Test report is complete (a test calling process.exit cannot force this job green)
+        run: bash .github/scripts/test-report-check.sh "$RUNNER_TEMP/junit.xml"
       - run: bun run typecheck
 
   shellcheck:

@@ -167,6 +167,18 @@ git -C "$BASELINE_WT" commit --no-verify --quiet -m "phase3: weekly measurement 
   && log "L1: committed" || log "L1 WARN: nothing to commit or commit failed"
 
 # ---------- layer 2: headless judgment session ----------
+# host-guard:begin (pinned by tests/host-run-guard.test.ts; security loop round 5)
+# The judgment session reads third-party text (Perplexity answers) and may edit
+# code and then run the build and the test suite, which execute that code. On
+# the Mac that is the owner's home folder, keychain and logins, so layer 2 runs
+# only inside the container (AA_CONTAINER=1) or with an explicit, temporary
+# override. Layer 1 above has already run and committed its measurements.
+if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" != "1" ]]; then
+    echo "phase3-weekly: REFUSED — the layer-2 claude session runs inside the container, not directly on this Mac (layer-1 data is committed)." >&2
+    echo "phase3-weekly: next: run layer 2 through docker/aa-run.sh (docker/README.md); for a one-off host run set AA_ALLOW_HOST_RUN=1." >&2
+    exit 9
+fi
+# host-guard:end
 if ! run_guard_selftest; then
   echo "- HEARTBEAT-L2 $(date '+%Y-%m-%d %H:%M') judgment session SKIPPED (guard self-test failed; see $RUN_LOG)" >> "$BENCH/PHASE3-LOG.md"
   git -C "$BASELINE_WT" add "$BENCH/PHASE3-LOG.md" && git -C "$BASELINE_WT" commit --no-verify --quiet -m "phase3: weekly L2 skipped (guard self-test)" 2>>"$RUN_LOG"
@@ -212,10 +224,11 @@ Do, in order: (1) the measurement-verdict step — compare the fresh probe/conso
 # commit) and no git push/-C/config/remote. Write/Edit/MultiEdit are granted by
 # name, so --permission-mode default suffices: acceptEdits would add auto-
 # approved filesystem commands (mkdir, mv, cp, rm) the session does not need.
-# Residual, by design: the session edits code and then runs the build and test
-# suite, and both execute that code on the host. That is only contained by
-# running this layer in the container (docker/aa-run.sh) with no secrets
-# mounted, an operator step. Pinned by tests/phase3-weekly-guard.test.ts.
+# The session edits code and then runs the build and test suite, and both
+# execute that code. Round 5: the host-guard block above refuses layer 2 on the
+# Mac (exit 9) unless AA_CONTAINER=1 (docker/aa-run.sh, no secrets mounted) or
+# AA_ALLOW_HOST_RUN=1. Pinned by tests/phase3-weekly-guard.test.ts and
+# tests/host-run-guard.test.ts.
 PHASE3_ALLOWED_TOOLS="Read,Glob,Grep,Edit,MultiEdit,Write,TodoWrite,Bash(bun run src/generate-site.ts),Bash(bun test),Bash(bunx tsc --noEmit -p .),Bash(git status),Bash(git status *),Bash(git diff),Bash(git diff *),Bash(git log *),Bash(git show *),Bash(git add *),Bash(git commit *),Bash(git merge *),Bash(git switch *),Bash(git branch *),Bash(git rev-parse *),Bash(ls *),Bash(wc *)"
 (
   cd "$PHASE3_WT" && AA_UNATTENDED_SESSION=phase3 AA_SESSION_EXTRA_ROOTS="$BENCH" "$CLAUDE_BIN" -p "$PROMPT" --permission-mode default --allowedTools "$PHASE3_ALLOWED_TOOLS" --add-dir "$BENCH" >> "$SESSION_LOG" 2>&1

@@ -324,6 +324,31 @@ exec "${REAL_GIT}" "$@"
     expect(res.err).toContain(headSha(r).slice(0, 12));
   });
 
+  test('THE THREAT, via git replace (round 5): a planted refs/replace entry cannot make an unreviewed HEAD look like an ancestor of origin/main', () => {
+    // origin/main moves to a reviewed commit R; locally HEAD is an unreviewed
+    // sibling L. A compromised run that can write .git/refs plants
+    // refs/replace/<R> → R' (R's tree, parent L). Git honouring replace refs
+    // then reports L as an ancestor of R, while the remote holds the real R.
+    const r = fixture();
+    writeFileSync(join(r, 'src/app.ts'), 'export const x = 5;\n');
+    sh(r, ['git', 'commit', '-qam', 'feat: reviewed']);
+    mergeUpstream(r);
+    const reviewed = headSha(r);
+    sh(r, ['git', 'reset', '-q', '--hard', 'HEAD~1']);
+    writeFileSync(join(r, 'src/app.ts'), 'export const x = 666;\n');
+    sh(r, ['git', 'commit', '-qam', 'local tweak']);
+    const local = headSha(r);
+    const fake = sh(r, ['git', 'commit-tree', `${reviewed}^{tree}`, '-p', local, '-m', 'feat: reviewed']).out.trim();
+    expect(sh(r, ['git', 'replace', reviewed, fake]).code).toBe(0);
+    // Precondition: with replace refs honoured, git itself is fooled.
+    expect(sh(r, ['git', 'merge-base', '--is-ancestor', local, reviewed]).code).toBe(0);
+    stamp(r, local);
+    const res = gateWith(r, fakeBin(r));
+    expect(res.code).toBe(1);
+    expect(res.err).toContain('[origin-gate] REFUSED');
+    expect(res.err).toContain(local.slice(0, 12));
+  });
+
   test('the old pipeline artifact-commit exception is gone: a data-only local commit with the pipeline message → REFUSED', () => {
     const r = fixture();
     writeFileSync(join(r, 'data/artifact.json'), '{"n":7}\n');
@@ -568,6 +593,13 @@ describe('deploy-gate — seam guards (fail if the gate is removed from a call s
     for (const t of ['QUARANTINE', 'deploy-gate.sh', 'check-published-artifacts.ts']) expect(rd.indexOf(t)).toBeLessThan(deploy);
   });
 
+  test('redeploy.sh documents that it (and `bun run deploy`) needs the host Netlify login, unlike the watchdog restore (round 5)', () => {
+    const header = readFileSync(REDEPLOY, 'utf-8').split('\nset -o pipefail')[0];
+    expect(header).toContain('host Netlify login');
+    expect(header).toContain('bun run deploy');
+    expect(header).toContain('docker/aa-run.sh restore');
+  });
+
   test('the origin gate lives in deploy-gate.sh (weaken-guard tokens)', () => {
     const gate = readFileSync(GATE, 'utf-8');
     expect(gate).toContain('readonly PRODUCTION_BRANCH="main"');
@@ -600,6 +632,19 @@ describe('deploy-gate — seam guards (fail if the gate is removed from a call s
   test('gate verifies the dist/ content hash recorded in the stamp (weaken-guard)', () => {
     const gate = readFileSync(GATE, 'utf-8');
     expect(gate).toContain('distHash');
+  });
+
+  test('replace refs are off (GIT_NO_REPLACE_OBJECTS=1) before the first git call in every deploy-path script (round 5)', () => {
+    for (const rel of ['scripts/deploy-gate.sh', 'scripts/daily-automated.sh', 'scripts/redeploy.sh']) {
+      const lines = readFileSync(join(PROJECT_ROOT, rel), 'utf-8').split('\n');
+      const exportAt = lines.findIndex((l) => l === 'export GIT_NO_REPLACE_OBJECTS=1');
+      expect(exportAt).toBeGreaterThan(-1);
+      const firstGit = lines.findIndex((l) => !/^\s*#/.test(l) && /(^|[^\w.$/-])git\s+[-a-z]/.test(l));
+      if (firstGit !== -1) expect(exportAt).toBeLessThan(firstGit);
+      // Top level, not inside a function: nothing may run before it.
+      const firstFn = lines.findIndex((l) => /^[a-z_]+\(\)\s*\{/.test(l));
+      if (firstFn !== -1) expect(exportAt).toBeLessThan(firstFn);
+    }
   });
 
   test('gate checks all three conditions (weaken-guard: tokens present in gate script)', () => {

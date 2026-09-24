@@ -5,9 +5,9 @@
   publish = "dist"
   command = "echo 'Deploy via CLI - no build needed'"
 
-# Enable Netlify Functions
-[functions]
-  directory = "netlify/functions"
+# No serverless functions are deployed (security loop round 5: the unused
+# /go/ click redirect, netlify/functions/go.ts, was removed — pinned by
+# tests/security/no-click-redirect.test.ts).
 
 # Deploy-B capability probe (GEO Ruling 2 sequel): does `--no-build --dir=dist`
 # ship an edge function? Scoped to a throwaway path only — never real routes.
@@ -15,7 +15,6 @@
   path = "/__edge-probe"
   function = "edge-probe"
 
-# Enable Netlify Blobs for click storage
 [dev]
   framework = "#custom"
 

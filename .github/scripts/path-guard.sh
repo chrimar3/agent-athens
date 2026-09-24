@@ -15,6 +15,7 @@
 # by its own edit. Not the PR's base either (security loop round 2): a PR opened
 # against an older side branch with a shorter list is still judged by main's.
 # Makes API calls only — it never needs (and must never be given) PR code.
+# Globs match case-insensitively (round 5; see the match loop).
 #
 # The bot comment (security loop round 3) carries NO PR-controlled text: every
 # changed path is attacker-chosen in a fork PR, and a name holding a backtick
@@ -104,8 +105,14 @@ N="$(awk 'END { print NR }' "$WORK/files.jsonl")"
 # For the log only: non-printable characters (a newline above all) become '?'.
 printable() { printf '%s' "$1" | LC_ALL=C tr -c '[:print:]' '?'; }
 
+# Case-insensitive (security loop round 5): the owner's Mac uses a
+# case-insensitive filesystem (APFS default), where `.Claude/settings.json` IS
+# .claude/settings.json and `SCRIPTS/hooks/x` lands in scripts/hooks/. So a
+# glob matches whatever the case of the path. nocasematch is switched on for
+# this loop only and off again right after it.
 HITS=()      # log lines (contain PR-controlled names — never put in the comment)
 HIT_GLOBS=() # the glob each hit matched (default-branch content)
+shopt -s nocasematch
 while IFS= read -r line; do
   [ -n "$line" ] || continue
   f="$(printf '%s' "$line" | jq -r '.filename // empty' 2>/dev/null)"
@@ -128,6 +135,7 @@ while IFS= read -r line; do
     fi
   done
 done < "$WORK/files.jsonl"
+shopt -u nocasematch
 
 if [ ${#HITS[@]} -eq 0 ]; then
   echo "path-guard: PASS — $N changed file(s), none protected"

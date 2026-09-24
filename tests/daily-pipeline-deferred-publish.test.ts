@@ -110,6 +110,7 @@ fi
 if [[ "$1" == */build-provenance.ts && "$2" == dist-hash ]]; then echo "${DIST_HASH}"; fi
 if [[ "$2" == "scripts/assemble-scoreboard.ts" ]]; then echo "{\\"run\\":\\"$RANDOM$RANDOM\\"}" > data/scoreboard.json; fi
 if [[ "$2" == "scripts/check-published-artifacts.ts" ]]; then exit "\${ARTIFACT_RC:-0}"; fi
+if [[ "$2" == "scripts/ingest-emails.ts" ]]; then ls -a | grep '^\\.pipeline-.*\\.lock$' | sed 's/^/lock-held /' >> "$TEST_CALLS"; fi
 exit 0
 `);
   exe(join(bin, 'sqlite3'), '#!/bin/bash\necho 0\n');
@@ -487,6 +488,36 @@ describe('publish mode', () => {
     expect(existsSync(marker(p))).toBe(true);
   });
 
+  test('TAMPER hidden behind git replace (round 5): the push gate judges the real commit, not the planted substitute', () => {
+    // As above, but the attacker also plants refs/replace/<bad> → a clean
+    // look-alike (allowlisted tree, pipeline message, same parent). Honouring
+    // replace refs, the content gate would read the look-alike while git push
+    // sends the real commit carrying src/evil.ts.
+    const p = mkProject();
+    runPipeline(p, 'freshness', { AA_DEFER_PUBLISH: '1' });
+    const m = JSON.parse(readFileSync(marker(p), 'utf-8'));
+    const env = { ...process.env, GIT_INDEX_FILE: join(tmp('aa-idx-'), 'index') };
+    spawnSync(REAL_GIT, ['read-tree', m.pipelineDataSha], { cwd: p.dir, env });
+    const blob = spawnSync('bash', ['-c', 'printf "export {}\\n" | git hash-object -w --stdin'], { cwd: p.dir, encoding: 'utf-8' }).stdout.trim();
+    spawnSync(REAL_GIT, ['update-index', '--add', '--cacheinfo', `100644,${blob},src/evil.ts`], { cwd: p.dir, env });
+    const tree = spawnSync(REAL_GIT, ['write-tree'], { cwd: p.dir, env, encoding: 'utf-8' }).stdout.trim();
+    const msg = git(p.dir, 'log', '-1', '--format=%s', m.pipelineDataSha);
+    const bad = git(p.dir, 'commit-tree', tree, '-p', m.pipelineDataSha, '-m', msg);
+    const lookAlike = git(p.dir, 'commit-tree', `${m.pipelineDataSha}^{tree}`, '-p', m.pipelineDataSha, '-m', msg);
+    git(p.dir, 'update-ref', 'refs/heads/pipeline-data', bad);
+    git(p.dir, 'replace', bad, lookAlike);
+    // Precondition: git honouring replace refs no longer shows src/evil.ts.
+    expect(git(p.dir, 'ls-tree', '-r', '--name-only', bad)).not.toContain('src/evil.ts');
+    writeFileSync(marker(p), JSON.stringify({ ...m, pipelineDataSha: bad }) + '\n');
+    const r = runPipeline(p, 'publish');
+    expect(r.status).toBe(1);
+    expect(r.log).toContain('[push-gate] REFUSED');
+    expect(r.log).toContain('src/evil.ts');
+    expect(r.calls).not.toContain('git push');
+    expect(r.calls).not.toContain('netlify deploy');
+    expect(remotePd(p)).toBe('');
+  });
+
   test('a marker with a malformed pipelineDataSha → refused before any gate', () => {
     const p = mkProject();
     runPipeline(p, 'freshness', { AA_DEFER_PUBLISH: '1' });
@@ -506,6 +537,71 @@ describe('publish mode', () => {
     expect(r.status).toBe(0);
     expect(r.calls).toContain('netlify deploy');
     expect(r.calls).not.toContain('--local-only');
+  });
+});
+
+describe('email ingest split (round 5): the mailbox password can live in a run with no browser', () => {
+  const INGEST = 'bun run scripts/ingest-emails.ts';
+  const PARSE = 'bun run scripts/parse-newsletter-emails.ts';
+  const SCRAPE = 'bun run scripts/scrape-all.ts';
+
+  test('control: a freshness run still ingests and parses by default', () => {
+    const p = mkProject();
+    const r = runPipeline(p, 'freshness', { AA_DEFER_PUBLISH: '1' });
+    expect(r.status).toBe(0);
+    expect(r.calls).toContain(INGEST);
+    expect(r.calls).toContain(PARSE);
+    expect(r.calls).toContain(SCRAPE);
+  });
+
+  test('AA_SKIP_INGEST=1: a freshness run skips ingest and parse, logs it, and still scrapes and builds', () => {
+    const p = mkProject();
+    const r = runPipeline(p, 'freshness', { AA_DEFER_PUBLISH: '1', AA_SKIP_INGEST: '1' });
+    expect(r.status).toBe(0);
+    expect(r.calls).not.toContain(INGEST);
+    expect(r.calls).not.toContain(PARSE);
+    expect(r.calls).toContain(SCRAPE);
+    expect(r.calls).toContain('bun run build');
+    expect(r.log).toContain('AA_SKIP_INGEST=1');
+    expect(r.log).not.toContain('PHASE: EMAIL INGESTION');
+  });
+
+  test('only the exact value 1 skips (a typo must not silently drop the newsletters)', () => {
+    const p = mkProject();
+    const r = runPipeline(p, 'freshness', { AA_DEFER_PUBLISH: '1', AA_SKIP_INGEST: 'yes' });
+    expect(r.calls).toContain(INGEST);
+  });
+
+  test('ingest mode runs ONLY ingest + parse, under its own lock: no scrape, build, gate, push or deploy', () => {
+    const p = mkProject();
+    const r = runPipeline(p, 'ingest');
+    expect(r.status).toBe(0);
+    expect(r.log).toContain('Pipeline mode: ingest');
+    expect(r.calls).toContain(INGEST);
+    expect(r.calls).toContain(PARSE);
+    expect(r.calls.indexOf(INGEST)).toBeLessThan(r.calls.indexOf(PARSE));
+    expect(r.calls).toContain('lock-held .pipeline-ingest.lock');
+    for (const never of [SCRAPE, 'bun run build', 'deploy-gate', 'netlify', 'git push', 'git fetch', 'yield-canary', 'ping-indexnow']) {
+      expect(r.calls).not.toContain(never);
+    }
+    expect(existsSync(join(p.dir, '.pipeline-ingest.lock'))).toBe(false); // released on exit
+    expect(existsSync(marker(p))).toBe(false);
+    expect(localPd(p)).toBe('');
+  });
+
+  test('ingest mode ignores AA_SKIP_INGEST (ingesting is its only job)', () => {
+    const p = mkProject();
+    const r = runPipeline(p, 'ingest', { AA_SKIP_INGEST: '1' });
+    expect(r.status).toBe(0);
+    expect(r.calls).toContain(INGEST);
+    expect(r.calls).toContain(PARSE);
+  });
+
+  test('ingest mode is refused on the host like every other mode (host guard runs first)', () => {
+    const p = mkProject();
+    const r = runPipeline(p, 'ingest', { AA_CONTAINER: '', AA_ALLOW_HOST_RUN: '' });
+    expect(r.status).toBe(9);
+    expect(r.calls).not.toContain(INGEST);
   });
 });
 
@@ -538,7 +634,7 @@ describe('run_deploy seams', () => {
   });
 
   test('mode list accepts publish and it gets a per-mode lock', () => {
-    expect(SCRIPT).toContain('full|freshness|enrichment|publish) PIPELINE_MODE="$arg"');
+    expect(SCRIPT).toContain('full|freshness|enrichment|publish|ingest) PIPELINE_MODE="$arg"');
     expect(SCRIPT).toContain('LOCK_FILE="$PROJECT_DIR/.pipeline-${PIPELINE_MODE}.lock"');
   });
 

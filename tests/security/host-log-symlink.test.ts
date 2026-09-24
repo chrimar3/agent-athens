@@ -205,6 +205,8 @@ describe('launchd plists of the host-resident jobs', () => {
     'com.agentathens.enrichment-check.plist',
     'com.agentathens.phase3-weekly.plist',
     'config/launchd/com.agentathens.deadman.plist',
+    // Round 5: the deploy-cadence check runs on the host too.
+    'com.agentathens.check-deploy-cadence.plist',
   ];
   for (const f of HOST_JOBS) {
     test(`${f}: output goes to the host-only state dir, never the repo logs/`, () => {

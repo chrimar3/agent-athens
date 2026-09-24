@@ -191,6 +191,48 @@ describe('path-guard.sh — protected touches are refused', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Round 5: matching ignores case. The owner's Mac (APFS default) is
+// case-insensitive, so `.Claude/settings.json` in a PR IS .claude/settings.json
+// once checked out there, and `SCRIPTS/hooks/x` lands in scripts/hooks/.
+// ---------------------------------------------------------------------------
+describe('path-guard.sh — case-insensitive matching (round 5)', () => {
+  const shipped: string[] = JSON.parse(readFileSync(CONFIG, 'utf-8')).protected;
+
+  for (const filename of ['.Claude/settings.json', 'SCRIPTS/hooks/x', 'Scripts/Deploy-Gate.sh', '.GITHUB/workflows/ci.yml', 'Netlify.toml', '.ENV']) {
+    test(`${filename} is refused by the shipped glob list`, () => {
+      const { gh } = fakeGh({ globs: shipped, files: [{ filename }] });
+      const r = runGuard(gh);
+      expect(r.code).toBe(1);
+      expect(r.out).not.toContain('PASS');
+      expect(r.err).toContain(filename);
+    });
+  }
+
+  test('a rename out of a protected dir spelled in another case is refused', () => {
+    const { gh } = fakeGh({ globs: shipped, files: [{ filename: 'misc/db-guard.ts', previous_filename: 'Scripts/Hooks/db-guard.ts' }] });
+    const r = runGuard(gh);
+    expect(r.code).toBe(1);
+    expect(r.err).toContain('renamed out of protected');
+  });
+
+  test('case folding does not widen the list: unrelated paths still pass', () => {
+    const { gh } = fakeGh({ globs: shipped, files: [{ filename: 'SRC/app.ts' }, { filename: 'Docs/notes.md' }] });
+    const r = runGuard(gh);
+    expect(r.err).toBe('');
+    expect(r.code).toBe(0);
+  });
+
+  test('case folding is scoped to the match loop (the PR-number check still rejects letters)', () => {
+    const src = readFileSync(SCRIPT, 'utf-8');
+    const on = src.indexOf('shopt -s nocasematch');
+    const off = src.indexOf('shopt -u nocasematch');
+    expect(on).toBeGreaterThan(src.indexOf("case \"$PR\" in"));
+    expect(off).toBeGreaterThan(on);
+    expect(src.slice(on, off)).toContain('[[ "$f" == $g ]]');
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Round 3: the bot comment must not reflect attacker-chosen filenames. A fork PR
 // controls every changed path, and a name holding a backtick breaks out of a
 // code span — the project's bot would then post the attacker's markdown (a
@@ -395,8 +437,9 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     '.claude/commands/pre-enrich-check.md',
     '.claude/skills/claude-code-mastery/SKILL.md',
     '.claude/agents/reviewer.md',
-    // Code deployed to production with the site.
-    'netlify/functions/go.ts',
+    // Code deployed to production with the site (round 5: the unused go.ts
+    // click redirect was removed; any future function is still protected).
+    'netlify/functions/any-future-function.ts',
     'netlify/edge-functions/edge-probe.ts',
     'docker/Dockerfile',
     // Disclosure channel and review routing.
@@ -457,6 +500,13 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/security/host-log-symlink.test.ts',
     'tests/security/dependabot-container-cli.test.ts',
     'tests/host-run-guard.test.ts',
+    // Round 5: the ci test-report check and its floor, and the new security tests.
+    '.github/scripts/test-report-check.sh',
+    '.github/scripts/test-report-floor.json',
+    'tests/security/ci-test-report.test.ts',
+    'tests/security/monitoring-labels.test.ts',
+    'tests/security/no-click-redirect.test.ts',
+    'config/monitoring.json',
   ];
   /** Listed by name in path-guard.json even where a broader glob already covers
    *  them, so narrowing that glob later cannot silently drop them. */
@@ -508,6 +558,11 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'scripts/lib/url-columns.ts',
     'docker/cli/**',
     'tests/host-run-guard.test.ts',
+    '.github/scripts/test-report-check.sh',
+    '.github/scripts/test-report-floor.json',
+    'tests/security/ci-test-report.test.ts',
+    'tests/security/monitoring-labels.test.ts',
+    'tests/security/no-click-redirect.test.ts',
   ];
   const MUST_NOT_PROTECT = [
     '.claude/notes/ledger.md',
@@ -534,6 +589,8 @@ describe('.github/path-guard.json — the shipped glob list', () => {
       'src/validators/inline-script-allowlist.ts', 'src/generators/security-headers.ts',
       'src/validators/persisted-state.ts', 'scripts/lib/url-columns.ts',
       'docker/cli/package.json', 'docker/cli/package-lock.json',
+      // Round 5: stands for any function added later (go.ts was removed).
+      'netlify/functions/any-future-function.ts',
     ]);
     for (const p of MUST_PROTECT) {
       if (allowMissing.has(p)) continue;

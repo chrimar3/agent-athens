@@ -1,6 +1,9 @@
 // The pipeline refuses to run directly on the Mac: daily-automated.sh and
 // auto-enrich.sh carry a host-guard block that exits 9 unless the run is in
 // the container (AA_CONTAINER=1) or explicitly overridden (AA_ALLOW_HOST_RUN=1).
+// Security loop round 5: phase3-weekly.sh carries the same block in front of
+// its layer-2 claude session (layer 1, the deterministic measurement, still
+// runs and commits first).
 import { describe, expect, test } from 'bun:test';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -20,7 +23,7 @@ function runGuard(file: string, env: Record<string, string>) {
   return { code: r.exitCode, out: r.stdout.toString(), err: r.stderr.toString() };
 }
 
-for (const file of ['scripts/daily-automated.sh', 'scripts/auto-enrich.sh']) {
+for (const file of ['scripts/daily-automated.sh', 'scripts/auto-enrich.sh', 'scripts/phase3-weekly.sh']) {
   describe(`${file} host guard`, () => {
     test('refuses on the Mac with no container marker and no override', () => {
       const r = runGuard(file, {});
@@ -43,4 +46,22 @@ test('daily-automated.sh checks the guard before re-executing under caffeinate',
   const src = readFileSync(join(ROOT, 'scripts/daily-automated.sh'), 'utf8');
   expect(src.indexOf('# host-guard:begin')).toBeGreaterThan(0);
   expect(src.indexOf('# host-guard:begin')).toBeLessThan(src.indexOf('# caffeinate:begin'));
+});
+
+describe('phase3-weekly.sh: the host guard gates layer 2 only', () => {
+  const src = readFileSync(join(ROOT, 'scripts/phase3-weekly.sh'), 'utf8');
+  const guard = src.indexOf('# host-guard:begin');
+  const l1 = src.indexOf('# ---------- layer 1');
+  const l2 = src.indexOf('# ---------- layer 2');
+
+  test('sits after layer 1 and inside layer 2, before the guard self-test and before ANY claude call', () => {
+    expect(guard).toBeGreaterThan(l1);
+    expect(guard).toBeGreaterThan(l2);
+    expect(guard).toBeLessThan(src.indexOf('if ! run_guard_selftest; then', l2));
+    expect(guard).toBeLessThan(src.indexOf('"$CLAUDE_BIN"', l2));
+  });
+
+  test('the --guard-selftest-only mode stays reachable on the host (it runs no claude)', () => {
+    expect(src.indexOf('"--guard-selftest-only"')).toBeLessThan(guard);
+  });
 });

@@ -82,45 +82,55 @@ describe('lastKnownGoodDeploy (host-only deploys.log)', () => {
 });
 
 describe('executeActions', () => {
-  interface Stub { dir: string; statePath: string; stateDir: string; netlify: string; calls: string; sentinel: string }
-  /** Stub project + host state dir + fake netlify CLI. The project carries a
-   *  scripts/redeploy.sh that drops a sentinel if anything ever runs it, and a
-   *  decoy .netlify/state.json (container-writable) naming another site. */
-  function stubProject(opts: { published?: string; recordedState?: string; netlifyRc?: number } = {}): Stub {
+  // Security loop round 5: RESTORE_KNOWN_GOOD no longer needs a Netlify login
+  // on the host. It runs the container job `bash docker/aa-run.sh restore <id>`
+  // (exit 0 = restored and verified by the job) and stays alert-only when that
+  // wrapper is not installed.
+  interface Stub { dir: string; statePath: string; stateDir: string; bin: string; calls: string; netlifyCalls: string; sentinel: string }
+  /** Stub project + host state dir. The project carries a scripts/redeploy.sh
+   *  that drops a sentinel if anything ever runs it, a decoy
+   *  .netlify/state.json (container-writable), optionally a fake
+   *  docker/aa-run.sh that logs its argv, and a fake `netlify` on PATH that
+   *  logs if the host CLI is ever called. */
+  function stubProject(opts: { aaRun?: boolean; aaRunRc?: number; aaRunSleep?: number } = {}): Stub {
     const dir = mkdtempSync(join(tmpdir(), 'aa-resp-'));
-    mkdirSync(join(dir, 'config'), { recursive: true });
-    mkdirSync(join(dir, 'scripts'), { recursive: true });
-    mkdirSync(join(dir, '.netlify'), { recursive: true });
+    for (const d of ['config', 'scripts', '.netlify', 'bin']) mkdirSync(join(dir, d), { recursive: true });
     const sentinel = join(dir, 'REDEPLOY-RAN');
     writeFileSync(join(dir, 'scripts', 'redeploy.sh'), `#!/bin/bash\ntouch "${sentinel}"\nexit 0\n`);
     chmodSync(join(dir, 'scripts', 'redeploy.sh'), 0o755);
     writeFileSync(join(dir, '.netlify', 'state.json'), '{"siteId":"decoy-site"}\n');
     const stateDir = join(dir, 'host-state');
     mkdirSync(stateDir);
-    const calls = join(dir, 'netlify-calls.log');
-    const publishedFile = join(dir, 'published');
-    writeFileSync(publishedFile, opts.published ?? 'live-deploy-000000000000');
-    const netlify = join(dir, 'fake-netlify');
-    writeFileSync(netlify, `#!/bin/bash
-echo "$*" >> "${calls}"
-[[ "${opts.netlifyRc ?? 0}" != 0 ]] && { echo "boom" >&2; exit ${opts.netlifyRc ?? 0}; }
-case "$2" in
-  getDeploy) echo '{"id":"${GOOD_ID}","site_id":"site-real","state":"${opts.recordedState ?? 'ready'}"}' ;;
-  getSite) printf '{"id":"site-real","published_deploy":{"id":"%s"}}\\n' "$(cat "${publishedFile}")" ;;
-  restoreSiteDeploy) echo "${GOOD_ID}" > "${publishedFile}"; echo '{"id":"${GOOD_ID}","state":"ready"}' ;;
-  *) echo '{}' ;;
-esac
+    const calls = join(dir, 'aa-run-calls.log');
+    if (opts.aaRun ?? true) {
+      mkdirSync(join(dir, 'docker'));
+      writeFileSync(join(dir, 'docker', 'aa-run.sh'), `#!/bin/bash
+printf '%s\\n' "$*" >> "${calls}"
+${opts.aaRunSleep ? `sleep ${opts.aaRunSleep}` : ''}
+echo "hostile <b>output</b> from the container" >&2
+exit ${opts.aaRunRc ?? 0}
 `);
-    chmodSync(netlify, 0o755);
-    return { dir, statePath: join(stateDir, 'responder-state.json'), stateDir, netlify, calls, sentinel };
+    }
+    const bin = join(dir, 'bin');
+    const netlifyCalls = join(dir, 'netlify-calls.log');
+    writeFileSync(join(bin, 'netlify'), `#!/bin/bash\necho "$*" >> "${netlifyCalls}"\necho '{}'\n`);
+    chmodSync(join(bin, 'netlify'), 0o755);
+    return { dir, statePath: join(stateDir, 'responder-state.json'), stateDir, bin, calls, netlifyCalls, sentinel };
   }
   const record = (s: Stub, body = `2026-09-21T08:00:00Z ${GOOD_ID} ${GOOD_HASH}\n`) =>
     writeFileSync(join(s.stateDir, 'deploys.log'), body);
   const callsOf = (s: Stub) => (existsSync(s.calls) ? readFileSync(s.calls, 'utf8') : '');
-  const exec = (s: Stub) =>
-    executeActions([{ kind: 'RESTORE_KNOWN_GOOD', summary: 's' }], {
-      dryRun: false, statePath: s.statePath, projectDir: s.dir, stateDir: s.stateDir, netlifyCmd: s.netlify,
-    });
+  /** Runs with the stub's bin first on PATH, so a host `netlify` call would be logged. */
+  async function withPath<T>(s: Stub, fn: () => Promise<T>): Promise<T> {
+    const prev = process.env.PATH;
+    process.env.PATH = `${s.bin}:${prev}`;
+    try { return await fn(); } finally { process.env.PATH = prev; }
+  }
+  const exec = (s: Stub, extra: { restoreTimeoutMs?: number } = {}) =>
+    withPath(s, () => executeActions([{ kind: 'RESTORE_KNOWN_GOOD', summary: 's' }], {
+      dryRun: false, statePath: s.statePath, projectDir: s.dir, stateDir: s.stateDir, ...extra,
+    }));
+  const noHostNetlify = (s: Stub) => expect(existsSync(s.netlifyCalls)).toBe(false);
 
   test('dry-run: nothing executes, outcomes say planned', async () => {
     const s = stubProject();
@@ -153,50 +163,62 @@ esac
     expect(JSON.parse(readFileSync(statePath, 'utf8')).lastActionMs.QUEUE_ENTRY).toBeGreaterThan(0);
   });
 
-  test('no host record → ALERT ONLY with the manual command; netlify and redeploy.sh never run', async () => {
+  test('no host record → ALERT ONLY with the manual command; aa-run, netlify and redeploy.sh never run', async () => {
     const s = stubProject();
     const out = await exec(s);
     expect(out[0].ran).toBe(true);
     expect(out[0].ok).toBe(false);
     expect(out[0].detail).toContain('alert only');
-    expect(out[0].detail).toContain('restoreSiteDeploy');
+    expect(out[0].detail).toContain('docker/aa-run.sh restore');
     expect(callsOf(s)).toBe('');
+    noHostNetlify(s);
     expect(existsSync(s.sentinel)).toBe(false);
   });
 
-  test('live site differs from the last verified deploy → restoreSiteDeploy with the RECORDED id and the site Netlify reports for it', async () => {
-    const s = stubProject({ published: 'something-else-000000000' });
+  test('a record → runs exactly `docker/aa-run.sh restore <RECORDED id>` (container job); no host netlify call', async () => {
+    const s = stubProject();
     record(s);
     const out = await exec(s);
     expect(out[0].ok).toBe(true);
     expect(out[0].detail).toContain(GOOD_ID);
-    const calls = callsOf(s);
-    expect(calls).toContain(`api getDeploy --data {"deploy_id":"${GOOD_ID}"}`);
-    expect(calls).toContain(`api restoreSiteDeploy --data {"site_id":"site-real","deploy_id":"${GOOD_ID}"}`);
-    expect(calls).not.toContain('decoy-site');                  // never trusts container-writable .netlify/state.json
-    expect(calls).not.toMatch(/^deploy /m);                      // never a forward deploy
+    expect(out[0].detail).toContain('docker/aa-run.sh restore');
+    expect(callsOf(s)).toBe(`restore ${GOOD_ID}\n`);
+    noHostNetlify(s);
     expect(existsSync(s.sentinel)).toBe(false);
   });
 
-  test('live site already serves the last verified deploy → nothing restored, ok', async () => {
-    const s = stubProject({ published: GOOD_ID });
-    record(s);
-    const out = await exec(s);
-    expect(out[0].ok).toBe(true);
-    expect(out[0].detail).toContain('nothing restored');
-    expect(callsOf(s)).not.toContain('restoreSiteDeploy');
+  test('the restore uses the NEWEST record only', async () => {
+    const s = stubProject();
+    const older = 'aa'.repeat(12);
+    record(s, `2026-09-20T08:00:00Z ${older} ${GOOD_HASH}\n2026-09-21T08:00:00Z ${GOOD_ID} ${GOOD_HASH}\n`);
+    await exec(s);
+    expect(callsOf(s)).toBe(`restore ${GOOD_ID}\n`);
   });
 
-  test('recorded deploy is not state=ready on Netlify → alert only, no restore', async () => {
-    const s = stubProject({ published: 'something-else-000000000', recordedState: 'error' });
+  test('docker/aa-run.sh not installed → ALERT ONLY naming it; nothing runs (no host netlify fallback)', async () => {
+    const s = stubProject({ aaRun: false });
     record(s);
     const out = await exec(s);
     expect(out[0].ok).toBe(false);
     expect(out[0].detail).toContain('alert only');
-    expect(callsOf(s)).not.toContain('restoreSiteDeploy');
+    expect(out[0].detail).toContain('docker/aa-run.sh');
+    expect(out[0].detail).toContain(GOOD_ID);
+    noHostNetlify(s);
+    expect(existsSync(s.sentinel)).toBe(false);
   });
 
-  test('malformed last record → alert only, netlify never called', async () => {
+  test('a recorded id that is not 24-40 lowercase hex → ALERT ONLY; the wrapper never sees it', async () => {
+    for (const id of ['abc', 'ZZ0c0ffee0123456789abcdX', 'a'.repeat(41), '64F0C0FFEE0123456789ABCD']) {
+      const s = stubProject();
+      record(s, `2026-09-21T08:00:00Z ${id} ${GOOD_HASH}\n`);
+      const out = await exec(s);
+      expect(out[0].ok).toBe(false);
+      expect(out[0].detail).toContain('alert only');
+      expect(callsOf(s)).toBe('');
+    }
+  });
+
+  test('malformed last record → alert only, the wrapper never runs', async () => {
     const s = stubProject();
     record(s, 'not a record\n');
     const out = await exec(s);
@@ -204,21 +226,31 @@ esac
     expect(callsOf(s)).toBe('');
   });
 
-  test('netlify CLI failure degrades to a failed outcome, never throws', async () => {
-    const s = stubProject({ netlifyRc: 1 });
+  test('the container job failing → a failed outcome naming the exit code, without echoing its output', async () => {
+    const s = stubProject({ aaRunRc: 5 });
     record(s);
     const out = await exec(s);
     expect(out[0].ok).toBe(false);
-    expect(out[0].detail.length).toBeGreaterThan(0);
+    expect(out[0].detail).toContain('exit 5');
+    expect(out[0].detail).not.toContain('hostile');
     expect(existsSync(s.sentinel)).toBe(false);
   });
 
-  test('a missing netlify binary degrades to a failed outcome (fault isolation)', async () => {
+  test('a hung container job is killed at the timeout → failed outcome, never throws', async () => {
+    const s = stubProject({ aaRunSleep: 20 });
+    record(s);
+    const t0 = Date.now();
+    const out = await exec(s, { restoreTimeoutMs: 500 });
+    expect(Date.now() - t0).toBeLessThan(10_000);
+    expect(out[0].ok).toBe(false);
+    expect(out[0].detail.length).toBeGreaterThan(0);
+  });
+
+  test('a missing project dir degrades to an alert-only outcome (fault isolation)', async () => {
     const s = stubProject();
     record(s);
     const out = await executeActions([{ kind: 'RESTORE_KNOWN_GOOD', summary: 's' }], {
       dryRun: false, statePath: s.statePath, projectDir: '/nonexistent-project-dir', stateDir: s.stateDir,
-      netlifyCmd: '/nonexistent/netlify',
     });
     expect(out[0].ok).toBe(false);
     expect(out[0].detail.length).toBeGreaterThan(0);
@@ -226,10 +258,11 @@ esac
 
   test('the whole STALE_DEPLOY path (plan → execute) never runs redeploy.sh, whatever the record says', async () => {
     for (const setup of [(s: Stub) => s, (s: Stub) => { record(s); return s; }]) {
-      const s = setup(stubProject({ published: 'something-else-000000000' }));
+      const s = setup(stubProject());
       const plan = planResponse(result('STALE_DEPLOY'), fresh, now);
-      await executeActions(plan, { dryRun: false, statePath: s.statePath, projectDir: s.dir, stateDir: s.stateDir, netlifyCmd: s.netlify });
+      await withPath(s, () => executeActions(plan, { dryRun: false, statePath: s.statePath, projectDir: s.dir, stateDir: s.stateDir }));
       expect(existsSync(s.sentinel)).toBe(false);
+      noHostNetlify(s);
     }
   });
 });
@@ -254,5 +287,13 @@ describe('deadman wiring pin', () => {
     expect(responders).not.toMatch(/spawn[^\n]*redeploy/);
     expect(responders).not.toContain("'--prod'");
     expect(responders).not.toMatch(/\[\s*netlifyCmd\s*,\s*'deploy'/);
+  });
+
+  test('round 5: the responder never calls the host netlify CLI; the restore runs docker/aa-run.sh restore', () => {
+    expect(responders).not.toContain('netlifyCmd');
+    expect(responders).not.toMatch(/spawn(Sync)?\(\s*\[\s*['"]netlify['"]/);
+    expect(responders).not.toMatch(/\[[^\]\n]*'api'/);
+    expect(responders).toContain("'restore'");
+    expect(responders).toContain("join(projectDir, 'docker', 'aa-run.sh')");
   });
 });

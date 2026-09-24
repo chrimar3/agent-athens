@@ -17,6 +17,19 @@
 #                                          # .pipeline-publish-ready)
 #   ./scripts/daily-automated.sh publish   # Ship that deferred build: no ingest,
 #                                          # scrape, enrich or generate
+#   ./scripts/daily-automated.sh ingest    # ONLY email ingestion + parsing (own
+#                                          # lock): the one run that needs the
+#                                          # mailbox password, and no browser
+#   AA_SKIP_INGEST=1 ./scripts/daily-automated.sh freshness
+#                                          # scrape/build without email ingest
+#                                          # (the ingest run covers it)
+#
+# Email ingest split (security loop round 5): headless Chrome loads hostile
+# pages in the scrape, so the mailbox password should not be in that run.
+# `ingest` mode runs run_ingest + run_parse and nothing else (no browser, no
+# build, no deploy); a freshness/full run with AA_SKIP_INGEST=1 skips those two
+# phases and logs that it did. A container policy can then give the email
+# credential to the ingest run alone.
 #
 # Exit codes: 0 success (a deferred run counts as success) · 1 failure or a
 # gate refused · 3 publish mode found no deferred build to publish.
@@ -43,6 +56,16 @@ set -o pipefail  # Catch pipe failures but don't exit on every error
 # Note: set -e removed — it conflicts with per-phase error handling and
 # killed the pipeline mid-email-ingestion on 2026-03-13. Every phase
 # already has explicit if/else error handling.
+
+# replace-objects:begin (security loop round 5; pinned by scripts/__tests__/deploy-gate.test.ts)
+# Git must judge the real object graph. A refs/replace/* entry (writable by a
+# compromised container run through .git/refs) makes every git read — rev-list,
+# ls-tree, merge-base, show — substitute one object for another, while git push
+# still sends the real objects. Honoured, it would let the origin gate call an
+# unreviewed HEAD reviewed and the pipeline-data content gate pass a commit
+# carrying code. Exported before the first git call; child processes inherit it.
+export GIT_NO_REPLACE_OBJECTS=1
+# replace-objects:end
 
 # ============================================================================
 # PATH Setup (for launchd which doesn't inherit user's PATH)
@@ -1229,9 +1252,9 @@ main() {
         case $arg in
             --dry-run)         DRY_RUN="true" ;;
             --mode=*)          PIPELINE_MODE="${arg#--mode=}" ;;
-            full|freshness|enrichment|publish) PIPELINE_MODE="$arg" ;;
-            --help|-h)         echo "Usage: [AA_DEFER_PUBLISH=1] $0 [full|freshness|enrichment|publish] [--dry-run]"; exit 0 ;;
-            *)                 echo "Unknown arg: $arg"; echo "Usage: [AA_DEFER_PUBLISH=1] $0 [full|freshness|enrichment|publish] [--dry-run]"; exit 1 ;;
+            full|freshness|enrichment|publish|ingest) PIPELINE_MODE="$arg" ;;
+            --help|-h)         echo "Usage: [AA_DEFER_PUBLISH=1] [AA_SKIP_INGEST=1] $0 [full|freshness|enrichment|publish|ingest] [--dry-run]"; exit 0 ;;
+            *)                 echo "Unknown arg: $arg"; echo "Usage: [AA_DEFER_PUBLISH=1] [AA_SKIP_INGEST=1] $0 [full|freshness|enrichment|publish|ingest] [--dry-run]"; exit 1 ;;
         esac
     done
 
@@ -1255,15 +1278,15 @@ main() {
     # assertion for its whole life. Known limit (ledger, 2026-04-08): -i does
     # NOT survive a closed lid on battery, and -s only works on AC. Enrichment
     # mode is excluded — 6 runs/day holding the assertion would drain a battery
-    # for no deploy benefit.
-    if [[ "$PIPELINE_MODE" != "enrichment" && -z "${AA_CAFFEINATED:-}" ]] && command -v caffeinate >/dev/null 2>&1; then
+    # for no deploy benefit. Ingest mode too: it is short and never deploys.
+    if [[ "$PIPELINE_MODE" != "enrichment" && "$PIPELINE_MODE" != "ingest" && -z "${AA_CAFFEINATED:-}" ]] && command -v caffeinate >/dev/null 2>&1; then
         export AA_CAFFEINATED=1
         exec caffeinate -i "$0" "$@"
     fi
     # caffeinate:end
 
     case "$PIPELINE_MODE" in
-        full|freshness|enrichment|publish) ;;
+        full|freshness|enrichment|publish|ingest) ;;
         *) echo "Invalid mode: $PIPELINE_MODE"; exit 1 ;;
     esac
 
@@ -1345,6 +1368,18 @@ main() {
         exit 0
     fi
 
+    # ── INGEST MODE (security loop round 5): email ingestion + parsing ONLY,
+    # under its own .pipeline-ingest.lock (per-mode lock above). No scrape (no
+    # browser), no build, no deploy — the run that holds the mailbox password
+    # does nothing else. AA_SKIP_INGEST is ignored here: ingesting is its job.
+    if [[ "$PIPELINE_MODE" == "ingest" ]]; then
+        check_dependencies
+        run_ingest
+        run_parse
+        log "Ingest completed (email ingestion + parsing only; nothing scraped, built or deployed)"
+        exit 0
+    fi
+
     # Check dependencies
     check_dependencies
 
@@ -1359,8 +1394,12 @@ main() {
     # ── FRESHNESS PHASES: data acquisition + quality (skip in enrichment mode) ──
     if [[ "$PIPELINE_MODE" != "enrichment" ]]; then
         # Data acquisition (all non-fatal)
-        run_ingest
-        run_parse
+        if [[ "${AA_SKIP_INGEST:-}" == "1" ]]; then
+            log "AA_SKIP_INGEST=1: skipping email ingestion and parsing (they run in the separate 'ingest' mode, the only run that holds the mailbox password)"
+        else
+            run_ingest
+            run_parse
+        fi
         run_scrape
         run_yield_canary
 
