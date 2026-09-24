@@ -7,8 +7,9 @@ cd /workspace
 usage() {
     cat >&2 <<'EOF'
 usage: aa-run.sh JOB [args]
-  freshness       daily-automated.sh freshness   (scrape → build; then publish)
-  publish         daily-automated.sh publish     (push + deploy a built site)
+  freshness       daily-automated.sh freshness   (ingest → scrape → build; then publish)
+  build           daily-automated.sh build       (site + pipeline-data commit, no network)
+  publish         daily-automated.sh publish     (push + deploy the built site)
   verify-live     print the live Netlify deploy id (compared on the Mac)
   ingest          daily-automated.sh ingest      (newsletter email only)
   restore ID      restore a recorded Netlify deploy
@@ -26,7 +27,7 @@ job="${1:-help}"
 [[ $# -gt 0 ]] && shift
 
 case "$job" in
-    freshness|enrichment|publish) exec bash scripts/daily-automated.sh "$job" "$@" ;;
+    freshness|build|enrichment|publish) exec bash scripts/daily-automated.sh "$job" "$@" ;;
     daily) exec bash scripts/daily-automated.sh "$@" ;;
     visibility)
         # The plist ran both with `;` — keep that, but report either failure.

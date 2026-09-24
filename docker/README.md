@@ -8,10 +8,11 @@ container and can reach only:
 
 | Reaches | Why |
 |---|---|
-| The repo's data folders (read-write) | The pipeline writes `data/`, `dist/`, `logs/`, `temp-*` |
+| The repo's data folders (read-write) | The pipeline writes `data/`, `logs/`, `temp-*`; `dist/` only in the build run (read-only for scrape and publish) |
 | Everything else in the repo, incl. `docs/`, `.netlify/`, `.git/config`, `.git/hooks` (**read-only**) | So nothing it does can change code or instructions your Mac or an agent session later runs |
 | `~/.config/agentathens` (read-only, **only runs that need it**) | GSC/Bing API keys |
 | The tokens its run needs, and no others | See the table below |
+| The internet and your local network, **except the build run**, which has no network | Scraping, email, enrichment and publishing need it |
 
 It cannot reach the rest of your home folder, the keychain, SSH keys, browser
 profiles, other projects, the backups, the token file or the Mac's system
@@ -25,18 +26,43 @@ pauses every job and alerts you.
 `tests/docker-hardening.test.ts` and `tests/docker-integrity-check.test.ts`
 fail if any of that is weakened.
 
-| Run | Schedule | Tokens it receives |
-|---|---|---|
-| `visibility` | 07:30 | none (reads the API-key folder) |
-| `freshness`, scrape and build | 08:00 | git identity only: no GitHub/Netlify token; loads web pages |
-| `freshness`, publish | right after, only if the integrity check passes | GitHub, Netlify: never loads a web page |
-| `enrichment` | 10:00, 13:00, 16:30, 19:00 | Claude only: no API-key folder, `.env*` hidden, `.git` read-only |
-| `verify-live` | 12:15, 20:15 | Netlify token + site id only: reads the live deploy id; the Mac alerts if it is not one the pipeline recorded |
-| `image-refresh` | Sundays 05:30 | none: rebuilds the image from scratch so system packages get their fixes |
+| Run | Schedule | Tokens | API-key folder | `.env` | `.git` | `dist/` | Network | Time limit |
+|---|---|---|---|---|---|---|---|---|
+| `visibility` | 07:30 | none | read-only | hidden | read-only | writable | yes | 30 min |
+| `freshness`, ingest | 08:00 | none (mailbox password from `.env`) | none | read-only | read-only | writable | yes | 30 min |
+| `freshness`, scrape | right after | **none**; loads web pages | none | hidden | read-only | **read-only** | yes | 3 h |
+| `freshness`, build | right after, only if the integrity check passes | git identity only (commits to `pipeline-data`) | none | hidden | may commit | writable | **none** | 45 min |
+| `freshness`, publish | right after, only if the integrity check passes | GitHub, Netlify, git identity: never loads a web page | Search Console key only | hidden | may commit | **read-only** | yes | 30 min |
+| `enrichment` | 10:00, 13:00, 16:30, 19:00 | Claude only | none | hidden | read-only | writable | yes | 90 min |
+| `verify-live` | 12:15, 20:15 | Netlify token + site id only: reads the live deploy id; the Mac alerts if it is not one the pipeline recorded | none | hidden | read-only | writable | yes | 10 min |
+| `restore ID` | by hand / watchdog | Netlify token + site id only | none | hidden | read-only | writable | yes | 10 min |
+| `image-refresh` | Sundays 05:30 | none: rebuilds the image from scratch so system packages get their fixes | – | – | – | – | – | – |
 
-(The two-step freshness needs the pipeline's deferred-publish mode from the
-protected-paths PR; until that is merged, freshness runs as one step holding
-both tokens.)
+`build` and `publish` can also be run by hand, in that order: `publish` refuses
+to start unless a `build` run has just recorded a dist hash, and each hash is
+used once (a failed publish needs a new `build`).
+
+**Sealed build.** The build run turns the scraped data into the site with no
+network and no secret: nothing a hostile page planted in the data can phone
+home or fetch more code while `dist/` is written. It prints
+`BUILD-RESULT dist_hash=…`; the Mac keeps that hash (in
+`~/.config/agentathens-docker/`, which no container mounts) and records the
+publish run's deploy in `deploys.log` only if the publish run reports the same
+hash. On a mismatch, or with no build hash, the deploy is not recorded, you
+get an alert, and `verify-live` keeps alerting until a good deploy is live.
+
+Which freshness you get depends on the pipeline in `scripts/daily-automated.sh`
+(protected-paths PR): with `AA_SKIP_BUILD` support, the four runs above; with
+only deferred publishing (`AA_DEFER_PUBLISH`), the scrape run also builds and
+commits (git identity, `.git` committable, `dist/` writable) and there is no
+hash check; with neither, freshness runs as one step holding both publishing
+tokens.
+
+**Time limits.** Every container run is stopped (`docker kill`) when it runs
+past its limit (`AA_JOB_TIMEOUT_MIN=<minutes>` overrides it for every run of
+one invocation). The run then counts as failed (exit 124), the integrity check
+still runs, and you get an alert. The limit is wall-clock time: a Mac that
+sleeps through it stops the run on wake.
 
 The API-key folder is mounted only where it is used: the scrape run gets none
 of it, the publish run gets only the Search Console key (sitemap submission),
@@ -61,10 +87,13 @@ Backups are taken **on the Mac** before each freshness/enrichment run: a plain
 copy of `data/events.db` into `~/agent-athens-backups`, which no container can
 see or change. The copy waits for other runs to finish, is recorded in
 `SHA256SUMS`, and generations are kept in tiers (newest 20, one per day for
-14 days, one per week for 8 weeks, one per month for 6 months). Set
+14 days, one per week for 8 weeks, one per month for 6 months). A backup that
+is skipped (another run still busy after 10 minutes, no database, a failed
+copy) sends an alert; the run itself goes ahead. Set
 `AA_OFFSITE_CMD` (for example a small script calling `rclone copy` or `rsync`
 to storage the Mac can write but not delete) to also copy each backup off the
-machine. Restore with `docker/restore-backup.sh`, which checks the checksum,
+machine. Without it every backup logs a warning and you get a reminder at most
+once a week. Restore with `docker/restore-backup.sh`, which checks the checksum,
 the database's integrity and that it isn't far smaller than the live one.
 
 Every verified deploy is recorded on the Mac in
@@ -100,6 +129,11 @@ weekly digest and phase3-weekly.
    If you created `~/.config/agentathens/docker.env` earlier, move it: that
    folder is mounted into some runs. Fill in `NETLIFY_SITE_ID` too; the
    live-site check needs it.
+
+   The wrapper makes `~/.config/agentathens` private (`chmod 700`) and refuses
+   to run while any file in it is readable by other accounts; it names the
+   file and the `chmod 600` to run (older installs: the
+   `launchd-pre-docker.txt` that `install-launchd.sh` wrote there).
 4. **Build and check**:
    ```bash
    docker/aa-run.sh image     # ~5 min, ~5 GB
@@ -136,11 +170,25 @@ host jobs exactly as they were.
 
 ## Known limits
 
-- The container can still reach the internet and your local network (it has
-  to fetch websites). Treat anything else on your LAN as reachable from it.
+- Every run except the build run can still reach the internet and your local
+  network (scraping, email, enrichment and publishing need it). Treat anything
+  else on your LAN as reachable from them.
 - The publish run holds the GitHub and Netlify tokens. It runs no browser and
   reads no outside input; the deploy and push gates decide *what* it may
-  publish.
+  publish. The dist-hash check compares what the publish run *reports* with
+  what the build run reported, both from inside containers: it catches `dist/`
+  changing between build and publish and a publish that deployed something
+  else, not a publish run that lies about its hash.
+- The build run still reads the scraped data and renders it, and its output is
+  what gets published: a sealed build keeps a compromised build from reaching
+  the network, not from shaping `dist/`. The published-output gates in the
+  build decide what may ship.
+- The hash check and the offline build need the pipeline's `AA_SKIP_BUILD`
+  support (protected-paths PR); until then the scrape run builds, commits and
+  can write `dist/`.
+- Time limits are wall-clock: a run suspended by sleep past its limit is
+  stopped on wake, and a publish stopped mid-upload can leave a Netlify deploy
+  unfinished (the next freshness run publishes again).
 - Runs that load outside content refuse an image older than 30 days (the
   weekly `image-refresh` job keeps it fresh). Chromium itself comes from the
   pinned base image, which Dependabot proposes updating; merge those PRs and

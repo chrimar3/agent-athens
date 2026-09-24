@@ -9,46 +9,68 @@ import { parse } from 'yaml';
 
 const ROOT = join(import.meta.dir, '..');
 const read = (p: string) => readFileSync(join(ROOT, p), 'utf8');
-const compose = parse(read('docker/compose.yaml'));
+// `merge: true` resolves the `<<: *pipeline` merge keys the way Compose does.
+const compose = parse(read('docker/compose.yaml'), { merge: true });
 const svc = compose.services.pipeline;
+const offline = compose.services['pipeline-offline'];
 
 describe('docker/compose.yaml hardening', () => {
-  test('non-root, read-only, no capabilities, no privilege escalation', () => {
-    expect(String(svc.user)).not.toMatch(/^(0|root)(:|$)/);
-    expect(svc.read_only).toBe(true);
-    expect(svc.cap_drop).toContain('ALL');
-    expect(svc.cap_add).toBeUndefined();
-    expect(svc.security_opt).toContain('no-new-privileges:true');
-    expect(svc.privileged).toBeFalsy();
-    expect(svc.init).toBe(true);
+  test('exactly two services: pipeline and the offline build service', () => {
+    expect(Object.keys(compose.services).sort()).toEqual(['pipeline', 'pipeline-offline']);
   });
 
-  test('publishes no ports and does not share the host network', () => {
-    expect(svc.ports).toBeUndefined();
+  for (const [label, s] of [['pipeline', svc], ['pipeline-offline', offline]] as const) {
+    test(`${label}: non-root, read-only, no capabilities, no privilege escalation`, () => {
+      expect(String(s.user)).not.toMatch(/^(0|root)(:|$)/);
+      expect(s.read_only).toBe(true);
+      expect(s.cap_drop).toContain('ALL');
+      expect(s.cap_add).toBeUndefined();
+      expect(s.security_opt).toContain('no-new-privileges:true');
+      expect(s.privileged).toBeFalsy();
+      expect(s.init).toBe(true);
+    });
+
+    test(`${label}: publishes no ports`, () => {
+      expect(s.ports).toBeUndefined();
+      expect(s.expose).toBeUndefined();
+    });
+
+    test(`${label}: receives no shared env file (aa-run.sh passes tokens per job)`, () => {
+      expect(s.env_file).toBeUndefined();
+    });
+
+    test(`${label}: mounts only the repo and the read-only secrets folder — never the backups`, () => {
+      const targets = s.volumes.map((v: string | { target: string }) => (typeof v === 'string' ? v : v.target));
+      expect(targets.sort()).toEqual([
+        '/home/pwuser/.config/agentathens',
+        '/workspace',
+        '/workspace/node_modules',
+      ]);
+      const secrets = s.volumes.find((v: { target?: string }) => v.target === '/home/pwuser/.config/agentathens');
+      expect(secrets.read_only).toBe(true);
+      for (const v of s.volumes) {
+        if (typeof v === 'string') continue;
+        expect(v.source).not.toMatch(/^(~|\$\{?HOME\}?|\/)$/);
+      }
+    });
+
+    test(`${label}: home directory is a fresh tmpfs every run`, () => {
+      expect(s.tmpfs.some((t: string) => t.startsWith('/home/pwuser:'))).toBe(true);
+    });
+  }
+
+  test('pipeline does not share the host network; pipeline-offline has no network at all', () => {
     expect(svc.network_mode).toBeUndefined();
+    expect(svc.networks).toBeUndefined();
+    expect(offline.network_mode).toBe('none');
+    expect(offline.networks).toBeUndefined();
   });
 
-  test('receives no shared env file (aa-run.sh passes tokens per job)', () => {
-    expect(svc.env_file).toBeUndefined();
-  });
-
-  test('mounts only the repo and the read-only secrets folder — never the backups', () => {
-    const targets = svc.volumes.map((v: string | { target: string }) => (typeof v === 'string' ? v : v.target));
-    expect(targets.sort()).toEqual([
-      '/home/pwuser/.config/agentathens',
-      '/workspace',
-      '/workspace/node_modules',
-    ]);
-    const secrets = svc.volumes.find((v: { target?: string }) => v.target === '/home/pwuser/.config/agentathens');
-    expect(secrets.read_only).toBe(true);
-    for (const v of svc.volumes) {
-      if (typeof v === 'string') continue;
-      expect(v.source).not.toMatch(/^(~|\$\{?HOME\}?|\/)$/);
-    }
-  });
-
-  test('home directory is a fresh tmpfs every run', () => {
-    expect(svc.tmpfs.some((t: string) => t.startsWith('/home/pwuser:'))).toBe(true);
+  test('the offline service is the pipeline service, minus build, plus network_mode none', () => {
+    const { build: _build, ...base } = svc;
+    const { network_mode: _net, ...rest } = offline;
+    expect(rest).toEqual(base);
+    expect(offline.build).toBeUndefined();
   });
 });
 
@@ -83,6 +105,7 @@ describe('docker/aa-run.sh least privilege', () => {
 
   test('the scrape run holds no publishing token or API keys; the publish run gets only the Search Console key', () => {
     expect(policy('scrape')).not.toMatch(/GH_TOKEN|NETLIFY_AUTH_TOKEN|CLAUDE_CODE_OAUTH_TOKEN/);
+    expect(policy('scrape-build')).not.toMatch(/GH_TOKEN|NETLIFY_AUTH_TOKEN|CLAUDE_CODE_OAUTH_TOKEN/);
     for (const name of ['enrichment', 'visibility', 'site', 'test|shell']) {
       expect(policy(name)).not.toMatch(/GH_TOKEN|NETLIFY_AUTH_TOKEN/);
     }
@@ -111,6 +134,27 @@ describe('docker/aa-run.sh least privilege', () => {
 
   test('freshness defers publishing to a separate run when the pipeline supports it', () => {
     expect(wrapper).toMatch(/export AA_DEFER_PUBLISH=1[\s\S]*run_container scrape[\s\S]*run_container publish/);
+  });
+
+  test('sealed build: scrape writes neither .git nor dist/; build is offline with git identity only; publish cannot write dist/', () => {
+    expect(policy('scrape')).toMatch(/TOKENS=""; SECRETS=no; DOTENV=\$\{SCRAPE_DOTENV:-no\}; GITRW=no; DIST=ro;/);
+    expect(policy('build')).toMatch(/TOKENS="\$GIT_ID"; SECRETS=no; DOTENV=no; GITRW=yes; NET=no;/);
+    expect(policy('publish')).toContain('DIST=ro');
+    expect(wrapper).toContain('mounts+=(-v "$REPO/dist:/workspace/dist:ro")');
+    expect(wrapper).toContain('[ "$NET" = "no" ] && service=pipeline-offline');
+    expect(wrapper).toMatch(/export AA_SKIP_BUILD=1[\s\S]*run_container scrape [\s\S]*run_container build [\s\S]*run_container publish /);
+  });
+
+  test('a deploy is recorded only when its dist hash is the one the build run reported', () => {
+    expect(wrapper).toContain("'^BUILD-RESULT dist_hash=[0-9a-f]{64}$'");
+    expect(wrapper).toMatch(/record_deploy\(\) \{[\s\S]*"\$hash" != "\$BUILD_HASH"[\s\S]*notify[\s\S]*exit 10/);
+  });
+
+  test('every policy has a time limit', () => {
+    const lines = wrapper.split('\n').filter((l) => /^\s+[a-z|-]+\)\s+TOKENS=/.test(l));
+    expect(lines.length).toBeGreaterThanOrEqual(14);
+    for (const l of lines) expect(l).toMatch(/LIMIT=[1-9][0-9]*/);
+    expect(wrapper).toContain('docker kill "$name"');
   });
 
   test('the token file lives outside every folder a container mounts', () => {

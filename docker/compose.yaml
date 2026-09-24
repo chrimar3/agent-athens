@@ -10,11 +10,12 @@
 # Guarded by tests/docker-hardening.test.ts.
 name: agent-athens
 
-services:
-  pipeline:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
+# One definition, two services: `pipeline` (network as usual) and
+# `pipeline-offline`, identical except that it has no network at all. aa-run.sh
+# uses the offline one for the build run (dist/ + the pipeline-data commit),
+# which needs no network and holds no secret token. Compose merges `<<: *pipeline`
+# as a YAML merge key; tests/docker-hardening.test.ts checks both services.
+x-pipeline: &pipeline
     image: agent-athens-pipeline:local
     pull_policy: never
     init: true                       # reaps orphaned Chromium/claude processes
@@ -55,3 +56,13 @@ services:
         read_only: true
     # No `ports:` — nothing listens for the network. Preview the site on the
     # Mac with `bun run serve` (binds 127.0.0.1 only).
+
+services:
+  pipeline:
+    <<: *pipeline
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+  pipeline-offline:
+    <<: *pipeline
+    network_mode: none               # no network interface except loopback
