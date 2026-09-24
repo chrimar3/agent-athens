@@ -186,6 +186,7 @@ describe('netlify.toml — Content-Security-Policy-Report-Only (target strict po
   test('GA4 beacons are allowed by connect-src', () => {
     const c = ro.get('connect-src') ?? [];
     expect(c).toContain("'self'");
-    expect(c.some((h) => h.includes('google-analytics.com'))).toBe(true);
+    // Exact source expression, not a substring match on a host name.
+    expect(c).toContain('https://*.google-analytics.com');
   });
 });
