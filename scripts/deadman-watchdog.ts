@@ -27,8 +27,16 @@
 // container-writable logs". Every logs/ read is bounded, refuses symlinks and
 // non-regular files, parses strictly, and quoted text has control characters
 // removed (src/watchdog/signal-sources.ts). So is every reason before delivery.
+//
+// Security loop round 8: data/events.db is container-written too, and a
+// planted recursive VIEW named `events` once hung this watchdog forever. The
+// DB is never opened here: every DB signal comes from ONE queryUntrustedDb()
+// read (src/watchdog/untrusted-db.ts: private copy, no views or foreign
+// triggers, queries in a child killed after 30 s). A refused or runaway DB is
+// its own status, DB_REFUSED, and says so in the alert. The whole run also
+// has a wall-clock limit (10 min): when it is hit the watchdog alerts through
+// the same notification, email, push and heartbeat layers and exits 1.
 
-import { Database } from "bun:sqlite";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { homedir } from "node:os";
@@ -43,6 +51,9 @@ import {
 import { loadQuarantine, filterQuarantined } from "../src/utils/quarantine";
 import { findVenueConfig } from "../src/quality/location-filter";
 import { ACTIVE_SOURCE_IDS } from "../src/config/active-source-ids";
+import {
+  killUntrustedDbReaders, queryUntrustedDb, UNTRUSTED_DB_DEFAULT_TIMEOUT_MS, type UntrustedDbResult, type UntrustedQuery,
+} from "../src/watchdog/untrusted-db";
 
 const ROOT = resolve(import.meta.dir, "..");
 const CONFIG_PATH = join(ROOT, "config", "monitoring.json");
@@ -54,6 +65,15 @@ const dbPath = (): string => process.env.DEADMAN_DB_PATH || join(ROOT, "data", "
 // DEADMAN_DRY_RUN=1 → classify + print, skip all delivery (notify/email/heartbeat).
 // Lets the watchdog be verified against a degenerate DB without spamming channels.
 const DRY_RUN = process.env.DEADMAN_DRY_RUN === "1";
+// Round 8: wall clock for the whole run and for the one DB read. The env
+// overrides are test seams (a positive integer of milliseconds, else ignored).
+const msFromEnv = (name: string, fallback: number): number => {
+  const v = Number(process.env[name]);
+  return Number.isSafeInteger(v) && v > 0 ? v : fallback;
+};
+export const DEADMAN_WALL_CLOCK_MS = 10 * 60_000;
+const wallClockMs = (): number => msFromEnv("DEADMAN_WALL_CLOCK_MS", DEADMAN_WALL_CLOCK_MS);
+const dbTimeoutMs = (): number => msFromEnv("DEADMAN_DB_TIMEOUT_MS", UNTRUSTED_DB_DEFAULT_TIMEOUT_MS);
 // Host-only (security loop round 4): logs/ is writable by pipeline
 // containers, which could plant a symlink there for this host job to write
 // through. The heartbeat lives in hostLogDir() and is opened O_NOFOLLOW.
@@ -149,63 +169,6 @@ async function deploySignal(): Promise<DeploySignal> {
   }
 }
 
-/** Enrichment freshness: MAX(enriched_at). Issues only a SELECT (no data mutation).
- *  WAL opens are state-dependent in Bun: {readonly:true} sometimes can't reach -shm,
- *  and a bare {} throws "flags must include READONLY or READWRITE". So try readonly
- *  first (zero side effects — ideal for a monitor) and fall back to readwrite when the
- *  WAL state forces it. create:false → a missing DB throws → null → stale (fail-loud). */
-function openEventsDb(): Database {
-  try {
-    return new Database(dbPath(), { readonly: true });
-  } catch {
-    return new Database(dbPath(), { readwrite: true, create: false });
-  }
-}
-
-function enrichSignalMs(): number | null {
-  const db = openEventsDb();
-  try {
-    const row = db.prepare("SELECT MAX(enriched_at) AS m FROM events").get() as { m: string | null };
-    if (!row?.m) return null;
-    // enriched_at is stored "YYYY-MM-DD HH:MM:SS" in Athens local wall-time; parse as such.
-    const ms = Date.parse(row.m.replace(" ", "T")); // local-tz interpretation, → epoch-ms
-    return Number.isNaN(ms) ? null : ms;
-  } finally {
-    db.close();
-  }
-}
-
-/** DB presence/row floor: events table row count. Reuses openEventsDb (the single
- *  DB-open seam) — a missing DB throws (create:false) → caller maps to null → DB_MISSING. */
-function dbRowCountSignal(): number {
-  const db = openEventsDb();
-  try {
-    const row = db.prepare("SELECT COUNT(*) AS c FROM events").get() as { c: number };
-    return row?.c ?? 0;
-  } finally {
-    db.close();
-  }
-}
-
-/** Busy-vs-missing disambiguation (campaign Phase 5). On 2026-07-05 the watchdog
- *  emailed CATASTROPHIC "DB missing" twice during ordinary WAL contention (the
- *  S195 class: readonly open succeeds, first read throws while the enrichment
- *  writer holds the lock). Retry once after 30s; if the file EXISTS but reads
- *  still fail, report busy — the classifier then declines to declare DB_MISSING. */
-function dbRowCountWithBusyRetry(): { count: number | null; busy: boolean } {
-  try {
-    return { count: dbRowCountSignal(), busy: false };
-  } catch {
-    if (!existsSync(dbPath())) return { count: null, busy: false }; // genuinely missing
-    Bun.sleepSync(30_000);
-    try {
-      return { count: dbRowCountSignal(), busy: false };
-    } catch {
-      return { count: null, busy: true }; // present but unreadable twice → writer contention
-    }
-  }
-}
-
 /** Silent source death (campaign Phase 5): an active source whose last
  *  SOURCE_DEAD_STREAK runs all returned 0 events or failed.
  *
@@ -223,44 +186,122 @@ function dbRowCountWithBusyRetry(): { count: number | null; busy: boolean } {
  *    still protected by the streak-length floor, and there is no flap: hard
  *    failures either persist (keep alerting) or resolve (stop alerting). */
 const SOURCE_DEAD_STREAK = 3;
-export function deadSourcesSignal(): string[] {
-  const db = openEventsDb();
-  try {
-    const dead: string[] = [];
-    for (const src of ACTIVE_SOURCE_IDS) {
-      const lastRuns = db.prepare(
-        `SELECT events_found, success FROM scrape_stats
+
+/** Every query the watchdog runs against events.db, read in ONE untrusted-DB
+ *  pass (round 8). Only SELECTs; the rows are validated where they are used. */
+function deadmanDbQueries(): Record<string, UntrustedQuery> {
+  const q: Record<string, UntrustedQuery> = {
+    // Enrichment freshness: MAX(enriched_at).
+    enrich: { sql: "SELECT MAX(enriched_at) AS m FROM events", tables: ["events"] },
+    // DB presence/row floor: events table row count.
+    count: { sql: "SELECT COUNT(*) AS c FROM events", tables: ["events"] },
+    // Addressless publishable venues (see addresslessFromDb).
+    addressless: {
+      sql: `SELECT DISTINCT venue_name FROM events
+       WHERE location_status IN ('verified_athens', 'pass_through')
+         AND merged_into IS NULL
+         AND is_cancelled = 0
+         AND (venue_address IS NULL OR TRIM(venue_address) = '')
+         AND COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')`,
+      tables: ["events"],
+    },
+  };
+  for (const src of ACTIVE_SOURCE_IDS) {
+    q[`runs:${src}`] = {
+      sql: `SELECT events_found, success FROM scrape_stats
          WHERE source = ? ORDER BY scraped_at DESC LIMIT ?`,
-      ).all(src, SOURCE_DEAD_STREAK) as Array<{ events_found: number; success: number }>;
-      if (lastRuns.length < SOURCE_DEAD_STREAK) continue;
-      const allDegenerate = lastRuns.every((r) => r.events_found === 0 || r.success === 0);
-      if (!allDegenerate) continue;
-      // Rule B — long-dead: every recent run HARD-FAILED. Not window-limited.
-      const allHardFailed = lastRuns.every((r) => r.success === 0);
-      if (allHardFailed) {
-        dead.push(src);
-        continue;
-      }
-      // Rule A — fresh death: quiet/failed streak on a source that was producing
-      // within the window. (Beyond the window, quiet-but-succeeding is dormancy.)
-      const producedRecently = db.prepare(
-        `SELECT 1 FROM scrape_stats
+      params: [src, SOURCE_DEAD_STREAK],
+      tables: ["scrape_stats"],
+    };
+    q[`recent:${src}`] = {
+      sql: `SELECT 1 AS hit FROM scrape_stats
          WHERE source = ? AND events_found > 0 AND scraped_at >= datetime('now', '-30 days')
          LIMIT 1`,
-      ).get(src);
-      if (producedRecently) dead.push(src);
-    }
-    // Phase 2A: already-quarantined sources are handled — the digest lists
-    // them; repeating SOURCE_DEAD every 6h for a known-quarantined source is
-    // alert fatigue (clubber pushed 8+ identical alerts, S222).
-    // DEADMAN_QUARANTINE_PATH: test seam, same pattern as DEADMAN_DB_PATH —
-    // the dead-sources-window fixtures use clubber as their long-dead specimen
-    // and must not be silenced by the REAL registry quarantining real clubber.
-    const quarantinePath = process.env.DEADMAN_QUARANTINE_PATH || join(ROOT, "config", "quarantined-sources.json");
-    return filterQuarantined(dead, loadQuarantine(quarantinePath));
-  } finally {
-    db.close();
+      params: [src],
+      tables: ["scrape_stats"],
+    };
   }
+  return q;
+}
+
+/** One untrusted read of events.db (round 8). A failing count query counts as
+ *  a failed read (the busy retry below applies to it). */
+async function readDeadmanDb(requireTables: string[] = ["events"]): Promise<UntrustedDbResult> {
+  const r = await queryUntrustedDb({
+    dbPath: dbPath(),
+    requireTables,
+    queries: deadmanDbQueries(),
+    timeoutMs: dbTimeoutMs(),
+  });
+  if (r.ok && r.errors.count) return { ok: false, kind: "error", detail: `row count query failed: ${r.errors.count}` };
+  return r;
+}
+
+/** Busy-vs-missing disambiguation (campaign Phase 5). On 2026-07-05 the watchdog
+ *  emailed CATASTROPHIC "DB missing" twice during ordinary WAL contention (the
+ *  S195 class: readonly open succeeds, first read throws while the enrichment
+ *  writer holds the lock). Retry once after 30s; if the file EXISTS but reads
+ *  still fail, report busy — the classifier then declines to declare DB_MISSING.
+ *  Round 8: a copy torn by a concurrent writer fails the same way (kind
+ *  "error"); a missing file, a refusal or a timeout is not retried. */
+export async function readDeadmanDbWithRetry(): Promise<{ res: UntrustedDbResult; busy: boolean }> {
+  const first = await readDeadmanDb();
+  if (first.ok || first.kind !== "error") return { res: first, busy: false };
+  await Bun.sleep(30_000);
+  const second = await readDeadmanDb();
+  return { res: second, busy: !second.ok && second.kind === "error" };
+}
+
+function enrichFromDb(r: UntrustedDbResult): number | null {
+  if (!r.ok) return null;
+  const m = r.rows.enrich?.[0]?.m;
+  if (typeof m !== "string" || !m) return null;
+  // enriched_at is stored "YYYY-MM-DD HH:MM:SS" in Athens local wall-time; parse as such.
+  const ms = Date.parse(m.replace(" ", "T")); // local-tz interpretation, → epoch-ms
+  return Number.isNaN(ms) ? null : ms;
+}
+
+/** Row count, or null when the DB is missing, refused or unreadable. */
+function rowCountFromDb(r: UntrustedDbResult): number | null {
+  if (!r.ok) return null;
+  const c = r.rows.count?.[0]?.c;
+  return typeof c === "number" && Number.isSafeInteger(c) && c >= 0 ? c : null;
+}
+
+/** Dead sources from the rows of one untrusted read (see SOURCE_DEAD_STREAK). */
+export function deadSourcesFromDb(r: UntrustedDbResult): string[] {
+  if (!r.ok) return [];
+  const dead: string[] = [];
+  for (const src of ACTIVE_SOURCE_IDS) {
+    const lastRuns = (r.rows[`runs:${src}`] ?? []) as Array<{ events_found: unknown; success: unknown }>;
+    if (lastRuns.length < SOURCE_DEAD_STREAK) continue;
+    const allDegenerate = lastRuns.every((row) => row.events_found === 0 || row.success === 0);
+    if (!allDegenerate) continue;
+    // Rule B — long-dead: every recent run HARD-FAILED. Not window-limited.
+    const allHardFailed = lastRuns.every((row) => row.success === 0);
+    if (allHardFailed) {
+      dead.push(src);
+      continue;
+    }
+    // Rule A — fresh death: quiet/failed streak on a source that was producing
+    // within the window. (Beyond the window, quiet-but-succeeding is dormancy.)
+    const producedRecently = (r.rows[`recent:${src}`] ?? []).length > 0;
+    if (producedRecently) dead.push(src);
+  }
+  // Phase 2A: already-quarantined sources are handled — the digest lists
+  // them; repeating SOURCE_DEAD every 6h for a known-quarantined source is
+  // alert fatigue (clubber pushed 8+ identical alerts, S222).
+  // DEADMAN_QUARANTINE_PATH: test seam, same pattern as DEADMAN_DB_PATH —
+  // the dead-sources-window fixtures use clubber as their long-dead specimen
+  // and must not be silenced by the REAL registry quarantining real clubber.
+  const quarantinePath = process.env.DEADMAN_QUARANTINE_PATH || join(ROOT, "config", "quarantined-sources.json");
+  return filterQuarantined(dead, loadQuarantine(quarantinePath));
+}
+
+/** Silent source death on its own (tests; main() reuses its one read):
+ *  needs only scrape_stats. */
+export async function deadSourcesSignal(): Promise<string[]> {
+  return deadSourcesFromDb(await readDeadmanDb([]));
 }
 
 /** Addressless publishable venues (campaign Phase 5): the pre-drought signal.
@@ -269,23 +310,12 @@ export function deadSourcesSignal(): string[] {
  *  future F2b hard-stop. The standing mitigation idea from mistakes.md
  *  2026-07-05, finally built — delivered through the one channel that reaches
  *  a human instead of a warn line in an unread scrape log. */
-function addresslessVenuesSignal(): string[] {
-  const db = openEventsDb();
-  try {
-    const rows = db.prepare(
-      `SELECT DISTINCT venue_name FROM events
-       WHERE location_status IN ('verified_athens', 'pass_through')
-         AND merged_into IS NULL
-         AND is_cancelled = 0
-         AND (venue_address IS NULL OR TRIM(venue_address) = '')
-         AND COALESCE(CASE WHEN type='exhibition' THEN end_date ELSE NULL END, start_date) >= date('now')`,
-    ).all() as Array<{ venue_name: string }>;
-    return rows
-      .map((r) => r.venue_name)
-      .filter((name) => !findVenueConfig(name)?.address?.trim());
-  } finally {
-    db.close();
-  }
+function addresslessFromDb(r: UntrustedDbResult): string[] {
+  if (!r.ok) return [];
+  return (r.rows.addressless ?? [])
+    .map((row) => row.venue_name)
+    .filter((name): name is string => typeof name === "string")
+    .filter((name) => !findVenueConfig(name)?.address?.trim());
 }
 
 /** Last build-failure line from logs/build-outcome.log, if newer than the last
@@ -313,7 +343,7 @@ const launchdHealth: PipelineHealthSource = {
     // `launchctl list <label>` prints a dict incl. "LastExitStatus" = N. A scheduled
     // job that last-exited non-zero (and isn't currently running) is unhealthy.
     for (const label of labels) {
-      const out = Bun.spawnSync(["launchctl", "list", label]);
+      const out = Bun.spawnSync(["launchctl", "list", label], { timeout: 10_000, killSignal: "SIGKILL" });
       if (out.exitCode !== 0) continue; // label not loaded → not our failure to flag
       const text = new TextDecoder().decode(out.stdout);
       const exitM = text.match(/"LastExitStatus"\s*=\s*(-?\d+)/);
@@ -330,7 +360,8 @@ const launchdHealth: PipelineHealthSource = {
 // It reaches AppleScript only as an argument (src/watchdog/notify.ts), never
 // as script text (security loop round 4).
 function fireNotification(title: string, subtitle: string, message: string): void {
-  Bun.spawnSync(osascriptNotificationArgv({ title, subtitle, message, sound: "Basso" }));
+  // Bounded (round 8): no sync call may outlast the run's wall clock.
+  Bun.spawnSync(osascriptNotificationArgv({ title, subtitle, message, sound: "Basso" }), { timeout: 15_000, killSignal: "SIGKILL" });
 }
 
 /** Layer 4 — off-machine push via ntfy (https://ntfy.sh). A DIFFERENT AXIS from
@@ -385,12 +416,57 @@ function ageH(ms: number | null, now: number): string {
   return ms === null ? "null" : ((now - ms) / 3_600_000).toFixed(1);
 }
 
+/** The alert line for a run stopped by its wall clock (round 8). */
+export function wallClockReason(limitMs: number): string {
+  const limit = limitMs >= 60_000 ? `${Math.round(limitMs / 60_000)} min` : `${limitMs / 1000} s`;
+  return `deadman: this run hit its ${limit} wall-clock limit and was stopped before it checked every signal — ` +
+    `something it reads is hanging (data/events.db, logs/, launchctl, the network or a responder). ` +
+    `Run it by hand to see where: DEADMAN_DRY_RUN=1 bun run scripts/deadman-watchdog.ts`;
+}
+
+/** Wall clock hit (round 8): alert through the normal layers — notification,
+ *  email, push, heartbeat — then exit 1. Each layer is bounded or never
+ *  throws; a last timer exits even if one of them stalls. */
+async function onWallClock(cfg: MonitoringConfig, limitMs: number): Promise<never> {
+  setTimeout(() => process.exit(1), 90_000);
+  killUntrustedDbReaders();
+  const status = "WALL_CLOCK_TIMEOUT";
+  const reason = wallClockReason(limitMs);
+  const tsIso = new Date().toISOString().replace(/\.\d+Z$/, "Z");
+  if (DRY_RUN) {
+    console.log(`[deadman:DRY_RUN] @ ${tsIso} status=${status} (would exit 1)`);
+    console.log(`  • ${reason}`);
+    process.exit(1);
+  }
+  console.error(`[deadman] ${status} @ ${tsIso}\n  • ${reason}`);
+  try {
+    if (cfg.notify.enabled) fireNotification("Agent Athens", `Deadman: ${status}`, reason);
+  } catch (e) {
+    console.error(`[deadman] notification failed: ${e instanceof Error ? e.message : String(e)}`);
+  }
+  const mail = sendEmail(cfg.email, `[Agent Athens] DEADMAN: ${status}`, `Deadman watchdog stopped at ${tsIso} (host wall-clock).\n\nStatus: ${status}\n\n  • ${reason}\n`);
+  const emailState = mail.ok ? "sent" : mail.skipped ? "skipped" : "FAILED";
+  if (!mail.ok) console.error(`[deadman] email ${emailState}: ${mail.detail}`);
+  const push = await sendPush(cfg, `Agent Athens DEADMAN: ${status}`, `${status} @ ${tsIso}\n- ${reason}`)
+    .catch((e) => ({ ok: false, skipped: false, detail: `sendPush threw: ${e}` }));
+  console.error(`[deadman] push ${push.ok ? "sent" : push.skipped ? `skipped: ${push.detail}` : `FAILED: ${push.detail}`}`);
+  try {
+    writeHeartbeat({ timestamp: tsIso, status, deploy_age_h: "null", enrich_age_h: "null", pipeline_ok: "unknown", email: emailState, reasons: reason });
+  } catch (e) {
+    console.error(`[deadman] HEARTBEAT NOT WRITTEN to ${heartbeatPath()}: ${e instanceof Error ? e.message : String(e)}`);
+  }
+  process.exit(1);
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 // Wrapped in a function + import.meta.main guard so importing this module (tests
 // export deadSourcesSignal / sendPush) can NEVER run the watchdog or fire delivery.
 async function main(): Promise<never> {
 const cfg = loadConfig();
 const nowMs = Date.now();
+// Round 8: the whole run has a wall clock; hitting it alerts and exits 1.
+const limitMs = wallClockMs();
+setTimeout(() => { void onWallClock(cfg, limitMs); }, limitMs);
 
 // Fault-isolate each adapter: a failure degrades one signal to "unknown", which the
 // classifier treats as stale (fail-loud), rather than crashing the watchdog silent.
@@ -400,16 +476,23 @@ const deploy = await deploySignal().catch(
 );
 const lastDeployMs = deploy.ms;
 const deployFrom = deploy.source === "host-record" ? "host record" : "from container-writable logs";
-const lastEnrichMs = safe(enrichSignalMs, null);
-// Busy-aware DB signal: retries once after 30s and reports lock-contention as
-// busy (NOT missing) — kills the 2026-07-05 false-CATASTROPHIC class.
-const { count: dbRowCount, busy: dbBusy } = safe(dbRowCountWithBusyRetry, { count: null, busy: false });
+// Round 8: ONE untrusted read of events.db feeds every DB signal. Busy-aware:
+// retries once after 30s and reports a failing read of a present file as busy
+// (NOT missing) — kills the 2026-07-05 false-CATASTROPHIC class. A refusal or
+// a timeout is DB_REFUSED, named in the alert.
+const db = await readDeadmanDbWithRetry().catch(
+  (e): { res: UntrustedDbResult; busy: boolean } => ({ res: { ok: false, kind: "error", detail: `db adapter failed: ${e}` }, busy: false }),
+);
+const lastEnrichMs = safe(() => enrichFromDb(db.res), null);
+const dbRowCount = safe(() => rowCountFromDb(db.res), null);
+const dbBusy = db.busy;
+const dbRefused = !db.res.ok && (db.res.kind === "refused" || db.res.kind === "timeout") ? db.res.detail : null;
 const authOk = safe(authPrecheckOk, null);
 const pipelineHealthy = safe(() => launchdHealth.isHealthy(cfg.pipeline_health_labels), true);
 // Cause signals (Phase 5) — fault-isolated; a failing adapter degrades to
 // "no signal", never blocks the freshness classification.
-const deadSources = safe(deadSourcesSignal, []);
-const addresslessVenues = safe(addresslessVenuesSignal, []);
+const deadSources = safe(() => deadSourcesFromDb(db.res), []);
+const addresslessVenues = safe(() => addresslessFromDb(db.res), []);
 const buildFailureCause = safe(() => buildFailureCauseSignal(lastDeployMs), null);
 
 const inputs: DeadmanInputs = {
@@ -420,6 +503,7 @@ const inputs: DeadmanInputs = {
   authPrecheckOk: authOk,
   dbRowCount,
   dbBusy,
+  dbRefused,
   deadSources,
   addresslessVenues,
   buildFailureCause,

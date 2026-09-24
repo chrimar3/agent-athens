@@ -105,7 +105,6 @@ describe('deadman heartbeat', () => {
 });
 
 describe('daily-enrichment-check.sh', () => {
-  const hasSqliteCli = Bun.spawnSync(['bash', '-c', 'command -v sqlite3']).exitCode === 0;
   function project() {
     const dir = tmp('aa-enrich-check-sym-');
     for (const d of ['scripts', 'data', 'logs', 'bin', 'home', 'state']) mkdirSync(join(dir, d));
@@ -120,12 +119,12 @@ describe('daily-enrichment-check.sh', () => {
   const run = (dir: string) => {
     const r = Bun.spawnSync(['bash', join(dir, 'scripts/daily-enrichment-check.sh')], {
       cwd: dir,
-      env: { ...process.env, PATH: `${join(dir, 'bin')}:${process.env.PATH}`, HOME: join(dir, 'home'), AA_STATE_DIR: join(dir, 'state') },
+      env: { ...process.env, PATH: `${join(dir, 'bin')}:${process.env.PATH}`, HOME: join(dir, 'home'), AA_STATE_DIR: join(dir, 'state'), AA_UNTRUSTED_DB_CLI: join(ROOT, 'scripts/untrusted-db-query.ts') },
     });
     return { code: r.exitCode, err: new TextDecoder().decode(r.stderr) };
   };
 
-  test.skipIf(!hasSqliteCli)('a symlink at the repo logs/ path is never written (the log moved to the state dir)', () => {
+  test('a symlink at the repo logs/ path is never written (the log moved to the state dir)', () => {
     const dir = project();
     const v = victim(dir);
     symlinkSync(v, join(dir, 'logs/enrichment-check.log'));
@@ -146,12 +145,16 @@ describe('daily-enrichment-check.sh', () => {
     expect(readFileSync(v, 'utf-8')).toBe('ORIGINAL\n');
   });
 
-  test('every count read from the database is checked to be an integer, and the database is opened read-only (source check)', () => {
+  test('every count read from the database is checked to be an integer, and the database is never opened directly (source check)', () => {
     const src = readFileSync(join(ROOT, 'scripts/daily-enrichment-check.sh'), 'utf-8');
-    for (const v of ['UNENRICHED', 'TOTAL_VISIBLE', 'ENRICHED', 'AUTO_ENRICHED_TODAY', 'HAS_ENRICHMENT_LOG']) {
+    for (const v of ['UNENRICHED', 'TOTAL_VISIBLE', 'ENRICHED', 'AUTO_ENRICHED_TODAY']) {
       expect(src).toContain(`require_count ${v} "$${v}"`);
     }
-    expect(src).not.toMatch(/sqlite3 (?!-readonly)/);
+    // Round 8: no sqlite3 invocation at all — only the untrusted-DB CLI reads
+    // it (the word survives in comments and in the operator hints).
+    const code = src.split('\n').filter((l) => !/^\s*#/.test(l) && !/refuse "/.test(l)).join('\n');
+    expect(code).not.toMatch(/sqlite3/);
+    expect(src).toContain('"$BUN_BIN" "$UNTRUSTED_DB_CLI" --db "$DB_PATH" --require-table events');
   });
 });
 

@@ -190,6 +190,9 @@ function restoreKnownGood(stateDir: string, projectDir: string, timeoutMs: numbe
   };
 }
 
+/** Wall-clock bound for the auth pre-check (security loop round 8). */
+const AUTH_CHECK_TIMEOUT_MS = 5 * 60_000;
+
 export async function executeActions(
   actions: PlannedAction[],
   opts: {
@@ -226,8 +229,12 @@ export async function executeActions(
         ok = r.ok;
         detail = r.detail;
       } else if (a.kind === 'AUTH_CHECK') {
+        // Bounded (security loop round 8): a sync call must not outlast the
+        // deadman's wall clock, which cannot fire while it blocks.
         const p = Bun.spawnSync(['bash', `${opts.projectDir}/scripts/auto-enrich.sh`, '--auth-check-only'], {
           cwd: opts.projectDir,
+          timeout: AUTH_CHECK_TIMEOUT_MS,
+          killSignal: 'SIGKILL',
         });
         ok = p.exitCode === 0;
         detail = ok ? 'auth ok' : `auth check failed rc=${p.exitCode} — see logs/auth-precheck-last.log`;

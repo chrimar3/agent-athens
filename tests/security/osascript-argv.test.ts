@@ -108,13 +108,12 @@ describe('daily-enrichment-check.sh — notification text reaches osascript as a
   const run = (dir: string) => {
     const r = Bun.spawnSync(['bash', join(dir, 'scripts/daily-enrichment-check.sh')], {
       cwd: dir,
-      env: { ...process.env, PATH: `${join(dir, 'bin')}:${process.env.PATH}`, HOME: join(dir, 'home'), AA_STATE_DIR: join(dir, 'state'), TZ: 'UTC' },
+      env: { ...process.env, PATH: `${join(dir, 'bin')}:${process.env.PATH}`, HOME: join(dir, 'home'), AA_STATE_DIR: join(dir, 'state'), TZ: 'UTC', AA_UNTRUSTED_DB_CLI: join(ROOT, 'scripts/untrusted-db-query.ts') },
     });
     return { code: r.exitCode, err: new TextDecoder().decode(r.stderr) };
   };
-  const hasSqliteCli = Bun.spawnSync(['bash', '-c', 'command -v sqlite3']).exitCode === 0;
 
-  test.skipIf(!hasSqliteCli)('each notification is a constant script plus argv items', () => {
+  test('each notification is a constant script plus argv items', () => {
     for (const [opts, sub] of [
       [{ unenriched: 6, enrichedToday: 0, autoLog: false }, 'Enrichment Warning'],
       [{ unenriched: 6, enrichedToday: 2, autoLog: true }, 'Enrichment Report'],
@@ -134,7 +133,7 @@ describe('daily-enrichment-check.sh — notification text reaches osascript as a
     }
   });
 
-  test.skipIf(!hasSqliteCli)('its own log goes to the host-only state dir, not the repo logs/', () => {
+  test('its own log goes to the host-only state dir, not the repo logs/', () => {
     const p = project({ unenriched: 1, enrichedToday: 0, autoLog: false });
     expect(run(p.dir).code).toBe(0);
     expect(existsSync(join(p.dir, 'state/logs/enrichment-check.log'))).toBe(true);

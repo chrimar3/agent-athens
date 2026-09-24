@@ -37,7 +37,9 @@ export interface EmailDeps {
 }
 
 function defaultSpawn(argv: string[], stdin: Buffer): { exitCode: number | null; stderr: string } {
-  const p = Bun.spawnSync(argv, { stdin, stdout: 'ignore', stderr: 'pipe' });
+  // Bounded (security loop round 8): the deadman's wall clock cannot fire
+  // while a sync call blocks, so msmtp gets its own limit.
+  const p = Bun.spawnSync(argv, { stdin, stdout: 'ignore', stderr: 'pipe', timeout: 60_000, killSignal: 'SIGKILL' });
   return { exitCode: p.exitCode, stderr: new TextDecoder().decode(p.stderr).trim() };
 }
 

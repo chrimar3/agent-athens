@@ -10,12 +10,12 @@
  *
  * launchd: com.agentathens.digest, Sundays 08:30.
  */
-import { Database } from 'bun:sqlite';
 import { readFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import { DateTime } from 'luxon';
 import { loadQuarantine } from '../src/utils/quarantine';
 import { writeFileNoFollow } from '../src/watchdog/host-files';
+import { queryUntrustedDb } from '../src/watchdog/untrusted-db';
 
 const ROOT = join(import.meta.dir, '..');
 
@@ -90,20 +90,28 @@ if (import.meta.main) {
 
   const enrichPerDay: Record<string, number> = {};
   const sourceTotals: Array<{ source: string; events: number }> = [];
-  try {
-    const db = new Database(join(ROOT, 'data', 'events.db'), { readonly: true });
-    for (const r of db
-      .query(`SELECT date(created_at) d, COUNT(*) c FROM enrichment_log WHERE saved_to_events=1 AND created_at > datetime('now','-8 days') GROUP BY d`)
-      .all() as Array<{ d: string; c: number }>) {
-      enrichPerDay[r.d] = r.c;
+  // Security loop round 8: events.db is container-written, so it is read
+  // through queryUntrustedDb (private copy, no views or foreign triggers,
+  // queries in a child killed at its wall clock), never opened here.
+  const dbRead = await queryUntrustedDb({
+    dbPath: join(ROOT, 'data', 'events.db'),
+    requireTables: [],
+    queries: {
+      enrich: { sql: `SELECT date(created_at) d, COUNT(*) c FROM enrichment_log WHERE saved_to_events=1 AND created_at > datetime('now','-8 days') GROUP BY d`, tables: ['enrichment_log'] },
+      sources: { sql: `SELECT source, SUM(events_found) e FROM scrape_stats WHERE scraped_at > datetime('now','-8 days') GROUP BY source ORDER BY e DESC`, tables: ['scrape_stats'] },
+    },
+  });
+  if (dbRead.ok) {
+    for (const r of dbRead.rows.enrich ?? []) {
+      if (typeof r.d === 'string' && typeof r.c === 'number') enrichPerDay[r.d] = r.c;
     }
-    for (const r of db
-      .query(`SELECT source, SUM(events_found) e FROM scrape_stats WHERE scraped_at > datetime('now','-8 days') GROUP BY source ORDER BY e DESC`)
-      .all() as Array<{ source: string; e: number }>) {
-      sourceTotals.push({ source: r.source, events: r.e ?? 0 });
+    for (const r of dbRead.rows.sources ?? []) {
+      if (typeof r.source === 'string') sourceTotals.push({ source: r.source, events: typeof r.e === 'number' ? r.e : 0 });
     }
-    db.close();
-  } catch { /* DB unavailable → empty sections, honestly */ }
+  } else {
+    // DB unavailable → empty sections, honestly; the log says why.
+    console.error(`[digest] events.db not read (${dbRead.kind}): ${dbRead.detail}`);
+  }
 
   let bing: DigestInputs['bing'] = { avgPosition: null, impressions7d: null };
   try {

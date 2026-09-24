@@ -193,6 +193,10 @@ log "L1: refreshing DB snapshot for diagnostic"
 if [ -L "$MAIN_REPO/data/events.db" ]; then
   log "L1: REFUSED to copy $MAIN_REPO/data/events.db — it is a symlink (inspect and delete it)"
   layer1_status="db-copy-refused-symlink"
+elif [ -e "$MAIN_REPO/data/events.db" ] && [ ! -f "$MAIN_REPO/data/events.db" ]; then
+  # Security loop round 8: a FIFO or device there would block cp forever.
+  log "L1: REFUSED to copy $MAIN_REPO/data/events.db — it is not a regular file (inspect and remove it)"
+  layer1_status="db-copy-refused-not-regular"
 else
   cp "$MAIN_REPO/data/events.db" "$PHASE3_WT/data/events.db" 2>>"$RUN_LOG" || layer1_status="db-copy-failed"
 fi

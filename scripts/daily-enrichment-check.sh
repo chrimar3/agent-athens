@@ -77,6 +77,16 @@ require_count() {
   esac
 }
 
+# Security loop round 8: this host job never opens the container-written
+# database itself (a planted FIFO blocks sqlite3; a planted VIEW makes a plain
+# SELECT run forever). Every query goes through scripts/untrusted-db-query.ts:
+# a private copy, a schema check (no views, no foreign triggers) and a child
+# process killed at its wall clock (src/watchdog/untrusted-db.ts).
+# AA_UNTRUSTED_DB_CLI is a test seam (fixture copies of this script live
+# outside the repo); launchd never sets it.
+UNTRUSTED_DB_CLI="${AA_UNTRUSTED_DB_CLI:-$SCRIPT_DIR/untrusted-db-query.ts}"
+BUN_BIN="$(command -v bun 2>/dev/null || echo "$HOME/.bun/bin/bun")"
+
 log "=== Starting enrichment check ==="
 
 # Check if database exists
@@ -88,39 +98,37 @@ fi
 # Get today's date in SQLite format
 TODAY=$(date '+%Y-%m-%d')
 
-# Count unenriched events (visible events with future dates)
-UNENRICHED=$(sqlite3 -readonly "$DB_PATH" "
-  SELECT COUNT(*) FROM events
-  WHERE location_status IN ('verified_athens', 'pass_through')
-  AND needs_enrichment = 1
-  AND start_date >= '$TODAY';
-")
-
-# Count total visible future events
-TOTAL_VISIBLE=$(sqlite3 -readonly "$DB_PATH" "
-  SELECT COUNT(*) FROM events
-  WHERE location_status IN ('verified_athens', 'pass_through')
-  AND start_date >= '$TODAY';
-")
-
-# Count already enriched
-ENRICHED=$(sqlite3 -readonly "$DB_PATH" "
-  SELECT COUNT(*) FROM events
-  WHERE location_status IN ('verified_athens', 'pass_through')
-  AND needs_enrichment = 0
-  AND start_date >= '$TODAY';
-")
-
-# Count events auto-enriched today (via enrichment_log timestamps)
-AUTO_ENRICHED_TODAY=0
-HAS_ENRICHMENT_LOG=$(sqlite3 -readonly "$DB_PATH" "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='enrichment_log';")
-require_count HAS_ENRICHMENT_LOG "$HAS_ENRICHMENT_LOG"
-if [ "$HAS_ENRICHMENT_LOG" -gt 0 ]; then
-  AUTO_ENRICHED_TODAY=$(sqlite3 -readonly "$DB_PATH" "
-    SELECT COUNT(*) FROM enrichment_log
-    WHERE date(created_at) = date('now');
-  ")
+# One untrusted read for every count and the report's sample rows.
+# enrichment_log may be absent (older databases): its count is then empty → 0.
+VISIBLE="location_status IN ('verified_athens', 'pass_through') AND start_date >= '$TODAY'"
+if ! DB_OUT="$("$BUN_BIN" "$UNTRUSTED_DB_CLI" --db "$DB_PATH" --require-table events \
+    --count UNENRICHED events "SELECT COUNT(*) FROM events WHERE $VISIBLE AND needs_enrichment = 1" \
+    --count TOTAL_VISIBLE events "SELECT COUNT(*) FROM events WHERE $VISIBLE" \
+    --count ENRICHED events "SELECT COUNT(*) FROM events WHERE $VISIBLE AND needs_enrichment = 0" \
+    --count AUTO_ENRICHED_TODAY enrichment_log "SELECT COUNT(*) FROM enrichment_log WHERE date(created_at) = date('now')" \
+    --rows events "SELECT substr(title, 1, 40) AS title, start_date AS date, substr(venue_name, 1, 20) AS venue, type FROM events WHERE $VISIBLE AND needs_enrichment = 1 ORDER BY start_date ASC LIMIT 10" \
+    2>>"$LOG_FILE")"; then
+  log "ERROR: $DB_PATH was not read (refused, timed out or failed — see the untrusted-db-query line above)"
+  notify "events.db could not be read safely. See enrichment-check.log." "Enrichment Check REFUSED" "Basso"
+  refuse "$DB_PATH was not read safely (details in $LOG_FILE). Inspect it with: sqlite3 -readonly data/events.db .schema"
 fi
+
+UNENRICHED=""
+TOTAL_VISIBLE=""
+ENRICHED=""
+AUTO_ENRICHED_TODAY=""
+while IFS= read -r line; do
+  case "$line" in
+    '--- rows') break ;;
+    UNENRICHED=*) UNENRICHED="${line#*=}" ;;
+    TOTAL_VISIBLE=*) TOTAL_VISIBLE="${line#*=}" ;;
+    ENRICHED=*) ENRICHED="${line#*=}" ;;
+    AUTO_ENRICHED_TODAY=*) AUTO_ENRICHED_TODAY="${line#*=}" ;;
+  esac
+done <<< "$DB_OUT"
+SAMPLE_ROWS="$(printf '%s\n' "$DB_OUT" | sed -n '/^--- rows$/,$p' | sed '1d')"
+# No enrichment_log table → no auto-enrichment recorded today.
+[ -n "$AUTO_ENRICHED_TODAY" ] || AUTO_ENRICHED_TODAY=0
 
 require_count UNENRICHED "$UNENRICHED"
 require_count TOTAL_VISIBLE "$TOTAL_VISIBLE"
@@ -160,19 +168,7 @@ if [ "$UNENRICHED" -gt 0 ]; then
   echo "NEXT 10 EVENTS TO ENRICH" >> "$REPORT_FILE"
   echo "-------------------------" >> "$REPORT_FILE"
 
-  sqlite3 -readonly -header -column "$DB_PATH" "
-    SELECT
-      substr(title, 1, 40) as title,
-      start_date as date,
-      substr(venue_name, 1, 20) as venue,
-      type
-    FROM events
-    WHERE location_status IN ('verified_athens', 'pass_through')
-    AND needs_enrichment = 1
-    AND start_date >= '$TODAY'
-    ORDER BY start_date ASC
-    LIMIT 10;
-  " >> "$REPORT_FILE"
+  printf '%s\n' "$SAMPLE_ROWS" >> "$REPORT_FILE"
 
   echo "" >> "$REPORT_FILE"
 
