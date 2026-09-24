@@ -453,7 +453,8 @@ const IN_PROCESS_SCHEMES = new Set(['data:', 'blob:', 'about:']);
  * null. http(s) hosts must not be an IP literal in a blocked range,
  * "localhost", a single-label name or a local-only suffix. data:, blob: and
  * about: are allowed (they never leave the browser); every other scheme
- * (file:, ftp:, chrome:, ...) is refused.
+ * (file:, ftp:, chrome:, ws:, wss:, ...) is refused. WebSockets never reach
+ * request interception at all; guardPageRequests switches them off instead.
  */
 export function quickBlockReason(input: string): string | null {
   let url: URL;
@@ -474,6 +475,74 @@ export function quickBlockReason(input: string): string | null {
   return null;
 }
 
+/** How long a host verdict is reused by one page's guard. */
+export const HOST_CHECK_TTL_MS = 60_000;
+/** A host lookup that takes longer than this is treated as a refusal. */
+export const HOST_CHECK_TIMEOUT_MS = 5_000;
+
+/** Returns why a request URL's host is refused (null = every address public). */
+export type HostChecker = (target: string) => Promise<string | null>;
+
+/**
+ * DNS check for browser requests, with a per-host cache (one checker per
+ * page) and a time limit. Only http(s) URLs are resolved: callers run
+ * quickBlockReason first. A lookup error, an empty answer or a timeout is a
+ * refusal (fail closed): a resource whose host we cannot classify is not
+ * loaded.
+ */
+export function createHostChecker(
+  opts: { resolver?: Resolver; timeoutMs?: number; ttlMs?: number; now?: () => number } = {},
+): HostChecker {
+  const timeoutMs = opts.timeoutMs ?? HOST_CHECK_TIMEOUT_MS;
+  const ttlMs = opts.ttlMs ?? HOST_CHECK_TTL_MS;
+  const now = opts.now ?? Date.now;
+  const cache = new Map<string, { at: number; verdict: Promise<string | null> }>();
+  return (target: string) => {
+    let url: URL;
+    try {
+      url = new URL(target);
+    } catch {
+      return Promise.resolve('not a valid absolute URL');
+    }
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return Promise.resolve(null);
+    const host = url.hostname.toLowerCase();
+    const hit = cache.get(host);
+    if (hit && now() - hit.at < ttlMs) return hit.verdict;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<string>((resolve) => {
+      timer = setTimeout(() => resolve(`DNS lookup for ${host} timed out after ${timeoutMs} ms`), timeoutMs);
+    });
+    const lookup = assertPublicUrl(`${url.protocol}//${url.host}/`, { resolver: opts.resolver }).then(
+      () => null,
+      (e) => (e as Error).message,
+    );
+    const verdict = Promise.race([lookup, timeout]).finally(() => clearTimeout(timer));
+    cache.set(host, { at: now(), verdict });
+    return verdict;
+  };
+}
+
+/**
+ * Runs in every document (all frames) and every worker of a guarded page
+ * before any page script. Request interception never sees WebSocket,
+ * WebTransport or WebRTC traffic (Chrome's Fetch domain does not carry it),
+ * and none of the scrapers needs them, so the constructors are removed:
+ * `new WebSocket(...)` throws, from any frame or worker. Shared and service
+ * workers run outside the page's reach (their targets are not attached to the
+ * page), so they cannot be created. window.open is disabled: a popup is a new
+ * page that has no request interception.
+ */
+export const BROWSER_KILL_SWITCH_SCRIPT = `(() => {
+  const g = globalThis;
+  const off = (o, k, v) => { try { Object.defineProperty(o, k, { value: v, writable: false, configurable: false, enumerable: false }); } catch (e) {} };
+  for (const k of ['WebSocket', 'WebSocketStream', 'WebTransport', 'SharedWorker', 'RTCPeerConnection', 'webkitRTCPeerConnection', 'RTCDataChannel']) off(g, k, undefined);
+  if (typeof g.open === 'function') off(g, 'open', function open() { return null; });
+  try {
+    const p = g.ServiceWorkerContainer && g.ServiceWorkerContainer.prototype;
+    if (p) off(p, 'register', function register() { return Promise.reject(new DOMException('service workers are blocked by the scraper guard', 'SecurityError')); });
+  } catch (e) {}
+})();`;
+
 /** The slice of a Puppeteer request the interceptor uses. */
 export interface InterceptedRequest {
   url(): string;
@@ -482,39 +551,81 @@ export interface InterceptedRequest {
   continue(): Promise<void>;
 }
 
+/** The slice of a Puppeteer CDP session the guard uses. */
+export interface GuardCdpSession {
+  send(method: string, params?: Record<string, unknown>): Promise<unknown>;
+  on(event: string, handler: (event: any) => void): unknown;
+  connection(): { session(sessionId: string): GuardCdpSession | null } | undefined;
+}
+
 /** The slice of a Puppeteer page the interceptor uses. */
 export interface InterceptablePage {
   setRequestInterception(value: boolean): Promise<void>;
   on(event: 'request', handler: (request: InterceptedRequest) => void): unknown;
+  evaluateOnNewDocument(source: string): Promise<unknown>;
+  createCDPSession(): Promise<unknown>;
+}
+
+const AUTO_ATTACH = { autoAttach: true, waitForDebuggerOnStart: true, flatten: true } as const;
+
+/**
+ * Attach to every worker and out-of-process iframe the page (or one of its
+ * workers/frames) starts, while Chrome holds it before its first script, and
+ * install the kill switch there too. Chrome starts a target that several
+ * clients wait for only after all of them resumed it, so the switch is in
+ * place before the worker's own code runs.
+ */
+async function guardChildTargets(session: GuardCdpSession, log: (m: string) => void): Promise<void> {
+  const onAttached = async (ev: { sessionId: string; targetInfo: { type: string; url?: string } }) => {
+    const child = session.connection()?.session(ev.sessionId);
+    if (!child) {
+      log(`   🛡️ could not attach to ${ev.targetInfo.type} ${String(ev.targetInfo.url ?? '').slice(0, 80)}; its WebSockets are not disabled`);
+      return;
+    }
+    child.on('Target.attachedToTarget', onAttached);
+    await child.send('Target.setAutoAttach', { ...AUTO_ATTACH }).catch(() => {});
+    if (ev.targetInfo.type === 'iframe' || ev.targetInfo.type === 'page') {
+      await child.send('Page.addScriptToEvaluateOnNewDocument', { source: BROWSER_KILL_SWITCH_SCRIPT, runImmediately: true }).catch(() => {});
+    } else {
+      await child.send('Runtime.evaluate', { expression: BROWSER_KILL_SWITCH_SCRIPT }).catch(() => {});
+    }
+    await child.send('Runtime.runIfWaitingForDebugger').catch(() => {});
+  };
+  session.on('Target.attachedToTarget', (ev) => { void onAttached(ev); });
+  await session.send('Target.setAutoAttach', { ...AUTO_ATTACH });
 }
 
 /**
- * Turn on request interception for a headless-browser page so neither the
- * scraper's navigations nor the page's own scripts reach local services:
- * every request gets quickBlockReason (scheme + host literal, no DNS), and
- * navigations (the documents the scraper reads) also get a DNS check
- * (assertPublicUrl). Subresources are not resolved, to keep this cheap.
+ * Guard a headless-browser page so neither the scraper's navigations nor the
+ * page's own scripts reach local services. Call it right after newPage(),
+ * before the first goto().
+ *   - Every intercepted request (documents, scripts, images, XHR/fetch,
+ *     EventSource, beacons, worker scripts …) gets quickBlockReason (scheme +
+ *     host literal) and then a DNS check of its host (createHostChecker: one
+ *     cache per page, 60 s per host, 5 s limit); a host that resolves to a
+ *     loopback, private, link-local, CGNAT, ULA or other non-public address,
+ *     or that cannot be resolved in time, is aborted.
+ *   - WebSocket, WebTransport and WebRTC never pass through request
+ *     interception, so they are switched off in every frame and worker
+ *     (BROWSER_KILL_SWITCH_SCRIPT); window.open is disabled.
  *
- * Residual risk: Chrome resolves the host again itself, so a DNS answer
- * that changes between the two lookups is not caught.
+ * Residual risk: Chrome resolves the host again itself, so a DNS answer that
+ * changes between the two lookups (rebinding) is not caught.
  */
 export async function guardPageRequests(
   page: InterceptablePage,
-  opts: { resolver?: Resolver; log?: (message: string) => void } = {},
+  opts: { resolver?: Resolver; log?: (message: string) => void; hostTimeoutMs?: number } = {},
 ): Promise<void> {
   const log = opts.log ?? ((m: string) => console.warn(m));
+  const checkHost = createHostChecker({ resolver: opts.resolver, timeoutMs: opts.hostTimeoutMs });
+  await page.evaluateOnNewDocument(BROWSER_KILL_SWITCH_SCRIPT);
+  await guardChildTargets((await page.createCDPSession()) as GuardCdpSession, log);
   await page.setRequestInterception(true);
   page.on('request', (request) => {
     void (async () => {
       const target = request.url();
       let reason = quickBlockReason(target);
-      if (!reason && request.isNavigationRequest() && /^https?:/i.test(target)) {
-        try {
-          await assertPublicUrl(target, { resolver: opts.resolver });
-        } catch (e) {
-          reason = (e as Error).message;
-        }
-      }
+      if (!reason && /^https?:/i.test(target)) reason = await checkHost(target);
       if (reason) {
         log(`   🛡️ blocked browser request to ${target.slice(0, 100)} (${reason})`);
         await request.abort('blockedbyclient').catch(() => {});
