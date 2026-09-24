@@ -40,7 +40,13 @@
 #      allowed to make; remote-tracking refs moved only where the publish
 #      run's push moves them (origin/main, origin/pipeline-data, to the local
 #      branch tip); and no tracked file outside the data paths changed in the
-#      working tree.
+#      working tree;
+#   8. no code, test or package/tool config file (*.ts, *.js, *.sh, *.py …,
+#      *.test.*, *_spec.*, package.json, bunfig.toml, tsconfig*.json, .npmrc
+#      …, any letter case) appeared in the folders runs may write — in dist/,
+#      which holds the site's own .js/.mjs, only tests and package/tool config
+#      count — or was committed under data/ (existing ones only get a warning
+#      at snapshot time).
 #
 #   docker/integrity-check.sh snapshot STATE_FILE
 #   docker/integrity-check.sh verify   STATE_FILE JOB
@@ -207,6 +213,43 @@ find_instruction_files() {  # sorted relative paths
 # The same names inside a committed path (a commit can add data/CLAUDE.md
 # without it ever being in the working tree). For grep -iE.
 INSTRUCTION_PATH_RE='(^|/)(claude\.md|claude\.local\.md|agents\.md|gemini\.md|\.cursorrules|\.windsurfrules|copilot-instructions\.md|\.claude|\.cursor|\.github|\.vscode)(/|$)|\.mdc$'
+
+# ---- 8. Planted code, tests and package/tool config ------------------------
+# Code on the Mac (bun test, bun run, an agent session, a shell) must come from
+# the read-only code paths, never from a folder runs may write: a planted
+# data/x.test.ts is picked up by `bun test`, a planted package.json, bunfig.toml,
+# tsconfig.json or .npmrc changes how bun/npm resolve and run code started in
+# or under that folder, and a planted *.ts/*.sh is one `bun run`/`bash` away.
+# -iname: the Mac's disk is case-insensitive. dist/ legitimately holds .js/.mjs
+# (src/generate-site.ts copies fuse.mjs to dist/scripts/), so there only test
+# files and package/tool config count.
+#
+# No pipeline output is allowlisted: grepping scripts/, src/ and the shell
+# pipeline (round 9) found no run that writes a code, test or package/tool
+# config file into data/, logs/, temp*/ or tmp/ — they hold .json, .jsonl,
+# .csv, .txt, .md, .html, .ics, .sql, .log, .db and .webp; enrichment's Claude
+# sessions may write only under temp-descriptions/ (descriptions, not code).
+# If a future output needs one, allowlist it here by exact path.
+CODE_TEST_NAMES=(-iname '*.test.*' -o -iname '*_test.*' -o -iname '*.spec.*' -o -iname '*_spec.*')
+CODE_CONFIG_NAMES=(-iname package.json -o -iname bunfig.toml -o -iname '.bunfig*' -o -iname 'tsconfig*.json' \
+    -o -iname 'jsconfig*.json' -o -iname .npmrc)
+CODE_EXEC_NAMES=(-iname '*.ts' -o -iname '*.tsx' -o -iname '*.mts' -o -iname '*.cts' -o -iname '*.js' -o -iname '*.jsx' \
+    -o -iname '*.mjs' -o -iname '*.cjs' -o -iname '*.sh' -o -iname '*.py' -o -iname '*.rb' -o -iname '*.command')
+find_code_files() {  # sorted relative paths
+    local d
+    (cd "$REPO" || exit 0
+     for d in $RW_DIRS; do
+         [ -d "$d" ] || continue
+         if [ "$d" = "dist" ]; then
+             find "$d" ! -type d \( "${CODE_TEST_NAMES[@]}" -o "${CODE_CONFIG_NAMES[@]}" \) -print 2>/dev/null
+         else
+             find "$d" ! -type d \( "${CODE_TEST_NAMES[@]}" -o "${CODE_CONFIG_NAMES[@]}" -o "${CODE_EXEC_NAMES[@]}" \) -print 2>/dev/null
+         fi
+     done) | LC_ALL=C sort
+}
+# The same names added or changed by a commit (commits may only touch data/,
+# where every one of them counts). For grep -iE.
+CODE_PATH_RE='(^|/)(package\.json|bunfig\.toml|\.bunfig[^/]*|tsconfig[^/]*\.json|jsconfig[^/]*\.json|\.npmrc)$|\.(ts|tsx|mts|cts|js|jsx|mjs|cjs|sh|py|rb|command)$|[._](test|spec)\.[^/]*$'
 
 # ---- 7. Git operation state, reflogs, remote-tracking refs, working tree --
 # Files that make a later git command on the Mac apply or restore a commit
@@ -570,6 +613,8 @@ check_pipeline_data() {  # $1 pre-run sha of pipeline-data ("" if it did not exi
         [ -z "$files" ] || quarantine_pdata "pipeline-data commit $c changes non-data files: $(echo "$files" | head -5 | tr '\n' ' ')" "$pre"
         files="$(cd "$REPO" && git diff-tree --no-commit-id --name-only -r --root "$c" | grep -iE "$INSTRUCTION_PATH_RE" || true)"
         [ -z "$files" ] || quarantine_pdata "pipeline-data commit $c adds or changes instruction files for AI agents: $(echo "$files" | head -5 | tr '\n' ' ')" "$pre"
+        files="$(cd "$REPO" && git diff-tree --no-commit-id --name-only --diff-filter=d -r --root "$c" | grep -iE "$CODE_PATH_RE" || true)"
+        [ -z "$files" ] || quarantine_pdata "pipeline-data commit $c adds or changes code, test or package/tool config files: $(echo "$files" | head -5 | tr '\n' ' ')" "$pre"
     done
 }
 
@@ -592,12 +637,19 @@ case "$MODE" in
         if [ -n "$instr" ]; then
             echo "integrity-check: WARNING: instruction files for AI agents already exist in folders runs may write (not flagged; review them): $(printf '%s\n' "$instr" | head -5 | tr '\n' ' ')" >&2
         fi
+        code="$(find_code_files)"
+        if [ -n "$code" ]; then
+            echo "integrity-check: WARNING: code, test or package/tool config files already exist in folders runs may write (not flagged; review them — nothing on the Mac should run them): $(printf '%s\n' "$code" | head -5 | tr '\n' ' ')" >&2
+        fi
         { printf 'head=%s\ngitmeta=%s\npdata=%s\nstaged=%s\nrefs=%s\n' "$head" "$(hash_git_meta)" "$pdata" \
               "$(staged_hash)" "$(other_refs_hash)"
           # Marks a snapshot that carries the checks 6 and 7 below.
           echo "checks=7"
+          # Marks a snapshot that carries check 8 (planted code).
+          echo "codecheck=1"
           root_entries | sed 's/^/root=/'
           [ -z "$instr" ] || printf '%s\n' "$instr" | sed 's/^/instr=/'
+          [ -z "$code" ] || printf '%s\n' "$code" | sed 's/^/code=/'
           git_state_lines
           reflog_lines
           remote_ref_lines
@@ -631,10 +683,21 @@ case "$MODE" in
         bad="$(cd "$REPO" && for c in $(git rev-list "$pre_head..HEAD" 2>/dev/null); do
                    git diff-tree --no-commit-id --name-only -r --root -m "$c"; done | grep -iE "$INSTRUCTION_PATH_RE" | LC_ALL=C sort -u || true)"
         [ -z "$bad" ] || quarantine "a commit made during the run adds or changes instruction files for AI agents: $(list5 "$bad")" "$pre_head" ""
+        bad="$(cd "$REPO" && for c in $(git rev-list "$pre_head..HEAD" 2>/dev/null); do
+                   git diff-tree --no-commit-id --name-only --diff-filter=d -r --root -m "$c"; done | grep -iE "$CODE_PATH_RE" | LC_ALL=C sort -u || true)"
+        [ -z "$bad" ] || quarantine "a commit made during the run adds or changes code, test or package/tool config files under data/: $(list5 "$bad")" "$pre_head" ""
         check_pipeline_data "$pre_pdata"
         if [ "$full" = yes ]; then
             new_instr="$(find_instruction_files | LC_ALL=C comm -13 <(sed -n 's/^instr=//p' "$STATE_FILE" | LC_ALL=C sort) -)"
             [ -z "$new_instr" ] || quarantine "instruction file(s) for AI agents appeared in folders runs may write (moved to the evidence folder): $(list5 "$new_instr")" "" "$new_instr"
+        fi
+        if grep -qx 'codecheck=1' "$STATE_FILE"; then
+            new_code="$(find_code_files | LC_ALL=C comm -13 <(sed -n 's/^code=//p' "$STATE_FILE" | LC_ALL=C sort) -)"
+            [ -z "$new_code" ] || quarantine "code, test or package/tool config file(s) appeared in folders runs may write (moved to the evidence folder; code the Mac runs comes only from the read-only code paths): $(list5 "$new_code")" "" "$new_code"
+        else
+            echo "integrity-check: WARNING: the snapshot was taken by an older integrity-check.sh; the planted-code check is skipped this run" >&2
+        fi
+        if [ "$full" = yes ]; then
             case "$state_changed" in *ORIG_HEAD*) check_orig_head "$pre_head" ;; esac
         fi
         [ "$(staged_hash)" = "$(sed -n 's/^staged=//p' "$STATE_FILE")" ] \

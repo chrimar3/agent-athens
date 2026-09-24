@@ -498,6 +498,118 @@ describe('integrity-check.sh planted instruction files', () => {
   });
 });
 
+// Code, tests and package/tool config planted in the folders runs may write:
+// `bun test` would pick up a data/x.test.ts, a package.json/bunfig.toml/
+// tsconfig.json/.npmrc changes how code started there runs, and a planted
+// .ts/.sh is one command away. dist/ holds the site's own .js/.mjs, so there
+// only tests and package/tool config count.
+describe('integrity-check.sh planted code', () => {
+  const planted = (rel: string) => join(state, 'quarantine', readdirSync(join(state, 'quarantine'))[0], 'planted', rel);
+  const put = (rel: string, body = 'x\n') => {
+    mkdirSync(join(repo, rel, '..'), { recursive: true });
+    writeFileSync(join(repo, rel), body);
+  };
+
+  for (const rel of [
+    'data/x.test.ts',
+    'logs/y_spec.ts',
+    'temp-descriptions/z.ts',
+    'data/package.json',
+    'dist/a.test.js',
+    'dist/sub/package.json',
+    'dist/bunfig.toml',
+    'data/nested/deep/X.SPEC.TSX',
+    'temp/tsconfig.build.json',
+    'tmp/.npmrc',
+    'temp-briefs/.bunfig.toml',
+    'temp-research/run.sh',
+    'data/tool.py',
+    'logs/hook.mjs',
+    'temp/open-me.command',
+  ]) {
+    test(`${rel} is quarantined and moved out with its path`, () => {
+      expect(snapshot().code).toBe(0);
+      put(rel, 'console.log("planted")\n');
+      const r = verify();
+      expect(r.code).toBe(1);
+      expect(r.out).toContain('code, test or package/tool config file(s) appeared');
+      expect(r.out).toContain(rel);
+      expect(existsSync(join(repo, rel))).toBe(false);
+      expect(existsSync(planted(rel))).toBe(true);
+      expect(readFileSync(join(state, 'QUARANTINE'), 'utf8')).toContain(rel);
+    });
+  }
+
+  test("the site's own JavaScript in dist/ and the pipeline's ordinary outputs pass", () => {
+    expect(snapshot().code).toBe(0);
+    // src/generate-site.ts output: pages, CSS, fuse.mjs, JSON API, sitemaps.
+    for (const rel of ['dist/app.js', 'dist/scripts/fuse.mjs', 'dist/scripts/search.JS', 'dist/index.html', 'dist/styles/design-system.css',
+      'dist/api/events.json', 'dist/sitemap-events.xml', 'dist/_headers', 'dist/_redirects']) put(rel);
+    // What the pipeline writes into data/, logs/ and temp*/ (round-9 survey).
+    for (const rel of ['data/scoreboard.json', 'data/test-summary.json', 'data/validator-log.jsonl', 'data/search-visibility-log.csv',
+      'data/images/e1.webp', 'data/migrations/002-add-bilingual-descriptions.sql', 'data/html-to-parse/newsletter.html',
+      'data/ical-to-parse/feed.ics', 'data/DECISIONS-QUEUE.md', 'data/fixture.db', 'logs/pipeline-2026-09-24.log', 'logs/indexnow-latest.json',
+      'temp-descriptions/batch-1/e1.md', 'temp-briefs/batch-1.md', 'tmp/state.txt']) put(rel);
+    // Names that only look similar.
+    for (const rel of ['data/latest-tests.json', 'data/spec-sheet.txt', 'data/package.json.bak', 'data/tsconfig-notes.md']) put(rel);
+    const r = verify();
+    expect(r.code).toBe(0);
+    expect(existsSync(join(state, 'QUARANTINE'))).toBe(false);
+  });
+
+  test('code files that existed at snapshot time only get a warning', () => {
+    put('data/notes/helper.ts');
+    put('dist/old.spec.js');
+    const s = snapshot();
+    expect(s.code).toBe(0);
+    expect(s.out).toContain('WARNING: code, test or package/tool config files already exist');
+    expect(s.out).toContain('data/notes/helper.ts');
+    expect(verify().code).toBe(0);
+    expect(existsSync(join(repo, 'data/notes/helper.ts'))).toBe(true);
+  });
+
+  test('a commit that adds data/evil.test.ts is quarantined even when the file is gone from the working tree', () => {
+    expect(snapshot().code).toBe(0);
+    const before = git('rev-parse', 'HEAD').out.trim();
+    put('data/evil.test.ts');
+    git('add', 'data/evil.test.ts');
+    git('commit', '-qm', 'chore: daily pipeline update');
+    git('rm', '-q', '--cached', 'data/evil.test.ts');
+    unlinkSync(join(repo, 'data/evil.test.ts'));
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('code, test or package/tool config files under data/');
+    expect(git('rev-parse', 'HEAD').out.trim()).toBe(before);
+  });
+
+  test('a pipeline-data commit that adds data/package.json is rolled back', () => {
+    git('branch', 'pipeline-data', 'HEAD');
+    expect(snapshot().code).toBe(0);
+    const before = git('rev-parse', 'pipeline-data').out.trim();
+    put('data/package.json', '{"scripts":{"test":"echo planted"}}\n');
+    git('add', 'data/package.json');
+    const tree = git('write-tree').out.trim();
+    git('reset', '-q');
+    unlinkSync(join(repo, 'data/package.json'));
+    const bad = git('commit-tree', tree, '-p', before, '-m', 'chore: daily pipeline update').out.trim();
+    git('update-ref', 'refs/heads/pipeline-data', bad);
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('code, test or package/tool config files');
+    expect(git('rev-parse', 'pipeline-data').out.trim()).toBe(before);
+  });
+
+  test('a commit that deletes a tracked code file under data/ passes', () => {
+    put('data/legacy/old.js');
+    git('add', 'data/legacy/old.js');
+    git('commit', '-qm', 'fixture');
+    expect(snapshot().code).toBe(0);
+    git('rm', '-q', 'data/legacy/old.js');
+    git('commit', '-qm', 'chore: daily pipeline update');
+    expect(verify().code).toBe(0);
+  });
+});
+
 // Git state a later command on the Mac would act on: the stash reflog
 // (`git stash pop stash@{1}`), ORIG_HEAD/FETCH_HEAD/MERGE_HEAD, rebase and
 // sequencer folders, the other reflogs, remote-tracking refs, and tracked
