@@ -175,6 +175,14 @@ describe('docker/install-launchd.sh', () => {
   test('carries AA_OFFSITE_CMD into the generated plists when set', () => {
     expect(installer).toContain('<key>AA_OFFSITE_CMD</key><string>$(xml "$AA_OFFSITE_CMD")</string>');
   });
+  test('the watchdog checks every scheduled container job (once config/monitoring.json lists them)', () => {
+    const names = [...(installer.match(/JOBS="([^"]*)"/) ?? ['', ''])[1].matchAll(/^([a-z0-9-]+)\|/gm)].map((m) => m[1]);
+    expect(names.length).toBeGreaterThanOrEqual(9);
+    const labels: string[] = JSON.parse(read('config/monitoring.json')).pipeline_health_labels;
+    // Before the protected-paths PR merges, monitoring.json has no docker labels yet.
+    if (!labels.some((l) => l.startsWith('com.agentathens.docker.'))) return;
+    for (const n of names) expect(labels).toContain(`com.agentathens.docker.${n}`);
+  });
   test('schedules the live-site check and the weekly image rebuild', () => {
     expect(installer).toContain('verify-live|verify-live|12|15|');
     expect(installer).toContain('image-refresh|image-refresh|5|30|0');

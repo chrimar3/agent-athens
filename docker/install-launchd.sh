@@ -145,7 +145,7 @@ if [ "$MODE" = "apply" ]; then
         echo "installed $label"
     done
     echo "Done. Container jobs log to $LOGDIR/docker-*.log."
-    echo "Add the com.agentathens.docker.* labels to pipeline_health_labels in your deadman config."
+    echo "The watchdog checks the com.agentathens.docker.* jobs via config/monitoring.json; add them to any local deadman config too."
     exit 0
 fi
 

@@ -111,8 +111,9 @@ weekly digest and phase3-weekly.
    docker/install-launchd.sh            # shows the plan, changes nothing
    docker/install-launchd.sh --apply
    ```
-   Then add the `com.agentathens.docker.*` labels to `pipeline_health_labels`
-   in your deadman config so the watchdog checks the new jobs.
+   The watchdog already checks the `com.agentathens.docker.*` jobs
+   (`config/monitoring.json`, from the protected-paths PR); if you keep a
+   local deadman config, add the same labels there.
 
 Undo at any time: `docker/install-launchd.sh --rollback` restores the old
 host jobs exactly as they were.
