@@ -8,7 +8,7 @@ container and can reach only:
 
 | Reaches | Why |
 |---|---|
-| The repo's data folders (read-write) | The pipeline writes `data/`, `logs/`, `temp-*`; `dist/` only in the build run (read-only for scrape, diff gate and publish) |
+| The repo's data folders (read-write) | The pipeline writes `data/`, `logs/`, `temp-*`; `dist/` only in the runs that build the site (`build`, `site`; read-only in every other run) |
 | Everything else in the repo, incl. `docs/`, `.netlify/`, `.git/config`, `.git/hooks` (**read-only**, `docs/` in every run) | So nothing it does can change code or instructions your Mac or an agent session later runs |
 | The repo's `.env` (read-only, **only the runs that fetch email**) | Mailbox password, for installs that keep it there (it can move to `docker.env`) |
 | Single key files from `~/.config/agentathens` (read-only, **only runs that use them**): the Search Console key for publish, the Bing and Search Console keys for `visibility`; the whole folder only for `doctor` and the legacy `daily` runs | GSC/Bing API keys |
@@ -39,6 +39,21 @@ overlays. Now any other spelling of a name simply does not exist. Also:
   is going — checked every 30 s, for up to 2 hours, then it gives up with an
   alert (exit 11). A freshness run and an enrichment run therefore no longer
   overlap. The same job already running is still simply skipped.
+- `dist/` is writable only in the runs that build the site (`build`, `site`;
+  on older pipelines also the freshness scrape-build, the legacy freshness and
+  `daily`), and read-only in every other run — scrape, ingest, enrichment,
+  visibility, verify-live, restore, diff gate, publish, test, shell, doctor.
+  (Checked in round 9: enrichment writes only `data/` and `temp-*`,
+  visibility only reads `dist/`'s sitemaps, verify-live and restore only
+  call the Netlify API, and the test suite only reads `dist/`.) Those
+  site-building runs never overlap the diff gate and publish: publish uploads
+  exactly what the gate compared. Each `aa-run.sh` that starts one of them
+  first takes a lock on the Mac (`~/.config/agentathens-docker/state/dist.lock`,
+  a symlink naming its process) and keeps it until it exits — freshness from
+  its build through the diff gate to the upload, `publish` from its diff gate
+  to the upload. Another such run waits while the lock is held or one of
+  those containers is still up — every 30 s, for up to 2 hours, then an alert
+  and exit 14. A lock whose process is gone is removed.
 
 It cannot reach the rest of your home folder, the keychain, SSH keys, browser
 profiles, other projects, the backups, the token file or the Mac's system
@@ -78,7 +93,19 @@ run's push moves them (recorded in
 outside the data folders changed in the working tree; and that the folders
 runs may write hold nothing but regular files and folders — no symlink, FIFO,
 socket or device file (a Mac-side job would write through a symlink, and a
-read or copy of a FIFO hangs). If any check fails, it
+read or copy of a FIFO hangs). It also checks that no code, test or package/tool
+config file appeared there — `*.ts`/`*.tsx`/`*.mts`/`*.cts`, `*.js`/`*.jsx`/
+`*.mjs`/`*.cjs`, `*.sh`, `*.py`, `*.rb`, `*.command`, `*.test.*`, `*_test.*`,
+`*.spec.*`, `*_spec.*`, `package.json`, `bunfig.toml`, `.bunfig*`,
+`tsconfig*.json`, `jsconfig*.json`, `.npmrc`, in any letter case — and that no
+commit made during the run adds one under `data/`. `bun test` on the Mac would
+run a planted `data/x.test.ts`, and a planted `package.json` or `bunfig.toml`
+changes how code started in that folder runs. `dist/` legitimately holds the
+site's own `.js`/`.mjs` (the site generator copies `fuse.mjs` there), so in
+`dist/` only test files and package/tool config count. No pipeline output is
+exempt: nothing the pipeline writes into `data/`, `logs/`, `temp*` or `tmp/`
+has those names (JSON, CSV, text, Markdown, HTML, ICS, SQL, logs, the
+database, images). If any check fails, it
 quarantines the change, pauses every job and alerts you by macOS notification,
 ntfy and, where `scripts/security-alert.ts` exists, email
 (`AA_ALERT_TIMEOUT_SEC`, default 60).
@@ -87,15 +114,15 @@ fail if any of that is weakened.
 
 | Run | Schedule | Tokens | API-key folder | `.env` | `.git` | `dist/` | Network | Time limit |
 |---|---|---|---|---|---|---|---|---|
-| `visibility` | 07:30 | none | Bing + Search Console key files only | absent | read-only | writable | proxy | 30 min |
-| `freshness`, ingest | 08:00 | mailbox settings (`EMAIL_*`, `IMAP_*`) from `docker.env` if set there; `IMAP_HOST` always the relay's | none | read-only | read-only | writable | proxy + IMAP relay (no direct route) | 30 min |
+| `visibility` | 07:30 | none | Bing + Search Console key files only | absent | read-only | **read-only** | proxy | 30 min |
+| `freshness`, ingest | 08:00 | mailbox settings (`EMAIL_*`, `IMAP_*`) from `docker.env` if set there; `IMAP_HOST` always the relay's | none | read-only | read-only | **read-only** | proxy + IMAP relay (no direct route) | 30 min |
 | `freshness`, scrape | right after | **none**; loads web pages | none | absent | read-only | **read-only** | proxy | 3 h |
 | `freshness`, build | right after, only if the integrity check passes | git identity only (commits to `pipeline-data`) | none | absent | may commit | writable | **none** | 45 min |
 | `freshness`, diff gate | right after, only if the build marked a publish and the pipeline has `scripts/publish-diff-gate.ts` | **none** | none | absent | read-only | **read-only** | **none** | 15 min |
 | `freshness`, publish | right after, only if the integrity check (and the diff gate) passed | GitHub, Netlify, git identity: never loads a web page; `AA_MIN_HEAD` deploy floor | Search Console key only | absent | may commit | **read-only** | proxy | 30 min |
-| `enrichment` | 10:00, 13:00, 16:30, 19:00 | Claude only | none | absent | read-only | writable | proxy | 90 min |
-| `verify-live` | 00:15, 06:15, 12:15, 18:15 | Netlify token + site id only: live deploy id, snippet injection, a hash of the security-relevant site settings, and the security headers and CSP of the home page and one event page. The Mac alerts on an unrecorded or rolled-back deploy, any snippet, changed settings (baseline `~/.config/agentathens-docker/live-baseline`, created on the first clean run; after reviewing an intended change: `AA_ACCEPT_LIVE_BASELINE=1 docker/aa-run.sh verify-live`), a missing header or a CSP allowing inline scripts | none | absent | read-only | writable | proxy | 10 min |
-| `restore ID` | by hand / watchdog | Netlify token + site id only | none | absent | read-only | writable | proxy | 10 min |
+| `enrichment` | 10:00, 13:00, 16:30, 19:00 | Claude only | none | absent | read-only | **read-only** | proxy | 90 min |
+| `verify-live` | 00:15, 06:15, 12:15, 18:15 | Netlify token + site id only: live deploy id, snippet injection, a hash of the security-relevant site settings, and the security headers and CSP of the home page and one event page. The Mac alerts on an unrecorded or rolled-back deploy, any snippet, changed settings (baseline `~/.config/agentathens-docker/live-baseline`, created on the first clean run; after reviewing an intended change: `AA_ACCEPT_LIVE_BASELINE=1 docker/aa-run.sh verify-live`), a missing header or a CSP allowing inline scripts | none | absent | read-only | **read-only** | proxy | 10 min |
+| `restore ID` | by hand / watchdog | Netlify token + site id only | none | absent | read-only | **read-only** | proxy | 10 min |
 | `site` | by hand | none | none | absent | read-only | writable | **none** | 45 min |
 | `image-refresh` | Sundays 05:30 | none: rebuilds from scratch and runs `apt-get upgrade`, so Ubuntu packages get their fixes. It does not update Chromium (see Known limits) | – | – | – | – | – | – |
 
@@ -204,7 +231,9 @@ compares or deletes files with exactly that name pattern, so it never touches
 the wrapper's tiered `events-YYYY-MM-DD-HHMM.db*.gz` generations — and the
 wrapper's tiered prune likewise considers only its own names, never the
 legacy script's. Restore with `docker/restore-backup.sh`, which checks the checksum,
-the database's integrity and that it isn't far smaller than the live one.
+the database's integrity and that it isn't far smaller than the live one, and
+refuses planted symlinks in `data/` and a quarantined pipeline (see Day to
+day).
 
 Every verified deploy is recorded on the Mac in
 `~/.config/agentathens-docker/deploys.log`. `verify-live` compares the live
@@ -264,6 +293,26 @@ weekly digest and phase3-weekly.
    The watchdog already checks the `com.agentathens.docker.*` jobs
    (`config/monitoring.json`, from the protected-paths PR); if you keep a
    local deadman config, add the same labels there.
+6. **Log the Mac's own CLIs out.** The scheduled jobs now publish from the
+   container with the scoped, expiring tokens in `docker.env`. A Netlify or
+   GitHub CLI login left on the Mac is a full-account credential — Netlify:
+   every site and its settings; `gh`: every repository your account can reach
+   — stored where any process running as you (a package's install script, an
+   agent session, a Mac-side job) can read and use it:
+   ```bash
+   netlify logout
+   gh auth status                            # lists every logged-in account
+   gh auth logout --hostname github.com      # repeat for each account listed
+   ```
+   `docker/aa-run.sh doctor` and `docker/install-launchd.sh --apply` warn
+   while a login is still there (a Netlify `config.json` under
+   `~/Library/Preferences/netlify/` or `$XDG_CONFIG_HOME/netlify/` holding a
+   token, or `gh auth status` succeeding without `GH_TOKEN` set); they report
+   presence only, never a token. Log in again only for a one-off by hand, and
+   out right after. On pipelines where the deadman watchdog's REDEPLOY
+   responder still runs `scripts/redeploy.sh` on the Mac, that responder uses
+   the Mac's Netlify login and fails (with its alert) once you log out; roll
+   back with `docker/aa-run.sh restore <id>` instead.
 
 Undo at any time: `docker/install-launchd.sh --rollback` restores the old
 host jobs exactly as they were.
@@ -282,9 +331,20 @@ host jobs exactly as they were.
   `git gc` or `git maintenance` on the Mac while a job runs trips it too.
   So does running `git fetch`, `git pull`, `git stash`, a merge, rebase or
   cherry-pick, or editing a tracked file outside `data/`, while a job runs.
-  Instruction files that already sit in `data/`, `dist/`, `logs/` or `temp*`
-  when a job starts are only warned about in the wrapper log; review them.
+  Instruction files, and code, test or package/tool config files, that already
+  sit in `data/`, `dist/`, `logs/` or `temp*` when a job starts are only warned
+  about in the wrapper log; review them. Planted ones are moved into the
+  evidence folder.
 - Restore the database: `docker/restore-backup.sh` (newest) or pass a file.
+  It refuses while the pipeline is quarantined (it prints the quarantine's
+  reason); if restoring is part of the incident response, add
+  `--force-under-quarantine` (its one check container then runs despite the
+  quarantine, which stays in place). It also refuses (exit 2) when `data/` is
+  a symlink, or when `data/events.db`, its `-wal`/`-shm` or a
+  `events.db.restore-candidate*` file is a symlink or not a regular file —
+  a planted link there would make the Mac write the backup wherever it
+  points. Stale regular candidates are removed; each candidate is unpacked
+  into a new temporary file in `data/` and renamed into place.
 - Update the image after dependency or Dockerfile changes: `docker/aa-run.sh image`.
 - Poke around inside: `docker/aa-run.sh shell` (no tokens).
 - Rotate a token: edit the env file; the next run picks it up.
@@ -379,6 +439,19 @@ public HTTPS site works through it and that nothing gets out around it.
   read-only on top by exact name. On the Mac's case-insensitive disk,
   `.git/CONFIG` inside such a run still reaches the real `.git/config`; the
   integrity check after the run catches any change there and quarantines.
+- The `dist/` lock only orders runs started through `aa-run.sh` (and waits
+  for their containers). A `docker compose run` started by hand, or a
+  pipeline run directly on the Mac with `AA_ALLOW_HOST_RUN=1`, is not
+  covered. Two runs that both find the same dead holder's lock at the same
+  moment could, in principle, both take it. `AA_DIST_WAIT_MAX_SEC` /
+  `AA_DIST_WAIT_POLL_SEC` (default: the database-wait values) tune the wait.
+- The planted-code check goes by file name: a code file under an innocent
+  name (`data/x.json` run as `bun data/x.json`) is not caught, and nothing the
+  Mac runs by itself executes such a file. It covers the folders runs may
+  write, not `node_modules` (a container-only volume, never the Mac's).
+- `--force-under-quarantine` lets exactly one `shell` run (the backup check:
+  no token, no `.env`, `dist/` and `.git` read-only, proxy network) start
+  despite the quarantine; its own integrity check still runs around it.
 - A tracked top-level symlink is not mounted, so inside a run git sees it as
   deleted; the integrity check refuses a commit that records that.
 - The publish run holds the GitHub and Netlify tokens. It runs no browser and

@@ -151,6 +151,10 @@ if [ "$MODE" = "apply" ]; then
     done
     echo "Done. Container jobs log to $LOGDIR/docker-*.log."
     echo "The watchdog checks the com.agentathens.docker.* jobs via config/monitoring.json; add them to any local deadman config too."
+    # The scheduled jobs no longer need the Mac's own CLI logins; say so if
+    # they are still there (presence only, never a token).
+    echo "Mac CLI logins (the container uses the scoped tokens in docker.env; see docker/README.md, setup step 6):"
+    bash "$HERE/doctor-checks.sh" --cli-logins || true
     exit 0
 fi
 
