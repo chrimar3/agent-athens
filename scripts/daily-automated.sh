@@ -14,7 +14,7 @@
 #   AA_DEFER_PUBLISH=1 ./scripts/daily-automated.sh freshness
 #                                          # Build + gate + artifact commit, then
 #                                          # STOP before push/deploy (writes
-#                                          # .pipeline-publish-ready)
+#                                          # the publish marker, below)
 #   ./scripts/daily-automated.sh publish   # Ship that deferred build: no ingest,
 #                                          # scrape, enrich or generate
 #   ./scripts/daily-automated.sh ingest    # ONLY email ingestion + parsing (own
@@ -115,7 +115,20 @@ readonly PIPELINE_DATA_BRANCH="pipeline-data"
 # `publish` mode, which is the only step that needs the GitHub and Netlify
 # credentials. pipelineDataSha is the pipeline-data commit to push ("" when
 # there is none).
-PUBLISH_MARKER="$PROJECT_DIR/.pipeline-publish-ready"
+# Marker location (security loop round 7): AA_PUBLISH_MARKER overrides the
+# default $PROJECT_DIR/.pipeline-publish-ready. The container wrapper no
+# longer bind-mounts the repo root (/workspace is a tmpfs with per-entry
+# mounts), so a file written at the repo root would not survive until the
+# separate `publish` run; the wrapper points this at a path on a persistent
+# mount. It must be an absolute path with no "..": the value names a file this
+# script writes, renames onto and deletes. Every read, write and removal of the
+# marker, and its .tmp sibling, goes through PUBLISH_MARKER. The run locks stay
+# at the repo root.
+PUBLISH_MARKER="${AA_PUBLISH_MARKER:-$PROJECT_DIR/.pipeline-publish-ready}"
+if [[ "$PUBLISH_MARKER" != /* || "$PUBLISH_MARKER" == *..* ]]; then
+    echo "daily-automated: REFUSED — AA_PUBLISH_MARKER='$PUBLISH_MARKER' must be an absolute path without '..'. Nothing ran. Next: set it to an absolute file path on a persistent mount (or unset it for the default \$PROJECT_DIR/.pipeline-publish-ready) and re-run." >&2
+    exit 1
+fi
 
 # Ensure we're in project directory
 cd "$PROJECT_DIR"
@@ -1175,9 +1188,27 @@ commit_pipeline_data() {
 }
 
 # pipeline-data-gate:begin (extracted VERBATIM by scripts/__tests__/deploy-gate.test.ts — keep both markers)
+# Agent-instruction paths (security loop round 7): a file an agent session
+# loads as instructions — CLAUDE.md, AGENTS.md, GEMINI.md, .cursorrules,
+# .windsurfrules, copilot-instructions.md, anything under a .claude/ or
+# .github/ directory — must never ride the pipeline-data branch, whatever
+# PIPELINE_ALLOWLIST says. Checked BEFORE the allowlist, so a future glob or a
+# careless entry that matches one is still refused. Case-insensitive, like
+# path-guard (the owner's Mac filesystem is). Returns 0 when $1 is one.
+pd_is_instruction_path() {
+    local lc base
+    lc=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')
+    base="${lc##*/}"
+    case "$base" in
+        claude.md|agents.md|gemini.md|.cursorrules|.windsurfrules|copilot-instructions.md) return 0 ;;
+    esac
+    [[ "/$lc/" == */.claude/* || "/$lc/" == */.github/* ]]
+}
+
 # Every entry of tree-ish $1 must be a regular file (mode 100644) at a
-# PIPELINE_ALLOWLIST path. Prints the offending entries; returns 1 if any, or
-# if the tree cannot be read (fail closed).
+# PIPELINE_ALLOWLIST path and not an agent-instruction path. Prints the
+# offending entries; returns 1 if any, or if the tree cannot be read (fail
+# closed).
 pd_tree_only_allowlisted() {
     local entry meta path ok allowed bad=0
     git rev-parse --verify -q "$1^{tree}" >/dev/null 2>&1 || { printf 'unreadable tree %s' "$1"; return 1; }
@@ -1185,6 +1216,11 @@ pd_tree_only_allowlisted() {
         meta="${entry%%$'\t'*}"
         path="${entry#*$'\t'}"
         ok=0
+        if pd_is_instruction_path "$path"; then
+            printf '%s (agent-instruction file: never allowed on %s) ' "$path" "${PIPELINE_DATA_BRANCH:-pipeline-data}"
+            bad=1
+            continue
+        fi
         if [[ "${meta%% *}" == "100644" ]]; then
             for allowed in "${PIPELINE_ALLOWLIST[@]}"; do
                 if [[ "$path" == "$allowed" ]]; then ok=1; break; fi

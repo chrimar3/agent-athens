@@ -158,6 +158,7 @@ function runPipeline(p: Project, mode: string, env: Record<string, string> = {})
   writeFileSync(p.calls, '');
   const base: Record<string, string> = { ...(process.env as Record<string, string>) };
   delete base.AA_DEFER_PUBLISH;
+  delete base.AA_PUBLISH_MARKER;
   const r = spawnSync('bash', [join(p.dir, 'scripts/daily-automated.sh'), mode], {
     cwd: p.dir,
     encoding: 'utf-8',
@@ -546,6 +547,84 @@ describe('publish mode', () => {
     expect(r.status).toBe(0);
     expect(r.calls).toContain('netlify deploy');
     expect(r.calls).not.toContain('--local-only');
+  });
+});
+
+describe('publish marker location (round 7): AA_PUBLISH_MARKER', () => {
+  // The container wrapper no longer bind-mounts the repo root, so a marker
+  // left there would not survive until the separate publish run. The wrapper
+  // points AA_PUBLISH_MARKER at a persistent mount instead.
+  const markerAt = (p: Project) => join(p.dir, 'state-mount', 'publish-ready.json');
+
+  test('a deferred run writes the marker at AA_PUBLISH_MARKER (not at the repo root) and publish reads and removes it there', () => {
+    const p = mkProject();
+    mkdirSync(join(p.dir, 'state-mount'));
+    const env = { AA_PUBLISH_MARKER: markerAt(p) };
+    const r = runPipeline(p, 'freshness', { ...env, AA_DEFER_PUBLISH: '1' });
+    expect(r.status).toBe(0);
+    expect(existsSync(marker(p))).toBe(false);
+    const m = JSON.parse(readFileSync(markerAt(p), 'utf-8'));
+    expect(m.distHash).toBe(DIST_HASH);
+    expect(m.pipelineDataSha).toBe(localPd(p));
+    expect(readdirSync(join(p.dir, 'state-mount'))).toEqual(['publish-ready.json']); // no .tmp left behind
+    expect(r.log).toContain(`Marker ${markerAt(p)}`);
+
+    // Without the variable, publish looks at the default path and finds nothing.
+    const miss = runPipeline(p, 'publish');
+    expect(miss.status).toBe(3);
+    expect(miss.calls).not.toContain('netlify deploy');
+    expect(existsSync(markerAt(p))).toBe(true);
+
+    const pub = runPipeline(p, 'publish', env);
+    expect(pub.status).toBe(0);
+    expect(publishResultLines(pub)).toEqual([`PUBLISH-RESULT deploy_id=5f1e2d3c4b5a69788796a5b4 dist_hash=${DIST_HASH} state=ready`]);
+    expect(existsSync(markerAt(p))).toBe(false);
+    expect(remotePd(p)).toBe(m.pipelineDataSha);
+  });
+
+  test('publish refuses a tampered marker at AA_PUBLISH_MARKER exactly as at the default path; marker kept', () => {
+    const p = mkProject();
+    mkdirSync(join(p.dir, 'state-mount'));
+    const env = { AA_PUBLISH_MARKER: markerAt(p) };
+    expect(runPipeline(p, 'freshness', { ...env, AA_DEFER_PUBLISH: '1' }).status).toBe(0);
+    const m = JSON.parse(readFileSync(markerAt(p), 'utf-8'));
+    writeFileSync(markerAt(p), JSON.stringify({ ...m, distHash: 'cd'.repeat(32) }));
+    const r = runPipeline(p, 'publish', env);
+    expect(r.status).toBe(1);
+    expect(r.log).toContain('does not match dist/.build-provenance');
+    expect(r.calls).not.toContain('netlify deploy');
+    expect(existsSync(markerAt(p))).toBe(true);
+  });
+
+  test('a relative path or one containing ".." is refused before anything runs (exit 1)', () => {
+    for (const bad of ['publish-ready.json', 'state-mount/publish-ready.json', '/tmp/aa-state/../publish-ready.json', '/tmp/aa-state/..']) {
+      for (const mode of ['freshness', 'publish', 'build']) {
+        const p = mkProject();
+        const r = runPipeline(p, mode, { AA_PUBLISH_MARKER: bad, AA_DEFER_PUBLISH: '1' });
+        expect(r.status).toBe(1);
+        expect(r.stderr).toContain('AA_PUBLISH_MARKER');
+        expect(r.stderr).toContain("must be an absolute path without '..'");
+        expect(r.calls).toBe('');                               // no bun, gate, git push or netlify call
+        expect(existsSync(marker(p))).toBe(false);
+      }
+    }
+  });
+
+  test('an empty AA_PUBLISH_MARKER keeps the default (unchanged: $PROJECT_DIR/.pipeline-publish-ready)', () => {
+    const p = mkProject();
+    const r = runPipeline(p, 'freshness', { AA_PUBLISH_MARKER: '', AA_DEFER_PUBLISH: '1' });
+    expect(r.status).toBe(0);
+    expect(existsSync(marker(p))).toBe(true);
+  });
+
+  test('seam: every marker access goes through PUBLISH_MARKER (the default path is spelled once)', () => {
+    expect(SCRIPT).toContain('PUBLISH_MARKER="${AA_PUBLISH_MARKER:-$PROJECT_DIR/.pipeline-publish-ready}"');
+    const code = SCRIPT.split('\n').filter((l) => !/^\s*#/.test(l)).join('\n');
+    expect(code.match(/\.pipeline-publish-ready/g)?.length).toBe(2); // the default + the refusal's hint
+    expect(code).toContain('> "$PUBLISH_MARKER.tmp"');
+    expect(code).toContain('mv -f "$PUBLISH_MARKER.tmp" "$PUBLISH_MARKER"');
+    expect(code).toContain('rm -f "$PUBLISH_MARKER"');
+    expect(code).not.toContain('"$PROJECT_DIR/.pipeline-publish-ready"');
   });
 });
 
