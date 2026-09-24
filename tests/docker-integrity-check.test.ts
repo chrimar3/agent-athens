@@ -540,6 +540,30 @@ describe('integrity-check.sh planted code', () => {
     });
   }
 
+  // Git and direnv control files (judge finding, round 9): a planted
+  // data/.git/config with core.fsmonitor runs as the owner the moment git looks
+  // at that folder on the Mac.
+  for (const rel of ['data/.git/config', 'dist/.GIT/config', 'logs/sub/.gitattributes', 'temp/.gitmodules', 'data/.gitconfig', 'tmp/.envrc']) {
+    test(`git/direnv control file ${rel} is quarantined and moved out`, () => {
+      expect(snapshot().code).toBe(0);
+      put(rel, '[core]\n\tfsmonitor = touch /tmp/aa-should-not-run\n');
+      const r = verify();
+      expect(r.code).toBe(1);
+      expect(r.out).toContain('code, test or package/tool config file(s) appeared');
+      const top = rel.includes('/.git/') || rel.includes('/.GIT/') ? rel.slice(0, rel.lastIndexOf('/')) : rel;
+      expect(existsSync(join(repo, top))).toBe(false);
+      expect(existsSync(planted(top))).toBe(true);
+    });
+  }
+
+  test('a .git FILE (gitdir pointer) planted in a writable folder is quarantined', () => {
+    expect(snapshot().code).toBe(0);
+    put('data/x/.git', 'gitdir: /tmp/elsewhere\n');
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(existsSync(join(repo, 'data/x/.git'))).toBe(false);
+  });
+
   test("the site's own JavaScript in dist/ and the pipeline's ordinary outputs pass", () => {
     expect(snapshot().code).toBe(0);
     // src/generate-site.ts output: pages, CSS, fuse.mjs, JSON API, sitemaps.

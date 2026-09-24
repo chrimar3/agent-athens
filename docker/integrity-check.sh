@@ -235,11 +235,18 @@ CODE_CONFIG_NAMES=(-iname package.json -o -iname bunfig.toml -o -iname '.bunfig*
     -o -iname 'jsconfig*.json' -o -iname .npmrc)
 CODE_EXEC_NAMES=(-iname '*.ts' -o -iname '*.tsx' -o -iname '*.mts' -o -iname '*.cts' -o -iname '*.js' -o -iname '*.jsx' \
     -o -iname '*.mjs' -o -iname '*.cjs' -o -iname '*.sh' -o -iname '*.py' -o -iname '*.rb' -o -iname '*.command')
+CODE_GIT_NAMES=(-iname .git -o -iname .gitattributes -o -iname .gitmodules -o -iname .gitconfig -o -iname .envrc)
 find_code_files() {  # sorted relative paths
     local d
     (cd "$REPO" || exit 0
      for d in $RW_DIRS; do
          [ -d "$d" ] || continue
+         # Git and shell-hook control files, as files OR folders, everywhere
+         # (dist/ included): a planted data/.git with a core.fsmonitor or hook
+         # runs as the owner the moment git (a shell prompt, an editor) looks
+         # at that folder on the Mac; .envrc runs when direnv enters it.
+         # -prune: the contents of a planted .git are moved with it.
+         find "$d" \( "${CODE_GIT_NAMES[@]}" \) -print -prune 2>/dev/null
          if [ "$d" = "dist" ]; then
              find "$d" ! -type d \( "${CODE_TEST_NAMES[@]}" -o "${CODE_CONFIG_NAMES[@]}" \) -print 2>/dev/null
          else
@@ -249,7 +256,7 @@ find_code_files() {  # sorted relative paths
 }
 # The same names added or changed by a commit (commits may only touch data/,
 # where every one of them counts). For grep -iE.
-CODE_PATH_RE='(^|/)(package\.json|bunfig\.toml|\.bunfig[^/]*|tsconfig[^/]*\.json|jsconfig[^/]*\.json|\.npmrc)$|\.(ts|tsx|mts|cts|js|jsx|mjs|cjs|sh|py|rb|command)$|[._](test|spec)\.[^/]*$'
+CODE_PATH_RE='(^|/)(\.git|\.gitattributes|\.gitmodules|\.gitconfig|\.envrc)(/|$)|(^|/)(package\.json|bunfig\.toml|\.bunfig[^/]*|tsconfig[^/]*\.json|jsconfig[^/]*\.json|\.npmrc)$|\.(ts|tsx|mts|cts|js|jsx|mjs|cjs|sh|py|rb|command)$|[._](test|spec)\.[^/]*$'
 
 # ---- 7. Git operation state, reflogs, remote-tracking refs, working tree --
 # Files that make a later git command on the Mac apply or restore a commit
