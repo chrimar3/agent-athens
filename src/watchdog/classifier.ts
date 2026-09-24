@@ -30,6 +30,10 @@ export interface DeadmanThresholds {
 export interface DeadmanInputs {
   /** epoch-ms of last deploy-success; null = signal missing (treated as stale). */
   lastDeployMs: number | null;
+  /** Where lastDeployMs came from (security loop round 7): the host record, or
+   *  a label saying "from container-writable logs". Quoted in the deploy
+   *  reason. Default: the legacy logs/deploy-cadence.log wording. */
+  deploySource?: string;
   /** epoch-ms of MAX(enriched_at); null = signal missing (treated as stale). */
   lastEnrichMs: number | null;
   /** launchd (or future routine) health: false = a pipeline job last-exited non-zero. */
@@ -74,7 +78,7 @@ function isStale(tsMs: number | null, nowMs: number, thresholdHours: number): bo
 export function classifyDeadman(inputs: DeadmanInputs): DeadmanResult {
   const {
     lastDeployMs, lastEnrichMs, pipelineHealthy, authPrecheckOk, dbRowCount, nowMs, thresholds,
-    dbBusy = false, deadSources = [], addresslessVenues = [], buildFailureCause = null,
+    dbBusy = false, deadSources = [], addresslessVenues = [], buildFailureCause = null, deploySource,
   } = inputs;
   const reasons: string[] = [];
 
@@ -98,8 +102,9 @@ export function classifyDeadman(inputs: DeadmanInputs): DeadmanResult {
   if (deployStale) {
     reasons.push(
       lastDeployMs === null
-        ? "deploy: no deploy-success signal found (logs/deploy-cadence.log missing/empty)"
-        : `deploy: stale by ${ageHours(lastDeployMs, nowMs).toFixed(1)}h (threshold ${thresholds.deployStaleHours}h)`,
+        ? `deploy: no deploy-success signal found (${deploySource ?? "logs/deploy-cadence.log missing/empty"})`
+        : `deploy: stale by ${ageHours(lastDeployMs, nowMs).toFixed(1)}h (threshold ${thresholds.deployStaleHours}h)` +
+          (deploySource ? ` [source: ${deploySource}]` : ""),
     );
   }
 

@@ -507,6 +507,14 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/security/monitoring-labels.test.ts',
     'tests/security/no-click-redirect.test.ts',
     'config/monitoring.json',
+    // Round 7: the security-alert CLI, its email transport, the deadman's
+    // signal sources and the round-7 tests.
+    'scripts/security-alert.ts',
+    'src/watchdog/email.ts',
+    'src/watchdog/signal-sources.ts',
+    'tests/security/security-alert.test.ts',
+    'tests/security/deadman-host-signals.test.ts',
+    'tests/security/unattended-disallowed-tools.test.ts',
   ];
   /** Listed by name in path-guard.json even where a broader glob already covers
    *  them, so narrowing that glob later cannot silently drop them. */
@@ -563,6 +571,7 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'tests/security/ci-test-report.test.ts',
     'tests/security/monitoring-labels.test.ts',
     'tests/security/no-click-redirect.test.ts',
+    'scripts/security-alert.ts',
   ];
   const MUST_NOT_PROTECT = [
     '.claude/notes/ledger.md',

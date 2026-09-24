@@ -18,6 +18,15 @@
 // Everything is epoch-ms end to end: each adapter normalizes its timestamp (ISO-UTC
 // deploy log, date-only/offset sitemap lastmod) to epoch-ms BEFORE the classifier, so
 // no timezone parse mismatch can read fresh-as-stale across midnight.
+//
+// Security loop round 7: the repo's logs/ folder is written by pipeline
+// containers. Deploy freshness therefore comes from the HOST record
+// ${AA_STATE_DIR:-~/.config/agentathens-docker}/deploys.log when it exists
+// (newest non-restore line); only without it (container setup not installed)
+// from logs/deploy-cadence.log, and then every alert says "from
+// container-writable logs". Every logs/ read is bounded, refuses symlinks and
+// non-regular files, parses strictly, and quoted text has control characters
+// removed (src/watchdog/signal-sources.ts). So is every reason before delivery.
 
 import { Database } from "bun:sqlite";
 import { readFileSync, existsSync } from "node:fs";
@@ -27,6 +36,10 @@ import { classifyDeadman, type DeadmanInputs, type DeadmanResult } from "../src/
 import { planResponse, executeActions, hostStateDir, type ResponderState } from "../src/watchdog/responders";
 import { osascriptNotificationArgv } from "../src/watchdog/notify";
 import { appendFileNoFollow, hostLogDir } from "../src/watchdog/host-files";
+import { sendEmail, type EmailConfig } from "../src/watchdog/email";
+import {
+  authPrecheckFromLog, buildFailureCauseFromLog, deployFreshness, stripControl, type DeploySignal,
+} from "../src/watchdog/signal-sources";
 import { loadQuarantine, filterQuarantined } from "../src/utils/quarantine";
 import { findVenueConfig } from "../src/quality/location-filter";
 import { ACTIVE_SOURCE_IDS } from "../src/config/active-source-ids";
@@ -67,7 +80,7 @@ export interface MonitoringConfig {
   enrich_stale_hours: number;
   pipeline_health_labels: string[];
   notify: { enabled: boolean };
-  email: { enabled: boolean; recipient: string; msmtp_account: string };
+  email: EmailConfig;
   // Layer 4 — off-machine push via ntfy. Optional so older configs stay valid.
   // No topic here: the repo is public and the topic name is the ONLY access
   // control, so it comes from resolvePushTopic() (env or untracked file) and
@@ -115,29 +128,24 @@ function loadConfig(): MonitoringConfig {
 // Each is independently fault-isolated by the caller: an adapter throwing degrades
 // that one signal to "unknown", never crashes the watchdog.
 
-/** Deploy freshness: last `deploy-success` in deploy-cadence.log; live-curl fallback. */
-async function deploySignalMs(): Promise<number | null> {
-  if (existsSync(DEPLOY_LOG)) {
-    const lines = readFileSync(DEPLOY_LOG, "utf-8").split("\n").map((l) => l.trim()).filter(Boolean);
-    for (let i = lines.length - 1; i >= 0; i--) {
-      const m = lines[i].match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)\s+deploy-success$/);
-      if (m) {
-        const ms = Date.parse(m[1]); // ISO-UTC → epoch-ms
-        return Number.isNaN(ms) ? null : ms;
-      }
-    }
-  }
+/** Deploy freshness (round 7): the host record deploys.log when it exists;
+ *  otherwise logs/deploy-cadence.log (container-writable, labelled as such),
+ *  and only when that has no deploy-success line, the live sitemap. */
+async function deploySignal(): Promise<DeploySignal> {
+  const sig = deployFreshness(hostStateDir(), DEPLOY_LOG);
+  if (sig.source === "host-record" || sig.ms !== null) return sig;
   // Fallback: newest <lastmod> from the live sitemap (date-only or offset → epoch-ms).
+  const label = `${sig.label}; value from the live sitemap lastmod`;
   try {
     const res = await fetch(SITEMAP_URL, { signal: AbortSignal.timeout(20_000) });
-    if (!res.ok) return null;
-    const xml = await res.text();
-    const stamps = [...xml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)]
+    if (!res.ok) return sig;
+    const xml = (await res.text()).slice(0, 5_000_000);
+    const stamps = [...xml.matchAll(/<lastmod>([^<]{1,64})<\/lastmod>/g)]
       .map((mm) => Date.parse(mm[1].trim()))
       .filter((n) => !Number.isNaN(n));
-    return stamps.length ? Math.max(...stamps) : null;
+    return stamps.length ? { ms: Math.max(...stamps), source: sig.source, label } : sig;
   } catch {
-    return null;
+    return sig;
   }
 }
 
@@ -281,32 +289,16 @@ function addresslessVenuesSignal(): string[] {
 }
 
 /** Last build-failure line from logs/build-outcome.log, if newer than the last
- *  deploy-success — so a drought's first alert already names the failing gate. */
+ *  deploy-success — so a drought's first alert already names the failing gate.
+ *  Container-writable: bounded, strict, sanitized (signal-sources.ts). */
 function buildFailureCauseSignal(lastDeployMs: number | null): string | null {
-  const path = join(ROOT, "logs", "build-outcome.log");
-  if (!existsSync(path)) return null;
-  const lines = readFileSync(path, "utf-8").split("\n").map((l) => l.trim()).filter(Boolean);
-  for (let i = lines.length - 1; i >= 0; i--) {
-    // Format (run_generate): 2026-07-07T01:00:00Z build-failure <last error line>
-    const m = lines[i].match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)\s+build-failure\s+(.*)$/);
-    if (!m) continue;
-    const ms = Date.parse(m[1]);
-    if (Number.isNaN(ms)) return null;
-    if (lastDeployMs !== null && ms <= lastDeployMs) return null; // deploy since → stale cause
-    return m[2];
-  }
-  return null;
+  return buildFailureCauseFromLog(join(ROOT, "logs", "build-outcome.log"), lastDeployMs);
 }
 
-/** Corroborating auth state: parse the last `exit=N` in auth-precheck-last.log. null if absent. */
+/** Corroborating auth state: the last `exit=N` line in auth-precheck-last.log
+ *  (container-writable; bounded, strict). null if absent. */
 function authPrecheckOk(): boolean | null {
-  if (!existsSync(AUTH_LOG)) return null;
-  const lines = readFileSync(AUTH_LOG, "utf-8").split("\n");
-  for (let i = lines.length - 1; i >= 0; i--) {
-    const m = lines[i].match(/^exit=(-?\d+)/);
-    if (m) return m[1] === "0";
-  }
-  return null;
+  return authPrecheckFromLog(AUTH_LOG);
 }
 
 /** Pluggable pipeline-health source — launchd today, swappable to routine-status later. */
@@ -339,19 +331,6 @@ const launchdHealth: PipelineHealthSource = {
 // as script text (security loop round 4).
 function fireNotification(title: string, subtitle: string, message: string): void {
   Bun.spawnSync(osascriptNotificationArgv({ title, subtitle, message, sound: "Basso" }));
-}
-
-/** Returns true if msmtp accepted the message. Never throws. */
-function sendEmail(cfg: MonitoringConfig, subject: string, body: string): { ok: boolean; skipped: boolean; detail: string } {
-  const rc = join(homedir(), ".msmtprc");
-  if (!cfg.email.enabled) return { ok: false, skipped: true, detail: "email disabled in config" };
-  if (!existsSync(rc)) return { ok: false, skipped: true, detail: "~/.msmtprc absent (app-password not set up)" };
-  const headers = `To: ${cfg.email.recipient}\nFrom: ${cfg.email.recipient}\nSubject: ${subject}\n\n`;
-  const proc = Bun.spawnSync(["msmtp", "-a", cfg.email.msmtp_account, cfg.email.recipient], {
-    stdin: Buffer.from(headers + body),
-  });
-  if (proc.exitCode === 0) return { ok: true, skipped: false, detail: "sent" };
-  return { ok: false, skipped: false, detail: `msmtp exit ${proc.exitCode}: ${new TextDecoder().decode(proc.stderr).trim()}` };
 }
 
 /** Layer 4 — off-machine push via ntfy (https://ntfy.sh). A DIFFERENT AXIS from
@@ -416,7 +395,11 @@ const nowMs = Date.now();
 // Fault-isolate each adapter: a failure degrades one signal to "unknown", which the
 // classifier treats as stale (fail-loud), rather than crashing the watchdog silent.
 const safe = <T>(fn: () => T, fallback: T): T => { try { return fn(); } catch { return fallback; } };
-const lastDeployMs = await deploySignalMs().catch(() => null);
+const deploy = await deploySignal().catch(
+  (): DeploySignal => ({ ms: null, source: "container-logs", label: "deploy signal adapter failed" }),
+);
+const lastDeployMs = deploy.ms;
+const deployFrom = deploy.source === "host-record" ? "host record" : "from container-writable logs";
 const lastEnrichMs = safe(enrichSignalMs, null);
 // Busy-aware DB signal: retries once after 30s and reports lock-contention as
 // busy (NOT missing) — kills the 2026-07-05 false-CATASTROPHIC class.
@@ -431,6 +414,7 @@ const buildFailureCause = safe(() => buildFailureCauseSignal(lastDeployMs), null
 
 const inputs: DeadmanInputs = {
   lastDeployMs,
+  deploySource: deploy.label,
   lastEnrichMs,
   pipelineHealthy,
   authPrecheckOk: authOk,
@@ -443,7 +427,10 @@ const inputs: DeadmanInputs = {
   thresholds: { deployStaleHours: cfg.deploy_stale_hours, enrichStaleHours: cfg.enrich_stale_hours },
 };
 
-const result: DeadmanResult = classifyDeadman(inputs);
+const classified: DeadmanResult = classifyDeadman(inputs);
+// Reasons can quote container-written text (venue names from the DB, log
+// lines); strip control characters before any delivery layer sees them.
+const result: DeadmanResult = { ...classified, reasons: classified.reasons.map((r) => stripControl(r, 1000)) };
 const tsIso = new Date(nowMs).toISOString().replace(/\.\d+Z$/, "Z");
 
 // Responder layer (Phase 2A): scoped action BEFORE notification so the alert
@@ -468,7 +455,7 @@ const responderLine =
 // Dry-run: report the classification + exit code without firing any delivery layer.
 if (DRY_RUN) {
   console.log(`[deadman:DRY_RUN] @ ${tsIso} status=${result.status} (would exit ${result.status === "OK" ? 0 : 1})`);
-  console.log(`  signals: deploy=${ageH(lastDeployMs, nowMs)}h enrich=${ageH(lastEnrichMs, nowMs)}h dbRows=${dbRowCount ?? "null"} pipeline=${pipelineHealthy ? "ok" : "FAIL"}`);
+  console.log(`  signals: deploy=${ageH(lastDeployMs, nowMs)}h (${deployFrom}) enrich=${ageH(lastEnrichMs, nowMs)}h dbRows=${dbRowCount ?? "null"} pipeline=${pipelineHealthy ? "ok" : "FAIL"}`);
   for (const r of result.reasons) console.log(`  • ${r}`);
   console.log(`  responder (planned only): ${responderLine}`);
   process.exit(result.status === "OK" ? 0 : 1);
@@ -478,7 +465,7 @@ let emailState = "n/a";
 
 if (result.status === "OK") {
   emailState = "n/a";
-  console.log(`[deadman] OK @ ${tsIso} — deploy ${ageH(lastDeployMs, nowMs)}h, enrich ${ageH(lastEnrichMs, nowMs)}h, pipeline ${pipelineHealthy ? "ok" : "FAIL"}`);
+  console.log(`[deadman] OK @ ${tsIso} — deploy ${ageH(lastDeployMs, nowMs)}h (${deployFrom}), enrich ${ageH(lastEnrichMs, nowMs)}h, pipeline ${pipelineHealthy ? "ok" : "FAIL"}`);
 } else {
   const subject = `[Agent Athens] DEADMAN: ${result.status}`;
   const body =
@@ -487,7 +474,7 @@ if (result.status === "OK") {
     result.reasons.map((r) => `  • ${r}`).join("\n") +
     `\n\nResponder: ${responderLine}\n` +
     responderOutcomes.map((o) => `  → ${o.summary}: ${o.detail}`).join("\n") +
-    `\n\nSignal ages: deploy=${ageH(lastDeployMs, nowMs)}h, enrich=${ageH(lastEnrichMs, nowMs)}h, pipeline=${pipelineHealthy ? "ok" : "non-zero-exit"}.\n` +
+    `\n\nSignal ages: deploy=${ageH(lastDeployMs, nowMs)}h (${deploy.label}), enrich=${ageH(lastEnrichMs, nowMs)}h, pipeline=${pipelineHealthy ? "ok" : "non-zero-exit"}.\n` +
     `Thresholds: deploy ${cfg.deploy_stale_hours}h, enrich ${cfg.enrich_stale_hours}h.\n`;
 
   // Layer 1 — local notification (always).
@@ -495,7 +482,7 @@ if (result.status === "OK") {
     fireNotification("Agent Athens", `Deadman: ${result.status}`, result.reasons[0] ?? result.status);
   }
   // Layer 2 — email (one path). On send-failure, escalate Layer 1 + mark heartbeat.
-  const mail = sendEmail(cfg, subject, body);
+  const mail = sendEmail(cfg.email, subject, body);
   if (mail.ok) {
     emailState = "sent";
   } else if (mail.skipped) {
