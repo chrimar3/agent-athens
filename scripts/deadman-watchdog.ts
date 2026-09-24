@@ -36,6 +36,11 @@
 // its own status, DB_REFUSED, and says so in the alert. The whole run also
 // has a wall-clock limit (10 min): when it is hit the watchdog alerts through
 // the same notification, email, push and heartbeat layers and exits 1.
+//
+// Security loop round 9: once the container setup is installed, at most once
+// a week the watchdog checks that this Mac no longer holds account-wide
+// Netlify / GitHub CLI logins (src/watchdog/cli-logins.ts: token presence
+// only, never the value) and warns through notification and email if it does.
 
 import { readFileSync, existsSync } from "node:fs";
 import { resolve, join } from "node:path";
@@ -45,6 +50,7 @@ import { planResponse, executeActions, hostStateDir, type ResponderState } from 
 import { osascriptNotificationArgv } from "../src/watchdog/notify";
 import { appendFileNoFollow, hostLogDir } from "../src/watchdog/host-files";
 import { sendEmail, type EmailConfig } from "../src/watchdog/email";
+import { weeklyCliLoginCheck } from "../src/watchdog/cli-logins";
 import {
   authPrecheckFromLog, buildFailureCauseFromLog, deployFreshness, stripControl, type DeploySignal,
 } from "../src/watchdog/signal-sources";
@@ -617,6 +623,21 @@ try {
 } catch (e) {
   heartbeatOk = false;
   console.error(`[deadman] HEARTBEAT NOT WRITTEN to ${heartbeatPath()}: ${e instanceof Error ? e.message : String(e)}. If it is a symlink, something planted it: inspect it, delete it, and rerun the deadman.`);
+}
+
+// Weekly: account-wide CLI logins left on this Mac (round 9). Low noise: runs
+// only with the container setup installed, at most once every 7 days; never
+// changes the exit code.
+try {
+  const cli = weeklyCliLoginCheck(ROOT, nowMs);
+  if (cli?.warning) {
+    console.error(`[deadman] ${cli.warning.short}`);
+    if (cfg.notify.enabled) fireNotification("Agent Athens", "CLI logins on this Mac", cli.warning.short);
+    const m = sendEmail(cfg.email, cli.warning.subject, cli.warning.body);
+    console.error(`[deadman] cli-login warning email ${m.ok ? "sent" : m.skipped ? `skipped: ${m.detail}` : `FAILED: ${m.detail}`}`);
+  }
+} catch (e) {
+  console.error(`[deadman] cli-login check failed: ${stripControl(e instanceof Error ? e.message : String(e), 300)}`);
 }
 
 process.exit(result.status === "OK" && heartbeatOk ? 0 : 1);

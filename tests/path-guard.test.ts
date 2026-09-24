@@ -804,6 +804,8 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     '.github/scripts/live-page-content.ts',
     'tests/security/test-discovery.test.ts',
     'tests/security/weekly-digest-host.test.ts',
+    'src/watchdog/cli-logins.ts',
+    'tests/security/cli-logins.test.ts',
   ];
   /** Listed by name in path-guard.json even where a broader glob already covers
    *  them, so narrowing that glob later cannot silently drop them. */
