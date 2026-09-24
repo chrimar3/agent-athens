@@ -20,6 +20,12 @@
  * `PUBLISH-RESULT deploy_id=… dist_hash=… state=ready` line on stdout (parsed
  * by the host wrapper) and removes the marker.
  *
+ * Sealed build (security loop round 6): AA_SKIP_BUILD=1 ends a freshness/full
+ * run after the data phases (no dist/, no git change, no marker); `build` mode
+ * wipes dist/, then runs ONLY generate, health check, scoreboard, the deferred
+ * deploy step (always deferred) and image cleanup, and prints ONE
+ * `BUILD-RESULT dist_hash=…` line on stdout.
+ *
  * Origin gate: lives in scripts/deploy-gate.sh (its own suite in
  * scripts/__tests__/deploy-gate.test.ts). Most whole-script tests here stub
  * the gate; the `real gate` tests run the real one against the bare origin.
@@ -104,6 +110,9 @@ function mkProject(opts: { realGate?: boolean } = {}): Project {
   exe(join(bin, 'bun'), `#!/bin/bash
 echo "bun $*" >> "$TEST_CALLS"
 if [[ "$1 $2" == "run build" ]]; then
+  ls -a | grep '^\\.pipeline-.*\\.lock$' | sed 's/^/lock-at-build /' >> "$TEST_CALLS"
+  if [[ -e dist/planted.html ]]; then echo "planted-visible-at-build" >> "$TEST_CALLS"; fi
+  if [[ -n "\${BUILD_RC:-}" ]]; then exit "\${BUILD_RC}"; fi
   mkdir -p dist && echo "<p>page</p>" > dist/index.html
   printf 'sha=%s\\nsourceDirty=0\\ndistHash=%s\\nbuiltAt=x\\n' "$(git rev-parse HEAD)" "${DIST_HASH}" > dist/.build-provenance
 fi
@@ -605,6 +614,175 @@ describe('email ingest split (round 5): the mailbox password can live in a run w
   });
 });
 
+describe('sealed build (round 6): the scrape run never builds; `build` mode builds, gates and defers', () => {
+  const INGEST = 'bun run scripts/ingest-emails.ts';
+  const PARSE = 'bun run scripts/parse-newsletter-emails.ts';
+  const SCRAPE = 'bun run scripts/scrape-all.ts';
+  const BUILD = 'bun run build';
+  const refs = (p: Project) => git(p.dir, 'for-each-ref', '--format=%(refname) %(objectname)');
+  const buildResultLines = (r: Run) => r.stdout.split('\n').filter(l => l.includes('BUILD-RESULT'));
+
+  test('AA_SKIP_BUILD=1 (freshness): data phases run, then STOP — no build, gate, scoreboard, commit, marker or deploy', () => {
+    const p = mkProject();
+    const before = snapshot(p);
+    const refsBefore = refs(p);
+    const r = runPipeline(p, 'freshness', { AA_SKIP_BUILD: '1', AA_SKIP_INGEST: '1', AA_DEFER_PUBLISH: '1' });
+    expect(r.status).toBe(0);
+    expect(r.calls).toContain(SCRAPE);
+    expect(r.calls).toContain('bun run scripts/yield-canary.ts');
+    expect(r.calls).toContain('bun run scripts/filter-athens-only.ts');
+    expect(r.calls).toContain('bun run scripts/geocode-missing-venues.ts');
+    for (const never of [BUILD, 'deploy-gate', 'health-check', 'assemble-scoreboard', 'venue-address-autofix', 'cleanup-old-images',
+      'ping-indexnow', 'gsc-submit-sitemaps', 'netlify', 'git push', 'git fetch', 'check-published-artifacts', INGEST]) {
+      expect(r.calls).not.toContain(never);
+    }
+    expect(r.log).toContain('AA_SKIP_BUILD=1');
+    expect(r.log).toContain("'build' mode");
+    expect(r.log).not.toContain('PHASE: SITE GENERATION');
+    expect(existsSync(join(p.dir, 'dist'))).toBe(false);          // never writes dist/
+    expect(existsSync(marker(p))).toBe(false);                     // never leaves a publish marker
+    expect(publishResultLines(r)).toEqual([]);
+    expect(buildResultLines(r)).toEqual([]);
+    // No git change at all: refs, HEAD, index bytes and working tree as before.
+    expect(refs(p)).toBe(refsBefore);
+    expect(snapshot(p)).toEqual(before);
+  });
+
+  test('AA_SKIP_BUILD=1 (full): ingest and the enrichment-side data phases still run; the build does not', () => {
+    const p = mkProject();
+    const r = runPipeline(p, 'full', { AA_SKIP_BUILD: '1' });
+    expect(r.status).toBe(0);
+    expect(r.calls).toContain(INGEST);
+    expect(r.calls).toContain(PARSE);
+    expect(r.calls).toContain(SCRAPE);
+    expect(r.calls).toContain('bun run scripts/download-images.ts');
+    expect(r.calls).not.toContain(BUILD);
+    expect(r.calls).not.toContain('deploy-gate');
+    expect(existsSync(marker(p))).toBe(false);
+    expect(localPd(p)).toBe('');
+  });
+
+  test('only the exact value 1 skips the build (control)', () => {
+    const p = mkProject();
+    const r = runPipeline(p, 'freshness', { AA_SKIP_BUILD: 'yes', AA_DEFER_PUBLISH: '1' });
+    expect(r.status).toBe(0);
+    expect(r.calls).toContain(BUILD);
+    expect(existsSync(marker(p))).toBe(true);
+  });
+
+  test('build mode: wipes dist/, builds, runs the deferred deploy step and prints ONE BUILD-RESULT line; never ingests or scrapes', () => {
+    const p = mkProject();
+    mkdirSync(join(p.dir, 'dist/images/og'), { recursive: true });
+    writeFileSync(join(p.dir, 'dist/planted.html'), '<script>evil()</script>');
+    writeFileSync(join(p.dir, 'dist/images/og/stale.png'), 'x');
+    writeFileSync(join(p.dir, 'dist/.og-cache.json'), '{}');
+    const headBefore = head(p);
+    // AA_DEFER_PUBLISH unset/0 in the env: build mode defers anyway.
+    const r = runPipeline(p, 'build', { AA_DEFER_PUBLISH: '0' });
+    expect(r.status).toBe(0);
+    expect(r.log).toContain('Pipeline mode: build');
+    expect(r.calls).toContain(BUILD);
+    expect(r.calls).not.toContain('planted-visible-at-build');    // emptied BEFORE the build
+    expect(existsSync(join(p.dir, 'dist/planted.html'))).toBe(false);
+    expect(existsSync(join(p.dir, 'dist/images/og/stale.png'))).toBe(false);
+    expect(existsSync(join(p.dir, 'dist/.og-cache.json'))).toBe(false);
+    expect(existsSync(join(p.dir, 'dist/index.html'))).toBe(true);
+    expect(r.calls).toContain('lock-at-build .pipeline-build.lock'); // its own per-mode lock
+    expect(existsSync(join(p.dir, '.pipeline-build.lock'))).toBe(false);
+    const order = [BUILD, 'bun run scripts/health-check.ts', 'bun run scripts/assemble-scoreboard.ts', 'deploy-gate --local-only', 'bun run scripts/cleanup-old-images.ts'];
+    for (let i = 0; i < order.length; i++) {
+      expect(r.calls).toContain(order[i]);
+      if (i > 0) expect(r.calls.indexOf(order[i - 1])).toBeLessThan(r.calls.indexOf(order[i]));
+    }
+    for (const never of [INGEST, PARSE, SCRAPE, 'yield-canary', 'filter-athens-only', 'run-enrichment-pipeline', 'auto-enrich', 'enrich-',
+      'download-images', 'geocode', 'ping-indexnow', 'gsc-submit-sitemaps', 'netlify', 'git push', 'git fetch', 'check-published-artifacts']) {
+      expect(r.calls).not.toContain(never);
+    }
+    // Deferred exactly like AA_DEFER_PUBLISH=1: pipeline-data commit + marker, HEAD unmoved.
+    expect(head(p)).toBe(headBefore);
+    const m = JSON.parse(readFileSync(marker(p), 'utf-8'));
+    expect(m.distHash).toBe(DIST_HASH);
+    expect(m.pipelineDataSha).toBe(localPd(p));
+    expect(remotePd(p)).toBe('');
+    expect(cadence(p)).toBe('');
+    // The host wrapper contract: exactly one line, exactly this shape and value.
+    expect(buildResultLines(r)).toEqual([`BUILD-RESULT dist_hash=${DIST_HASH}`]);
+    expect(r.stdout).toMatch(/^BUILD-RESULT dist_hash=[0-9a-f]{64}$/m);
+    expect(publishResultLines(r)).toEqual([]);
+  });
+
+  test('build then publish: the published dist_hash is the one BUILD-RESULT reported', () => {
+    const p = mkProject();
+    const b = runPipeline(p, 'build');
+    expect(b.status).toBe(0);
+    const built = buildResultLines(b)[0]?.replace('BUILD-RESULT dist_hash=', '');
+    const r = runPipeline(p, 'publish');
+    expect(r.status).toBe(0);
+    expect(publishResultLines(r)).toHaveLength(1);
+    expect(publishResultLines(r)[0]).toContain(`dist_hash=${built} `);
+  });
+
+  test('build mode: a failed build → exit 1, no gate, no commit, no marker, no BUILD-RESULT', () => {
+    const p = mkProject();
+    const r = runPipeline(p, 'build', { BUILD_RC: '1' });
+    expect(r.status).toBe(1);
+    expect(r.calls).not.toContain('deploy-gate');
+    expect(existsSync(marker(p))).toBe(false);
+    expect(localPd(p)).toBe('');
+    expect(buildResultLines(r)).toEqual([]);
+  });
+
+  test('build mode: the deploy gate refuses → exit 1, no marker, no BUILD-RESULT', () => {
+    const p = mkProject();
+    const r = runPipeline(p, 'build', { GATE_RC: '1' });
+    expect(r.status).toBe(1);
+    expect(existsSync(marker(p))).toBe(false);
+    expect(buildResultLines(r)).toEqual([]);
+    expect(r.calls).not.toContain('cleanup-old-images');
+  });
+
+  test('build mode: a dist/ that is a symlink is refused before anything is built or deleted through it', () => {
+    const p = mkProject();
+    const elsewhere = tmp('aa-dist-target-');
+    writeFileSync(join(elsewhere, 'keep.txt'), 'x');
+    symlinkSync(elsewhere, join(p.dir, 'dist'));
+    const r = runPipeline(p, 'build');
+    expect(r.status).toBe(1);
+    expect(r.calls).not.toContain(BUILD);
+    expect(existsSync(join(elsewhere, 'keep.txt'))).toBe(true);
+    expect(r.log).toContain('symlink');
+    expect(buildResultLines(r)).toEqual([]);
+  });
+
+  test('build mode is refused on the host like every other mode, and the override does not work from a launchd job', () => {
+    const p = mkProject();
+    const r1 = runPipeline(p, 'build', { AA_CONTAINER: '', AA_ALLOW_HOST_RUN: '' });
+    expect(r1.status).toBe(9);
+    expect(r1.calls).not.toContain(BUILD);
+    const r2 = runPipeline(p, 'build', { AA_CONTAINER: '', AA_ALLOW_HOST_RUN: '1', XPC_SERVICE_NAME: 'com.agentathens.docker.freshness' });
+    expect(r2.status).toBe(9);
+    expect(r2.stderr).toContain('one-off manual runs only');
+    expect(r2.calls).not.toContain(BUILD);
+  });
+
+  test('unknown modes are still refused (positional and --mode=)', () => {
+    const p = mkProject();
+    const r1 = runPipeline(p, 'bulid');
+    expect(r1.status).toBe(1);
+    expect(r1.stdout).toContain('Unknown arg');
+    expect(r1.stdout).toContain('|build]');
+    const r2 = runPipeline(p, '--mode=sealed');
+    expect(r2.status).toBe(1);
+    expect(r2.stdout).toContain('Invalid mode');
+    expect(r1.calls + r2.calls).toBe('');
+  });
+
+  test('build mode is excluded from the caffeinate re-exec (it never deploys)', () => {
+    const block = SCRIPT.slice(SCRIPT.indexOf('# caffeinate:begin'), SCRIPT.indexOf('# caffeinate:end'));
+    expect(block).toContain('"$PIPELINE_MODE" != "build"');
+  });
+});
+
 describe('run_deploy seams', () => {
   const body = SCRIPT.slice(SCRIPT.indexOf('\nrun_deploy() {'), SCRIPT.indexOf('\n}\n', SCRIPT.indexOf('\nrun_deploy() {')));
 
@@ -634,7 +812,7 @@ describe('run_deploy seams', () => {
   });
 
   test('mode list accepts publish and it gets a per-mode lock', () => {
-    expect(SCRIPT).toContain('full|freshness|enrichment|publish|ingest) PIPELINE_MODE="$arg"');
+    expect(SCRIPT).toContain('full|freshness|enrichment|publish|ingest|build) PIPELINE_MODE="$arg"');
     expect(SCRIPT).toContain('LOCK_FILE="$PROJECT_DIR/.pipeline-${PIPELINE_MODE}.lock"');
   });
 

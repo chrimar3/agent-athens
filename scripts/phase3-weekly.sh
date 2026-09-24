@@ -61,6 +61,17 @@ unset AA_ENRICHMENT_SESSION
 # an unguarded one over third-party text is not. Mirrors run_guard_selftest in
 # scripts/auto-enrich.sh. DB_GUARD_HOOK_OVERRIDE is a test seam.
 run_guard_selftest() {
+  # hook-override-guard:begin (security loop round 6; pinned by tests/security/hook-override-seam.test.ts)
+  # The seam points the self-test at ANOTHER hook file, so a scheduled run that
+  # inherits it would "pass" against a stub while the session still uses the
+  # worktree's real (possibly broken) hook. Test and interactive use only:
+  # refused inside the container (AA_CONTAINER=1) and in a launchd job
+  # (XPC_SERVICE_NAME=com.agentathens.*).
+  if [ -n "${DB_GUARD_HOOK_OVERRIDE:-}" ] && { [ "${AA_CONTAINER:-}" = "1" ] || [[ "${XPC_SERVICE_NAME:-}" == com.agentathens* ]]; }; then
+    log "Guard self-test REFUSED — DB_GUARD_HOOK_OVERRIDE is a test seam and is not honoured in a container or launchd run. L2 skipped before any claude call. Next: remove DB_GUARD_HOOK_OVERRIDE from the job's environment (plist, docker/aa-run.sh env) and re-run."
+    return 1
+  fi
+  # hook-override-guard:end
   local hook="${DB_GUARD_HOOK_OVERRIDE:-$PHASE3_WT/scripts/hooks/db-guard.ts}"
   local failures=() probe name expected json rc
   # name|expected-exit|hook-json
@@ -173,6 +184,14 @@ git -C "$BASELINE_WT" commit --no-verify --quiet -m "phase3: weekly measurement 
 # the Mac that is the owner's home folder, keychain and logins, so layer 2 runs
 # only inside the container (AA_CONTAINER=1) or with an explicit, temporary
 # override. Layer 1 above has already run and committed its measurements.
+# Round 6: the override is for a person at a terminal. launchd sets
+# XPC_SERVICE_NAME to the job label, so a com.agentathens.* job (an edited
+# legacy plist) cannot use AA_ALLOW_HOST_RUN=1 to skip the container.
+if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" == "1" && "${XPC_SERVICE_NAME:-}" == com.agentathens* ]]; then
+    echo "phase3-weekly: REFUSED — AA_ALLOW_HOST_RUN=1 is for one-off manual runs only and is ignored in a launchd job (XPC_SERVICE_NAME=${XPC_SERVICE_NAME})." >&2
+    echo "phase3-weekly: next: schedule this job through docker/aa-run.sh (docker/README.md) and unload the legacy plist; for a one-off host run, start it from a terminal." >&2
+    exit 9
+fi
 if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" != "1" ]]; then
     echo "phase3-weekly: REFUSED — the layer-2 claude session runs inside the container, not directly on this Mac (layer-1 data is committed)." >&2
     echo "phase3-weekly: next: run layer 2 through docker/aa-run.sh (docker/README.md); for a one-off host run set AA_ALLOW_HOST_RUN=1." >&2

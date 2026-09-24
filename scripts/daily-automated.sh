@@ -23,6 +23,28 @@
 #   AA_SKIP_INGEST=1 ./scripts/daily-automated.sh freshness
 #                                          # scrape/build without email ingest
 #                                          # (the ingest run covers it)
+#   AA_SKIP_BUILD=1 ./scripts/daily-automated.sh freshness
+#                                          # data phases ONLY: stop before the
+#                                          # build (no dist/, no git, no deploy)
+#   ./scripts/daily-automated.sh build     # ONLY build + health + scoreboard +
+#                                          # deferred deploy step (gate, artifact
+#                                          # commit, marker); always deferred
+#
+# Sealed build (security loop round 6): the scrape run loads hostile pages in
+# Chromium, so it must not be the run that builds dist/ and writes the
+# provenance stamp the deploy trusts. AA_SKIP_BUILD=1 ends a freshness/full run
+# after its data phases (ingest unless AA_SKIP_INGEST=1, scrape, quality,
+# dedup, prices, tickets, schema, geocode, enrichment phases by mode): no
+# run_generate, health check, scoreboard, deploy, image cleanup, IndexNow or
+# GSC, and it never writes dist/ or touches .git. `build` mode, run in a
+# separate container with no browser, then runs ONLY run_generate,
+# run_health_check, run_scoreboard, run_deploy (always as AA_DEFER_PUBLISH=1:
+# deploy gate --local-only, pipeline-data artifact commit, publish marker) and
+# run_image_cleanup. It first deletes everything inside dist/ (the directory
+# itself may be a mount point), so nothing an earlier run left there can ship.
+# On success it prints ONE line on stdout for the host wrapper:
+#   BUILD-RESULT dist_hash=<64 lowercase hex>
+# (the stamp's distHash, the same value the publish marker records).
 #
 # Email ingest split (security loop round 5): headless Chrome loads hostile
 # pages in the scrape, so the mailbox password should not be in that run.
@@ -32,7 +54,8 @@
 # credential to the ingest run alone.
 #
 # Exit codes: 0 success (a deferred run counts as success) · 1 failure or a
-# gate refused · 3 publish mode found no deferred build to publish.
+# gate refused · 3 publish mode found no deferred build to publish · 9 refused
+# to run on the host (see host-guard below).
 #
 # Git (security loop round 3): the pipeline NEVER commits to or pushes main.
 # Its allowlisted data artifacts are committed to the separate branch
@@ -981,6 +1004,50 @@ print_publish_result() {
     fi
 }
 
+# build mode (security loop round 6): empty dist/ before run_generate, so no
+# file an earlier run left there (e.g. a compromised scrape run, or a stale
+# OG image whose cache entry still matches) survives into the stamped build.
+# dist/ may be a mount point: its CONTENTS are deleted, never the directory.
+# A dist/ that is a symlink or not a directory is refused — the build would
+# write through it. The cost is a cold build (OG images re-rendered).
+wipe_dist_for_build() {
+    local dist="$PROJECT_DIR/dist" left
+    if [[ -L "$dist" ]] || { [[ -e "$dist" ]] && [[ ! -d "$dist" ]]; }; then
+        log_error "[build] REFUSED — $dist is a symlink or not a directory; the build would write through it. Nothing built. Next: remove it (or fix the dist mount) and re-run build."
+        return 1
+    fi
+    if ! mkdir -p "$dist"; then
+        log_error "[build] REFUSED — cannot create $dist. Nothing built. Next: check permissions (or the dist mount) and re-run build."
+        return 1
+    fi
+    find "$dist" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} + >> "$LOG_FILE" 2>&1
+    left=$(find "$dist" -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null)
+    if [[ -n "$left" ]]; then
+        log_error "[build] REFUSED — could not empty $dist (still holds ${left#"$dist"/}). Nothing built. Next: check its permissions and re-run build."
+        return 1
+    fi
+    log "[build] dist/ emptied before the build (nothing from an earlier run can ship)"
+    return 0
+}
+
+# build mode: ONE stable stdout line for the host wrapper. The hash is the
+# stamp's distHash — the value write_publish_marker just recorded — and is
+# printed only when the marker agrees with the stamp and it is 64 lowercase
+# hex, so no value can smuggle in a second line. Not through log() (that tees a
+# timestamped copy to stdout). Returns 1 when no line can be printed.
+print_build_result() {
+    local s_hash m_hash
+    s_hash=$(sed -n 's/^distHash=//p' "$PROJECT_DIR/dist/.build-provenance" 2>/dev/null | head -1)
+    m_hash=$(jq -r '.distHash // empty' "$PUBLISH_MARKER" 2>/dev/null) || m_hash=""
+    if [[ "$s_hash" =~ ^[0-9a-f]{64}$ && "$s_hash" == "$m_hash" ]]; then
+        printf 'BUILD-RESULT dist_hash=%s\n' "$s_hash"
+        log "[build] result line printed for the host record (dist ${s_hash:0:12})"
+        return 0
+    fi
+    log_error "[build] the stamp's distHash (${s_hash:0:12}) is not 64 lowercase hex or does not match $PUBLISH_MARKER (${m_hash:0:12}); no result line printed. Next: re-run build; if it repeats, inspect dist/.build-provenance."
+    return 1
+}
+
 # Deferred publish (AA_DEFER_PUBLISH=1): record which build is waiting. Values
 # come from the stamp the deploy gate just verified, HEAD (unchanged by the
 # artifact commit) and the pipeline-data commit ($1, "" when there is none);
@@ -1252,9 +1319,9 @@ main() {
         case $arg in
             --dry-run)         DRY_RUN="true" ;;
             --mode=*)          PIPELINE_MODE="${arg#--mode=}" ;;
-            full|freshness|enrichment|publish|ingest) PIPELINE_MODE="$arg" ;;
-            --help|-h)         echo "Usage: [AA_DEFER_PUBLISH=1] [AA_SKIP_INGEST=1] $0 [full|freshness|enrichment|publish|ingest] [--dry-run]"; exit 0 ;;
-            *)                 echo "Unknown arg: $arg"; echo "Usage: [AA_DEFER_PUBLISH=1] [AA_SKIP_INGEST=1] $0 [full|freshness|enrichment|publish|ingest] [--dry-run]"; exit 1 ;;
+            full|freshness|enrichment|publish|ingest|build) PIPELINE_MODE="$arg" ;;
+            --help|-h)         echo "Usage: [AA_DEFER_PUBLISH=1] [AA_SKIP_INGEST=1] [AA_SKIP_BUILD=1] $0 [full|freshness|enrichment|publish|ingest|build] [--dry-run]"; exit 0 ;;
+            *)                 echo "Unknown arg: $arg"; echo "Usage: [AA_DEFER_PUBLISH=1] [AA_SKIP_INGEST=1] [AA_SKIP_BUILD=1] $0 [full|freshness|enrichment|publish|ingest|build] [--dry-run]"; exit 1 ;;
         esac
     done
 
@@ -1264,6 +1331,14 @@ main() {
     # (docker/aa-run.sh sets AA_CONTAINER=1). A run directly on the Mac, with
     # its home folder, keychain and account-wide logins, needs an explicit,
     # temporary override.
+    # Round 6: the override is for a person at a terminal. launchd sets
+    # XPC_SERVICE_NAME to the job label, so a com.agentathens.* job (an edited
+    # legacy plist) cannot use AA_ALLOW_HOST_RUN=1 to skip the container.
+    if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" == "1" && "${XPC_SERVICE_NAME:-}" == com.agentathens* ]]; then
+        echo "daily-automated: REFUSED — AA_ALLOW_HOST_RUN=1 is for one-off manual runs only and is ignored in a launchd job (XPC_SERVICE_NAME=${XPC_SERVICE_NAME})." >&2
+        echo "daily-automated: next: schedule this job through docker/aa-run.sh (docker/README.md) and unload the legacy plist; for a one-off host run, start it from a terminal." >&2
+        exit 9
+    fi
     if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" != "1" ]]; then
         echo "daily-automated: REFUSED — the pipeline runs inside the container, not directly on this Mac." >&2
         echo "daily-automated: next: install it (docker/README.md, ~20 min) and run 'docker/aa-run.sh ${PIPELINE_MODE}'; for a one-off host run set AA_ALLOW_HOST_RUN=1." >&2
@@ -1278,15 +1353,16 @@ main() {
     # assertion for its whole life. Known limit (ledger, 2026-04-08): -i does
     # NOT survive a closed lid on battery, and -s only works on AC. Enrichment
     # mode is excluded — 6 runs/day holding the assertion would drain a battery
-    # for no deploy benefit. Ingest mode too: it is short and never deploys.
-    if [[ "$PIPELINE_MODE" != "enrichment" && "$PIPELINE_MODE" != "ingest" && -z "${AA_CAFFEINATED:-}" ]] && command -v caffeinate >/dev/null 2>&1; then
+    # for no deploy benefit. Ingest mode too: it is short and never deploys;
+    # build mode likewise (security loop round 6): it never deploys either.
+    if [[ "$PIPELINE_MODE" != "enrichment" && "$PIPELINE_MODE" != "ingest" && "$PIPELINE_MODE" != "build" && -z "${AA_CAFFEINATED:-}" ]] && command -v caffeinate >/dev/null 2>&1; then
         export AA_CAFFEINATED=1
         exec caffeinate -i "$0" "$@"
     fi
     # caffeinate:end
 
     case "$PIPELINE_MODE" in
-        full|freshness|enrichment|publish|ingest) ;;
+        full|freshness|enrichment|publish|ingest|build) ;;
         *) echo "Invalid mode: $PIPELINE_MODE"; exit 1 ;;
     esac
 
@@ -1380,6 +1456,36 @@ main() {
         exit 0
     fi
 
+    # ── BUILD MODE (security loop round 6): the sealed build. Runs ONLY the
+    # build and the deferred deploy step, under its own .pipeline-build.lock
+    # (per-mode lock above), in a run with no browser that never saw a scraped
+    # page. No backup, ingest, scrape, enrichment, IndexNow or GSC. Always
+    # deferred, whatever the env says: deploy gate --local-only, artifact
+    # commit on pipeline-data, publish marker; `publish` mode ships it.
+    if [[ "$PIPELINE_MODE" == "build" ]]; then
+        export AA_DEFER_PUBLISH=1
+        check_dependencies
+        if [[ "$DRY_RUN" != "true" ]]; then
+            wipe_dist_for_build || exit 1
+        fi
+        if ! run_generate; then
+            log_error "Site generation failed — build mode stops here (nothing committed, no marker)"
+            exit 1
+        fi
+        run_health_check
+        run_scoreboard
+        if ! run_deploy; then
+            log_error "Build did not complete — the deferred deploy step refused (see the [deploy-gate]/[publish]/[staging] lines above); no marker for publish"
+            exit 1
+        fi
+        run_image_cleanup
+        if [[ "$DRY_RUN" != "true" ]]; then
+            print_build_result || exit 1
+        fi
+        log "Build completed (deferred: IndexNow + GSC sitemap submission run in publish mode)"
+        exit 0
+    fi
+
     # Check dependencies
     check_dependencies
 
@@ -1426,6 +1532,18 @@ main() {
         run_time_enrichment
         run_image_enrichment
         run_image_download
+    fi
+
+    # ── SEALED BUILD (security loop round 6): AA_SKIP_BUILD=1 ends a
+    # freshness/full run here, after the data phases. The build, health check,
+    # scoreboard, deferred deploy step and image cleanup run in the separate
+    # `build` mode; IndexNow + GSC in `publish`. This run writes no dist/ and
+    # makes no git change. Only the exact value 1 skips.
+    if [[ "${AA_SKIP_BUILD:-}" == "1" && "$PIPELINE_MODE" != "enrichment" ]]; then
+        log "AA_SKIP_BUILD=1: stopping after the data phases — the build runs in the separate 'build' mode (no browser); nothing built, committed or deployed here"
+        print_summary
+        log "Pipeline completed successfully (data phases only)"
+        exit 0
     fi
 
     # ── BUILD & DEPLOY (skip in enrichment mode — 22h latency by design) ──

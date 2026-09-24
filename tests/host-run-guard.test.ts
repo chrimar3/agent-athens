@@ -4,6 +4,8 @@
 // Security loop round 5: phase3-weekly.sh carries the same block in front of
 // its layer-2 claude session (layer 1, the deterministic measurement, still
 // runs and commits first).
+// Security loop round 6: the override is not honoured when XPC_SERVICE_NAME
+// names a com.agentathens.* launchd job — it is for one-off manual runs.
 import { describe, expect, test } from 'bun:test';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -38,6 +40,27 @@ for (const file of ['scripts/daily-automated.sh', 'scripts/auto-enrich.sh', 'scr
     test('runs on the host only with the explicit override', () => {
       expect(runGuard(file, { AA_ALLOW_HOST_RUN: '1' }).out).toContain('PASSED');
       expect(runGuard(file, { AA_ALLOW_HOST_RUN: 'yes' }).code).toBe(9);
+    });
+    // Round 6: launchd sets XPC_SERVICE_NAME to the job label. An edited
+    // legacy plist that adds AA_ALLOW_HOST_RUN=1 must not skip the container.
+    test('the override is ignored in a com.agentathens.* launchd job (one-off manual runs only)', () => {
+      for (const label of ['com.agentathens.daily', 'com.agentathens.enrichment-13', 'com.agentathens.phase3-weekly', 'com.agentathens.docker.freshness']) {
+        const r = runGuard(file, { AA_ALLOW_HOST_RUN: '1', XPC_SERVICE_NAME: label });
+        expect(r.code).toBe(9);
+        expect(r.out).not.toContain('PASSED');
+        expect(r.err).toContain('REFUSED');
+        expect(r.err).toContain('one-off manual runs only');
+      }
+    });
+    test('a terminal session (other XPC_SERVICE_NAME) keeps the override; the container is unaffected by the label', () => {
+      expect(runGuard(file, { AA_ALLOW_HOST_RUN: '1', XPC_SERVICE_NAME: 'application.com.apple.Terminal.1234' }).out).toContain('PASSED');
+      expect(runGuard(file, { AA_ALLOW_HOST_RUN: '1', XPC_SERVICE_NAME: '0' }).out).toContain('PASSED');
+      expect(runGuard(file, { AA_CONTAINER: '1', XPC_SERVICE_NAME: 'com.agentathens.docker.enrichment' }).out).toContain('PASSED');
+    });
+    test('without the override a launchd job gets the ordinary refusal', () => {
+      const r = runGuard(file, { XPC_SERVICE_NAME: 'com.agentathens.daily' });
+      expect(r.code).toBe(9);
+      expect(r.err).toContain('REFUSED');
     });
   });
 }

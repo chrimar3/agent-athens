@@ -30,6 +30,14 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 # Unattended claude sessions over scraped text run inside the hardened
 # container (docker/aa-run.sh enrichment sets AA_CONTAINER=1); a direct run on
 # the Mac needs an explicit, temporary override.
+# Round 6: the override is for a person at a terminal. launchd sets
+# XPC_SERVICE_NAME to the job label, so a com.agentathens.* job (an edited
+# legacy plist) cannot use AA_ALLOW_HOST_RUN=1 to skip the container.
+if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" == "1" && "${XPC_SERVICE_NAME:-}" == com.agentathens* ]]; then
+    echo "auto-enrich: REFUSED — AA_ALLOW_HOST_RUN=1 is for one-off manual runs only and is ignored in a launchd job (XPC_SERVICE_NAME=${XPC_SERVICE_NAME})." >&2
+    echo "auto-enrich: next: schedule this job through docker/aa-run.sh (docker/README.md) and unload the legacy plist; for a one-off host run, start it from a terminal." >&2
+    exit 9
+fi
 if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" != "1" ]]; then
     echo "auto-enrich: REFUSED — enrichment runs inside the container, not directly on this Mac." >&2
     echo "auto-enrich: next: install it (docker/README.md) and run 'docker/aa-run.sh enrichment'; for a one-off host run set AA_ALLOW_HOST_RUN=1." >&2
@@ -193,6 +201,17 @@ run_auth_precheck() {
 # DB_GUARD_HOOK_OVERRIDE is a test seam (tests/auto-enrich-guard-selftest.test.ts).
 # ============================================================================
 run_guard_selftest() {
+    # hook-override-guard:begin (security loop round 6; pinned by tests/security/hook-override-seam.test.ts)
+    # The seam points the self-test at ANOTHER hook file, so a scheduled run
+    # that inherits it would "pass" against a stub while the sessions still use
+    # the real (possibly broken) hook. Test and interactive use only: refused
+    # inside the container (AA_CONTAINER=1) and in a launchd job
+    # (XPC_SERVICE_NAME=com.agentathens.*).
+    if [[ -n "${DB_GUARD_HOOK_OVERRIDE:-}" ]] && [[ "${AA_CONTAINER:-}" == "1" || "${XPC_SERVICE_NAME:-}" == com.agentathens* ]]; then
+        log_error "Guard self-test REFUSED — DB_GUARD_HOOK_OVERRIDE is a test seam and is not honoured in a container or launchd run. Enrichment aborted before any claude session. Next: remove DB_GUARD_HOOK_OVERRIDE from the job's environment (plist, docker/aa-run.sh env) and re-run."
+        return 1
+    fi
+    # hook-override-guard:end
     local hook="${DB_GUARD_HOOK_OVERRIDE:-$PROJECT_DIR/scripts/hooks/db-guard.ts}"
     local failures=()
     local rc
