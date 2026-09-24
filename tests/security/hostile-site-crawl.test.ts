@@ -17,7 +17,7 @@
  * hostile persisted state (dist/.slug-history.json, manifests), which must not
  * add a rule to _redirects or reach <lastmod>.
  */
-import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
+import { afterAll, beforeAll, describe, expect, setDefaultTimeout, test } from 'bun:test';
 import { readFileSync, rmSync } from 'fs';
 import { relative } from 'path';
 import { load } from 'cheerio';
@@ -25,13 +25,16 @@ import { buildHostileSite, listFiles, KEPT_OLD_SLUG, type HostileSite } from './
 import { scanJson, scanRedirects } from '../../src/validators/published-artifacts';
 import { renderHeadersFile } from '../../src/generators/security-headers';
 
+// Covers beforeAll too: bun 1.3.0 (the CI pin) rejects a hook timeout argument.
+setDefaultTimeout(240_000);
+
 let site: HostileSite;
 let files: string[] = [];
 
 beforeAll(() => {
   site = buildHostileSite();
   files = listFiles(site.dist);
-}, 240_000);
+});
 
 afterAll(() => {
   if (site?.root && !process.env.KEEP_HOSTILE_SITE) rmSync(site.root, { recursive: true, force: true });

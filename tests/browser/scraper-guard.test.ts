@@ -26,7 +26,8 @@ const DNS: Record<string, string[]> = {
 };
 
 describe.skipIf(process.env.AA_BROWSER_TESTS !== '1')('scraper request guard in Chromium', () => {
-  setDefaultTimeout(60_000);
+  // Also covers beforeAll (bun 1.3.0, the CI pin, rejects a hook timeout argument).
+  setDefaultTimeout(120_000);
   let server: ReturnType<typeof Bun.serve>;
   let browser: Browser;
   const hits: string[] = [];
@@ -63,7 +64,7 @@ describe.skipIf(process.env.AA_BROWSER_TESTS !== '1')('scraper request guard in 
     const args = ['--host-resolver-rules=MAP *.test 127.0.0.1', '--no-proxy-server'];
     if (process.getuid?.() === 0) args.push('--no-sandbox');
     browser = await puppeteer.launch({ headless: true, executablePath: CHROME, args });
-  }, 120_000);
+  });
 
   afterAll(async () => {
     await browser?.close();

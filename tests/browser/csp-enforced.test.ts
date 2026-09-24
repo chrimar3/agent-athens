@@ -37,7 +37,8 @@ function parseHeaders(text: string): Record<string, string> {
 const TYPES: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.json': 'application/json', '.mjs': 'text/javascript', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.xml': 'application/xml' };
 
 describe.skipIf(process.env.AA_BROWSER_TESTS !== '1')('enforced script CSP in Chromium', () => {
-  setDefaultTimeout(60_000);
+  // Also covers beforeAll (bun 1.3.0, the CI pin, rejects a hook timeout argument).
+  setDefaultTimeout(240_000);
   let site: HostileSite;
   let server: ReturnType<typeof Bun.serve>;
   let browser: Browser;
@@ -70,7 +71,7 @@ describe.skipIf(process.env.AA_BROWSER_TESTS !== '1')('enforced script CSP in Ch
     const args = process.getuid?.() === 0 ? ['--no-sandbox'] : [];
     browser = await puppeteer.launch({ headless: true, executablePath: CHROME, args });
     await browser.defaultBrowserContext().overridePermissions(server.url.origin, ['clipboard-read', 'clipboard-write', 'clipboard-sanitized-write']);
-  }, 240_000);
+  });
 
   afterAll(async () => {
     await browser?.close();
