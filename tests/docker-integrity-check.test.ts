@@ -3,7 +3,8 @@
 // root file, a commit touching code, or a changed .git/config quarantines and
 // pauses all jobs.
 import { beforeEach, describe, expect, test } from 'bun:test';
-import { existsSync, mkdtempSync, readFileSync, writeFileSync, mkdirSync, symlinkSync } from 'fs';
+import { chmodSync, existsSync, mkdtempSync, readdirSync, readFileSync, statSync, unlinkSync, utimesSync, writeFileSync, mkdirSync, symlinkSync } from 'fs';
+import { deflateSync } from 'zlib';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
@@ -190,6 +191,149 @@ describe('integrity-check.sh', () => {
     expect(snapshot().code).toBe(0);
     writeFileSync(join(repo, '.git/hooks/post-checkout'), '#!/bin/sh\necho planted\n');
     expect(verify().code).toBe(1);
+  });
+});
+
+// .git/objects: a run with a writable .git could replace an existing object's
+// bytes; a later `git stash` or checkout on the Mac would then write the
+// planted content into a tracked file. Objects are immutable, so any change
+// to an existing object file, and any new object that does not hash to its
+// name, is quarantined — without running git reset on the suspect store.
+describe('integrity-check.sh object store', () => {
+  const objPath = (oid: string) => join(repo, '.git/objects', oid.slice(0, 2), oid.slice(2));
+  const blobOf = (rev: string) => git('rev-parse', rev).out.trim();
+  const packFiles = (ext: string) =>
+    readdirSync(join(repo, '.git/objects/pack')).filter((f) => f.endsWith(ext)).map((f) => join(repo, '.git/objects/pack', f));
+  const flipByte = (file: string, at: number) => {
+    const b = readFileSync(file);
+    b[at] ^= 0xff;
+    chmodSync(file, 0o644);
+    writeFileSync(file, b); // same inode, same size
+  };
+  const packEverything = () => git('repack', '-a', '-d', '-q', '-n');
+
+  test('overwriting an existing loose object in place (same size, mtime restored) is quarantined', () => {
+    const oid = blobOf('HEAD:scripts/job.ts');
+    const file = objPath(oid);
+    const { mtime, atime } = statSync(file);
+    expect(snapshot().code).toBe(0);
+    flipByte(file, readFileSync(file).length - 3);
+    utimesSync(file, atime, mtime); // hide the write from mtime; ctime still moves
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain(`git object ${oid}`);
+    expect(r.out).toContain('does not match its name');
+    expect(readFileSync(join(state, 'QUARANTINE'), 'utf8')).toContain(oid);
+  });
+
+  test("replacing an existing loose object with another object's bytes is quarantined", () => {
+    const victim = objPath(blobOf('HEAD:scripts/job.ts'));
+    const other = objPath(blobOf('HEAD:data/scoreboard.json'));
+    expect(snapshot().code).toBe(0);
+    chmodSync(victim, 0o644);
+    writeFileSync(victim, readFileSync(other));
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toMatch(/rewritten|does not match its name/);
+    expect(r.out).toContain('git fsck --full');
+  });
+
+  test('deleting an existing loose object is quarantined', () => {
+    const oid = blobOf('HEAD:scripts/job.ts');
+    expect(snapshot().code).toBe(0);
+    unlinkSync(objPath(oid));
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('deleted');
+    expect(r.out).toContain(oid.slice(2));
+  });
+
+  test('a planted new loose object whose content does not match its name is quarantined', () => {
+    expect(snapshot().code).toBe(0);
+    const fake = 'ab' + 'c'.repeat(38);
+    mkdirSync(join(repo, '.git/objects/ab'), { recursive: true });
+    writeFileSync(objPath(fake), deflateSync(Buffer.from('blob 20\0console.log("evil")\n\0')));
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain(`git object ${fake}`);
+    expect(r.out).toContain('does not match its name');
+  });
+
+  test('a symlink planted in .git/objects is quarantined', () => {
+    expect(snapshot().code).toBe(0);
+    mkdirSync(join(repo, '.git/objects/cd'), { recursive: true });
+    symlinkSync('/tmp', join(repo, '.git/objects/cd', 'e'.repeat(38)));
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('non-regular');
+  });
+
+  test('git gc during the run is quarantined', () => {
+    expect(snapshot().code).toBe(0);
+    git('gc', '-q');
+    expect(verify().code).toBe(1);
+    expect(existsSync(join(state, 'QUARANTINE'))).toBe(true);
+  });
+
+  test('a repack of existing packs is flagged as a repack', () => {
+    packEverything();
+    writeFileSync(join(repo, 'data/scoreboard.json'), '{"n":9}\n');
+    git('commit', '-qam', 'chore: daily pipeline update');
+    expect(snapshot().code).toBe(0);
+    packEverything();
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('repacked');
+  });
+
+  test('a pack git merely touched (freshened) passes; one modified in place is quarantined', () => {
+    packEverything();
+    const [pack] = packFiles('.pack');
+    expect(snapshot().code).toBe(0);
+    const now = new Date();
+    utimesSync(pack, now, now);
+    expect(verify().code).toBe(0);
+
+    expect(snapshot().code).toBe(0);
+    flipByte(pack, 40);
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('was modified during the run');
+  });
+
+  test('a changed .idx is quarantined', () => {
+    packEverything();
+    const [idx] = packFiles('.idx');
+    expect(snapshot().code).toBe(0);
+    flipByte(idx, 20);
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('rewritten');
+  });
+
+  test('a fetched pack passes; a corrupted new pack is quarantined', () => {
+    const other = mkdtempSync(join(tmpdir(), 'aa-integ-other-'));
+    sh(['git', 'clone', '-q', repo, other]);
+    writeFileSync(join(other, 'data/scoreboard.json'), '{"fetched":1}\n');
+    sh(['git', '-c', 'user.name=t', '-c', 'user.email=t@t', 'commit', '-qam', 'upstream data'], other);
+
+    expect(snapshot().code).toBe(0);
+    git('-c', 'fetch.unpackLimit=1', 'fetch', '-q', other, 'HEAD');
+    expect(packFiles('.pack').length).toBe(1);
+    const ok = verify();
+    expect(ok.out).toContain('PASS');
+    expect(ok.code).toBe(0);
+
+    writeFileSync(join(other, 'data/scoreboard.json'), '{"fetched":2}\n');
+    sh(['git', '-c', 'user.name=t', '-c', 'user.email=t@t', 'commit', '-qam', 'upstream data 2'], other);
+    const before = new Set(packFiles('.pack'));
+    expect(snapshot().code).toBe(0);
+    git('-c', 'fetch.unpackLimit=1', 'fetch', '-q', other, 'HEAD');
+    const fresh = packFiles('.pack').find((p) => !before.has(p))!;
+    flipByte(fresh, 30);
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('verify-pack');
   });
 });
 

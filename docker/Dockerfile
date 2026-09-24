@@ -8,9 +8,36 @@
 #
 # Base: Microsoft's Playwright image — Ubuntu 24.04 + Node 24 + a Chromium
 # build and its system libraries, published for both amd64 and arm64 (Apple
-# Silicon). Pinned by digest; bump tag and digest together.
+# Silicon). Pinned by digest; bump tag and digest together. Chromium only gets
+# newer when this digest moves (Dependabot proposes it): aa-run.sh refuses runs
+# that load outside content once the base is older than 60 days, measured from
+# the label and image-info below, not from when this image was built.
 ARG BASE_IMAGE=mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
 FROM ${BASE_IMAGE}
+ARG BASE_IMAGE
+# The base's own creation time as the registry reports it. Optional: supplied
+# by `docker/aa-run.sh image` (--build-arg AA_BASE_CREATED=...) when it has the
+# base locally; docker/image-age.sh falls back to the image-info file below.
+ARG AA_BASE_CREATED=""
+LABEL org.agentathens.base-image="${BASE_IMAGE}" \
+      org.agentathens.base-created="${AA_BASE_CREATED}"
+
+# Record, before anything below touches the system, when the base was built
+# and which Chromium it ships. A LABEL cannot hold a value computed by RUN, so
+# both go to /usr/local/share/agentathens/image-info (docker/image-age.sh reads
+# it on the Mac). The newest of the base's dpkg database and /ms-playwright
+# timestamps is the base's build time: image layers keep file mtimes.
+RUN set -eu; t=0; \
+    for p in /var/lib/dpkg/status /ms-playwright; do \
+        m="$(stat -c %Y "$p")"; if [ "$m" -gt "$t" ]; then t="$m"; fi; \
+    done; \
+    chrome="$(ls -d /ms-playwright/chromium-*/chrome-linux*/chrome | head -1)"; \
+    v="$("$chrome" --version | grep -oE '[0-9]+(\.[0-9]+){1,3}' | head -1)"; \
+    [ -n "$v" ]; \
+    mkdir -p /usr/local/share/agentathens; \
+    printf 'base_created=%s\nchromium_version=%s\n' "$(date -u -d "@$t" +%Y-%m-%d)" "$v" \
+        > /usr/local/share/agentathens/image-info; \
+    cat /usr/local/share/agentathens/image-info
 
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=Europe/Athens \
@@ -24,9 +51,15 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # Tools the pipeline scripts call: jq + sqlite3 (daily-automated.sh, deploy
 # gate), gh (git push credential helper, yield canary), unzip (bun), tzdata.
 # The nodesource list is dropped: Node comes pinned with the base image.
+# `apt-get upgrade` gives the Ubuntu system libraries (the ones Chromium links
+# to) their security fixes on every rebuild; the weekly image-refresh rebuilds
+# without cache, so this layer is redone. Chromium itself is not an apt
+# package: only a newer base digest updates it.
 RUN rm -f /etc/apt/sources.list.d/nodesource* \
  && apt-get update \
+ && apt-get -y -o Dpkg::Options::=--force-confold upgrade --no-install-recommends \
  && apt-get install -y --no-install-recommends jq sqlite3 gh unzip tzdata \
+ && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
 # Pinned CLIs: bun (runtime), netlify (deploy), claude (auto-enrich `claude -p`).

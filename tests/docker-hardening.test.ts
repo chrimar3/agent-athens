@@ -79,6 +79,17 @@ describe('docker/Dockerfile', () => {
   test('base image pinned by digest', () => {
     expect(dockerfile).toMatch(/ARG BASE_IMAGE=\S+@sha256:[0-9a-f]{64}/);
   });
+  test('system packages are upgraded on every build; the base date and Chromium version are recorded', () => {
+    expect(dockerfile).toMatch(/apt-get update \\\n && apt-get -y [^\n]*upgrade --no-install-recommends/);
+    expect(dockerfile).toContain('rm -rf /var/lib/apt/lists/*');
+    expect(dockerfile).toMatch(/LABEL org\.agentathens\.base-image="\$\{BASE_IMAGE\}"[\s\S]{0,80}org\.agentathens\.base-created=/);
+    // Recorded before the upgrade touches the dpkg database it is read from.
+    const info = dockerfile.indexOf('> /usr/local/share/agentathens/image-info');
+    expect(info).toBeGreaterThan(0);
+    expect(info).toBeLessThan(dockerfile.indexOf('apt-get update'));
+    expect(dockerfile).toMatch(/base_created=%s\\nchromium_version=%s/);
+    expect(dockerfile).toContain('/ms-playwright/chromium-*/chrome-linux*/chrome');
+  });
   test('final user is not root', () => {
     const users = [...dockerfile.matchAll(/^USER\s+(\S+)/gm)].map((m) => m[1]);
     expect(users.at(-1)).toBeDefined();
@@ -181,12 +192,24 @@ describe('docker/aa-run.sh least privilege', () => {
     expect(wrapper).toContain('DEPLOYS_LOG="$STATE_DIR/deploys.log"');
     expect(wrapper).toContain("'^PUBLISH-RESULT deploy_id=[0-9a-f]{20,40} dist_hash=[0-9a-f]{64} state=ready$'");
     expect(wrapper).toMatch(/verify-live\)\s+TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no/);
-    expect(wrapper).toMatch(/check_live[\s\S]*is not one the pipeline recorded[\s\S]*exit 8/);
+    // check_live hands the strict LIVE lines to docker/check-live.sh (tested in
+    // tests/docker-verify-live.test.ts) and alerts + exits 8 on any finding.
+    expect(wrapper).toMatch(/check_live\(\) \{[\s\S]{0,200}check-live\.sh" "\$1" "\$DEPLOYS_LOG" "\$STATE_DIR\/live-baseline"[\s\S]{0,400}integrity-check\.sh" notify[\s\S]{0,120}exit 8/);
+    expect(read('docker/check-live.sh')).toContain('is not one the pipeline recorded');
   });
 
   test('stale images are refused except for checks and restores', () => {
     expect(wrapper).toContain('case "$JOB" in doctor|shell|verify-live|restore) stale_ok=yes');
-    expect(wrapper).toMatch(/-gt 30 \] && \[ "\$stale_ok" = "no" \][\s\S]{0,300}\s7\n/);
+    // Both clocks are checked only for the runs that load outside content.
+    const block = wrapper.slice(wrapper.indexOf('stale_ok=yes'), wrapper.indexOf('caffeinate'));
+    expect(block).toMatch(/if \[ "\$stale_ok" = "no" \] && \[ -z "\$\{AA_ALLOW_STALE_IMAGE:-\}" \]; then/);
+    // The local build: 30 days, image-refresh fixes it.
+    expect(block).toMatch(/"\$\{age_days:-999\}" -gt 30 \][\s\S]{0,300}image-refresh[\s\S]{0,120}\s7\n/);
+    // The Playwright base (Chromium): 60 days by default, measured from the
+    // base's own date, so a rebuild does not reset it; unknown counts as old.
+    expect(block).toContain('max_base_days="${AA_MAX_BASE_AGE_DAYS:-60}"');
+    expect(block).toContain('bash "$HERE/image-age.sh" agent-athens-pipeline:local');
+    expect(block).toMatch(/"\$\{base_days:-999\}" -gt "\$max_base_days" \][\s\S]{0,500}Dependabot[\s\S]{0,200}docker\/aa-run\.sh image'[\s\S]{0,200}\s7\n/);
   });
 
   test('backups wait for other runs, are checksummed and pruned in tiers', () => {
