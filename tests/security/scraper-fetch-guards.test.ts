@@ -10,6 +10,7 @@
  */
 import { afterAll, afterEach, beforeEach, describe, expect, mock, test } from 'bun:test';
 import { readdirSync, readFileSync } from 'fs';
+import vm from 'node:vm';
 import { join } from 'path';
 
 const PUBLIC_IP = '93.184.216.34';
@@ -32,6 +33,7 @@ mock.module('node:dns/promises', () => ({
 
 const {
   quickBlockReason, sameOriginUrl, isRefusedTarget, guardPageRequests, safeCurlTextFollow, OutboundUrlError, assertPublicUrl,
+  createHostChecker, BROWSER_KILL_SWITCH_SCRIPT,
 } = await import('../../src/utils/outbound-url');
 const { fetchWithRetryAthinorama, fetchWithHttp1Fallback, fetchWithCurl } = await import('../../scripts/scrape-all');
 
@@ -93,6 +95,7 @@ describe('quickBlockReason: cheap per-request check', () => {
     'file:///etc/passwd', 'ftp://example.com/', 'chrome://settings', 'http://127.0.0.1:3000/', 'http://[::1]/',
     'http://169.254.169.254/latest/meta-data/', 'http://192.168.1.1/', 'http://0x7f.1/', 'http://localhost:8080/',
     'http://printer.local/', 'http://router/', 'http://nas.home.arpa/', 'https://user:pw@example.com/',
+    'ws://127.0.0.1:9222/devtools/browser', 'wss://www.snfcc.org/socket',
   ])('%s is refused', url => expect(quickBlockReason(url)).not.toBeNull());
   test.each([
     'https://www.snfcc.org/ekdiloseis/', 'http://93.184.216.34/', 'data:image/png;base64,AAAA', 'blob:https://www.snfcc.org/x', 'about:blank',
@@ -100,13 +103,24 @@ describe('quickBlockReason: cheap per-request check', () => {
 });
 
 describe('guardPageRequests: puppeteer request interception', () => {
+  type Sent = { session: string; method: string; params?: Record<string, unknown> };
   function fakePage() {
     let handler: ((r: any) => void) | null = null;
     const outcomes: Record<string, string> = {};
+    const sent: Sent[] = [];
+    const newDocScripts: string[] = [];
+    const listeners: Record<string, Record<string, (ev: any) => void>> = {};
+    const session = (id: string): any => ({
+      async send(method: string, params?: Record<string, unknown>) { sent.push({ session: id, method, params }); return {}; },
+      on(event: string, h: (ev: any) => void) { (listeners[id] ??= {})[event] = h; },
+      connection: () => ({ session: (sid: string) => session(sid) }),
+    });
     const page = {
       interception: false,
       async setRequestInterception(v: boolean) { this.interception = v; },
       on(_e: 'request', h: (r: any) => void) { handler = h; },
+      async evaluateOnNewDocument(src: string) { newDocScripts.push(src); },
+      async createCDPSession() { return session('page'); },
     };
     const request = (url: string, navigation: boolean) => new Promise<string>(resolve => {
       handler!({
@@ -116,14 +130,19 @@ describe('guardPageRequests: puppeteer request interception', () => {
         continue: async () => { outcomes[url] = 'continue'; resolve('continue'); },
       });
     });
-    return { page, request };
+    /** Chrome reporting a new worker / iframe held before its first script. */
+    const attach = async (parent: string, sessionId: string, type: string) => {
+      listeners[parent]['Target.attachedToTarget']({ sessionId, targetInfo: { type, url: 'blob:https://x/1' }, waitingForDebugger: true });
+      await new Promise(r => setTimeout(r, 10));
+    };
+    return { page, request, sent, newDocScripts, attach };
   }
 
   test('turns interception on and refuses local, private and non-http targets', async () => {
     const { page, request } = fakePage();
     await guardPageRequests(page, { log: () => {} });
     expect(page.interception).toBe(true);
-    for (const url of ['file:///etc/passwd', 'http://127.0.0.1:3000/', 'http://169.254.169.254/', 'http://localhost/', 'http://router/']) {
+    for (const url of ['file:///etc/passwd', 'http://127.0.0.1:3000/', 'http://169.254.169.254/', 'http://localhost/', 'http://router/', 'ws://127.0.0.1:9222/devtools', 'wss://www.snfcc.org/socket']) {
       expect(await request(url, false)).toBe('abort:blockedbyclient');
       expect(await request(url, true)).toBe('abort:blockedbyclient');
     }
@@ -135,14 +154,113 @@ describe('guardPageRequests: puppeteer request interception', () => {
     expect(await request('https://rebind.example.com/next/', true)).toBe('abort:blockedbyclient');
   });
 
-  test('public navigations and subresources continue; subresources are not resolved', async () => {
+  test('a subresource whose host resolves to a private address is refused', async () => {
+    DNS['cdn-private.example.com'] = ['192.168.1.10'];
+    DNS['cdn-ula.example.com'] = ['fd00::5'];
+    DNS['cdn-cgnat.example.com'] = ['100.64.0.9'];
+    DNS['cdn-mixed.example.com'] = [PUBLIC_IP, '127.0.0.1'];
+    const { page, request } = fakePage();
+    await guardPageRequests(page, { log: () => {} });
+    for (const url of ['https://rebind.example.com/app.js', 'https://cdn-private.example.com/x.png', 'https://cdn-ula.example.com/api', 'http://cdn-cgnat.example.com/', 'https://cdn-mixed.example.com/x.css']) {
+      expect(await request(url, false)).toBe('abort:blockedbyclient');
+    }
+  });
+
+  test('a subresource whose host cannot be resolved is refused (fail closed)', async () => {
+    const { page, request } = fakePage();
+    await guardPageRequests(page, { log: () => {} });
+    expect(await request('https://cdn.unlisted.example/app.js', false)).toBe('abort:blockedbyclient');
+  });
+
+  test('a lookup that hangs is refused after the time limit', async () => {
+    const { page, request } = fakePage();
+    const logs: string[] = [];
+    await guardPageRequests(page, { log: m => logs.push(m), hostTimeoutMs: 50, resolver: () => new Promise(() => {}) });
+    const started = Date.now();
+    expect(await request('https://slow.example.com/x.js', false)).toBe('abort:blockedbyclient');
+    expect(Date.now() - started).toBeLessThan(2000);
+    expect(logs.join('\n')).toContain('timed out');
+  });
+
+  test('public navigations and subresources continue; each host is resolved once per page', async () => {
     const { page, request } = fakePage();
     await guardPageRequests(page, { log: () => {} });
     expect(await request('https://www.snfcc.org/ekdiloseis/page/2/', true)).toBe('continue');
+    expect(await request('https://www.snfcc.org/wp-content/app.js', false)).toBe('continue');
+    expect(await request('https://www.snfcc.org/wp-content/logo.png', false)).toBe('continue');
+    expect(dnsCalls).toEqual(['www.snfcc.org']);
     dnsCalls = [];
-    expect(await request('https://cdn.unlisted.example/app.js', false)).toBe('continue');
     expect(await request('data:image/png;base64,AAAA', false)).toBe('continue');
     expect(dnsCalls).toEqual([]);
+    // A second page has its own cache.
+    const other = fakePage();
+    await guardPageRequests(other.page, { log: () => {} });
+    expect(await other.request('https://www.snfcc.org/x.js', false)).toBe('continue');
+    expect(dnsCalls).toEqual(['www.snfcc.org']);
+  });
+
+  test('WebSockets are switched off in every frame, and in every worker before it starts', async () => {
+    const { page, sent, newDocScripts, attach } = fakePage();
+    await guardPageRequests(page, { log: () => {} });
+    expect(newDocScripts).toEqual([BROWSER_KILL_SWITCH_SCRIPT]);
+    expect(sent).toContainEqual({ session: 'page', method: 'Target.setAutoAttach', params: { autoAttach: true, waitForDebuggerOnStart: true, flatten: true } });
+
+    await attach('page', 'w1', 'worker');
+    const w1 = sent.filter(s => s.session === 'w1').map(s => s.method);
+    expect(w1).toEqual(['Target.setAutoAttach', 'Runtime.evaluate', 'Runtime.runIfWaitingForDebugger']);
+    expect(sent.find(s => s.session === 'w1' && s.method === 'Runtime.evaluate')!.params).toEqual({ expression: BROWSER_KILL_SWITCH_SCRIPT });
+
+    // A worker started by that worker is held and switched off the same way.
+    await attach('w1', 'w2', 'worker');
+    expect(sent.filter(s => s.session === 'w2').map(s => s.method)).toEqual(['Target.setAutoAttach', 'Runtime.evaluate', 'Runtime.runIfWaitingForDebugger']);
+
+    // An out-of-process iframe gets the script for every document it loads.
+    await attach('page', 'f1', 'iframe');
+    expect(sent.filter(s => s.session === 'f1').map(s => s.method)).toEqual(['Target.setAutoAttach', 'Page.addScriptToEvaluateOnNewDocument', 'Runtime.runIfWaitingForDebugger']);
+    expect(sent.find(s => s.session === 'f1' && s.method === 'Page.addScriptToEvaluateOnNewDocument')!.params).toEqual({ source: BROWSER_KILL_SWITCH_SCRIPT, runImmediately: true });
+  });
+
+  test('the kill switch removes WebSocket, WebTransport, WebRTC, shared workers and window.open for good', async () => {
+    const ctx: Record<string, any> = {
+      WebSocket: class {}, WebSocketStream: class {}, WebTransport: class {}, SharedWorker: class {},
+      RTCPeerConnection: class {}, webkitRTCPeerConnection: class {}, RTCDataChannel: class {},
+      open: () => 'popup', DOMException: class extends Error { constructor(m: string, public name: string) { super(m); } },
+      ServiceWorkerContainer: class { register() { return 'registered'; } },
+    };
+    vm.runInNewContext(BROWSER_KILL_SWITCH_SCRIPT, vm.createContext(ctx));
+    for (const k of ['WebSocket', 'WebSocketStream', 'WebTransport', 'SharedWorker', 'RTCPeerConnection', 'webkitRTCPeerConnection', 'RTCDataChannel']) {
+      expect({ k, v: vm.runInContext(`typeof ${k}`, ctx) }).toEqual({ k, v: 'undefined' });
+      // A page script cannot put it back.
+      vm.runInContext(`try { globalThis.${k} = function () {}; } catch (e) {} try { Object.defineProperty(globalThis, '${k}', { value: function () {} }); } catch (e) {}`, ctx);
+      expect({ k, v: vm.runInContext(`typeof ${k}`, ctx) }).toEqual({ k, v: 'undefined' });
+    }
+    expect(vm.runInContext(`open('http://192.168.1.1/')`, ctx)).toBeNull();
+    expect(await vm.runInContext(`new ServiceWorkerContainer().register('/sw.js').then(() => 'registered', e => e.name)`, ctx)).toBe('SecurityError');
+  });
+
+  test('in a worker (no window) the WebSocket constructor is removed too', () => {
+    const ctx: Record<string, any> = { WebSocket: class {} };
+    vm.runInNewContext(BROWSER_KILL_SWITCH_SCRIPT, vm.createContext(ctx));
+    expect(vm.runInContext('typeof WebSocket', ctx)).toBe('undefined');
+  });
+});
+
+describe('createHostChecker', () => {
+  test('caches a verdict per host for its lifetime, then asks again', async () => {
+    let t = 0;
+    const calls: string[] = [];
+    const check = createHostChecker({ resolver: async h => { calls.push(h); return [PUBLIC_IP]; }, ttlMs: 1000, now: () => t });
+    expect(await check('https://a.example.com/1')).toBeNull();
+    expect(await check('https://A.example.com:8443/2')).toBeNull();
+    expect(calls).toEqual(['a.example.com']);
+    t = 1500;
+    expect(await check('https://a.example.com/3')).toBeNull();
+    expect(calls).toEqual(['a.example.com', 'a.example.com']);
+  });
+
+  test('an empty answer and a resolver error are refusals', async () => {
+    expect(await createHostChecker({ resolver: async () => [] })('https://none.example.com/')).toMatch(/no addresses/);
+    expect(await createHostChecker({ resolver: async () => { throw new Error('SERVFAIL'); } })('https://err.example.com/')).toMatch(/could not resolve/);
   });
 });
 

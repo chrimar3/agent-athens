@@ -10,7 +10,10 @@
  *   - the GA bootstrap ran and the gtag loader was not blocked;
  *   - search, save, the saved page and share still work;
  *   - a probe page proves the policy is enforced (an unlisted inline script
- *     and an inline handler are blocked), so "no violations" is not vacuous.
+ *     and an inline handler are blocked), so "no violations" is not vacuous;
+ *   - a second probe loads another container from the GA host (gtm.js), which
+ *     the exact-path script-src must block, and gtag's own /gtag/destination
+ *     script, which it must allow.
  *
  * Run: AA_BROWSER_TESTS=1 CHROME_PATH=/path/to/chrome bun test tests/browser/csp-enforced.test.ts
  */
@@ -47,12 +50,14 @@ describe.skipIf(process.env.AA_BROWSER_TESTS !== '1')('enforced script CSP in Ch
     const headers = parseHeaders(readFileSync(join(site.dist, '_headers'), 'utf-8'));
     csp = headers['Content-Security-Policy'];
     const probe = '<!doctype html><html><head><script>window.__probeInline = true;</script></head><body><img src="/missing.png" onerror="window.__probeHandler = true"><a id="js" href="javascript:window.__probeHref = true">x</a></body></html>';
+    const gtmProbe = '<!doctype html><html><head><script src="https://www.googletagmanager.com/gtm.js?id=GTM-EVIL"></script><script src="https://www.googletagmanager.com/gtag/destination?id=AW-1&l=dataLayer&cx=c"></script></head><body></body></html>';
     server = Bun.serve({
       hostname: '127.0.0.1',
       port: 0,
       fetch(req) {
         const path = decodeURIComponent(new URL(req.url).pathname);
         if (path === '/__csp-probe.html') return new Response(probe, { headers: { ...headers, 'Content-Type': 'text/html' } });
+        if (path === '/__csp-gtm-probe.html') return new Response(gtmProbe, { headers: { ...headers, 'Content-Type': 'text/html' } });
         let file = normalize(join(site.dist, path));
         if (!file.startsWith(site.dist)) return new Response('no', { status: 403 });
         if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
@@ -86,7 +91,7 @@ describe.skipIf(process.env.AA_BROWSER_TESTS !== '1')('enforced script CSP in Ch
       const url = new URL(req.url());
       if (url.origin === server.url.origin) return req.continue();
       // The GA loader host is allowed by script-src; answer with a stub so no traffic leaves the sandbox.
-      if (url.hostname === 'www.googletagmanager.com') return req.respond({ status: 200, contentType: 'text/javascript', body: 'window.__gtagLoaded = true;' });
+      if (url.hostname === 'www.googletagmanager.com') return req.respond({ status: 200, contentType: 'text/javascript', body: `window.__gtagLoaded = true; (window.__gtmPaths = window.__gtmPaths || []).push(${JSON.stringify(url.pathname)});` });
       return req.abort('failed'); // hotlinked images and fonts fail, exercising the image fallback
     });
     page.on('console', msg => { if (/Content Security Policy/i.test(msg.text())) entry.violations.push(`console: ${msg.text().slice(0, 200)}`); });
@@ -118,6 +123,15 @@ describe.skipIf(process.env.AA_BROWSER_TESTS !== '1')('enforced script CSP in Ch
     expect(ran).toEqual([false, false, false]);
     const v = await violations(page);
     expect(v.filter(x => /script-src/.test(x)).length).toBeGreaterThanOrEqual(2);
+    await page.close();
+  });
+
+  test('the GA host is allowed by exact path only: another container (gtm.js) is blocked, /gtag/destination runs', async () => {
+    const page = await open('/__csp-gtm-probe.html');
+    const ran = await page.evaluate(() => (globalThis as any).__gtmPaths ?? []);
+    expect(ran).toEqual(['/gtag/destination']);
+    const v = await violations(page);
+    expect(v.some(x => /script-src/.test(x) && /gtm\.js/.test(x))).toBe(true);
     await page.close();
   });
 

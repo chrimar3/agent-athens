@@ -26,7 +26,19 @@
 #      an existing object's bytes, and a later `git stash` or checkout on the
 #      Mac would write the planted content into a tracked script.) Objects are
 #      immutable and the container never gcs or repacks (aa-run.sh passes
-#      gc.auto=0), so a vanished or repacked file is itself an alarm.
+#      gc.auto=0), so a vanished or repacked file is itself an alarm;
+#   6. no instruction file for AI agents (CLAUDE.md, AGENTS.md, .cursorrules,
+#      a .claude/ folder … any letter case) appeared anywhere in the folders
+#      runs may write (existing ones only get a warning at snapshot time);
+#   7. git's operation state did not change: no stash reflog entry, no
+#      ORIG_HEAD/FETCH_HEAD/MERGE_HEAD/…/AUTO_MERGE, no rebase or sequencer
+#      folder (a later `git stash pop`, `git reset --hard ORIG_HEAD` or
+#      `git rebase --continue` on the Mac would apply what they point to);
+#      every other reflog only grew, by entries for commits the run was
+#      allowed to make; remote-tracking refs moved only where the publish
+#      run's push moves them (origin/main, origin/pipeline-data, to the local
+#      branch tip); and no tracked file outside the data paths changed in the
+#      working tree.
 #
 #   docker/integrity-check.sh snapshot STATE_FILE
 #   docker/integrity-check.sh verify   STATE_FILE JOB
@@ -48,6 +60,11 @@ unset GIT_DIR GIT_WORK_TREE GIT_COMMON_DIR GIT_INDEX_FILE GIT_OBJECT_DIRECTORY \
 DATA_PATHS_RE='^(data/|docs/DECISIONS-QUEUE\.md$)'
 # Root-level entries the pipeline itself creates.
 ROOT_RUNTIME_RE='^(\.pipeline-[a-z-]+\.lock|\.pipeline-publish-ready|\.auto-enrich\.lock\.d|temp|tmp|temp-[a-z-]+|dist|logs|node_modules|\.netlify|\.cache)$'
+
+# The folders runs may write (aa-run.sh RW_TOP). node_modules is left out:
+# compose.yaml mounts an anonymous volume over it, so no container ever
+# writes the Mac's copy.
+RW_DIRS="data dist logs temp tmp temp-descriptions temp-briefs temp-research"
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="${AA_INTEGRITY_REPO:-$(cd "$HERE/.." && pwd)}"  # override for tests only
@@ -83,20 +100,48 @@ notify() {  # $1 message. Passed as data, never interpolated into a script.
         *) curl -fsS -m 15 -H "Title: Agent Athens integrity check failed" -H "Priority: high" \
                --data-binary "$1" "https://ntfy.sh/$topic" >/dev/null 2>&1 || true ;;
     esac
+    # Email (scripts/security-alert.ts, where the pipeline has it). Best
+    # effort: bounded by AA_ALERT_TIMEOUT_SEC, and its failure never fails
+    # the notification. The message is one argv element, never code.
+    if [ -f "$REPO/scripts/security-alert.ts" ] && command -v bun >/dev/null 2>&1; then
+        send_email_alert "$1" || true
+    fi
 }
 
-quarantine() {  # $1 reason, $2 pre-run HEAD ("" = do not run git), $3 new root entries
+send_email_alert() {  # $1 message
+    local limit="${AA_ALERT_TIMEOUT_SEC:-60}" pid watcher
+    case "$limit" in ''|*[!0-9]*) limit=60 ;; esac
+    (cd "$REPO" && exec bun run "$REPO/scripts/security-alert.ts" -- "$1") </dev/null >/dev/null 2>&1 &
+    pid=$!
+    # No GNU timeout on macOS: a watcher stops the sender once the limit passes.
+    (n=0
+     while [ "$n" -lt "$limit" ] && kill -0 "$pid" 2>/dev/null; do sleep 1; n=$((n + 1)); done
+     kill "$pid" 2>/dev/null) </dev/null >/dev/null 2>&1 &
+    watcher=$!
+    wait "$pid" 2>/dev/null
+    kill "$watcher" 2>/dev/null
+    return 0
+}
+
+quarantine() {  # $1 reason, $2 pre-run HEAD ("" = do not run git), $3 planted paths (relative, one per line) to move out
     ts="$(date +%Y%m%d-%H%M%S)"
     qdir="$STATE_DIR/quarantine/$ts"
     mkdir -p "$qdir"
     printf '%s\njob=%s\npre_head=%s\n' "$1" "$JOB" "${2:-not-run}" > "$qdir/REASON"
     if [ -n "${3:-}" ]; then
         mkdir -p "$qdir/planted"
-        echo "$3" | while read -r f; do [ -n "$f" ] && mv "$REPO/$f" "$qdir/planted/" 2>/dev/null; done
+        # Moved with their path (data/x/CLAUDE.md -> planted/data/x/CLAUDE.md);
+        # a path inside an already-moved folder is skipped; nothing outside
+        # the repo is ever touched.
+        printf '%s\n' "$3" | while IFS= read -r f; do
+            case "$f" in ''|/*|..|../*|*/..|*/../*) continue ;; esac
+            [ -e "$REPO/$f" ] || [ -L "$REPO/$f" ] || continue
+            mkdir -p "$qdir/planted/$(dirname "$f")" && mv "$REPO/$f" "$qdir/planted/$f" 2>/dev/null
+        done
     fi
     if [ -n "${2:-}" ]; then
         (cd "$REPO" || exit
-         git log --stat "$2..HEAD" > "$qdir/new-commits.txt" 2>&1
+         git log --no-ext-diff --no-textconv --stat "$2..HEAD" > "$qdir/new-commits.txt" 2>&1
          if [ "$(git rev-parse HEAD)" != "$2" ]; then
              git branch "quarantine/$ts" HEAD >/dev/null 2>&1
              git reset --mixed -q "$2" >/dev/null 2>&1
@@ -113,11 +158,12 @@ quarantine() {  # $1 reason, $2 pre-run HEAD ("" = do not run git), $3 new root 
 # What is staged for the owner's next commit (the pipeline itself commits
 # through a temporary index, so this must not change during a run).
 staged_hash() {
-    (cd "$REPO" && git diff --cached --binary 2>/dev/null) | shasum -a 256 | awk '{print $1}'
+    (cd "$REPO" && git diff --no-ext-diff --no-textconv --cached --binary 2>/dev/null) | shasum -a 256 | awk '{print $1}'
 }
 
 # Every ref except the checked-out branch (covered by the commit check),
-# pipeline-data (covered below), remote-tracking refs and quarantine branches:
+# pipeline-data (covered below), remote-tracking refs (check_remote_refs) and
+# quarantine branches:
 # local branches, tags, the stash, notes and replace refs (refs/replace can
 # swap the content git shows for any object) must not move during a run.
 other_refs_hash() {
@@ -135,6 +181,196 @@ find_rw_symlinks() {
     for d in data dist logs temp tmp temp-descriptions temp-briefs temp-research; do
         [ -d "$REPO/$d" ] && find "$REPO/$d" -type l 2>/dev/null
     done
+}
+
+# ---- 6. Instruction files for AI agents -----------------------------------
+# Agent sessions (Claude Code, Codex, Gemini, Cursor, Windsurf, Copilot, VS
+# Code) load these as instructions from the folders they work in. -iname:
+# the Mac's disk is case-insensitive, so claude.md is CLAUDE.md.
+find_instruction_files() {  # sorted relative paths
+    local d
+    (cd "$REPO" || exit 0
+     for d in $RW_DIRS; do
+         [ -d "$d" ] || continue
+         find "$d" \( -iname CLAUDE.md -o -iname CLAUDE.local.md -o -iname AGENTS.md -o -iname GEMINI.md \
+             -o -iname .cursorrules -o -iname .windsurfrules -o -iname copilot-instructions.md -o -iname '*.mdc' \
+             -o -iname .claude -o -iname .cursor -o -iname .github -o -iname .vscode \) -print 2>/dev/null
+     done) | LC_ALL=C sort
+}
+# The same names inside a committed path (a commit can add data/CLAUDE.md
+# without it ever being in the working tree). For grep -iE.
+INSTRUCTION_PATH_RE='(^|/)(claude\.md|claude\.local\.md|agents\.md|gemini\.md|\.cursorrules|\.windsurfrules|copilot-instructions\.md|\.claude|\.cursor|\.github|\.vscode)(/|$)|\.mdc$'
+
+# ---- 7. Git operation state, reflogs, remote-tracking refs, working tree --
+# Files that make a later git command on the Mac apply or restore a commit
+# they name (`git stash pop`, `git reset --hard ORIG_HEAD`, `git merge
+# FETCH_HEAD`, `git rebase --continue`, `git cherry-pick --continue` …). No
+# pipeline run writes any of them except ORIG_HEAD (the staging guard's
+# `git reset HEAD --`), which may then only name the pre-run or the verified
+# post-run HEAD.
+GIT_STATE_ITEMS="logs/refs/stash ORIG_HEAD FETCH_HEAD MERGE_HEAD MERGE_MSG MERGE_MODE MERGE_RR CHERRY_PICK_HEAD REVERT_HEAD REBASE_HEAD AUTO_MERGE BISECT_LOG rebase-merge rebase-apply sequencer"
+tree_hash() {  # $1 dir: path + content of every file and link under it
+    (cd "$1" && find . \( -type f -o -type l \) | LC_ALL=C sort | while IFS= read -r f; do
+         printf '== %s\n' "$f"
+         if [ -L "$f" ]; then readlink "$f"; else cat "$f"; fi
+     done) | shasum -a 256 | awk '{print $1}'
+}
+git_state_lines() {  # gitstate=<item> <fingerprint> for each item ("-" = absent)
+    local item p h
+    for item in $GIT_STATE_ITEMS; do
+        p="$REPO/.git/$item"
+        if [ -L "$p" ]; then h="link:$(readlink "$p")"
+        elif [ -d "$p" ]; then h="dir:$(tree_hash "$p")"
+        elif [ -e "$p" ]; then h="file:$(shasum -a 256 < "$p" | awk '{print $1}')"
+        else h="-"; fi
+        printf 'gitstate=%s %s\n' "$item" "$h"
+    done
+}
+changed_git_state() {  # $1 state file: the items whose fingerprint changed
+    git_state_lines | LC_ALL=C sort | LC_ALL=C comm -13 <(grep '^gitstate=' "$1" | LC_ALL=C sort) - \
+        | sed 's/^gitstate=//; s/ .*//'
+}
+
+# Reflogs other than the stash's: size + SHA-256 per file, so verify can
+# check that each one only grew.
+reflog_lines() {
+    (cd "$REPO/.git" 2>/dev/null && [ -d logs ] || exit 0
+     find logs -type f ! -path logs/refs/stash | LC_ALL=C sort | while IFS= read -r f; do
+         printf 'reflog=%s %s %s\n' "$(wc -c < "$f" | tr -d ' ')" "$(shasum -a 256 < "$f" | awk '{print $1}')" "$f"
+     done)
+}
+
+# Remote-tracking refs (a symbolic one by its target).
+remote_ref_lines() {
+    (cd "$REPO" && git for-each-ref --format='%(refname) %(objectname) %(symref)' refs/remotes 2>/dev/null) \
+        | awk '{ if ($3 != "") print "remote=" $1 " ->" $3; else print "remote=" $1 " " $2 }' | LC_ALL=C sort
+}
+
+# Tracked files outside the data paths whose bytes on disk differ from the
+# index, each with a hash of those bytes. `git diff-files` (plumbing: no
+# external diff, no textconv, no index write) lists candidates; a candidate
+# whose raw bytes (`hash-object --no-filters`: no filter runs) still match
+# its index blob is left out. The data paths are excluded by pathspec, so no
+# attribute a run could plant under data/ applies to anything read here.
+tracked_changes() {
+    local f idx cur h
+    (cd "$REPO" && git diff-files --name-only -- . ':(exclude)data' ':(exclude,literal)docs/DECISIONS-QUEUE.md' 2>/dev/null) \
+        | LC_ALL=C sort -u | while IFS= read -r f; do
+        [ -n "$f" ] || continue
+        idx="$(cd "$REPO" && git ls-files -s -- ":(literal)$f" 2>/dev/null | awk 'NR == 1 {print $2}')"
+        if [ -L "$REPO/$f" ]; then h="link:$(readlink "$REPO/$f")"
+        elif [ -f "$REPO/$f" ]; then
+            cur="$(cd "$REPO" && git hash-object --no-filters -- "$f" 2>/dev/null)"
+            [ -n "$idx" ] && [ "$cur" = "$idx" ] && continue
+            h="file:$(shasum -a 256 < "$REPO/$f" | awk '{print $1}')"
+        elif [ -e "$REPO/$f" ]; then h="other"
+        else h="deleted"; fi
+        printf 'tracked=%s %s\n' "$h" "$f"
+    done
+}
+
+check_orig_head() {  # $1 pre-run HEAD. Called once HEAD's new commits are verified.
+    local p="$REPO/.git/ORIG_HEAD" v post
+    post="$(cd "$REPO" && git rev-parse HEAD 2>/dev/null)"
+    if [ -f "$p" ] && [ ! -L "$p" ] && [ "$(wc -l < "$p" | tr -d ' ')" -le 1 ]; then
+        v="$(head -1 "$p")"
+        { [ "$v" = "$1" ] || [ "$v" = "$post" ]; } && return 0
+    fi
+    quarantine ".git/ORIG_HEAD was changed during the run to something other than the pre-run or the new HEAD — do not run 'git reset ORIG_HEAD' or 'git merge ORIG_HEAD'; inspect it with 'git log -1 ORIG_HEAD'" "" ""
+}
+
+# Remote-tracking refs may only move where the publish run's `git push` moves
+# them: refs/remotes/origin/main and refs/remotes/origin/pipeline-data, and
+# only to the local branch's current tip (already verified above). Allowed
+# moves are recorded in $STATE_DIR/remote-ref-moves.log.
+check_remote_refs() {  # $1 state file
+    local pre post moves ref old new branch tip bad=""
+    pre="$(mktemp)"; post="$(mktemp)"
+    sed -n 's/^remote=//p' "$1" > "$pre"
+    remote_ref_lines | sed 's/^remote=//' > "$post"
+    moves="$(awk 'NR == FNR { p[$1] = $2; next } { q[$1] = $2 }
+        END { for (r in p) if (!(r in q)) print r, p[r], "-"
+              for (r in q) if (!(r in p) || p[r] != q[r]) print r, ((r in p) ? p[r] : "-"), q[r] }' "$pre" "$post")"
+    rm -f "$pre" "$post"
+    [ -n "$moves" ] || return 0
+    while read -r ref old new; do
+        [ -n "$ref" ] || continue
+        case "$ref" in
+            refs/remotes/origin/main|refs/remotes/origin/pipeline-data) branch="refs/heads/${ref#refs/remotes/origin/}" ;;
+            *) bad="$bad$ref "; continue ;;
+        esac
+        tip="$(cd "$REPO" && git rev-parse -q --verify "$branch" 2>/dev/null || true)"
+        if [ -n "$tip" ] && [ "$new" = "$tip" ]; then
+            printf '%s job=%s %s %s -> %s (push)\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$JOB" "$ref" "$old" "$new" >> "$STATE_DIR/remote-ref-moves.log"
+            echo "integrity-check: recorded $ref $old -> $new (the publish run's push)"
+        else
+            bad="$bad$ref "
+        fi
+    done <<EOF
+$moves
+EOF
+    [ -z "$bad" ] || quarantine "remote-tracking ref(s) moved, appeared or vanished during the run: $bad— do not merge, rebase onto or check them out; compare with 'git ls-remote origin' and fix with 'git fetch origin'" "" ""
+}
+
+# Every reflog except the stash's may only grow, by entries whose new value
+# is a commit this run was allowed to make (or the pre-run tips); a reflog
+# may only appear for HEAD, the checked-out branch, pipeline-data and the two
+# remote-tracking refs a push moves. A forged entry would otherwise be picked
+# up by `git reset --hard HEAD@{1}`, `git checkout -` or `git reflog`.
+reflog_allowed_oids() {  # $1 pre-run HEAD, $2 pre-run pipeline-data ("" if none)
+    local pd
+    (cd "$REPO" || exit 0
+     printf '%s\n' "$1" "$2" "$(git rev-parse HEAD 2>/dev/null)" \
+         "$(git rev-parse -q --verify refs/heads/main 2>/dev/null)"
+     git rev-list "$1..HEAD" 2>/dev/null
+     pd="$(git rev-parse -q --verify refs/heads/pipeline-data 2>/dev/null || true)"
+     if [ -n "$pd" ]; then
+         printf '%s\n' "$pd"
+         if [ -n "$2" ]; then git rev-list "$2..$pd" 2>/dev/null; fi
+     fi
+     printf '%s\n' 0000000000000000000000000000000000000000 0000000000000000000000000000000000000000000000000000000000000000
+    ) | grep -E '^[0-9a-f]{40}([0-9a-f]{24})?$' | LC_ALL=C sort -u
+}
+
+check_reflogs() {  # $1 state file, $2 pre-run HEAD, $3 pre-run pipeline-data
+    local tmp current f line size pre_size pre_sum bad=""
+    current="$(cd "$REPO" && git symbolic-ref -q HEAD || echo DETACHED)"
+    tmp="$(mktemp -d "${TMPDIR:-/tmp}/aa-reflog.XXXXXX")" || quarantine "could not create a temporary folder to check the reflogs" "" ""
+    reflog_allowed_oids "$2" "$3" > "$tmp/allowed"
+    sed -n 's/^reflog=//p' "$1" > "$tmp/pre"
+    reflog_lines | sed 's/^reflog=//' > "$tmp/post"
+    # A reflog that vanished (nothing in a run deletes one).
+    for f in $(awk '{print $3}' "$tmp/pre" | LC_ALL=C comm -23 - <(awk '{print $3}' "$tmp/post")); do
+        bad="$bad$f(deleted) "
+    done
+    [ -z "$(cd "$REPO/.git" 2>/dev/null && find logs ! -type f ! -type d 2>/dev/null)" ] || bad="${bad}logs/(symlink or special file) "
+    while read -r size _ f; do
+        [ -n "$f" ] || continue
+        line="$(awk -v f="$f" '$3 == f {print $1, $2}' "$tmp/pre")"
+        if [ -n "$line" ]; then
+            pre_size="${line%% *}"; pre_sum="${line#* }"
+            if [ "$size" -lt "$pre_size" ] || [ "$(head -c "$pre_size" "$REPO/.git/$f" | shasum -a 256 | awk '{print $1}')" != "$pre_sum" ]; then
+                bad="$bad$f(rewritten) "; continue
+            fi
+            [ "$size" -gt "$pre_size" ] || continue
+            tail -c +"$((pre_size + 1))" "$REPO/.git/$f" > "$tmp/new"
+        else
+            case "$f" in
+                logs/HEAD|"logs/$current"|logs/refs/heads/pipeline-data|logs/refs/remotes/origin/main|logs/refs/remotes/origin/pipeline-data) ;;
+                *) bad="$bad$f(new) "; continue ;;
+            esac
+            cat "$REPO/.git/$f" > "$tmp/new"
+        fi
+        # An entry: "<old> <new> <name> <email> <time> <tz>\t<message>".
+        awk -v A="$tmp/allowed" -v F="$f" '
+            BEGIN { while ((getline l < A) > 0) ok[l] = 1 }
+            { split($0, parts, "\t"); split(parts[1], w, " ")
+              if (!(w[2] in ok) || w[1] !~ /^[0-9a-f]+$/) exit 1
+              if (F == "logs/HEAD" && parts[2] ~ /^checkout:/) exit 1 }' "$tmp/new" \
+            || bad="$bad$f(entry for a commit the run may not make) "
+    done < "$tmp/post"
+    rm -r "$tmp"
+    [ -z "$bad" ] || quarantine "reflog(s) in .git/logs were forged or rewritten during the run: $bad— do not use HEAD@{n}, 'git checkout -' or 'git reflog' entries from this run; inspect .git/logs by hand" "" ""
 }
 
 # ---- 5. The object store ------------------------------------------------
@@ -325,6 +561,8 @@ check_pipeline_data() {  # $1 pre-run sha of pipeline-data ("" if it did not exi
         fi
         files="$(cd "$REPO" && git diff-tree --no-commit-id --name-only -r --root "$c" | grep -Ev "$DATA_PATHS_RE" || true)"
         [ -z "$files" ] || quarantine_pdata "pipeline-data commit $c changes non-data files: $(echo "$files" | head -5 | tr '\n' ' ')" "$pre"
+        files="$(cd "$REPO" && git diff-tree --no-commit-id --name-only -r --root "$c" | grep -iE "$INSTRUCTION_PATH_RE" || true)"
+        [ -z "$files" ] || quarantine_pdata "pipeline-data commit $c adds or changes instruction files for AI agents: $(echo "$files" | head -5 | tr '\n' ' ')" "$pre"
     done
 }
 
@@ -342,9 +580,20 @@ case "$MODE" in
         mkdir -p "$(dirname "$STATE_FILE")"
         head="$(cd "$REPO" && git rev-parse HEAD)" || { echo "integrity-check: git rev-parse HEAD failed in $REPO" >&2; exit 2; }
         pdata="$(cd "$REPO" && git rev-parse -q --verify refs/heads/pipeline-data 2>/dev/null || true)"
+        instr="$(find_instruction_files)"
+        if [ -n "$instr" ]; then
+            echo "integrity-check: WARNING: instruction files for AI agents already exist in folders runs may write (not flagged; review them): $(printf '%s\n' "$instr" | head -5 | tr '\n' ' ')" >&2
+        fi
         { printf 'head=%s\ngitmeta=%s\npdata=%s\nstaged=%s\nrefs=%s\n' "$head" "$(hash_git_meta)" "$pdata" \
               "$(staged_hash)" "$(other_refs_hash)"
+          # Marks a snapshot that carries the checks 6 and 7 below.
+          echo "checks=7"
           root_entries | sed 's/^/root=/'
+          [ -z "$instr" ] || printf '%s\n' "$instr" | sed 's/^/instr=/'
+          git_state_lines
+          reflog_lines
+          remote_ref_lines
+          tracked_changes
           # Taken before the inventory: anything written from this second on is checked.
           printf 'objstamp=%s\n' "$(date +%s)"
           obj_inventory; } > "$STATE_FILE"
@@ -353,6 +602,16 @@ case "$MODE" in
         [ -f "$STATE_FILE" ] || { echo "integrity-check: no snapshot at $STATE_FILE" >&2; exit 2; }
         pre_head="$(sed -n 's/^head=//p' "$STATE_FILE")"
         pre_meta="$(sed -n 's/^gitmeta=//p' "$STATE_FILE")"
+        pre_pdata="$(sed -n 's/^pdata=//p' "$STATE_FILE")"
+        full=no
+        if grep -qx 'checks=7' "$STATE_FILE"; then full=yes
+        else echo "integrity-check: WARNING: the snapshot was taken by an older integrity-check.sh; the instruction-file, git-state, reflog, remote-ref and working-tree checks are skipped this run" >&2; fi
+        if [ "$full" = yes ]; then
+            # Before any git runs: only reading files.
+            state_changed="$(changed_git_state "$STATE_FILE")"
+            not_orig="$(printf '%s\n' "$state_changed" | grep -vx 'ORIG_HEAD' | grep -v '^$' || true)"
+            [ -z "$not_orig" ] || quarantine "git operation state changed during the run: $(list5 "$not_orig")— a later 'git stash pop', 'git merge FETCH_HEAD', 'git rebase/cherry-pick --continue' or 'git reset ORIG_HEAD' on the Mac would apply what the run planted there (git was not run afterwards; inspect .git by hand)" "" ""
+        fi
         [ "$(hash_git_meta)" = "$pre_meta" ] \
             || quarantine ".git metadata (config, hooks, commondir, info/ …) changed during the run (git was not run afterwards; inspect .git by hand)" "" ""
         check_objects "$STATE_FILE"
@@ -360,11 +619,28 @@ case "$MODE" in
         [ -z "$new_root" ] || quarantine "new file(s) at the repo root: $(echo "$new_root" | tr '\n' ' ')" "$pre_head" "$new_root"
         bad="$(cd "$REPO" && git diff --name-only "$pre_head" HEAD 2>/dev/null | grep -Ev "$DATA_PATHS_RE" || true)"
         [ -z "$bad" ] || quarantine "a commit made during the run changes non-data files: $(echo "$bad" | head -5 | tr '\n' ' ')" "$pre_head" ""
-        check_pipeline_data "$(sed -n 's/^pdata=//p' "$STATE_FILE")"
+        # Per commit: one commit can add data/CLAUDE.md and the next remove it.
+        bad="$(cd "$REPO" && for c in $(git rev-list "$pre_head..HEAD" 2>/dev/null); do
+                   git diff-tree --no-commit-id --name-only -r --root -m "$c"; done | grep -iE "$INSTRUCTION_PATH_RE" | LC_ALL=C sort -u || true)"
+        [ -z "$bad" ] || quarantine "a commit made during the run adds or changes instruction files for AI agents: $(list5 "$bad")" "$pre_head" ""
+        check_pipeline_data "$pre_pdata"
+        if [ "$full" = yes ]; then
+            new_instr="$(find_instruction_files | LC_ALL=C comm -13 <(sed -n 's/^instr=//p' "$STATE_FILE" | LC_ALL=C sort) -)"
+            [ -z "$new_instr" ] || quarantine "instruction file(s) for AI agents appeared in folders runs may write (moved to the evidence folder): $(list5 "$new_instr")" "" "$new_instr"
+            case "$state_changed" in *ORIG_HEAD*) check_orig_head "$pre_head" ;; esac
+        fi
         [ "$(staged_hash)" = "$(sed -n 's/^staged=//p' "$STATE_FILE")" ] \
             || quarantine "changes were staged for your next commit during the run (inspect 'git diff --cached')" "" ""
+        if [ "$full" = yes ]; then
+            changed_tracked="$(tracked_changes | LC_ALL=C sort | LC_ALL=C comm -13 <(grep '^tracked=' "$STATE_FILE" | LC_ALL=C sort) - | sed 's/^tracked=[^ ]* //')"
+            [ -z "$changed_tracked" ] || quarantine "tracked file(s) outside the data folders were changed in the working tree during the run: $(list5 "$changed_tracked")— inspect 'git diff' before running or committing anything" "" ""
+        fi
         [ "$(other_refs_hash)" = "$(sed -n 's/^refs=//p' "$STATE_FILE")" ] \
             || quarantine "a branch, tag, the stash, a note or a replace ref moved during the run (compare 'git for-each-ref')" "" ""
+        if [ "$full" = yes ]; then
+            check_remote_refs "$STATE_FILE"
+            check_reflogs "$STATE_FILE" "$pre_head" "$pre_pdata"
+        fi
         links="$(find_rw_symlinks)"
         [ -z "$links" ] || quarantine "symlink(s) appeared in folders runs may write: $(echo "$links" | head -5 | tr '\n' ' ')" "" ""
         rm -f "$STATE_FILE"
