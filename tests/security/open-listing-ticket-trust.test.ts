@@ -1,6 +1,7 @@
 /**
  * Anti-phishing: on sources where anyone can list an event (Resident Advisor,
- * cometogether.live, Eventbrite/Meetup/Luma), a ticket link is published only
+ * cometogether.live, Eventbrite/Meetup/Luma) — and since round 8 on every
+ * other source too (ticket-trust-all-sources.test.ts) — a ticket link is published only
  * when its host is a known ticketing platform (getTicketHosts + the
  * classifier's known_merchants) or the source's own domain. Otherwise the
  * ticket link is dropped from the CTA, the JSON-LD Offer and the JSON files,
@@ -49,9 +50,12 @@ describe('isTrustedTicketUrl', () => {
     expect(isTrustedTicketUrl('https://cometogether.live/el/buytickets/1', 'cometogether')).toBe(true);
     expect(isTrustedTicketUrl('https://cometogether.live/el/buytickets/1', 'residentadvisor')).toBe(false);
   });
-  test('sources where only the operator lists events are unaffected', () => {
-    expect(isTrustedTicketUrl('https://tickets.venue.example/x', 'more.com')).toBe(true);
-    expect(isTrustedTicketUrl('https://tickets.venue.example/x', 'athinorama.gr')).toBe(true);
+  // Round 8: the rule now covers every source (tests/security/ticket-trust-all-sources.test.ts);
+  // an unregistered third-party host is refused on operator-listed sources too.
+  test('operator-listed sources: a host off the platforms, the source domain and the venue registry is refused', () => {
+    expect(isTrustedTicketUrl('https://tickets.venue.example/x', 'more.com')).toBe(false);
+    expect(isTrustedTicketUrl('https://tickets.venue.example/x', 'athinorama.gr')).toBe(false);
+    expect(isTrustedTicketUrl('https://www.athinorama.gr/theatre/x', 'athinorama.gr')).toBe(true);
   });
 });
 
@@ -74,9 +78,11 @@ describe('CTA (event page button + practical block)', () => {
     const cta = resolveCtaForEvent(listed({ ticketUrl: 'https://www.viva.gr/tickets/music/x/', ticketUrlStatus: 'direct' }), t);
     expect(cta).toMatchObject({ kind: 'tickets', href: 'https://www.viva.gr/tickets/music/x/', label: t.buyTicketsArrow });
   });
-  test('an operator-listed source keeps its venue ticket link', () => {
-    const cta = resolveCtaForEvent(listed({ source: 'more.com', ticketUrl: 'https://tickets.venue.example/x', ticketUrlStatus: 'direct' }), t);
-    expect(cta.href).toBe('https://tickets.venue.example/x');
+  // Round 8: an unregistered venue host is no longer published for operator-listed
+  // sources either; the CTA falls back to the source listing (rule 4.4).
+  test('an operator-listed source with an unregistered ticket host falls back to its listing', () => {
+    const cta = resolveCtaForEvent(listed({ source: 'more.com', url: 'https://www.more.com/gr-el/tickets/music/x/', ticketUrl: 'https://tickets.venue.example/x', ticketUrlStatus: 'direct' }), t);
+    expect(cta).toMatchObject({ kind: 'tickets', href: 'https://www.more.com/gr-el/tickets/music/x/', label: t.findTicketsArrow });
   });
 });
 
@@ -102,7 +108,7 @@ describe('JSON-LD Offer', () => {
 });
 
 describe('build load (sanitizeEventUrlFields → HTML, JSON-LD, api/*.json, search index)', () => {
-  test('clears untrusted ticket fields and an off-domain listing URL on open-listing sources only', () => {
+  test('clears untrusted ticket fields (every source) and an off-domain listing URL (open-listing sources only)', () => {
     const ra: { source: string; url?: string; ticketUrl?: string; ticketUrlResolved?: string | null } = { source: 'residentadvisor', url: 'https://ra.co/events/1', ticketUrl: PHISH[0], ticketUrlResolved: PHISH[1] };
     expect(sanitizeEventUrlFields(ra)).toBe(2);
     expect(ra).toEqual({ source: 'residentadvisor', url: 'https://ra.co/events/1', ticketUrl: undefined, ticketUrlResolved: null });
@@ -111,9 +117,11 @@ describe('build load (sanitizeEventUrlFields → HTML, JSON-LD, api/*.json, sear
     applyTicketTrust(meetup);
     expect(meetup).toEqual({ source: 'meetup', url: undefined, ticketUrl: 'https://www.viva.gr/tickets/x/' });
 
-    const more = { source: 'more.com', url: 'https://www.more.com/x', ticketUrl: 'https://tickets.venue.example/x' };
-    expect(sanitizeEventUrlFields(more)).toBe(0);
-    expect(more.ticketUrl).toBe('https://tickets.venue.example/x');
+    // Round 8: the ticket rule applies to operator-listed sources too; their
+    // listing URL is still not held to the source domain.
+    const more: { source: string; url?: string; ticketUrl?: string } = { source: 'more.com', url: 'https://www.more.com/x', ticketUrl: 'https://tickets.venue.example/x' };
+    expect(sanitizeEventUrlFields(more)).toBe(1);
+    expect(more).toEqual({ source: 'more.com', url: 'https://www.more.com/x', ticketUrl: undefined });
   });
 
   test('a rendered RA event page carries the phishing host nowhere (CTA, practical block, JSON-LD)', () => {

@@ -47,8 +47,9 @@ export interface OfferBuilderEvent {
   ticketUrl?: string | null;
   ticketUrlResolved?: string | null;
   /**
-   * Scrape source. Open-listing sources (src/ticketing/ticket-trust.ts) never
-   * emit an offers.url off a known ticketing platform or their own domain.
+   * Scrape source. No source (src/ticketing/ticket-trust.ts) emits an
+   * offers.url off a known ticketing platform, its own domain or the venue's
+   * registered domain.
    */
   source?: string | null;
   venue: {
@@ -109,12 +110,12 @@ function omissionKeyForUrl(url: string | null | undefined): string {
 }
 
 export function buildOfferOrOmit(input: OfferBuilderEvent): OfferDecision {
-  // Anti-phishing: an untrusted ticket URL from an open-listing source is
-  // treated as absent (the classifier then omits the Offer).
+  // Anti-phishing (ticket-trust.ts): an untrusted ticket URL is treated as
+  // absent (the classifier then omits the Offer).
   const event: OfferBuilderEvent = {
     ...input,
-    ticketUrl: isTrustedTicketUrl(input.ticketUrl, input.source) ? input.ticketUrl : null,
-    ticketUrlResolved: isTrustedTicketUrl(input.ticketUrlResolved, input.source) ? input.ticketUrlResolved : null,
+    ticketUrl: isTrustedTicketUrl(input.ticketUrl, input.source, input.venue?.name) ? input.ticketUrl : null,
+    ticketUrlResolved: isTrustedTicketUrl(input.ticketUrlResolved, input.source, input.venue?.name) ? input.ticketUrlResolved : null,
   };
   const droppedUntrusted = (!!input.ticketUrl && !event.ticketUrl) || (!!input.ticketUrlResolved && !event.ticketUrlResolved);
   // Past-event precedent: EventCompleted → omit entire Offer block.

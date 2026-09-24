@@ -19,6 +19,7 @@ import {
 import { generateEventPages, generateEventSlug, loadSlugHistory, saveSlugHistory, generateRedirects, generateArchiveGoneRules } from './generators/event-page';
 import { sweepOrphans } from './generators/orphan-sweep';
 import { snapshotOfferOmissions, resetOfferOmissionsCounter } from './ticketing/offer-builder';
+import { snapshotTicketTrustDrops, resetTicketTrustDrops } from './ticketing/ticket-trust';
 import { generateVenuePages, computePagedVenueSlugs } from './generators/venue-page';
 import { generateSearchIndex } from './generators/search-index';
 import { generateHubPages, getHubEvents } from './generators/hub-page';
@@ -115,6 +116,7 @@ async function main() {
   const buildStartTime = Date.now();
   resetWriteStats();
   resetOfferOmissionsCounter();
+  resetTicketTrustDrops();
   console.log('🚀 Starting site generation...\n');
 
   // DB-health gate (2026-06-30): fail-fast on a degenerate DB BEFORE any expensive
@@ -189,6 +191,13 @@ async function main() {
     let cleared = 0;
     for (const event of allEvents) cleared += sanitizeEventUrlFields(event);
     if (cleared > 0) console.warn(`  ⚠️  Cleared ${cleared} unsafe URL field${cleared === 1 ? '' : 's'} (non-http(s) or malformed) before emission`);
+    // Ticket-trust drops (src/ticketing/ticket-trust.ts): "<source> <host>" → count,
+    // written to logs/ticket-trust-drops-latest.json below for review.
+    const ticketDrops = Object.entries(snapshotTicketTrustDrops());
+    if (ticketDrops.length > 0) {
+      const top = ticketDrops.slice(0, 10).map(([k, n]) => `${k} ×${n}`).join(', ');
+      console.warn(`  ⚠️  Dropped untrusted ticket URLs (source host ×count): ${top}${ticketDrops.length > 10 ? `, … ${ticketDrops.length - 10} more` : ''}`);
+    }
   }
   const { selectPublishedPopulation, selectUpcomingListing } = await import('./utils/event-populations');
   const { events: locationFiltered, rolloverHeld } = selectPublishedPopulation(allEvents);
@@ -1282,6 +1291,15 @@ async function main() {
     JSON.stringify(offerOmissionsLog, null, 2),
   );
   console.log(`📊 offer-omissions-latest.json: ${totalOmitted} total Offer blocks omitted (${Object.keys(omissionsBySource).length} sources)`);
+  const ticketTrustDrops = snapshotTicketTrustDrops();
+  writeFileIfChangedSync(
+    join(logsDir, 'ticket-trust-drops-latest.json'),
+    JSON.stringify({
+      build_timestamp: new Date(buildStartTime).toISOString(),
+      total_dropped: Object.values(ticketTrustDrops).reduce((a, b) => a + b, 0),
+      by_source_host: ticketTrustDrops,
+    }, null, 2),
+  );
 
   // Generate discovery files
   console.log('\n📄 Generating discovery files...');

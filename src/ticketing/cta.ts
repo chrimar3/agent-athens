@@ -70,9 +70,10 @@ const FIND_TICKETS_STATUSES = [
  *   2. status ∈ {direct, detail_page, venue_registry_direct, crossref, ai_discovered} + url → "Buy tickets"
  *   3. status ∈ {venue_registry_search, platform_search} + url → "Find tickets" (+ D8 secondary link)
  *   4. status = door_only → "At the door" (href=null)
- *   4.4 open-listing source whose ticket URL is off a known ticketing platform
- *       and its own domain (src/ticketing/ticket-trust.ts): the ticket link is
- *       dropped and the source listing URL is the "Find tickets" target
+ *   4.4 ticket URL off a known ticketing platform, the source's own domain and
+ *       the venue's registered domain (src/ticketing/ticket-trust.ts, every
+ *       source): the ticket link is dropped and the source listing URL is the
+ *       "Find tickets" target
  *   5. else if venue.website (covers venue_fallback / unresolved / expired / legacy undefined) → "Check venue website"
  *   6. else → none
  */
@@ -84,10 +85,11 @@ export function resolveCtaForEvent(event: Event, t: UIStrings): CtaResult {
 
   const venueWebsite = event.venue.website;
   const status = event.ticketUrlStatus;
-  // Anti-phishing (ticket-trust.ts): on open-listing sources only a known
-  // ticketing platform or the source's own domain may be linked, and the
-  // listing URL itself must be on the source's domain.
-  const url = isTrustedTicketUrl(event.ticketUrl, event.source) ? event.ticketUrl : undefined;
+  // Anti-phishing (ticket-trust.ts): for every source only a known ticketing
+  // platform, the source's own domain or the venue's registered domain may be
+  // linked; on open-listing sources the listing URL itself must be on the
+  // source's domain.
+  const url = isTrustedTicketUrl(event.ticketUrl, event.source, event.venue?.name) ? event.ticketUrl : undefined;
   const listingUrl = !isOpenListingSource(event.source) || isOnSourceDomain(event.url, event.source) ? event.url : undefined;
 
   // D7 rule 2: high-confidence tiers get "Buy tickets".
@@ -115,8 +117,8 @@ export function resolveCtaForEvent(event: Event, t: UIStrings): CtaResult {
     return { kind: 'door', label: t.doorOnly, href: null };
   }
 
-  // Rule 4.4: an untrusted open-listing ticket link was dropped — send the
-  // visitor to the source listing instead.
+  // Rule 4.4: an untrusted ticket link was dropped — send the visitor to the
+  // source listing instead.
   if (event.ticketUrl && !url && listingUrl) {
     return { kind: 'tickets', label: t.findTicketsArrow, href: listingUrl };
   }

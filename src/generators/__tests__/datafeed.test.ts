@@ -70,6 +70,10 @@ describe('buildDataFeed', () => {
       ...sampleConcertWithTicket,
       startDate: new Date(Date.now() + 86400000 * 14).toISOString(),
       endDate: undefined,
+      // Round 8 ticket trust (src/ticketing/ticket-trust.ts): a benaki.org ticket
+      // URL is published only for an event whose source is Benaki (its own
+      // domain) — the way such URLs reach the site — not for any source.
+      source: 'benaki',
       ticketUrl: 'https://www.benaki.org/event/123/',
       venue: {
         ...sampleConcertWithTicket.venue,
