@@ -370,6 +370,10 @@ run_container() {
     [ -n "${AA_DEFER_PUBLISH:-}" ] && env_flags+=(-e AA_DEFER_PUBLISH)
     [ -n "${AA_SKIP_INGEST:-}" ] && env_flags+=(-e AA_SKIP_INGEST)
     [ -n "${AA_SKIP_BUILD:-}" ] && env_flags+=(-e AA_SKIP_BUILD)
+    # Containers never gc or run maintenance: the integrity check requires the
+    # object store to only grow (no existing object or pack may change).
+    env_flags+=(-e GIT_CONFIG_COUNT=2 -e GIT_CONFIG_KEY_0=gc.auto -e GIT_CONFIG_VALUE_0=0 \
+        -e GIT_CONFIG_KEY_1=maintenance.auto -e GIT_CONFIG_VALUE_1=false)
 
     local mounts=() entry
     while IFS= read -r entry; do
@@ -581,7 +585,16 @@ case "$JOB" in
         printf '%s' "$id" | grep -qE '^[0-9a-f]{20,40}$' || fail "restore needs a deploy id" "docker/aa-run.sh restore <id from $DEPLOYS_LOG>" 2
         { [ -f "$DEPLOYS_LOG" ] && awk '{print $2}' "$DEPLOYS_LOG" | grep -qxF "$id"; } \
             || fail "deploy $id is not in $DEPLOYS_LOG" "only deploys the pipeline recorded can be restored" 2
-        run_container restore "$NAME" restore "$id"
+        # Recorded so verify-live expects this (older) deploy, not the newest.
+        run_container restore "$NAME" restore "$id" \
+            && echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $id restore" >> "$DEPLOYS_LOG"
+        ;;
+    doctor)
+        # Host-side checks (token type, off-site backup) plus the container's.
+        hrc=0; bash "$HERE/doctor-checks.sh" "$ENV_FILE" || hrc=$?
+        rc=0; run_container doctor "$NAME" doctor || rc=$?
+        [ "$rc" -ne 0 ] && exit "$rc"
+        exit "$hrc"
         ;;
     verify-live)
         rc=0; run_container verify-live "$NAME" verify-live || rc=$?

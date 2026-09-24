@@ -7,7 +7,8 @@
 // what it can see and write, which compose service (network) it uses, and the
 // order of the runs.
 import { beforeEach, describe, expect, test } from 'bun:test';
-import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'fs';
+import { createHash } from 'crypto';
+import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
@@ -43,7 +44,11 @@ case "$job" in
     build) touch "$AA_REPO/.pipeline-publish-ready"; echo "BUILD-RESULT dist_hash=\${STUB_BUILD_HASH}" ;;
     freshness) [ -n "\${STUB_SCRAPE_BUILDS:-}" ] && touch "$AA_REPO/.pipeline-publish-ready" ;;
     publish) echo "PUBLISH-RESULT deploy_id=\${STUB_DEPLOY_ID} dist_hash=\${STUB_PUBLISH_HASH} state=ready" ;;
-    verify-live) echo "LIVE deploy_id=\${STUB_DEPLOY_ID}" ;;
+    verify-live) printf '%s\\n' "LIVE deploy_id=\${STUB_DEPLOY_ID}" "LIVE settings_hash=3333333333333333333333333333333333333333333333333333333333333333" "LIVE snippets=0" \
+        "LIVE snippets_hash=4444444444444444444444444444444444444444444444444444444444444444" "LIVE page home status=200" "LIVE page event status=200" \
+        "LIVE header home content-security-policy=1111111111111111111111111111111111111111111111111111111111111111" "LIVE header event content-security-policy=1111111111111111111111111111111111111111111111111111111111111111" \
+        "LIVE header home strict-transport-security=2222222222222222222222222222222222222222222222222222222222222222" "LIVE header event strict-transport-security=2222222222222222222222222222222222222222222222222222222222222222" \
+        "LIVE header home x-content-type-options=\${STUB_NOSNIFF}" "LIVE header event x-content-type-options=\${STUB_NOSNIFF}" "LIVE csp_ok=yes" ;;
 esac
 exit 0
 `;
@@ -83,8 +88,9 @@ beforeEach(() => {
   for (const d of [repo, home, state, stub, secrets, join(fx, 'tmp'), join(repo, 'docker'), join(repo, 'scripts'), join(repo, 'data'), join(repo, 'dist')]) {
     mkdirSync(d, { recursive: true });
   }
-  for (const f of ['aa-run.sh', 'integrity-check.sh', 'compose.yaml', 'entrypoint.sh']) {
-    copyFileSync(join(ROOT, 'docker', f), join(repo, 'docker', f));
+  // Every script the wrapper calls (image-age, check-live, doctor-checks …).
+  for (const f of readdirSync(join(ROOT, 'docker'))) {
+    if (/\.(sh|ya?ml)$/.test(f)) copyFileSync(join(ROOT, 'docker', f), join(repo, 'docker', f));
   }
   writePipeline('AA_DEFER_PUBLISH AA_SKIP_INGEST AA_SKIP_BUILD');
   writeFileSync(join(repo, 'data/events.db'), 'fixture bytes, not a database\n');
@@ -134,6 +140,7 @@ function run(args: string[], extra: Record<string, string> = {}) {
       STUB_BUILD_HASH: HASH_A,
       STUB_PUBLISH_HASH: HASH_A,
       STUB_DEPLOY_ID: DEPLOY_ID,
+      STUB_NOSNIFF: createHash('sha256').update('nosniff').digest('hex'),
       ...extra,
     },
   });
@@ -156,7 +163,7 @@ function calls(): Call[] {
     });
 }
 const after = (args: string[], flag: string) => args.flatMap((a, i) => (a === flag ? [args[i + 1]] : []));
-type Run = { name: string; service: string; job: string; jobArgs: string[]; tokens: string[]; aaFlags: string[]; mounts: string[]; secretsEnv: string };
+type Run = { name: string; service: string; job: string; jobArgs: string[]; tokens: string[]; gitConfig: string[]; aaFlags: string[]; mounts: string[]; secretsEnv: string };
 function runs(): Run[] {
   return calls()
     .filter((c) => c.args[0] === 'compose' && c.args.includes('run'))
@@ -168,7 +175,8 @@ function runs(): Run[] {
         service: c.args[i + 2],
         job: c.args[i + 3],
         jobArgs: c.args.slice(i + 4),
-        tokens: envs.filter((e) => !e.startsWith('AA_')).sort(),
+        tokens: envs.filter((e) => !e.startsWith('AA_') && !e.startsWith('GIT_CONFIG_')).sort(),
+        gitConfig: envs.filter((e) => e.startsWith('GIT_CONFIG_')),
         aaFlags: envs.filter((e) => e.startsWith('AA_')).sort(),
         mounts: after(c.args, '-v'),
         secretsEnv: c.secretsEnv,
@@ -332,6 +340,25 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
       expect(secretsFolderMounted(x)).toBe(false);
     }
     expect(run(['restore', 'f'.repeat(24)]).code).toBe(2); // not recorded
+  });
+
+  test('every run disables git gc/maintenance; restore records itself; doctor runs the host checks', () => {
+    writeFileSync(join(state, 'deploys.log'), `2026-01-01T00:00:00Z ${DEPLOY_ID} ${HASH_A}\n`);
+    expect(run(['restore', DEPLOY_ID]).code).toBe(0);
+    expect(run(['enrichment']).code).toBe(0);
+    for (const x of runs()) {
+      expect(x.gitConfig).toEqual([
+        'GIT_CONFIG_COUNT=2', 'GIT_CONFIG_KEY_0=gc.auto', 'GIT_CONFIG_VALUE_0=0',
+        'GIT_CONFIG_KEY_1=maintenance.auto', 'GIT_CONFIG_VALUE_1=false',
+      ]);
+    }
+    // The restored (older) deploy becomes the one verify-live expects.
+    expect(deploysLog().trim().split('\n').at(-1)).toMatch(new RegExp(`^\\S+ ${DEPLOY_ID} restore$`));
+    // doctor: the host-side check refuses a classic (non fine-grained) token.
+    const d = run(['doctor']);
+    expect(d.code).not.toBe(0);
+    expect(d.out).toContain('github_pat_');
+    expect(d.out).not.toContain('gh-fixture');
   });
 
   test('a leftover snapshot is verified before a new one is taken', () => {

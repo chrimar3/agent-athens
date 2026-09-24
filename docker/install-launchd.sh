@@ -42,7 +42,9 @@ enrichment-13|enrichment|13|0|
 enrichment-16|enrichment|16|30|
 enrichment-19|enrichment|19|0|
 verify-live|verify-live|12|15|
-verify-live-20|verify-live|20|15|
+verify-live-0|verify-live|0|15|
+verify-live-6|verify-live|6|15|
+verify-live-18|verify-live|18|15|
 image-refresh|image-refresh|5|30|0"
 
 LEGACY="com.agentathens.daily
