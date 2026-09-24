@@ -21,7 +21,7 @@ import puppeteer from 'puppeteer-core';
 import { normalizeDateField } from '../src/utils/date-format';
 import { normalizePriceType, stripMarkupChars } from '../src/db/database';
 import type { DomDocument, DomAnchor } from './dom-eval-types';
-import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
+import { chromePath, chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
 import { prepareUrlWrite } from './lib/url-columns';
 import { guardPageRequests, sameOriginUrl } from '../src/utils/outbound-url';
 
@@ -223,6 +223,7 @@ async function scrapeSNFCC(): Promise<ScrapedExhibition[]> {
     browser = await puppeteer.launch({
       headless: true,
       executablePath: CHROME_PATH,
+      ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
       args: chromeLaunchArgs()
     });
 

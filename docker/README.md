@@ -43,14 +43,25 @@ It cannot reach the rest of your home folder, the keychain, SSH keys, browser
 profiles, other projects, the backups, the token file or the Mac's system
 files. The container runs as a non-root user with every Linux capability
 dropped, a read-only system filesystem, a fresh empty home folder on every run
-and no open ports. After every run, `docker/integrity-check.sh` checks on the
-Mac that nothing in `.git` that steers git changed (config, hooks,
-`commondir`, `info/`, alternates …), that new commits touch only data, and
-that no file was planted at the repo root, and that git's object store only
+and no open ports. After every run, `docker/integrity-check.sh` checks on the Mac that nothing
+in `.git` that steers git changed (config, hooks, `commondir`, `info/`,
+alternates …); that new commits touch only data and add no AI-agent
+instruction files; that no file was planted at the repo root; and that no
+instruction file for AI agents (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`,
+`.cursorrules`, `.windsurfrules`, `copilot-instructions.md`, `*.mdc`, or a
+`.claude`/`.cursor`/`.github`/`.vscode` folder, in any letter case) appeared
+anywhere in the folders runs may write. It checks that git's object store only
 grew (no existing object or pack changed or vanished, every new object hashes
-to its name, new packs pass `git verify-pack`; containers never gc); if not,
-it quarantines the change,
-pauses every job and alerts you.
+to its name, new packs pass `git verify-pack`; containers never gc); that no
+stash reflog entry, `ORIG_HEAD`, `FETCH_HEAD`, `MERGE_HEAD`, rebase or
+cherry-pick state was planted; that the other reflogs only grew by entries for
+the run's own commits; that remote-tracking refs moved only where the publish
+run's push moves them (recorded in
+`~/.config/agentathens-docker/remote-ref-moves.log`); and that no tracked file
+outside the data folders changed in the working tree. If any check fails, it
+quarantines the change, pauses every job and alerts you by macOS notification,
+ntfy and, where `scripts/security-alert.ts` exists, email
+(`AA_ALERT_TIMEOUT_SEC`, default 60).
 `tests/docker-hardening.test.ts` and `tests/docker-integrity-check.test.ts`
 fail if any of that is weakened.
 
@@ -206,6 +217,10 @@ host jobs exactly as they were.
   the top of the repo while a job runs also trips it (it can't tell you apart
   from a planted file); move yours back from the evidence folder. Running
   `git gc` or `git maintenance` on the Mac while a job runs trips it too.
+  So does running `git fetch`, `git pull`, `git stash`, a merge, rebase or
+  cherry-pick, or editing a tracked file outside `data/`, while a job runs.
+  Instruction files that already sit in `data/`, `dist/`, `logs/` or `temp*`
+  when a job starts are only warned about in the wrapper log; review them.
 - Restore the database: `docker/restore-backup.sh` (newest) or pass a file.
 - Update the image after dependency or Dockerfile changes: `docker/aa-run.sh image`.
 - Poke around inside: `docker/aa-run.sh shell` (no tokens).
@@ -247,6 +262,12 @@ public HTTPS site works through it and that nothing gets out around it.
 
 ## Known limits
 
+- The scrapers' Chrome can still reach any public host. Every request is
+  checked against private addresses by a DNS lookup of its own, but Chrome
+  resolves the name again itself, so a DNS answer that changes between the two
+  lookups is not caught (the egress proxy still refuses private addresses).
+  WebSockets, WebTransport, WebRTC, shared/service workers and `window.open`
+  are switched off in scraped pages, and Chromium's popup blocker stays on.
 - The proxy stops runs reaching your Mac, your LAN and cloud metadata. It does
   **not** stop a compromised run from sending what it can read to a public
   host of the attacker's choosing, or tunnelling anything inside HTTPS: the

@@ -18,7 +18,7 @@
 import { Database } from 'bun:sqlite';
 import { join } from 'path';
 import puppeteer from 'puppeteer-core';
-import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
+import { chromePath, chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
 import { prepareUrlWrite } from './lib/url-columns';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
@@ -334,6 +334,7 @@ async function main() {
   const browser = await puppeteer.launch({
     executablePath: CHROME_PATH,
     headless: true,
+    ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
     args: chromeLaunchArgs()
   });
 

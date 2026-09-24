@@ -45,7 +45,7 @@ import type { DomDocument, DomElement } from './dom-eval-types';
 import { ACTIVE_SOURCE_IDS } from '../src/config/active-source-ids';
 import { checkImportDuplicate } from '../src/quality/import-gate';
 import type { Event } from '../src/types';
-import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
+import { chromePath, chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
 import { prepareUrlWrite } from './lib/url-columns';
 import { safeFetch, safeFetchResponse, safeCurlText, isRefusedTarget, sameOriginUrl, guardPageRequests, OutboundUrlError } from '../src/utils/outbound-url';
 
@@ -955,6 +955,7 @@ async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
       browser = await puppeteer.launch({
         headless: true,
         executablePath: CHROME_PATH,
+        ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
         args: chromeLaunchArgs()
       });
 

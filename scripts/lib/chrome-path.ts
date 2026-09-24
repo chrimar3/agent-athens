@@ -30,3 +30,11 @@ export function chromeLaunchArgs(env: Env = process.env): string[] {
   if (env.HTTPS_PROXY) args.push(`--proxy-server=${env.HTTPS_PROXY}`, '--proxy-bypass-list=<-loopback>');
   return args;
 }
+
+/**
+ * Puppeteer defaults to remove at launch (security loop round 7). Puppeteer
+ * passes --disable-popup-blocking by default; popups opened by a scraped page
+ * are not covered by the page's request interception, so Chromium's own popup
+ * blocker stays on.
+ */
+export const CHROME_IGNORE_DEFAULT_ARGS: readonly string[] = ['--disable-popup-blocking'];

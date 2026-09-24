@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { chromeLaunchArgs, chromePath, MAC_CHROME_PATH } from '../chrome-path';
+import { CHROME_IGNORE_DEFAULT_ARGS, chromeLaunchArgs, chromePath, MAC_CHROME_PATH } from '../chrome-path';
 
 const SCRIPTS = join(import.meta.dir, '../..');
 
@@ -42,5 +42,14 @@ describe('chromeLaunchArgs', () => {
       .filter((f) => f.endsWith('.ts'))
       .filter((f) => readFileSync(join(SCRIPTS, f), 'utf8').includes('--no-sandbox'));
     expect(offenders).toEqual([]);
+  });
+  test('every scraper launch keeps Chromium\'s popup blocker on (popups escape request interception)', () => {
+    expect(CHROME_IGNORE_DEFAULT_ARGS).toContain('--disable-popup-blocking');
+    for (const f of readdirSync(SCRIPTS).filter((f) => f.endsWith('.ts'))) {
+      const src = readFileSync(join(SCRIPTS, f), 'utf8');
+      const launches = (src.match(/puppeteer\.launch\(/g) ?? []).length;
+      const guarded = (src.match(/ignoreDefaultArgs: \[\.\.\.CHROME_IGNORE_DEFAULT_ARGS\]/g) ?? []).length;
+      expect([f, guarded]).toEqual([f, launches]);
+    }
   });
 });

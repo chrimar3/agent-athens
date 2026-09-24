@@ -571,6 +571,7 @@ quarantine_pdata() {  # $1 reason, $2 pre-run sha: keep the evidence, roll the b
     (cd "$REPO" && git branch -f "quarantine/pipeline-data-$ts" refs/heads/pipeline-data >/dev/null 2>&1
      if [ -n "$2" ]; then git update-ref refs/heads/pipeline-data "$2"; else git update-ref -d refs/heads/pipeline-data; fi)
     rm -f "$REPO/.pipeline-publish-ready"   # nothing from this run may be published
+    rm -f "$STATE_DIR/handoff/publish-ready"   # the hand-off copy (AA_PUBLISH_MARKER) too
     quarantine "$1 (branch rolled back; evidence on quarantine/pipeline-data-$ts)" "" ""
 }
 

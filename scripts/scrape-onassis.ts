@@ -23,7 +23,7 @@ import { log } from '../src/utils/logger';
 import { createHash } from 'crypto';
 import type { Event, EventType } from '../src/types';
 import { SCHEMA_TYPE_MAP } from '../src/enrichment/quality-gates';
-import { chromePath, chromeLaunchArgs } from './lib/chrome-path';
+import { chromePath, chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
 import { guardPageRequests } from '../src/utils/outbound-url';
 
 const SOURCE_ID = 'onassis';
@@ -226,6 +226,7 @@ export async function scrapeOnassis(): Promise<ScrapedExhibition[]> {
   const browser = await puppeteer.launch({
     headless: true,
     executablePath: CHROME_PATH,
+    ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
     args: chromeLaunchArgs()
   });
 
