@@ -15,7 +15,7 @@
  * repository) with marker-writing test files planted, and checks the markers.
  */
 import { afterAll, describe, expect, test } from 'bun:test';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
+import { cpSync, existsSync, symlinkSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { dirname, join } from 'path';
 
@@ -141,5 +141,65 @@ describe('bun run test (the documented command)', () => {
     const guard = JSON.parse(readFileSync(join(ROOT, '.github', 'path-guard.json'), 'utf8')) as { protected: string[] };
     expect(guard.protected).toContain('scripts/run-tests.sh');
     expect(existsSync(join(ROOT, 'scripts', 'run-tests.sh'))).toBe(true);
+  });
+});
+
+// --- append to tests/security/test-discovery.test.ts with the bunfig.toml +
+// --- tests/preload/planted-tests.preload.ts owner patch (security loop round 9)
+
+describe('plain `bun test` (bunfig.toml pathIgnorePatterns + planted-tests preload)', () => {
+  test('bunfig loads the planted-tests preload first and ignores the writable folders', () => {
+    const bunfig = readFileSync(join(ROOT, 'bunfig.toml'), 'utf8');
+    expect(bunfig).toMatch(/^preload = \["\.\/tests\/preload\/planted-tests\.preload\.ts", /m);
+    for (const p of ['data/**', 'logs/**', 'dist/**', 'tmp/**', 'tmp*/**', 'temp*/**']) expect(bunfig).toContain(`"${p}"`);
+  });
+
+  test('a clean scratch copy: plain `bun test` runs the honest test', () => {
+    const f = fixture();
+    const r = run(f.dir, ['bun', 'test']);
+    expect(r.code).toBe(0);
+    expect(markersIn(f)).toEqual(['honest']);
+  });
+
+  test('planted files: plain `bun test` exits before any test file loads', () => {
+    const f = fixture();
+    for (const p of PLANTED) f.plant(p);
+    const r = run(f.dir, ['bun', 'test']);
+    expect(r.code).toBe(1);
+    expect(r.err).toContain('[planted-tests] REFUSED');
+    expect(r.err).toContain('data/x.test.ts');
+    expect(markersIn(f)).toEqual([]);
+  });
+
+  test('explicit ./data path and a planted symlinked directory are refused too', () => {
+    const f = fixture();
+    const outside = join(f.dir, '..', 'outside');
+    mkdirSync(outside, { recursive: true });
+    writeFileSync(join(outside, 'o.test.ts'), markerTest(f.markers, 'outside'));
+    mkdirSync(join(f.dir, 'data'), { recursive: true });
+    symlinkSync(outside, join(f.dir, 'data', 'link'));
+    const r = run(f.dir, ['bun', 'test', './data/link/o.test.ts', './tests/honest.test.ts']);
+    expect(r.code).toBe(1);
+    expect(r.err).toContain('data/link/o.test.ts');
+    expect(markersIn(f)).toEqual([]);
+  });
+
+  test('a symlink loop under data/ ends the scan (no hang)', () => {
+    const f = fixture();
+    mkdirSync(join(f.dir, 'data', 'a'), { recursive: true });
+    symlinkSync(join(f.dir, 'data'), join(f.dir, 'data', 'a', 'loop'));
+    const r = run(f.dir, ['bun', 'test']);
+    expect(r.code).toBe(0);
+    expect(markersIn(f)).toEqual(['honest']);
+  });
+
+  test.skipIf(!Bun.semver.satisfies(Bun.version, '>=1.3.11'))('bun >= 1.3.11: pathIgnorePatterns alone keeps data/ out of discovery', () => {
+    const f = fixture();
+    for (const p of PLANTED) f.plant(p);
+    const bunfig = readFileSync(join(f.dir, 'bunfig.toml'), 'utf8').replace(/^preload = .*$/m, '');
+    writeFileSync(join(f.dir, 'bunfig.toml'), bunfig);
+    const r = run(f.dir, ['bun', 'test']);
+    expect(r.code).toBe(0);
+    expect(markersIn(f)).toEqual(['honest']);
   });
 });
