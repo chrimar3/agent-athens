@@ -65,6 +65,9 @@ export function scanHtmlForArtifacts(html: string): string[] {
 //     javascript:/vbscript: value
 //   - <iframe> only to the OpenStreetMap embed the venue pages use
 //   - no <meta http-equiv="refresh">, <object>, <embed>, <base>, <frame>, <frameset>
+//   - no SVG <animate>/<set>/<animateTransform>/<animateMotion> of href or
+//     xlink:href, or with a javascript:/vbscript:/data: to/from/by/values;
+//     no <use> of data: or another origin
 //   - no search-engine ownership-verification <meta> except the allowlisted
 //     one (verification-allowlist.ts)
 // Pages are parsed with an HTML5 parser, so the rules apply to the elements a
@@ -97,6 +100,50 @@ const FIX_ACTIVE_ELEMENT = 'fix: templates emit no frames, meta refresh, plugins
 const ALLOWED_IFRAME = /^https:\/\/www\.openstreetmap\.org\/export\/embed\.html\?/;
 const FORBIDDEN_ELEMENTS = new Set(['object', 'embed', 'base', 'frame', 'frameset', 'applet']);
 const SCRIPT_TAG_IN_JSON = /<\/?script/i;
+const FIX_SVG_ACTIVE = 'fix: templates emit no SVG animation of links and no <use> outside the page; data reaching HTML/SVG unescaped produced it — escape it with escapeHtml/escapeAttr at emission';
+/** SVG elements that change another attribute's value at run time. */
+const SVG_ANIMATION_ELEMENTS = new Set(['animate', 'set', 'animatetransform', 'animatemotion']);
+/** Animation attributes that hold the value(s) written into attributeName. */
+const SVG_ANIMATION_VALUE_ATTRS = new Set(['to', 'from', 'by', 'values']);
+const SVG_ANIMATION_BAD_SCHEMES = new Set(['javascript', 'vbscript', 'data']);
+
+/**
+ * SVG animation that rewrites a link (attributeName href/xlink:href, or a
+ * javascript:/vbscript:/data: value) and <use> that pulls content from data:
+ * or another origin. `decoded` says whether attribute values are already
+ * entity-decoded (HTML5 parser) or raw text (standalone .svg scan).
+ */
+function svgActiveContentIssues(tagName: string, attrs: [string, string][], decoded: boolean): string[] {
+  const tag = tagName.toLowerCase();
+  const issues: string[] = [];
+  const value = (v: string) => (decoded ? v : he.decode(v, { isAttributeValue: true }));
+  if (SVG_ANIMATION_ELEMENTS.has(tag)) {
+    for (const [rawName, raw] of attrs) {
+      const name = rawName.toLowerCase();
+      if (name === 'attributename') {
+        const target = value(raw).replace(/[\t\n\r]/g, '').trim().toLowerCase();
+        if (target === 'href' || target === 'xlink:href') issues.push(`<${tagName}> animates ${target} (${FIX_SVG_ACTIVE})`);
+      } else if (SVG_ANIMATION_VALUE_ATTRS.has(name)) {
+        for (const part of value(raw).split(';')) {
+          const scheme = urlScheme(part, true);
+          if (scheme && SVG_ANIMATION_BAD_SCHEMES.has(scheme)) issues.push(`"${scheme}:" value in <${tagName} ${name}> (${FIX_SVG_ACTIVE})`);
+        }
+      }
+    }
+  }
+  if (tag === 'use') {
+    for (const [rawName, raw] of attrs) {
+      const name = rawName.toLowerCase();
+      if (name !== 'href' && name !== 'xlink:href') continue;
+      const url = resolveOnSite(value(raw).replace(/[\t\n\r]/g, '').trim());
+      if (!url || url.origin !== SITE_ORIGIN) {
+        const where = url ? (url.protocol === 'data:' ? 'data:' : `${url.protocol}//${url.hostname}`) : `"${raw.trim().slice(0, 80)}"`;
+        issues.push(`<use ${name}> loads from ${where}, outside this site (${FIX_SVG_ACTIVE})`);
+      }
+    }
+  }
+  return issues;
+}
 const FIX_VERIFICATION = 'fix: search-engine ownership proofs publish only from VERIFICATION_FILE_ALLOWLIST / VERIFICATION_META_ALLOWLIST (src/validators/verification-allowlist.ts); a new one is an owner decision — delete it from dist/ and rebuild';
 
 function parseAttributes(raw: string): [string, string | undefined][] {
@@ -275,6 +322,7 @@ function scanElement(node: DomNode, issues: Set<string>): void {
     const issue = verificationMetaIssue(attr('name'), attr('content'));
     if (issue) issues.add(issue);
   }
+  for (const issue of svgActiveContentIssues(node.name ?? '', Object.entries(attrs), true)) issues.add(issue);
   for (const [rawName, value] of Object.entries(attrs)) {
     const name = rawName.toLowerCase();
     if (/^on[a-z]+$/.test(name)) {
@@ -301,7 +349,8 @@ function scanElement(node: DomNode, issues: Set<string>): void {
 //   proofs       anything under .well-known/ ...: only the exact path+content
 //                on VERIFICATION_FILE_ALLOWLIST (verification-allowlist.ts)
 //   .js/.mjs     path + sha256 on COPIED_SCRIPT_ALLOWLIST
-//   .svg         no script, foreignObject, on* handler or non-http(s) link
+//   .svg         no script, foreignObject, on* handler or non-http(s) link;
+//                no animation of href or to javascript:/data:, no external <use>
 //   .json        parses; URL-valued keys hold http(s) or site-relative URLs;
 //                no "<script" or "<!--" in the file text
 //   .xml         URLs http(s); no script, stylesheet PI or XHTML beyond <xhtml:link>
@@ -366,6 +415,9 @@ export function scanSvg(text: string): string[] {
   if (/<(?:[\w.-]+:)?foreignObject\b/i.test(text)) issues.push('<foreignObject> in SVG');
   if (/<!ENTITY/i.test(text)) issues.push('entity declaration in SVG');
   for (const tag of text.matchAll(START_TAG)) {
+    const localName = tag[1].replace(/^[\w.-]+:/, '');
+    const attrs = parseAttributes(tag[2]).map(([n, v]) => [n, v ?? ''] as [string, string]);
+    issues.push(...svgActiveContentIssues(localName, attrs, false));
     for (const [name, value = ''] of parseAttributes(tag[2])) {
       if (/^on[a-z]+$/.test(name)) issues.push(`inline event handler ${name}= in SVG`);
       if (/(?:^|:)href$/.test(name) || name === 'src') {

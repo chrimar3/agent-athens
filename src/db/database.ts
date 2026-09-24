@@ -14,6 +14,7 @@ import { decodeEventFields } from "../utils/decode-html-entities";
 import { findVenueConfig } from "../quality/location-filter";
 import { checkImportDuplicate } from "../quality/import-gate";
 import { safeHttpUrl } from "../utils/safe-url";
+import { prepareUrlWrite } from "./url-columns";
 import type { Event } from "../types";
 
 const DB_PATH = join(import.meta.dir, "../../data/events.db");
@@ -343,7 +344,7 @@ export function upsertEvent(
     }
   }
 
-  const stmt = database.prepare(`
+  const stmt = prepareUrlWrite(database, `
     INSERT INTO events (
       id, title, description, full_description, start_date, end_date,
       type, genres, tags,
@@ -582,7 +583,7 @@ export function updateEvent(event: Event, db?: Database): boolean {
   const database = db || getDatabase();
   const row = eventToRow(event);
 
-  const stmt = database.prepare(`
+  const stmt = prepareUrlWrite(database, `
     UPDATE events
     SET title = $title,
         description = $description,
@@ -712,7 +713,7 @@ export function updateEventImage(
 ): boolean {
   const database = db || getDatabase();
 
-  const stmt = database.prepare(`
+  const stmt = prepareUrlWrite(database, `
     UPDATE events
     SET image_url = $imageUrl,
         image_source = $imageSource,

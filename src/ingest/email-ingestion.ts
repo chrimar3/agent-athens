@@ -26,6 +26,7 @@ import {
 } from '../db/processed-emails';
 import type { Database } from 'bun:sqlite';
 import { fromHeaderDomain, verifySender } from './allowed-senders';
+import { prepareUrlWrite } from '../db/url-columns';
 
 // ============================================================================
 // Types
@@ -499,7 +500,7 @@ export function upsertEvent(event: ParsedEvent): void {
   const existing = db.prepare('SELECT id FROM events WHERE id = ?').get(eventId);
 
   if (existing) {
-    db.prepare(`
+    prepareUrlWrite(db, `
       UPDATE events SET
         title = ?,
         date = ?,

@@ -5,6 +5,7 @@
 import { Database } from 'bun:sqlite';
 import { downloadImage } from './download-image';
 import { optimizeImage } from './optimize-image';
+import { prepareUrlWrite } from '../db/url-columns';
 
 /**
  * Process a single event image: download, optimize, and update DB.
@@ -29,8 +30,8 @@ export async function processEventImage(
     return null;
   }
 
-  // Update DB
-  db.prepare(`
+  // Update DB (image_local passes through safeImageSrc)
+  prepareUrlWrite(db, `
     UPDATE events
     SET image_local = ?,
         updated_at = datetime('now')
