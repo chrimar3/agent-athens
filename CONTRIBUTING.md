@@ -24,6 +24,7 @@ rules.
     default branch.
   - `dependency-audit` runs `bun audit` when you change dependencies.
   - `shellcheck` checks the shell scripts.
+  - `analyze` runs CodeQL on the TypeScript sources.
 - Pull requests from forks run CI with a read-only token and no secrets.
   Dependency install scripts do not run in CI.
 - Keep a pull request to one change. Add or update tests with it. Run

@@ -5,9 +5,13 @@
 # Reads the rules in effect on a branch (GET /repos/{owner}/{repo}/rules/
 # branches/{branch}, which reports RULESETS; classic branch protection does not
 # appear there) and fails unless they include:
-#   - a pull_request rule (changes reach the branch only through a PR), and
-#   - required status checks named ci, path-guard, secret-scan and
-#     dependency-audit (the job names of ci.yml, path-guard.yml, security.yml).
+#   - a pull_request rule (changes reach the branch only through a PR) that
+#     requires code-owner review (require_code_owner_review, round 6:
+#     CONTRIBUTING.md promises it and .github/CODEOWNERS names the owner), and
+#   - required status checks named ci, path-guard, secret-scan,
+#     dependency-audit, shellcheck and analyze (the job names of ci.yml,
+#     path-guard.yml, security.yml and CodeQL's codeql.yml; the last two
+#     were added in round 6).
 # Fails CLOSED: an API error, a payload that is not a list, or no rules at all
 # exits 1 and never prints PASS.
 #
@@ -18,8 +22,8 @@ set -u
 GH="${GH_BIN:-gh}"
 REPO="${REPO:-}"
 BRANCH="${BRANCH:-}"
-REQUIRED_CHECKS=(ci path-guard secret-scan dependency-audit)
-SETUP_HINT="Settings → Rules → Rulesets → New branch ruleset targeting main: enable 'Require a pull request before merging' and 'Require status checks to pass' with ${REQUIRED_CHECKS[*]}"
+REQUIRED_CHECKS=(ci path-guard secret-scan dependency-audit shellcheck analyze)
+SETUP_HINT="Settings → Rules → Rulesets → New branch ruleset targeting main: enable 'Require a pull request before merging' with 'Require review from Code Owners', and 'Require status checks to pass' with ${REQUIRED_CHECKS[*]}"
 
 refuse() {
   echo "branch-rules: FAILED — $1" >&2
@@ -47,6 +51,8 @@ jq -e -s 'all(.[]; type == "object" and has("type"))' "$WORK/rules.jsonl" >/dev/
 problems=()
 if ! jq -e -s 'any(.[]; .type == "pull_request")' "$WORK/rules.jsonl" >/dev/null; then
   problems+=("no pull_request rule: direct pushes to $BRANCH are not blocked")
+elif ! jq -e -s 'any(.[]; .type == "pull_request" and .parameters.require_code_owner_review == true)' "$WORK/rules.jsonl" >/dev/null; then
+  problems+=("code-owner review is not required: a PR can merge without the review .github/CODEOWNERS asks for")
 fi
 jq -r -s '.[] | select(.type == "required_status_checks") | .parameters.required_status_checks[]?.context' \
   "$WORK/rules.jsonl" > "$WORK/contexts.txt" || refuse "could not read the required status checks"
@@ -61,6 +67,5 @@ if [ ${#problems[@]} -gt 0 ]; then
 fi
 
 reviews="$(jq -r -s '[.[] | select(.type == "pull_request") | .parameters.required_approving_review_count // 0] | max' "$WORK/rules.jsonl")"
-codeowners="$(jq -r -s 'any(.[]; .type == "pull_request" and (.parameters.require_code_owner_review // false))' "$WORK/rules.jsonl")"
-echo "branch-rules: PASS — $BRANCH requires a PR and the checks ${REQUIRED_CHECKS[*]} (approvals required: $reviews, code-owner review: $codeowners)"
+echo "branch-rules: PASS — $BRANCH requires a PR with code-owner review and the checks ${REQUIRED_CHECKS[*]} (approvals required: $reviews)"
 exit 0

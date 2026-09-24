@@ -1,7 +1,8 @@
 # Weekly check that main is protected the way the review design assumes.
 #
-# The required checks (ci, path-guard, secret-scan, dependency-audit) and the
-# PR requirement only protect main if a repository RULESET enforces them. That
+# The required checks (ci, path-guard, secret-scan, dependency-audit,
+# shellcheck, and CodeQL's analyze job), the PR requirement and code-owner
+# review only protect main if a repository RULESET enforces them. That
 # setting lives in GitHub, not in this repo, so this job reads it back every
 # week with the job's own read-only token and fails (the owner gets the usual
 # failed-workflow notification) if any piece is missing.
@@ -9,9 +10,10 @@
 # It reads GET /repos/{owner}/{repo}/rules/branches/main, which reports the
 # rules in effect from RULESETS. Classic branch protection is not reported by
 # that endpoint, so the owner must configure a ruleset (Settings → Rules →
-# Rulesets → target main) with: "Require a pull request before merging" and
-# "Require status checks to pass" listing ci, path-guard, secret-scan and
-# dependency-audit. See .github/scripts/check-branch-rules.sh.
+# Rulesets → target main) with: "Require a pull request before merging" with
+# "Require review from Code Owners", and "Require status checks to pass"
+# listing ci, path-guard, secret-scan, dependency-audit, shellcheck and
+# analyze. See .github/scripts/check-branch-rules.sh.
 name: repo-settings
 
 on:
