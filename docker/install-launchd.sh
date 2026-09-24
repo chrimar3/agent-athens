@@ -130,6 +130,9 @@ if [ "$MODE" = "apply" ]; then
             disabled "$l" && st_disabled=yes
             echo "$l|$st_loaded|$st_disabled"
         done > "$STATE"
+        # aa-run.sh refuses to run while any file in the secrets folder is
+        # readable by other accounts.
+        chmod 700 "$(dirname "$STATE")"; chmod 600 "$STATE"
         echo "recorded host job state in $STATE"
     fi
     echo "$LEGACY" | while read -r l; do
