@@ -217,6 +217,12 @@ describe('the workflows pass the default branch', () => {
     for (const s of steps) expect(s.env?.FLOOR_REF).toBe('${{ github.event.repository.default_branch }}');
   });
 
+  test('ci.yml: the test run itself does not inherit FLOOR_REF (scratch-repo tests have no default branch)', () => {
+    const ci = readFileSync(join(ROOT, '.github', 'workflows', 'ci.yml'), 'utf8');
+    expect(ci).toMatch(/env -u FLOOR_REF bun test --reporter=junit/);
+    expect(ci).not.toMatch(/^\s*bun test --reporter=junit/m);
+  });
+
   test('security.yml: the audit step gets AUDIT_IGNORE_REF', () => {
     const step = wf('security.yml').jobs['dependency-audit'].steps.find((s) => (s.run ?? '').includes('dependency-audit.sh'))!;
     expect(step.env?.AUDIT_IGNORE_REF).toBe('${{ github.event.repository.default_branch }}');

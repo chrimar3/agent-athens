@@ -78,7 +78,9 @@ jobs:
           # An empty list would make `bun test` run everything, network tests included.
           [ "${#FILES[@]}" -gt 100 ] || { echo "ci: only ${#FILES[@]} test files found — refusing (check test-report-check.sh --list)" >&2; exit 1; }
           rm -f "$RUNNER_TEMP/junit.xml"
-          bun test --reporter=junit --reporter-outfile="$RUNNER_TEMP/junit.xml" "${FILES[@]/#/./}"
+          # FLOOR_REF is for the checker above only: tests that drive the checker
+          # in scratch repos (no default branch there) must not inherit it.
+          env -u FLOOR_REF bun test --reporter=junit --reporter-outfile="$RUNNER_TEMP/junit.xml" "${FILES[@]/#/./}"
       - name: Test report is complete (a test calling process.exit cannot force this job green)
         env:
           FLOOR_REF: ${{ github.event.repository.default_branch }}
