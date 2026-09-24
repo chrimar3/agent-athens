@@ -11,9 +11,18 @@
 # rules in effect from RULESETS. Classic branch protection is not reported by
 # that endpoint, so the owner must configure a ruleset (Settings → Rules →
 # Rulesets → target main) with: "Require a pull request before merging" with
-# "Require review from Code Owners", and "Require status checks to pass"
-# listing ci, path-guard, secret-scan, dependency-audit, shellcheck and
-# analyze. See .github/scripts/check-branch-rules.sh.
+# "Require review from Code Owners", "Dismiss stale pull request approvals
+# when new commits are pushed" and "Require approval of the most recent
+# reviewable push", and "Require status checks to pass" listing ci,
+# path-guard, secret-scan, dependency-audit, shellcheck and analyze, and an
+# empty Bypass list. See .github/scripts/check-branch-rules.sh.
+#
+# Round 7: bypass actors are visible only through GET
+# /repos/{owner}/{repo}/rulesets/{id}, and only to a token that can administer
+# the repository; the job token (contents: read) cannot. The RULESET_READ_TOKEN
+# secret (a fine-grained token for this repository with the Administration
+# permission) is passed as RULESET_TOKEN and used for those reads only.
+# Without it the check fails closed and says which permission is missing.
 name: repo-settings
 
 on:
@@ -35,6 +44,7 @@ jobs:
       - name: Check the main branch ruleset
         env:
           GH_TOKEN: ${{ github.token }}
+          RULESET_TOKEN: ${{ secrets.RULESET_READ_TOKEN }}
           REPO: ${{ github.repository }}
           BRANCH: main
         run: bash .github/scripts/check-branch-rules.sh

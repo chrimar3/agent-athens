@@ -10,6 +10,13 @@
  * CLOSED: a missing check, a missing PR rule, no ruleset at all, or an API
  * error is a red run, never a pass. A fake `gh` runs the script's own --jq
  * filter through real jq over canned payloads.
+ *
+ * Round 7: the PR rule must also dismiss stale approvals on push and require
+ * approval of the last push, and no ruleset behind the rules may list a bypass
+ * actor. Bypass actors are only visible through GET
+ * /repos/{owner}/{repo}/rulesets/{id}, and only to a token that can administer
+ * the repository: absent → fail closed naming the permission. The fake `gh`
+ * serves those per-ruleset payloads too and records which token read them.
  */
 import { describe, test, expect, beforeAll, afterAll } from 'bun:test';
 import { mkdtempSync, rmSync, writeFileSync, chmodSync, mkdirSync } from 'fs';
@@ -32,14 +39,24 @@ const checks = (...names: string[]) => ({
   ruleset_id: 1,
   parameters: { strict_required_status_checks_policy: false, required_status_checks: names.map((context) => ({ context })) },
 });
-const PR_RULE = { type: 'pull_request', ruleset_id: 1, parameters: { required_approving_review_count: 0, require_code_owner_review: true } };
+const PR_PARAMS = { required_approving_review_count: 0, require_code_owner_review: true, dismiss_stale_reviews_on_push: true, require_last_push_approval: true };
+const PR_RULE = { type: 'pull_request', ruleset_id: 1, parameters: PR_PARAMS };
 const REQUIRED = ['ci', 'path-guard', 'secret-scan', 'dependency-audit', 'shellcheck', 'analyze'];
 const FULL = [PR_RULE, checks(...REQUIRED), { type: 'deletion', ruleset_id: 1 }];
 
-function fakeGh(payload: unknown, fail = false) {
+/** Per-ruleset payloads for GET repos/{repo}/rulesets/{id}. Unlisted ids get
+ *  `{ id, bypass_actors: [] }` (what an admin-capable token sees for a clean
+ *  ruleset); a value of 'fail' makes that read fail like a 403. */
+type Rulesets = Record<string, unknown>;
+
+function fakeGh(payload: unknown, fail = false, rulesets: Rulesets = {}) {
   const dir = join(work, `gh-${seq++}`);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, 'rules.json'), JSON.stringify(payload));
+  for (const [id, body] of Object.entries(rulesets)) {
+    if (body === 'fail') writeFileSync(join(dir, `ruleset-${id}.fail`), '');
+    else writeFileSync(join(dir, `ruleset-${id}.json`), JSON.stringify(body));
+  }
   const gh = join(dir, 'fake-gh');
   writeFileSync(gh, `#!/bin/bash
 printf '%s\\n' "$*" >> "${dir}/calls.log"
@@ -48,12 +65,19 @@ FILTER=''; prev=''
 for a in "$@"; do [ "$prev" = "--jq" ] && FILTER="$a"; prev="$a"; done
 case "$*" in
   "api repos/${REPO}/rules/branches/main"*) if [ -n "$FILTER" ]; then jq -r "$FILTER" < "${dir}/rules.json"; else cat "${dir}/rules.json"; fi; exit $?;;
+  "api repos/${REPO}/rulesets/"*)
+    id="\${2##*/}"
+    printf '%s %s\\n' "$id" "\${GH_TOKEN:-<unset>}" >> "${dir}/ruleset-tokens.log"
+    if [ -e "${dir}/ruleset-$id.fail" ]; then echo "gh: HTTP 404 Not Found" >&2; exit 1; fi
+    if [ -e "${dir}/ruleset-$id.json" ]; then cat "${dir}/ruleset-$id.json"; else printf '{"id":%s,"enforcement":"active","bypass_actors":[]}\\n' "$id"; fi
+    exit 0;;
 esac
 echo "fake-gh: unexpected call: $*" >&2; exit 64
 `);
   chmodSync(gh, 0o755);
   return gh;
 }
+const ghDir = (gh: string) => gh.replace(/\/fake-gh$/, '');
 
 function run(gh: string, env: Record<string, string> = {}) {
   const r = Bun.spawnSync(['bash', SCRIPT], { cwd: ROOT, env: { PATH: process.env.PATH ?? '/usr/bin:/bin', REPO, BRANCH: 'main', GH_BIN: gh, ...env } });
@@ -91,7 +115,7 @@ describe('check-branch-rules.sh', () => {
 
   // Round 6: CONTRIBUTING.md promises code-owner review; the ruleset must enforce it.
   test('a PR rule without code-owner review fails the run (false, or the parameter absent)', () => {
-    for (const parameters of [{ required_approving_review_count: 1, require_code_owner_review: false }, { required_approving_review_count: 1 }]) {
+    for (const parameters of [{ ...PR_PARAMS, require_code_owner_review: false }, { required_approving_review_count: 1, dismiss_stale_reviews_on_push: true, require_last_push_approval: true }]) {
       const r = run(fakeGh([{ type: 'pull_request', ruleset_id: 1, parameters }, checks(...REQUIRED)]));
       expect(r.code).toBe(1);
       expect(r.err).toContain('code-owner review is not required');
@@ -100,15 +124,108 @@ describe('check-branch-rules.sh', () => {
   });
 
   test('code-owner review set in any ruleset\'s PR rule counts', () => {
-    const noOwners = { type: 'pull_request', ruleset_id: 2, parameters: { required_approving_review_count: 0, require_code_owner_review: false } };
+    const noOwners = { type: 'pull_request', ruleset_id: 2, parameters: { ...PR_PARAMS, require_code_owner_review: false } };
     const r = run(fakeGh([noOwners, PR_RULE, checks(...REQUIRED)]));
     expect(r.code).toBe(0);
     expect(r.out).toContain('code-owner review');
   });
 
   test('a truthy non-boolean is not "required" (exact true only)', () => {
-    const r = run(fakeGh([{ type: 'pull_request', ruleset_id: 1, parameters: { require_code_owner_review: 'true' } }, checks(...REQUIRED)]));
+    const r = run(fakeGh([{ type: 'pull_request', ruleset_id: 1, parameters: { ...PR_PARAMS, require_code_owner_review: 'true' } }, checks(...REQUIRED)]));
     expect(r.code).toBe(1);
+  });
+
+  // Round 7: an approval must not cover commits pushed after it.
+  test('a PR rule that keeps stale approvals, or lets the last pusher approve, fails the run (false, absent or non-boolean)', () => {
+    for (const [param, msg] of [
+      ['dismiss_stale_reviews_on_push', 'stale approvals are not dismissed on push'],
+      ['require_last_push_approval', 'the most recent push does not need approval'],
+    ] as const) {
+      for (const value of [false, undefined, 'true']) {
+        const parameters: Record<string, unknown> = { ...PR_PARAMS, [param]: value };
+        if (value === undefined) delete parameters[param];
+        const r = run(fakeGh([{ type: 'pull_request', ruleset_id: 1, parameters }, checks(...REQUIRED)]));
+        expect(r.code).toBe(1);
+        expect(r.err).toContain(msg);
+        expect(r.err).toContain(param);
+        expect(r.out).not.toContain('PASS');
+      }
+    }
+  });
+
+  test('stale-review dismissal and last-push approval may come from different rulesets\' PR rules', () => {
+    const a = { type: 'pull_request', ruleset_id: 1, parameters: { ...PR_PARAMS, require_last_push_approval: false } };
+    const b = { type: 'pull_request', ruleset_id: 2, parameters: { ...PR_PARAMS, dismiss_stale_reviews_on_push: false } };
+    expect(run(fakeGh([a, b, checks(...REQUIRED)])).code).toBe(0);
+  });
+
+  test('the PASS line names every guarantee', () => {
+    const r = run(fakeGh(FULL));
+    expect(r.out).toContain('stale-approval dismissal and last-push approval');
+    expect(r.out).toContain('no ruleset has bypass actors');
+  });
+});
+
+describe('check-branch-rules.sh — bypass actors (round 7)', () => {
+  test('each ruleset behind the rules is read once, with RULESET_TOKEN when it is set', () => {
+    const gh = fakeGh([PR_RULE, checks('ci', 'path-guard', 'shellcheck'), { ...checks('secret-scan', 'dependency-audit', 'analyze'), ruleset_id: 7 }]);
+    const r = run(gh, { GH_TOKEN: 'job-token', RULESET_TOKEN: 'admin-token' });
+    expect(r.code).toBe(0);
+    expect(readFileSync(join(ghDir(gh), 'ruleset-tokens.log'), 'utf-8')).toBe('1 admin-token\n7 admin-token\n');
+  });
+
+  test('without RULESET_TOKEN the ruleset reads use the job token (and fail closed if it cannot see the list)', () => {
+    const gh = fakeGh(FULL, false, { 1: { id: 1, enforcement: 'active' } });
+    const r = run(gh, { GH_TOKEN: 'job-token' });
+    expect(readFileSync(join(ghDir(gh), 'ruleset-tokens.log'), 'utf-8')).toBe('1 job-token\n');
+    expect(r.code).toBe(1);
+    expect(r.err).toContain('ruleset 1: its bypass list is not visible to this token');
+    expect(r.err).toContain("'Administration' repository permission");
+    expect(r.err).toContain('RULESET_READ_TOKEN');
+    expect(r.out).not.toContain('PASS');
+  });
+
+  test('any bypass actor fails the run, naming it; so does bypass_actors that is not a list', () => {
+    const actors = [
+      [{ actor_id: 5, actor_type: 'RepositoryRole', bypass_mode: 'always' }],
+      [{ actor_id: null, actor_type: 'OrganizationAdmin', bypass_mode: 'pull_request' }],
+      [{ actor_id: 99, actor_type: 'Integration', bypass_mode: 'always' }, { actor_id: 1, actor_type: 'Team', bypass_mode: 'always' }],
+    ];
+    for (const list of actors) {
+      const r = run(fakeGh(FULL, false, { 1: { id: 1, bypass_actors: list } }));
+      expect(r.code).toBe(1);
+      expect(r.err).toContain('ruleset 1 lists bypass actors');
+      expect(r.err).toContain(String(list[0].actor_type));
+      expect(r.out).not.toContain('PASS');
+    }
+    const odd = run(fakeGh(FULL, false, { 1: { id: 1, bypass_actors: 'none' } }));
+    expect(odd.code).toBe(1);
+    expect(odd.err).toContain('not visible');
+  });
+
+  test('a bypass actor on a second ruleset fails even when the first is clean', () => {
+    const r = run(fakeGh([PR_RULE, { ...checks(...REQUIRED), ruleset_id: 2 }], false, { 2: { id: 2, bypass_actors: [{ actor_id: 3, actor_type: 'Integration', bypass_mode: 'always' }] } }));
+    expect(r.code).toBe(1);
+    expect(r.err).toContain('ruleset 2 lists bypass actors (Integration:3(always))');
+  });
+
+  test('a failed ruleset read fails closed with the permission hint; so does a non-object payload', () => {
+    const r = run(fakeGh(FULL, false, { 1: 'fail' }));
+    expect(r.code).toBe(1);
+    expect(r.err).toContain('could not read ruleset 1');
+    expect(r.err).toContain("'Administration'");
+    const arr = run(fakeGh(FULL, false, { 1: [] }));
+    expect(arr.code).toBe(1);
+    expect(arr.err).toContain('did not return an object');
+  });
+
+  test('a rule without a numeric ruleset_id fails closed (the id goes into the API path)', () => {
+    for (const bad of [undefined, '1/../../x', 'abc']) {
+      const rules = FULL.map((r) => ({ ...r, ruleset_id: bad }));
+      const r = run(fakeGh(rules));
+      expect(r.code).toBe(1);
+      expect(r.out).not.toContain('PASS');
+    }
   });
 
   test('no pull_request rule fails the run', () => {
@@ -167,5 +284,20 @@ describe('REQUIRED_CHECKS matches the workflows', () => {
       expect(contrib).toContain(`\`${c}\``);
     }
     expect(wf).toContain('Require review from Code Owners');
+    // Round 7:
+    const wfText = wf.replace(/\n#\s*/g, ' '); // comment lines wrap
+    expect(wfText).toContain('Dismiss stale pull request approvals when new commits are pushed');
+    expect(wfText).toContain('Require approval of the most recent reviewable push');
+    expect(contrib).toContain('dismisses earlier approvals');
+    expect(contrib).toContain('no bypass actors');
+  });
+
+  test('the workflow passes the admin-capable token only as RULESET_TOKEN, beside the job token', () => {
+    const wf = parseYaml(readFileSync(join(ROOT, '.github', 'workflows', 'repo-settings.yml'), 'utf-8')) as {
+      jobs: Record<string, { steps: Array<{ run?: string; env?: Record<string, string> }> }>;
+    };
+    const step = Object.values(wf.jobs).flatMap((j) => j.steps).find((st) => (st.run ?? '').includes('check-branch-rules.sh'))!;
+    expect(step.env?.GH_TOKEN).toBe('${{ github.token }}');
+    expect(step.env?.RULESET_TOKEN).toBe('${{ secrets.RULESET_READ_TOKEN }}');
   });
 });

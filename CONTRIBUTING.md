@@ -17,6 +17,10 @@ rules.
 
 - Every pull request needs the code owner's review before it can merge
   (`.github/CODEOWNERS`). Nothing merges automatically.
+- Pushing new commits to a pull request dismisses earlier approvals, and the
+  most recent push must be approved by someone other than the person who
+  pushed it.
+- Nobody can bypass these rules: the ruleset on `main` has no bypass actors.
 - These required checks must pass:
   - `ci` runs the test suite and the type check.
   - `path-guard` checks protected paths (see below).
