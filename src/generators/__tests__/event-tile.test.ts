@@ -1,8 +1,10 @@
 import { describe, test, expect } from 'bun:test';
+import { mkdtempSync, readFileSync, rmSync } from 'fs';
+import { join } from 'path';
+import { tmpdir } from 'os';
 import {
   generateEventTile,
   DEFAULT_TILE_OPTS,
-  uniquifySvgIds,
   precomputeEventTiles,
   getEventTile,
   clearEventTileCache,
@@ -88,73 +90,21 @@ describe('generateEventTile', () => {
   });
 });
 
-// ─── WCAG 4.1.1 / F77 — per-tile unique internal ids ─────────────────────────
+// ─── WCAG 4.1.1 / F77 — no tile ids in the page ──────────────────────────────
 //
 // Satori emits fixed internal ids (satori_om-id, satori_bc-id, …) in every SVG.
-// With multiple tiles inlined on one page those ids collide, and because
-// mask/clipPath resolution is per-document, a colliding tile can silently
-// resolve against ANOTHER tile's mask. uniquifySvgIds suffixes every id and
-// every url(#…)/href="#…" reference with the event-id prefix.
+// Inlined, they collided across cards (and mask/clipPath resolution is
+// per-document, so a tile could resolve against ANOTHER tile's mask). Since
+// round 2 each tile is a separate file loaded as an image — its own document —
+// so the page carries no tile ids at all and each file's references resolve
+// within that file.
 
 /** Extract declared ids / url(#) refs / href="#" refs from an SVG string. */
 const idsOf = (svg: string) => new Set([...svg.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]));
 const urlRefsOf = (svg: string) => [...svg.matchAll(/url\(#([^)]+)\)/g)].map(m => m[1]);
 const hrefRefsOf = (svg: string) => [...svg.matchAll(/\bhref="#([^"]+)"/g)].map(m => m[1]);
 
-describe('uniquifySvgIds', () => {
-  // Synthetic fixture exercising ALL THREE reference forms. Live Satori output
-  // currently emits no href="#…" — a fixture built from live output would leave
-  // that form unguarded (vacuous-fixture rule).
-  const fixture =
-    '<svg><defs>' +
-    '<mask id="satori_om-id"><rect/></mask>' +
-    '<clipPath id="satori_cp-id"><rect/></clipPath>' +
-    '<path id="satori_bc-id" d="M0 0"/>' +
-    '</defs>' +
-    '<g mask="url(#satori_om-id)" clip-path="url(#satori_cp-id)">' +
-    '<use href="#satori_bc-id"/>' +
-    '</g></svg>';
-
-  test('fixture precondition: contains all three reference forms', () => {
-    // If this fails the fixture went vacuous and the tests below assert nothing.
-    expect(idsOf(fixture).size).toBeGreaterThanOrEqual(3);
-    expect(urlRefsOf(fixture).length).toBeGreaterThanOrEqual(2);
-    expect(hrefRefsOf(fixture).length).toBeGreaterThanOrEqual(1);
-  });
-
-  test('suffixes id="…", url(#…) and href="#…" with the event-id prefix', () => {
-    const out = uniquifySvgIds(fixture, 'abcdef1234567890');
-    expect(out).toContain('id="satori_om-id-abcdef12"');
-    expect(out).toContain('id="satori_cp-id-abcdef12"');
-    expect(out).toContain('id="satori_bc-id-abcdef12"');
-    expect(out).toContain('url(#satori_om-id-abcdef12)');
-    expect(out).toContain('url(#satori_cp-id-abcdef12)');
-    expect(out).toContain('href="#satori_bc-id-abcdef12"');
-  });
-
-  test('every reference still resolves after the rewrite (no dangling url/href)', () => {
-    // Guards against the half-done rewrite: suffixing ids but not their
-    // references would leave url(#satori_om-id) pointing at a renamed id.
-    const out = uniquifySvgIds(fixture, 'abcdef1234567890');
-    const ids = idsOf(out);
-    for (const ref of [...urlRefsOf(out), ...hrefRefsOf(out)]) {
-      expect(ids.has(ref)).toBe(true);
-    }
-    // And no unsuffixed original id survives anywhere in the output.
-    expect(out).not.toContain('"satori_om-id"');
-    expect(out).not.toContain('(#satori_om-id)');
-  });
-
-  test('two different eventIds yield disjoint id sets', () => {
-    const a = idsOf(uniquifySvgIds(fixture, 'aaaaaaaa-1111'));
-    const b = idsOf(uniquifySvgIds(fixture, 'bbbbbbbb-2222'));
-    expect(a.size).toBeGreaterThan(0);
-    expect(b.size).toBeGreaterThan(0);
-    for (const id of a) expect(b.has(id)).toBe(false);
-  });
-});
-
-describe('precomputeEventTiles applies uniquifySvgIds per event', () => {
+describe('precomputeEventTiles keeps Satori ids out of the page', () => {
   const asEvent = (id: string, title: string): Event =>
     ({
       id,
@@ -164,34 +114,31 @@ describe('precomputeEventTiles applies uniquifySvgIds per event', () => {
       // imageless: none of imageLocal / imageUrl / venueImage set
     }) as unknown as Event;
 
-  test('two cached tiles on one page share NO internal id, and refs resolve within each tile', async () => {
-    clearEventTileCache();
-    const evA = asEvent('11112222-aaaa-bbbb', 'Συναυλία Κλασικής Μουσικής');
-    const evB = asEvent('33334444-cccc-dddd', 'Jazz Live');
-    await precomputeEventTiles([evA, evB]);
+  test('card markup declares no ids; each tile file resolves its own refs', async () => {
+    const outDir = mkdtempSync(join(tmpdir(), 'event-tile-ids-'));
+    try {
+      clearEventTileCache();
+      const evA = asEvent('11112222-aaaa-bbbb', 'Συναυλία Κλασικής Μουσικής');
+      const evB = asEvent('33334444-cccc-dddd', 'Jazz Live');
+      await precomputeEventTiles([evA, evB], { outDir });
 
-    const tileA = getEventTile(evA.id)!;
-    const tileB = getEventTile(evB.id)!;
-    expect(tileA).toBeDefined();
-    expect(tileB).toBeDefined();
-
-    const idsA = idsOf(tileA);
-    const idsB = idsOf(tileB);
-    // Precondition: real Satori output DOES contain internal ids — if it ever
-    // stops, this test would go vacuous, so fail loudly instead.
-    expect(idsA.size).toBeGreaterThan(0);
-    expect(idsB.size).toBeGreaterThan(0);
-
-    // Disjoint id sets across tiles (the WCAG F77 collision).
-    for (const id of idsA) expect(idsB.has(id)).toBe(false);
-
-    // Each tile's url(#)/href refs resolve within THAT tile (mask integrity).
-    for (const ref of [...urlRefsOf(tileA), ...hrefRefsOf(tileA)]) {
-      expect(idsA.has(ref)).toBe(true);
+      for (const ev of [evA, evB]) {
+        const markup = getEventTile(ev.id)!;
+        expect(markup).toBeDefined();
+        expect(idsOf(markup).size).toBe(0);
+        const file = markup.match(/href="\/tiles\/([^"]+)"/)![1];
+        const svg = readFileSync(join(outDir, 'tiles', file), 'utf-8');
+        const ids = idsOf(svg);
+        // Precondition: real Satori output DOES contain internal ids — if it
+        // ever stops, this test would go vacuous, so fail loudly instead.
+        expect(ids.size).toBeGreaterThan(0);
+        for (const ref of [...urlRefsOf(svg), ...hrefRefsOf(svg)]) {
+          expect(ids.has(ref)).toBe(true);
+        }
+      }
+    } finally {
+      clearEventTileCache();
+      rmSync(outDir, { recursive: true, force: true });
     }
-    for (const ref of [...urlRefsOf(tileB), ...hrefRefsOf(tileB)]) {
-      expect(idsB.has(ref)).toBe(true);
-    }
-    clearEventTileCache();
   });
 });

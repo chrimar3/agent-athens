@@ -39,3 +39,25 @@ describe('selectImageRows', () => {
     expect(rows.map((r) => r.id)).toEqual(['done']);
   });
 });
+
+// 2026-09-23: 106 of 118 downloads went to quarantined clubber.gr, whose
+// image URLs answer an HTML wall. The registry keys scraper ids ("clubber"),
+// rows store "clubber.gr"; and a SQL LIMIT taken before filtering would let
+// quarantined rows fill the batch.
+describe('selectImageRows — quarantined sources', () => {
+  const registry = { sources: { clubber: { since: '2026-09-01', reason: 'captcha wall' } } };
+  const db = () => {
+    const d = fixtureDb();
+    d.run(`INSERT INTO events VALUES ('q', 'https://www.clubber.gr/img/1.jpg', NULL, 'clubber.gr', '2026-09-30', NULL)`);
+    return d;
+  };
+
+  test('quarantined rows are not queued', () => {
+    expect(selectImageRows(db(), {}, { sources: {} }).map(r => r.id).sort()).toEqual(['good', 'q']); // precondition: selectable without quarantine
+    expect(selectImageRows(db(), {}, registry).map(r => r.id)).toEqual(['good']);
+  });
+
+  test('the limit counts downloadable rows only', () => {
+    expect(selectImageRows(db(), { limit: 1 }, registry).map(r => r.id)).toEqual(['good']);
+  });
+});

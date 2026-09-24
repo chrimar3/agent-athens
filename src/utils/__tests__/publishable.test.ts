@@ -59,3 +59,38 @@ describe('toPublishable — enrichment markers never reach renderers', () => {
     expect(ev.fullDescriptionGr).toBeUndefined();
   });
 });
+
+describe('toPublishable — unknown clock times are not facts', () => {
+  const ra = (startDate: string, timeDoors?: string): Event => ({ ...sampleConcert, source: 'residentadvisor', startDate, timeDoors });
+
+  test('the residentadvisor 23:59 placeholder becomes a date-only event', () => {
+    const input = ra('2026-10-24T23:59:00', '23:59');
+    expect(input.startDate).toContain('T23:59'); // precondition: the fixture carries the sentinel
+    const ev = toPublishable(input);
+    expect(ev.startDate).toBe('2026-10-24');
+    expect(ev.timeDoors).toBeUndefined();
+  });
+
+  test('a real residentadvisor start time is kept', () => {
+    expect(toPublishable(ra('2026-10-24T23:00:00', '23:00')).startDate).toBe('2026-10-24T23:00:00');
+  });
+
+  test('23:59 from another source is not treated as a placeholder', () => {
+    const ev = toPublishable({ ...sampleConcert, source: 'more.com', startDate: '2026-12-31T23:59:00' });
+    expect(ev.startDate).toBe('2026-12-31T23:59:00');
+  });
+
+  test('a door time equal to the start time is dropped as redundant', () => {
+    const input: Event = { ...sampleConcert, startDate: '2026-10-08T20:30:00', timeDoors: '20:30' };
+    expect(input.startDate.slice(11, 16)).toBe(input.timeDoors!); // precondition
+    expect(toPublishable(input).timeDoors).toBeUndefined();
+  });
+
+  test('a door time before the start is kept', () => {
+    expect(toPublishable({ ...sampleConcert, startDate: '2026-10-08T21:30:00', timeDoors: '20:30' }).timeDoors).toBe('20:30');
+  });
+
+  test('on a date-only event the door time is the only known time and is kept', () => {
+    expect(toPublishable({ ...sampleConcert, startDate: '2026-10-08', timeDoors: '20:30' }).timeDoors).toBe('20:30');
+  });
+});

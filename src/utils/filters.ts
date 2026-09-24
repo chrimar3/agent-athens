@@ -124,6 +124,12 @@ export function isCurrentlyOpen(event: Event, referenceDate?: Date): boolean {
   return classifyDateFormat(endDay) === 'date-only' && endDay >= today;
 }
 
+/** An end-less event whose effective (presumed) end has not passed yet. */
+export function isPresumedRunning(event: Event, referenceDate?: Date): boolean {
+  const today = DateTime.fromJSDate(referenceDate ?? new Date(), { zone: ATHENS_TZ }).toISODate();
+  return !!today && resolveEffectiveEnd(event).date >= today;
+}
+
 /**
  * Filter to only currently open exhibitions
  */
@@ -157,6 +163,8 @@ export function formatExhibitionDateRange(event: Event, locale: string = 'el-GR'
   });
 
   if (!event.endDate) {
+    // "Ongoing" only while the presumed run lasts; past it, the end is unknown.
+    if (!isPresumedRunning(event)) return startStr;
     const ongoingLabel = locale === 'en-US' ? 'Ongoing' : 'Συνεχίζεται';
     return `${startStr} - ${ongoingLabel}`;
   }

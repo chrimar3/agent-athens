@@ -27,7 +27,8 @@ import { formatDateOnly, formatPrice } from '../utils/i18n-date';
 import { STRINGS, type Locale } from '../i18n/strings';
 import { getAthensTimezone, formatSchemaDate, VENUE_TYPE_MAP } from '../enrichment/quality-gates';
 import { resolveEventSchemaType } from '../utils/comedy-format';
-import { generateEventMetaDescription } from '../utils/meta-descriptions';
+import { generateEventMetaDescription, cleanForMeta } from '../utils/meta-descriptions';
+import { buildFactualSummary } from '../utils/factual-summary';
 import { normalizeGreek } from '../utils/normalize-greek';
 import { getVenueIdentity } from '../utils/venue-identity';
 import { findVenueConfig } from '../quality/location-filter';
@@ -291,9 +292,11 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
     );
   }
 
-  // Add door time if available
+  // Add door time if available. A date-only row's door time already became
+  // startDate above; repeating it as doorTime would claim a separate opening.
   if (event.timeDoors) {
-    schema.doorTime = formatSchemaDate(event.startDate.split('T')[0], event.timeDoors);
+    const doorTime = formatSchemaDate(event.startDate.split('T')[0], event.timeDoors);
+    if (doorTime !== startDate) schema.doorTime = doorTime;
   }
 
   // Add coordinates if available
@@ -659,6 +662,16 @@ function isMultiVenuePlaceholder(event: Event): boolean {
   return normalizeGreek(event.venue.name).includes('πολλαπλοι χωροι');
 }
 
+const META_TEXT_LIMIT = 155;
+
+/** SERP-length cut on a word boundary, marked with an ellipsis. */
+function capMetaText(text: string): string {
+  if (text.length <= META_TEXT_LIMIT) return text;
+  const cut = text.slice(0, META_TEXT_LIMIT - 1);
+  const atWord = cut.slice(0, Math.max(cut.lastIndexOf(' '), 1)).replace(/[\s,.;:·—-]+$/, '');
+  return `${atWord}…`;
+}
+
 function localizedVenueName(event: Event, locale: Locale): string {
   return locale === 'en' && isMultiVenuePlaceholder(event) ? 'Multiple venues' : event.venue.name;
 }
@@ -733,8 +746,11 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
     const fallbackLabel = isEnglishFallback ? '<p class="edp-lang-notice">Περιγραφή στα Αγγλικά</p>\n' : '';
     descriptionHtml = fallbackLabel + rendered.visibleHtml;
     hiddenMetadataHtml = rendered.hiddenHtml;
-  } else {
+  } else if (event.description.trim()) {
     descriptionHtml = `<p${langOverride(event.description, locale)}>${escapeHtml(event.description)}</p>`;
+  } else {
+    // No prose at all: state the stored facts, labelled so it never reads as editorial.
+    descriptionHtml = `<div class="edp-fact-summary"><p class="edp-lang-notice">${t.summaryLabel}</p><p>${escapeHtml(buildFactualSummary(event, locale))}</p></div>`;
   }
 
   // Read-more for long descriptions
@@ -837,7 +853,14 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   // pre-S154 DB rows, undecoded entities. Normalize via he.decode (idempotent
   // on already-decoded text) then escapeAttr so emission is uniformly correct
   // regardless of the row's encoding state. Composer stays plain-text.
-  const metaDescription = escapeAttr(he.decode(generateEventMetaDescription(event)));
+  // The composer is English-only (and reads fullDescription, which prefers
+  // English when both exist): Greek pages take their native Greek prose, else
+  // the Greek factual summary.
+  const nativeGreek = event.hasNativeGreek && event.fullDescriptionGr ? cleanForMeta(event.fullDescriptionGr) : '';
+  const metaSource = locale === 'el'
+    ? capMetaText(nativeGreek || buildFactualSummary(event, 'el'))
+    : generateEventMetaDescription(event);
+  const metaDescription = escapeAttr(he.decode(metaSource));
   const safeMetaTitle = escapeAttr(displayTitle(event.title, event.venue.name));
   // Title/meta carry the glossed venue on /en/ (JSON-LD keeps the DB name —
   // structured data stays the data-layer truth).
@@ -941,7 +964,7 @@ ${renderImageFallbackScript()}
     </section>
 
     ${isPast ? `<div class="event-passed-banner" role="status">
-      <p>${t.eventEnded}</p>
+      <p>${resolveEffectiveEnd(event).presumed ? t.eventNoLaterDates : t.eventEnded}</p>
     </div>` : ''}
 
     <div class="edp-content">

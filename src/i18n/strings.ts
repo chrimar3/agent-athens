@@ -38,6 +38,7 @@ export interface UIStrings {
   upcomingEventsAt: string;   // "Επόμενες εκδηλώσεις στο" / "Upcoming events at"
   source: string;             // "Πηγή" / "Source"
   eventEnded: string;         // "Αυτή η εκδήλωση έχει ολοκληρωθεί" / "This event has ended"
+  eventNoLaterDates: string;  // presumed end passed: "no later dates listed", never "ended"
   openMap: string;            // "Άνοιγμα στον Χάρτη" / "Open in Maps"
   atTime: string;             // "στις" / "at" (before time)
 
@@ -152,6 +153,17 @@ export interface UIStrings {
   // sits next to it, and two About entries read as a duplicate.
   colophonTrigger: string;
   colophonTriggerAria: string;
+
+  // Factual summary for event pages with no description (src/utils/factual-summary.ts).
+  // Built only from stored fields; {placeholders} are filled by the builder.
+  summaryLabel: string;          // visible marker: this is a summary, not editorial prose
+  summaryQuote: [string, string];
+  summaryAtVenue: string;        // '{venue}'
+  summaryMultipleVenues: string; // venue placeholder "Πολλαπλοί Χώροι"
+  summaryOnDate: string;         // '{date}'
+  summaryAtTime: string;         // '{time}'
+  summaryRuns: string;           // '{start}', '{end}' — exhibitions with a stored end date
+  summaryPrice: Record<'open' | 'with-ticket' | 'donation', string>;
 }
 
 export const STRINGS: Record<Locale, UIStrings> = {
@@ -211,6 +223,7 @@ export const STRINGS: Record<Locale, UIStrings> = {
     upcomingEventsAt: 'Επόμενες εκδηλώσεις στο',
     source: 'Πηγή',
     eventEnded: 'Αυτή η εκδήλωση έχει ολοκληρωθεί.',
+    eventNoLaterDates: 'Η πηγή δεν αναφέρει νεότερες ημερομηνίες για αυτή την εκδήλωση.',
     openMap: 'Άνοιγμα στον Χάρτη →',
     atTime: 'στις',
 
@@ -360,6 +373,19 @@ export const STRINGS: Record<Locale, UIStrings> = {
 
     colophonTrigger: 'About',
     colophonTriggerAria: 'About — ο δημιουργός του ιστότοπου (κείμενο στα αγγλικά)',
+
+    summaryLabel: 'Σύνοψη από τα στοιχεία της καταχώρισης',
+    summaryQuote: ['«', '»'],
+    summaryAtVenue: ' στον χώρο {venue}',
+    summaryMultipleVenues: ' σε διάφορους χώρους',
+    summaryOnDate: ', {date}',
+    summaryAtTime: ' στις {time}',
+    summaryRuns: 'Διάρκεια: {start} έως {end}.',
+    summaryPrice: {
+      open: 'Ελεύθερη είσοδος.',
+      'with-ticket': 'Είσοδος με εισιτήριο.',
+      donation: 'Είσοδος με ελεύθερη συνεισφορά.',
+    },
   },
 
   en: {
@@ -418,6 +444,7 @@ export const STRINGS: Record<Locale, UIStrings> = {
     upcomingEventsAt: 'Upcoming events at',
     source: 'Source',
     eventEnded: 'This event has ended.',
+    eventNoLaterDates: 'The source lists no later dates for this event.',
     openMap: 'Open in Maps →',
     atTime: 'at',
 
@@ -569,5 +596,18 @@ export const STRINGS: Record<Locale, UIStrings> = {
 
     colophonTrigger: 'About',
     colophonTriggerAria: 'About — open colophon',
+
+    summaryLabel: 'Summary from the listing details',
+    summaryQuote: ['“', '”'],
+    summaryAtVenue: ' at {venue}',
+    summaryMultipleVenues: ' at multiple venues',
+    summaryOnDate: ' on {date}',
+    summaryAtTime: ' at {time}',
+    summaryRuns: 'Runs {start} to {end}.',
+    summaryPrice: {
+      open: 'Open entry.',
+      'with-ticket': 'Ticketed entry.',
+      donation: 'Entry by donation.',
+    },
   },
 };

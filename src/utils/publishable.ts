@@ -19,6 +19,15 @@ export function toPublishable(event: Event): Event {
   if (event.priceSource === 'venue_default') {
     out.price = { ...event.price, amount: undefined, range: undefined };
   }
+  // residentadvisor returns 23:59 when the promoter gave no start time.
+  if (event.source === 'residentadvisor' && event.startDate.slice(10, 16) === 'T23:59') {
+    out.startDate = event.startDate.slice(0, 10);
+    if (event.timeDoors === '23:59') out.timeDoors = undefined;
+  }
+  // Doors equal to the start is the start restated, not a door time.
+  if (out.timeDoors && out.startDate.slice(11, 16) === out.timeDoors) {
+    out.timeDoors = undefined;
+  }
   return out;
 }
 

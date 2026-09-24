@@ -82,7 +82,7 @@ function enforceCharLimit(text: string, limit: number): string {
  * the same surface. Composer works on this CLEAN text; escaping stays at the
  * emission seam (event-page.ts, 1.5a).
  */
-function cleanForMeta(text: string): string {
+export function cleanForMeta(text: string): string {
   return text
     .replace(/<!--[\s\S]*?-->/g, '') // drop HTML comments (e.g. timeliness-expires)
     .replace(/[*_`]/g, '')           // drop bold/italic/code markers

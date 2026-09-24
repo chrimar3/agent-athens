@@ -85,6 +85,55 @@ export const RANK_EVENTS_JS = `function rankEvents(results) {
   }`;
 
 /**
+ * Greeklish fold — one Latin key for Greek text and for how people type it in
+ * Latin letters ("kyttaro"/"kittaro" ↔ Κύτταρο, "mousiki"/"musiki" ↔ μουσική).
+ * The index applies it to transliterateGreekId output; the page applies it to
+ * a Latin query. The page embeds THIS function's source text
+ * (greeklishFold.toString()), so it must stay self-contained: no imports, no
+ * helpers, ES5 syntax. Both sides fold identically, so over-folding only
+ * widens matches, it never splits them.
+ */
+export function greeklishFold(s: string): string {
+  return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/ou/g, 'u')
+    .replace(/mp/g, 'b')
+    .replace(/nt/g, 'd')
+    .replace(/g[gk]/g, 'g')
+    .replace(/[ck]h/g, 'h')
+    .replace(/ks/g, 'x')
+    .replace(/ph/g, 'f')
+    .replace(/ai/g, 'e')
+    .replace(/[eo]i|y/g, 'i')
+    .replace(/w/g, 'o')
+    .replace(/([a-z])\1+/g, '$1')
+    .trim();
+}
+
+/**
+ * Wrap a Fuse searcher so a Latin query also runs against the Latin (…L) keys
+ * of a second searcher over the SAME records; results merge by record, the
+ * better score wins, and the merged list keeps Fuse's own order (score, then
+ * index). Greek queries use the primary searcher only, as before.
+ */
+export const GREEKLISH_SEARCH_JS = `function withGreeklish(primary, latin) {
+    return { search: function(q) {
+      var main = primary.search(q);
+      if (/[\\u0370-\\u03ff\\u1f00-\\u1fff]/.test(q)) return main;
+      var lq = greeklishFold(q);
+      if (lq.length < 2) return main;
+      var best = {};
+      main.concat(latin.search(lq)).forEach(function(r) {
+        var prev = best[r.refIndex];
+        if (!prev || r.score < prev.score) best[r.refIndex] = r;
+      });
+      return Object.keys(best).map(function(k) { return best[k]; }).sort(function(a, b) {
+        return (a.score - b.score) || (a.refIndex - b.refIndex);
+      });
+    } };
+  }`;
+
+/**
  * Render the client-side search script (IIFE, no external deps at parse time).
  * Uses safe DOM methods (createElement/textContent) instead of innerHTML
  * since index data passes through JSON — defense in depth.
@@ -131,6 +180,10 @@ export function renderSearchScript(locale: Locale = 'el'): string {
   } catch(e) {}
 
   ${RANK_EVENTS_JS}
+
+  ${greeklishFold.toString()}
+
+  ${GREEKLISH_SEARCH_JS}
 
   function norm(s) {
     return s.trim().toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
@@ -313,7 +366,7 @@ export function renderSearchScript(locale: Locale = 'el'): string {
       if (!indexData || !Array.isArray(indexData.events) || !Array.isArray(indexData.venues) || !Array.isArray(indexData.categories)) throw new Error('Invalid search index');
       var Fuse = results[1].default;
 
-      fuseEvents = new Fuse(indexData.events, {
+      fuseEvents = withGreeklish(new Fuse(indexData.events, {
         keys: [
           { name: 'titleN', weight: 2 },
           { name: 'venueN', weight: 1 },
@@ -321,24 +374,43 @@ export function renderSearchScript(locale: Locale = 'el'): string {
         ],
         threshold: 0.3,
         includeScore: true
-      });
+      }), new Fuse(indexData.events, {
+        keys: [
+          { name: 'titleL', weight: 2 },
+          { name: 'venueL', weight: 1 }
+        ],
+        threshold: 0.3,
+        includeScore: true
+      }));
 
-      fuseVenues = new Fuse(indexData.venues, {
+      fuseVenues = withGreeklish(new Fuse(indexData.venues, {
         keys: [
           { name: 'nameN', weight: 2 },
           { name: 'neighborhoodN', weight: 0.5 }
         ],
         threshold: 0.3,
         includeScore: true
-      });
+      }), new Fuse(indexData.venues, {
+        keys: [
+          { name: 'nameL', weight: 2 }
+        ],
+        threshold: 0.3,
+        includeScore: true
+      }));
 
-      fuseCategories = new Fuse(indexData.categories, {
+      fuseCategories = withGreeklish(new Fuse(indexData.categories, {
         keys: [
           { name: 'titleN', weight: 1.5 }
         ],
         threshold: 0.3,
         includeScore: true
-      });
+      }), new Fuse(indexData.categories, {
+        keys: [
+          { name: 'titleL', weight: 1.5 }
+        ],
+        threshold: 0.3,
+        includeScore: true
+      }));
 
       loaded = true;
       hideSkeleton();

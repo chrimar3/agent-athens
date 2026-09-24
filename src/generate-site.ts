@@ -200,8 +200,9 @@ async function main() {
     }
   }
   const { selectPublishedPopulation, selectUpcomingListing } = await import('./utils/event-populations');
-  const { events: locationFiltered, rolloverHeld } = selectPublishedPopulation(allEvents);
+  const { events: locationFiltered, rolloverHeld, cityHeld } = selectPublishedPopulation(allEvents);
   console.log(`🕰️  Held back ${rolloverHeld} athinorama rows dated >300 days after first scrape (rollover suspects)`);
+  console.log(`🗺️  Held back ${cityHeld} events whose title places them in a non-Athens city`);
 
   // Pre-build performer QID gate (S179): every wikidata QID in
   // config/performer-sameAs.json must carry a resolver-written verification

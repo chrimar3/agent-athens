@@ -1,5 +1,5 @@
 /**
- * S161 — Imageless event-card typographic tile (Satori → inline SVG).
+ * S161 — Imageless event-card typographic tile (Satori → SVG file under dist/tiles/).
  *
  * Replaces the .card-image--fallback gradient (S124) per Design Navigator ruling
  * 2026-06-03. Renders one Satori SVG per imageless event for the on-page card
@@ -13,7 +13,10 @@
  * room.
  */
 import satori from 'satori';
+import { createHash } from 'crypto';
+import { join } from 'path';
 import type { Event } from '../types';
+import { writeFileIfChangedSync } from '../utils/write-if-changed';
 import { SATORI_FONTS } from '../utils/satori-fonts';
 import { computeTileFit } from '../utils/tile-autofit';
 import { formatGreekDateOnly } from '../utils/i18n';
@@ -148,47 +151,58 @@ export async function generateEventTile(
 // ─── Precompute cache for sync card-render lookup ────────────────────────────
 //
 // Card renderers (page.ts:renderEventCard, card-variants.ts, event-page.ts) are
-// synchronous. Satori is async. We bridge by precomputing tile SVGs for every
-// imageless event once per build, storing them in a module-level Map keyed by
-// event.id, and exposing a sync getter the renderers call. Mirrors the
-// generateEventOgImages() pattern at src/generators/og-image.ts (build-time
-// batch, called from src/generate-site.ts).
+// synchronous. Satori is async. We bridge by precomputing tiles for every
+// imageless event once per build and exposing a sync getter the renderers
+// call. Mirrors generateEventOgImages() in src/generators/og-image.ts.
+//
+// Each tile is written once to <outDir>/tiles/<content-hash>.svg and cards
+// carry a small reference instead of the ~28 KB glyph-path SVG. Constraints:
+// - The reference keeps an <svg> root with the tile's viewBox: every
+//   `.…-image-wrapper > svg` rule in design-system.css (absolute fill, the
+//   96×128 mobile thumb, pointer-events:none) targets it.
+// - The tile is loaded as an image, i.e. its own document, so Satori's fixed
+//   internal ids cannot collide across cards; that is what allows identical
+//   tiles to share one file. Never inline the file content back into a page.
+
+/** Where generate-site's dist/ is; tests pass their own outDir. */
+export const DEFAULT_TILE_OUT_DIR = join(import.meta.dir, '../../dist');
 
 const tileCache = new Map<string, string>();
 
-/**
- * Generate inline-SVG tiles for every imageless event in `events` and cache them
- * by id. An event is "imageless" when none of imageLocal/imageUrl/venueImage are
- * set — the same predicate the card renderers use to pick the fallback branch.
- *
- * Returns the number of tiles generated. Safe to call multiple times per build
- * (later calls overwrite earlier cache entries for the same id).
- */
-export async function precomputeEventTiles(events: Event[]): Promise<number> {
-  const imageless = events.filter(
-    e => !e.imageLocal && !e.imageUrl && !e.venueImage,
-  );
-  for (const event of imageless) {
-    const svg = await generateEventTile(event);
-    tileCache.set(event.id, uniquifySvgIds(svg, event.id));
-  }
-  return imageless.length;
+function tileReference(fileName: string, o: TileOpts): string {
+  return `<svg width="${o.width}" height="${o.height}" viewBox="0 0 ${o.width} ${o.height}" aria-hidden="true" focusable="false">`
+    + `<image href="/tiles/${fileName}" width="${o.width}" height="${o.height}"/></svg>`;
 }
 
 /**
- * Satori emits fixed internal ids (`satori_om-id` etc.) in every SVG. With
- * multiple tiles inlined on one page those ids collide — WCAG 4.1.1 F77
- * duplicate-id errors — and mask/clipPath resolution is per-document, so a
- * colliding tile silently resolves against ANOTHER tile's mask (renders OK
- * today, fragile by construction). Suffix every id and its url(#…)/href="#…"
- * reference with the event-id prefix so each tile is self-contained.
+ * Generate tiles for every imageless event in `events`, write each distinct
+ * tile once to `<outDir>/tiles/`, and cache the card reference by event id.
+ * An event is "imageless" when none of imageLocal/imageUrl/venueImage are
+ * set — the same predicate the card renderers use to pick the fallback branch.
+ *
+ * File names are the content hash, so an unchanged tile keeps its URL (and
+ * its browser cache entry) across builds, and an unchanged file is not
+ * rewritten. Returns the number of events that got a tile.
  */
-export function uniquifySvgIds(svg: string, eventId: string): string {
-  const suffix = `-${eventId.substring(0, 8)}`;
-  return svg
-    .replace(/\bid="([^"]+)"/g, (_m, id) => `id="${id}${suffix}"`)
-    .replace(/url\(#([^)]+)\)/g, (_m, id) => `url(#${id}${suffix})`)
-    .replace(/\bhref="#([^"]+)"/g, (_m, id) => `href="#${id}${suffix}"`);
+export async function precomputeEventTiles(
+  events: Event[],
+  opts: { outDir?: string } = {},
+): Promise<number> {
+  const tilesDir = join(opts.outDir ?? DEFAULT_TILE_OUT_DIR, 'tiles');
+  const imageless = events.filter(
+    e => !e.imageLocal && !e.imageUrl && !e.venueImage,
+  );
+  const written = new Set<string>();
+  for (const event of imageless) {
+    const svg = await generateEventTile(event);
+    const fileName = `${createHash('sha256').update(svg).digest('hex').slice(0, 16)}.svg`;
+    if (!written.has(fileName)) {
+      writeFileIfChangedSync(join(tilesDir, fileName), svg);
+      written.add(fileName);
+    }
+    tileCache.set(event.id, tileReference(fileName, DEFAULT_TILE_OPTS));
+  }
+  return imageless.length;
 }
 
 /**

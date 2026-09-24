@@ -21,7 +21,8 @@ import { writeFileIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
 import { computePagedVenueSlugs } from './venue-page';
 import type { Event } from '../types';
-import { normalizeGreek } from '../utils/normalize-greek';
+import { normalizeGreek, transliterateGreekId } from '../utils/normalize-greek';
+import { greeklishFold } from '../templates/search-overlay';
 import { getAthensTodayStr, resolveEffectiveEnd } from '../utils/event-lifecycle';
 import { displayNeighborhood } from '../utils/neighborhoods';
 import { displayTitle, decodeFully } from '../utils/display-title';
@@ -37,13 +38,28 @@ function formatShortGreekDate(isoDate: string): string {
 
 const DIST_DIR = join(import.meta.dir, '../../dist');
 
+const GREEK_LETTER = /[\u0370-\u03ff\u1f00-\u1fff]/;
+
+/** Latin search key for Greek text: the page folds Latin queries the same way. */
+export function greeklishKey(text: string): string {
+  return greeklishFold(transliterateGreekId(text));
+}
+
+/** Latin key only where the text has Greek letters: a Latin-only string is
+ *  already matched through its *N field, so a copy would only grow the index. */
+function latinKey(text: string): string | undefined {
+  return GREEK_LETTER.test(text) ? greeklishKey(text) : undefined;
+}
+
 interface EventRecord {
   id: string;
   title: string;
   titleN: string;
+  titleL?: string;
   type: string;
   venue: string;
   venueN: string;
+  venueL?: string;
   neighborhood: string;
   neighborhoodN: string;
   date: string;
@@ -57,6 +73,7 @@ interface EventRecord {
 interface VenueRecord {
   name: string;
   nameN: string;
+  nameL?: string;
   neighborhood: string;
   neighborhoodN: string;
   slug: string;
@@ -67,6 +84,7 @@ interface CategoryRecord {
   slug: string;
   title: string;
   titleN: string;
+  titleL?: string;
   count: number;
 }
 
@@ -103,9 +121,11 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
     id: event.id,
     title: displayTitle(event.title, event.venue.name),
     titleN: normalizeGreek(displayTitle(event.title, event.venue.name)),
+    titleL: latinKey(displayTitle(event.title, event.venue.name)),
     type: event.type,
     venue: decodeFully(event.venue.name),
     venueN: normalizeGreek(decodeFully(event.venue.name)),
+    venueL: latinKey(decodeFully(event.venue.name)),
     neighborhood: displayNeighborhood(event.venue.neighborhood || ''),
     neighborhoodN: normalizeGreek(event.venue.neighborhood || ''),
     date: formatShortGreekDate(event.startDate),
@@ -131,6 +151,7 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
       venueMap.set(slug, {
         name: he.decode(event.venue.name),
         nameN: normalizeGreek(he.decode(event.venue.name)),
+        nameL: latinKey(he.decode(event.venue.name)),
         neighborhood: displayNeighborhood(event.venue.neighborhood || ''),
         neighborhoodN: normalizeGreek(event.venue.neighborhood || ''),
         slug,
@@ -154,6 +175,7 @@ export function generateSearchIndex(events: Event[], outDir: string = DIST_DIR):
       slug: cat.slug,
       title: cat.title,
       titleN: normalizeGreek(cat.title),
+      titleL: latinKey(cat.title),
       count: filtered.length,
     };
   });
