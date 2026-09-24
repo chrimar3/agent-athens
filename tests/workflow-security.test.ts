@@ -25,6 +25,10 @@
  * config from outside the change under scan (tests/secret-scan.test.ts); and
  * the contributor-facing files (CONTRIBUTING.md, issue chooser, PR template,
  * README → SECURITY.md) exist and say what reviewers and automation do.
+ * Security loop round 8: pull_request_target / workflow_run triggers are limited
+ * to main; a pull_request_review workflow checks out the default branch by
+ * name; path-guard re-runs on reviews and reads CODEOWNERS from the default
+ * branch.
  */
 import { describe, test, expect } from 'bun:test';
 import { readFileSync, readdirSync, existsSync } from 'fs';
@@ -100,8 +104,37 @@ describe('workflows — untrusted input', () => {
         for (const s of job.steps ?? []) {
           if (!s.uses?.startsWith('actions/checkout')) continue;
           const ref = s.with?.ref;
-          expect(ref === undefined || String(ref).includes('base.')).toBe(true);
+          expect(ref === undefined || String(ref).includes('base.') || String(ref) === '${{ github.event.repository.default_branch }}').toBe(true);
           expect(String(s.with?.['persist-credentials'])).toBe('false');
+        }
+      }
+    });
+
+    // Round 8: a pull_request_target or workflow_run workflow runs with a
+    // write-capable token from the definition on the TARGET branch, so a PR
+    // against a stale branch would run that branch's old copy. Restricted to main.
+    test(`${file}: every pull_request_target / workflow_run trigger is limited to branches [main]`, () => {
+      const on = (wf.on ?? wf[true as unknown as string]) as Record<string, { branches?: string[] } | null> | string | string[];
+      if (typeof on === 'string' || Array.isArray(on)) {
+        const list = typeof on === 'string' ? [on] : on;
+        expect(list.filter((t) => t === 'pull_request_target' || t === 'workflow_run')).toEqual([]);
+        return;
+      }
+      for (const t of ['pull_request_target', 'workflow_run']) {
+        if (!(t in on)) continue;
+        expect(`${t}: ${JSON.stringify(on[t]?.branches)}`).toBe(`${t}: ["main"]`);
+      }
+    });
+
+    // Round 8: pull_request_review runs the definition and (by default) the
+    // checkout from the PR's merge ref, so every checkout must name the
+    // default branch.
+    test(`${file}: a pull_request_review workflow checks out the default branch explicitly`, () => {
+      if (!triggers(wf).includes('pull_request_review')) return;
+      for (const job of Object.values(wf.jobs)) {
+        for (const s of job.steps ?? []) {
+          if (!s.uses?.startsWith('actions/checkout')) continue;
+          expect(String(s.with?.ref)).toBe('${{ github.event.repository.default_branch }}');
         }
       }
     });
@@ -164,6 +197,15 @@ describe('path-guard.yml — base changes and the glob source', () => {
 
   test('re-runs when a PR is opened, pushed to, reopened or edited (a retargeted base fires `edited`)', () => {
     expect([...(on.pull_request_target?.types ?? [])].sort()).toEqual(['edited', 'opened', 'reopened', 'synchronize']);
+  });
+
+  test('round 8: re-runs when a review is submitted or dismissed, and passes the event head SHA', () => {
+    expect([...(on.pull_request_review?.types ?? [])].sort()).toEqual(['dismissed', 'submitted']);
+    const step = (pg.wf.jobs['path-guard'].steps ?? []).find((s) => (s.run ?? '').includes('path-guard.sh'))!;
+    expect(step.env?.HEAD_SHA).toBe('${{ github.event.pull_request.head.sha }}');
+    const script = readFileSync(join(ROOT, '.github', 'scripts', 'path-guard.sh'), 'utf-8');
+    expect(script).toContain('contents/.github/CODEOWNERS?ref=$GLOBS_REF');
+    expect(script).toContain('repos/$REPO/pulls/$PR/reviews');
   });
 
   test('reads the protected globs from the default branch, not the PR base or head', () => {

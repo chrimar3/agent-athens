@@ -48,8 +48,10 @@ rules.
 - the security tests.
 
 A pull request that touches any of these fails the `path-guard` check and gets
-the `needs-input` label. The owner still reviews it, but a change there has to
-be agreed first.
+the `needs-input` label until a code owner (from `.github/CODEOWNERS` on the
+default branch) approves its current head commit. The check then re-runs and
+passes. Pushing new commits needs a new approval, because the old one names an
+older commit. A change there still has to be agreed first.
 
 So **open an issue first**. Describe the change you want to a protected path
 and why. The owner decides whether to make it. The list is read from the
