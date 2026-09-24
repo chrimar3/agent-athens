@@ -8,7 +8,7 @@
     "dev": "bun run src/generate-site.ts && bun run serve",
     "serve": "bun run --watch src/serve.ts",
     "deploy": "bash scripts/redeploy.sh",
-    "test": "bun run scripts/test-pipeline.ts",
+    "test": "bash scripts/run-tests.sh",
     "test:full": "bun run scripts/test-pipeline.ts --full",
     "test:quick": "bun run scripts/test-pipeline.ts --no-scrape",
     "test:unit": "bun test tests/unit",
