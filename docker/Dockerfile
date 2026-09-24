@@ -14,22 +14,28 @@
 # the label and image-info below, not from when this image was built.
 ARG BASE_IMAGE=mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
 
-# --- egress: the pipeline's forward proxy (compose service `egress`) --------
-# Squid from Ubuntu on the same pinned base: no second image to pin or keep
-# fresh (Dependabot bumps one digest), shared layers on disk, and `apt-get
-# upgrade` on every rebuild like the pipeline stage. Configuration is
-# docker/egress/squid.conf, mounted read-only by compose. Runs as the
-# unprivileged `proxy` user (port 3128 needs no capability).
+# --- egress: the pipeline's only way out (compose service `egress`) --------
+# Squid (HTTP/HTTPS forward proxy) and socat (the TCP relay email ingest uses
+# for IMAP, pinned to one public address) from Ubuntu on the same pinned base:
+# no second image to pin or keep fresh (Dependabot bumps one digest), shared
+# layers on disk, and `apt-get upgrade` on every rebuild like the pipeline
+# stage. Squid's configuration is docker/egress/squid.conf, mounted read-only
+# by compose; docker/egress/start.sh runs both. Runs as the unprivileged
+# `proxy` user (ports 3128 and 9993 need no capability).
 FROM ${BASE_IMAGE} AS egress
 RUN rm -f /etc/apt/sources.list.d/nodesource* \
  && apt-get update \
  && apt-get -y -o Dpkg::Options::=--force-confold upgrade --no-install-recommends \
- && apt-get install -y --no-install-recommends squid \
+ && apt-get install -y --no-install-recommends squid socat \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
- && /usr/sbin/squid -v | head -1
+ && /usr/sbin/squid -v | head -1 && socat -V | grep -m1 'socat version'
+COPY docker/egress/start.sh /usr/local/bin/aa-egress-start
+RUN chmod 0755 /usr/local/bin/aa-egress-start \
+ && bash /usr/local/bin/aa-egress-start --check-ip 8.8.8.8 \
+ && ! bash /usr/local/bin/aa-egress-start --check-ip 192.168.1.1
 USER proxy
-ENTRYPOINT ["/usr/sbin/squid", "-N", "-d", "1", "-f", "/etc/squid/aa-egress.conf"]
+ENTRYPOINT ["/usr/local/bin/aa-egress-start"]
 
 # --- pipeline: the job image (compose services pipeline*; the default target)
 FROM ${BASE_IMAGE} AS pipeline
@@ -84,12 +90,40 @@ RUN rm -f /etc/apt/sources.list.d/nodesource* \
 # Pinned CLIs: bun (runtime), netlify (deploy), claude (auto-enrich `claude -p`).
 # `npm ci` installs exactly docker/cli/package-lock.json and verifies every
 # tarball's integrity hash. Bump versions there (npm install --package-lock-only).
+#
+# Install scripts: `--ignore-scripts`, so none of the ~1,000 packages in the
+# tree (netlify-cli's dependencies above all) runs code at build time. Only
+# the two whose install script the pipeline needs run, explicitly, from
+# their own (integrity-checked) package folder, as npm would:
+#   bun                        postinstall `node install.js`: puts the native
+#                              binary from @oven/bun-linux-* at bin/bun.exe
+#   @anthropic-ai/claude-code  postinstall `node install.cjs`: the same for
+#                              @anthropic-ai/claude-code-linux-* (bin/claude.exe)
+# Skipped on purpose (lockfile `hasInstallScript`): netlify-cli (postinstall
+# prints a welcome and sets up shell completion), esbuild (postinstall only
+# validates/optimises; its JS API finds @esbuild/linux-* at run time), sharp
+# (install only checks for the prebuilt @img/sharp-linux-*, which npm
+# installs), unix-dgram (optional native build for hot-shots, which runs
+# without it). The script list was taken from the registry metadata for the
+# pinned versions; the scripts' bodies could not be read at authoring time,
+# so the version checks at the end are what proves bun and claude work.
+# A version bump that adds an install script needs a look here.
+#
+# npm runs as pwuser, not root (setpriv; unpacking tarballs and the two
+# scripts never run with root rights); the tree is handed to root afterwards
+# in the same layer, so no run-time user can change the CLIs.
 COPY docker/cli/package.json docker/cli/package-lock.json /opt/aa-cli/
-RUN npm ci --prefix /opt/aa-cli --no-fund --no-audit \
- && ln -s /opt/aa-cli/node_modules/.bin/bun /opt/aa-cli/node_modules/.bin/bunx \
-          /opt/aa-cli/node_modules/.bin/netlify /opt/aa-cli/node_modules/.bin/claude /usr/local/bin/ \
- && npm cache clean --force \
- && bun --version && netlify --version && claude --version
+RUN set -eu; u="$(id -u pwuser)"; g="$(id -g pwuser)"; \
+    chown -R "$u:$g" /opt/aa-cli; install -d -o "$u" -g "$g" -m 0700 /tmp/aa-npm-home; \
+    asuser() { setpriv --reuid="$u" --regid="$g" --init-groups env HOME=/tmp/aa-npm-home npm_config_cache=/tmp/aa-npm-home/.npm "$@"; }; \
+    asuser npm ci --prefix /opt/aa-cli --ignore-scripts --no-fund --no-audit; \
+    (cd /opt/aa-cli/node_modules/bun && asuser node install.js); \
+    (cd /opt/aa-cli/node_modules/@anthropic-ai/claude-code && asuser node install.cjs); \
+    rm -rf /tmp/aa-npm-home; \
+    chown -R root:root /opt/aa-cli; \
+    ln -s /opt/aa-cli/node_modules/.bin/bun /opt/aa-cli/node_modules/.bin/bunx \
+          /opt/aa-cli/node_modules/.bin/netlify /opt/aa-cli/node_modules/.bin/claude /usr/local/bin/; \
+    bun --version && netlify --version && claude --version
 
 # Stable Chromium path for puppeteer (scripts/lib/chrome-path.ts reads
 # PUPPETEER_EXECUTABLE_PATH). Unused Playwright browsers stay in the base layer.

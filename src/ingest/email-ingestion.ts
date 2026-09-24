@@ -15,6 +15,7 @@ import { simpleParser } from 'mailparser';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { createHash } from 'crypto';
+import { checkServerIdentity, type PeerCertificate } from 'tls';
 import { getDatabase } from '../db/database';
 import {
   insertProcessedEmail,
@@ -449,26 +450,63 @@ export function imapSimpleMailbox(connection: any): MailboxClient {
   };
 }
 
+/** A DNS host name (no IP literal, no port, no path). */
+const HOSTNAME_RE = /^(?=.{1,253}$)[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
+
+function parsePort(name: string, value: string): number {
+  if (!/^[0-9]{1,5}$/.test(value) || Number(value) < 1 || Number(value) > 65535) {
+    throw new Error(`${name}='${value}' is not a TCP port (1-65535)`);
+  }
+  return Number(value);
+}
+
 /**
  * Build the imap-simple config. TLS certificate verification is explicit, and
  * the run refuses to start if verification has been disabled process-wide.
+ *
+ * IMAP_CONNECT_HOST / IMAP_CONNECT_PORT (set by docker/compose.yaml for the
+ * container's email-ingest run) choose where the TCP connection goes: the
+ * egress container's relay, which forwards raw bytes to the IMAP server and
+ * nowhere else. TLS still runs end to end with the IMAP server: the server
+ * name sent (SNI) and the certificate checked are IMAP_HOST's, never the
+ * relay's, so the relay can neither read nor impersonate the mailbox.
  */
 export function buildImapConfig(env: Record<string, string | undefined> = process.env) {
   if (env.NODE_TLS_REJECT_UNAUTHORIZED === '0') {
     throw new Error('NODE_TLS_REJECT_UNAUTHORIZED=0 disables certificate verification; unset it before ingesting email');
   }
   const host = env.IMAP_HOST || 'imap.gmail.com';
+  const port = parsePort('IMAP_PORT', env.IMAP_PORT || '993');
+  let connectHost = host;
+  let connectPort = port;
+  if (env.IMAP_CONNECT_HOST) {
+    if (!HOSTNAME_RE.test(env.IMAP_CONNECT_HOST)) {
+      throw new Error(`IMAP_CONNECT_HOST='${env.IMAP_CONNECT_HOST}' is not a host name`);
+    }
+    if (!HOSTNAME_RE.test(host) || /^[0-9.]+$/.test(host)) {
+      throw new Error(`IMAP_HOST='${host}' must be a host name when connecting through a relay (the certificate is checked against it)`);
+    }
+    connectHost = env.IMAP_CONNECT_HOST;
+    connectPort = parsePort('IMAP_CONNECT_PORT', env.IMAP_CONNECT_PORT || String(port));
+  } else if (env.IMAP_CONNECT_PORT) {
+    throw new Error('IMAP_CONNECT_PORT is set without IMAP_CONNECT_HOST');
+  }
   return {
     imap: {
       user: env.EMAIL_USER ?? '',
       password: env.EMAIL_PASSWORD ?? '',
-      host,
-      port: parseInt(env.IMAP_PORT || '993', 10),
+      // Where the socket connects (the relay, or the server itself).
+      host: connectHost,
+      port: connectPort,
       tls: true,
+      // node-imap copies these over its own tlsOptions.host (= the connect
+      // host): identity, SNI and verification are always the IMAP server's.
       tlsOptions: {
-        rejectUnauthorized: true,
+        host,
         servername: host,
+        rejectUnauthorized: true,
         minVersion: 'TLSv1.2',
+        checkServerIdentity: (_connectedTo: string, cert: PeerCertificate) => checkServerIdentity(host, cert),
       },
       autotls: 'never',
       authTimeout: 10000,

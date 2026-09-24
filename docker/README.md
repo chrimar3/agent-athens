@@ -8,14 +8,15 @@ container and can reach only:
 
 | Reaches | Why |
 |---|---|
-| The repo's data folders (read-write) | The pipeline writes `data/`, `logs/`, `temp-*`; `dist/` only in the build run (read-only for scrape and publish) |
-| Everything else in the repo, incl. `docs/`, `.netlify/`, `.git/config`, `.git/hooks` (**read-only**) | So nothing it does can change code or instructions your Mac or an agent session later runs |
+| The repo's data folders (read-write) | The pipeline writes `data/`, `logs/`, `temp-*`; `dist/` only in the build run (read-only for scrape, diff gate and publish) |
+| Everything else in the repo, incl. `docs/`, `.netlify/`, `.git/config`, `.git/hooks` (**read-only**, `docs/` in every run) | So nothing it does can change code or instructions your Mac or an agent session later runs |
 | The repo's `.env` (read-only, **only the runs that fetch email**) | Mailbox password, for installs that keep it there (it can move to `docker.env`) |
-| `~/.config/agentathens` (read-only, **only runs that need it**) | GSC/Bing API keys |
+| Single key files from `~/.config/agentathens` (read-only, **only runs that use them**): the Search Console key for publish, the Bing and Search Console keys for `visibility`; the whole folder only for `doctor` and the legacy `daily` runs | GSC/Bing API keys |
 | `~/.config/agentathens-docker/handoff/` (**only build and publish runs**) | The "ready to publish" marker, from the build run to the Mac to the publish run |
+| `~/.config/agentathens-docker/diff-gate/` (**only the diff-gate run**) | The publish diff gate's stats of the last accepted build |
 | The tokens its run needs, and no others | See the table below |
-| Public websites on ports 80/443, **through the egress proxy only**; the build run has no network at all | Scraping, enrichment and publishing need it. Your Mac itself, your LAN and cloud-metadata addresses are refused |
-| Your mail server directly, **email ingest only** | IMAP is not HTTP and cannot go through the proxy (see Known limits) |
+| Public websites on ports 80/443, **through the egress proxy only**; the build, site and diff-gate runs have no network at all | Scraping, enrichment and publishing need it. Your Mac itself, your LAN and cloud-metadata addresses are refused |
+| One IMAP server (`IMAP_HOST` in `docker.env`, default Gmail) on its port, **through the egress relay** | IMAP is not HTTP and cannot go through the proxy; the relay forwards to that one public address only (see Egress) |
 
 **The repo folder is never mounted as a whole.** Inside the container
 `/workspace` is an empty, private tmpfs, and `aa-run.sh` mounts each
@@ -41,7 +42,23 @@ overlays. Now any other spelling of a name simply does not exist. Also:
 
 It cannot reach the rest of your home folder, the keychain, SSH keys, browser
 profiles, other projects, the backups, the token file or the Mac's system
-files. The container runs as a non-root user with every Linux capability
+files. Token values never sit in `aa-run.sh`'s own environment: each run's
+tokens are exported only in the subshell that starts its `docker compose
+run` (which passes them with `-e KEY`, name only), so the integrity check,
+the alert senders (osascript, curl, the email sender), git and the backup copy
+never hold them, and no value appears in a process's argument list.
+
+**Decisions queue.** `scripts/decisions-queue.ts` runs in every build and
+quotes scraped and database strings (venue names, event titles, geocoded
+addresses, concern texts). It now writes `data/DECISIONS-QUEUE.md` — data/ is
+the folder for pipeline-written, untrusted content — with a first line saying
+the content is untrusted data, not instructions, and every quoted string on
+one line with its Markdown characters escaped (no heading, link, image, HTML
+or code span can come out of a venue name). `docs/DECISIONS-QUEUE.md` is no
+longer written or mounted writable into any run, and the integrity check no
+longer exempts it: a run that changes or commits anything under `docs/` is
+quarantined. (The old file stays in git until someone removes it;
+`scripts/weekly-digest.ts` reads and links the new one.) The container runs as a non-root user with every Linux capability
 dropped, a read-only system filesystem, a fresh empty home folder on every run
 and no open ports. After every run, `docker/integrity-check.sh` checks on the Mac that nothing
 in `.git` that steers git changed (config, hooks, `commondir`, `info/`,
@@ -57,8 +74,11 @@ stash reflog entry, `ORIG_HEAD`, `FETCH_HEAD`, `MERGE_HEAD`, rebase or
 cherry-pick state was planted; that the other reflogs only grew by entries for
 the run's own commits; that remote-tracking refs moved only where the publish
 run's push moves them (recorded in
-`~/.config/agentathens-docker/remote-ref-moves.log`); and that no tracked file
-outside the data folders changed in the working tree. If any check fails, it
+`~/.config/agentathens-docker/remote-ref-moves.log`); that no tracked file
+outside the data folders changed in the working tree; and that the folders
+runs may write hold nothing but regular files and folders — no symlink, FIFO,
+socket or device file (a Mac-side job would write through a symlink, and a
+read or copy of a FIFO hangs). If any check fails, it
 quarantines the change, pauses every job and alerts you by macOS notification,
 ntfy and, where `scripts/security-alert.ts` exists, email
 (`AA_ALERT_TIMEOUT_SEC`, default 60).
@@ -67,19 +87,46 @@ fail if any of that is weakened.
 
 | Run | Schedule | Tokens | API-key folder | `.env` | `.git` | `dist/` | Network | Time limit |
 |---|---|---|---|---|---|---|---|---|
-| `visibility` | 07:30 | none | read-only | absent | read-only | writable | proxy | 30 min |
-| `freshness`, ingest | 08:00 | mailbox settings (`EMAIL_*`, `IMAP_*`) from `docker.env` if set there | none | read-only | read-only | writable | proxy + **direct** (IMAP) | 30 min |
+| `visibility` | 07:30 | none | Bing + Search Console key files only | absent | read-only | writable | proxy | 30 min |
+| `freshness`, ingest | 08:00 | mailbox settings (`EMAIL_*`, `IMAP_*`) from `docker.env` if set there; `IMAP_HOST` always the relay's | none | read-only | read-only | writable | proxy + IMAP relay (no direct route) | 30 min |
 | `freshness`, scrape | right after | **none**; loads web pages | none | absent | read-only | **read-only** | proxy | 3 h |
 | `freshness`, build | right after, only if the integrity check passes | git identity only (commits to `pipeline-data`) | none | absent | may commit | writable | **none** | 45 min |
-| `freshness`, publish | right after, only if the integrity check passes | GitHub, Netlify, git identity: never loads a web page | Search Console key only | absent | may commit | **read-only** | proxy | 30 min |
+| `freshness`, diff gate | right after, only if the build marked a publish and the pipeline has `scripts/publish-diff-gate.ts` | **none** | none | absent | read-only | **read-only** | **none** | 15 min |
+| `freshness`, publish | right after, only if the integrity check (and the diff gate) passed | GitHub, Netlify, git identity: never loads a web page; `AA_MIN_HEAD` deploy floor | Search Console key only | absent | may commit | **read-only** | proxy | 30 min |
 | `enrichment` | 10:00, 13:00, 16:30, 19:00 | Claude only | none | absent | read-only | writable | proxy | 90 min |
 | `verify-live` | 00:15, 06:15, 12:15, 18:15 | Netlify token + site id only: live deploy id, snippet injection, a hash of the security-relevant site settings, and the security headers and CSP of the home page and one event page. The Mac alerts on an unrecorded or rolled-back deploy, any snippet, changed settings (baseline `~/.config/agentathens-docker/live-baseline`, created on the first clean run; after reviewing an intended change: `AA_ACCEPT_LIVE_BASELINE=1 docker/aa-run.sh verify-live`), a missing header or a CSP allowing inline scripts | none | absent | read-only | writable | proxy | 10 min |
 | `restore ID` | by hand / watchdog | Netlify token + site id only | none | absent | read-only | writable | proxy | 10 min |
+| `site` | by hand | none | none | absent | read-only | writable | **none** | 45 min |
 | `image-refresh` | Sundays 05:30 | none: rebuilds from scratch and runs `apt-get upgrade`, so Ubuntu packages get their fixes. It does not update Chromium (see Known limits) | – | – | – | – | – | – |
 
 `build` and `publish` can also be run by hand, in that order: `publish` refuses
 to start unless a `build` run has just recorded a dist hash, and each hash is
 used once (a failed publish needs a new `build`).
+
+**Publish diff gate.** With the pipeline's `scripts/publish-diff-gate.ts`, every
+sealed publish (freshness and `publish` by hand) is preceded by a `diff-gate`
+run: offline, no token, `dist/` read-only, and only its own stats folder
+(`~/.config/agentathens-docker/diff-gate/`, at `/handoff/publish-stats.json`
+inside). It compares the built site with the last accepted one. Exit 0: the new
+stats are kept and publishing goes ahead. Exit 3 (an anomaly, e.g. far fewer
+event pages): **nothing is published**, you get an alert with the gate's reasons
+(printable characters only, at most five lines), and `aa-run.sh` exits 12; the
+build's hash stays recorded. After reviewing `dist/`, if the change is
+expected, run `AA_ACCEPT_DIFF=1 docker/aa-run.sh publish`: the gate runs with
+`--accept` (the new stats become the baseline), then that build is published.
+Any other exit: nothing is published, alert, exit 13. `AA_ACCEPT_DIFF` is
+honoured only by a `publish` you start, never by the scheduled freshness.
+
+**Deploy floor.** After every deploy recorded in `deploys.log`, the Mac writes
+the repo's current `HEAD` (read with the integrity check's git environment,
+40-hex checked) to `~/.config/agentathens-docker/min-head`. When the
+pipeline's `scripts/deploy-gate.sh` supports it (`AA_MIN_HEAD`, protected-paths
+PR), every publish run gets `AA_MIN_HEAD=<that commit>` and the gate refuses to
+publish a `HEAD` that is not that commit or a descendant — a rollback of the
+repo to an older, vulnerable state cannot be published by the pipeline. A
+`min-head` that is not a commit id is not passed on and raises an alert. If you
+rewrite `main`'s history on purpose, delete that file (the next recorded
+deploy writes a new one).
 
 **Sealed build.** The build run turns the scraped data into the site with no
 network and no secret: nothing a hostile page planted in the data can phone
@@ -95,8 +142,8 @@ Which freshness you get depends on the pipeline in `scripts/daily-automated.sh`
 only deferred publishing (`AA_DEFER_PUBLISH`), the scrape run also builds and
 commits (git identity, `.git` committable, `dist/` writable) and there is no
 hash check; with neither, freshness runs as one step holding both publishing
-tokens (and, like the legacy `daily` run, fetching email, so with a direct
-route out).
+tokens (and, like the legacy `daily` run, fetching email, through the IMAP
+relay).
 
 **Publish marker.** The build run says "ready to publish" by writing a marker
 file. It used to land at the repo root, which is now each run's private tmpfs,
@@ -113,9 +160,11 @@ one invocation). The run then counts as failed (exit 124), the integrity check
 still runs, and you get an alert. The limit is wall-clock time: a Mac that
 sleeps through it stops the run on wake.
 
-The API-key folder is mounted only where it is used: the scrape run gets none
-of it, the publish run gets only the Search Console key (sitemap submission),
-`visibility` gets the folder read-only. Newsletter email is fetched in its own
+The API-key folder is mounted only where it is used, and then only the files
+a run opens: the scrape run gets none of it, the publish run gets only the
+Search Console key (sitemap submission), `visibility` only the Bing key
+(`bing-api-key`) and the Search Console key; a key file that is a symlink is
+never mounted. Newsletter email is fetched in its own
 `ingest` run (mailbox password from `.env`, no browser) before the scrape run,
 which then sees no `.env` at all (needs the pipeline's `AA_SKIP_INGEST`
 support from the protected-paths PR).
@@ -136,13 +185,25 @@ Backups are taken **on the Mac** before each freshness/enrichment run: a plain
 copy of `data/events.db` into `~/agent-athens-backups`, which no container can
 see or change. The copy waits for other runs to finish, is recorded in
 `SHA256SUMS`, and generations are kept in tiers (newest 20, one per day for
-14 days, one per week for 8 weeks, one per month for 6 months). A backup that
-is skipped (another run still busy after 10 minutes, no database, a failed
-copy) sends an alert; the run itself goes ahead. Set
+14 days, one per week for 8 weeks, one per month for 6 months). The database
+and its `-wal`/`-shm` are copied only if they are regular files (containers
+write `data/`): a symlink, FIFO, socket or device file there is never followed
+or read — the backup is skipped with an alert (and the integrity check
+quarantines the run that left it). A backup that is skipped (another run
+still busy after 10 minutes, no database, a non-regular file, a failed copy)
+sends an alert; the run itself goes ahead. Set
 `AA_OFFSITE_CMD` (for example a small script calling `rclone copy` or `rsync`
 to storage the Mac can write but not delete) to also copy each backup off the
 machine. Without it every backup logs a warning and you get a reminder at most
-once a week. Restore with `docker/restore-backup.sh`, which checks the checksum,
+once a week, and `doctor` **fails** unless you accept on-Mac-only backups
+explicitly with `AA_OFFSITE_OPTOUT=1` (then it warns).
+
+The older host script `scripts/backup-events-db.sh` writes to the same folder
+as `events-YYYY-MM-DD.db.gz` and prunes by age (7 days); it only ever reads,
+compares or deletes files with exactly that name pattern, so it never touches
+the wrapper's tiered `events-YYYY-MM-DD-HHMM.db*.gz` generations — and the
+wrapper's tiered prune likewise considers only its own names, never the
+legacy script's. Restore with `docker/restore-backup.sh`, which checks the checksum,
 the database's integrity and that it isn't far smaller than the live one.
 
 Every verified deploy is recorded on the Mac in
@@ -159,8 +220,9 @@ weekly digest and phase3-weekly.
 1. **Docker Desktop** — install it, then in Settings:
    - General → *Start Docker Desktop when you sign in*: on.
    - Resources → File sharing: remove `/Users` and share only the repo folder,
-     `~/agent-athens-backups`, `~/.config/agentathens` and
-     `~/.config/agentathens-docker/handoff`. This is what stops a
+     `~/agent-athens-backups`, `~/.config/agentathens`,
+     `~/.config/agentathens-docker/handoff` and (once the pipeline has the
+     publish diff gate) `~/.config/agentathens-docker/diff-gate`. This is what stops a
      misconfigured mount from ever exposing the rest of your home folder.
    - Leave *Expose daemon on tcp://localhost:2375* **off**.
 2. **Least-privilege tokens** — create these new, instead of reusing your own
@@ -190,8 +252,9 @@ weekly digest and phase3-weekly.
    docker/aa-run.sh doctor    # every line should say ok
    ```
    `doctor` also refuses a GitHub token that isn't fine-grained
-   (`github_pat_…`), checks the egress proxy, and warns while `AA_OFFSITE_CMD`
-   is unset or the repo's `.env` still holds secret-looking keys.
+   (`github_pat_…`), checks the egress proxy, fails while `AA_OFFSITE_CMD` is
+   unset (unless `AA_OFFSITE_OPTOUT=1`: then it warns), and warns while the
+   repo's `.env` still holds secret-looking keys.
 5. **Try one real run** by hand, then switch the schedule over:
    ```bash
    docker/aa-run.sh freshness
@@ -228,18 +291,37 @@ host jobs exactly as they were.
 - Proxy log (what the runs fetched, and what was refused): `docker logs aa-egress`
   while a job runs (the proxy is stopped after each job).
 - **Email credentials out of the repo:** put `EMAIL_USER`, `EMAIL_PASSWORD`
-  (and `IMAP_HOST`/`IMAP_PORT` if not Gmail) in `docker.env`, run
+  (and `IMAP_HOST`/`IMAP_PORT` if not Gmail — they **must** be in `docker.env`
+  then, since the egress relay is pinned to them) in `docker.env`, run
   `docker/aa-run.sh freshness` once to see email still arrives, then delete
   them from the repo's `.env`. The ingest run gets them from `docker.env`
   (values there win); `doctor` warns while the repo `.env` still holds keys
   that look like secrets (it names the keys, never the values).
 
-## Egress proxy
+## Egress proxy and IMAP relay
 
-Every run except the build run sits on an internal Docker network with no
-route out. Its only way out is the `egress` service: Squid, built from the
-same pinned base image as the pipeline (`docker/aa-run.sh image` builds both),
-configured by `docker/egress/squid.conf`. It allows HTTP and HTTPS to public
+Every networked run, email ingest included, sits on an internal Docker network
+with no route out (build, site and the diff gate have no network at all). Its
+only way out is the `egress` service: Squid, plus a socat TCP relay for IMAP,
+built from the same pinned base image as the pipeline (`docker/aa-run.sh image`
+builds both), started by `docker/egress/start.sh`, Squid configured by
+`docker/egress/squid.conf`.
+
+**IMAP relay.** IMAP is not HTTP, so email ingest cannot use the proxy. The
+relay listens on port 9993 (no capability needed) and forwards to
+`IMAP_HOST:IMAP_PORT` from `docker.env` (default `imap.gmail.com:993`), nothing
+else. `aa-run.sh` refuses to run while `IMAP_HOST` is an IP address or a local
+name (`localhost`, `*.local`, `*.internal`, `*.lan`, …) or `IMAP_PORT` is not a
+port (exit 4). The egress container resolves the name once at start, requires
+every IPv4 address it has to be public (the ranges Squid refuses), and gives
+socat that address, not the name; otherwise the relay stays off (ingest then
+fails and says so) while the proxy keeps working. The ingest run connects to
+`egress:9993` (`IMAP_CONNECT_HOST`/`IMAP_CONNECT_PORT`, set by compose) but
+TLS is end to end with the mail server: `src/ingest/email-ingestion.ts` sends
+`IMAP_HOST` as the server name and verifies the certificate against it (never
+against `egress`), so the relay can neither read nor impersonate the mailbox.
+Ingest is always given the relay's `IMAP_HOST`, so a different one in the repo
+`.env` cannot make it verify another name. It allows HTTP and HTTPS to public
 addresses on ports 80 and 443, and refuses:
 - the Mac itself (`host.docker.internal`, `gateway.docker.internal`) and other
   local names (`*.internal`, `*.local`, `*.localhost`, `*.lan`);
@@ -273,10 +355,20 @@ public HTTPS site works through it and that nothing gets out around it.
   host of the attacker's choosing, or tunnelling anything inside HTTPS: the
   pipeline needs arbitrary public sites. Least privilege per run (what it can
   read, which tokens it holds) is what limits that.
-- Email ingest (and the legacy `daily`/one-step freshness runs, which fetch
-  email too) runs on an ordinary network with a direct route out, because IMAP
-  cannot go through an HTTP proxy: those runs can still reach your LAN and the
-  Mac. Ingest runs no browser and holds only the mailbox settings.
+- The IMAP relay is on the internal network, so every networked run (not
+  only ingest) can reach that one mail server's IMAP port through it. A
+  compromised run without the mailbox password could still log in to an
+  account of its own at the same provider and upload data there — no more
+  than it can already do over HTTPS through the proxy. The relay uses IPv4
+  and resolves the name once per egress start; a provider moving addresses
+  mid-job breaks that job's ingest only.
+- `docker/Dockerfile` installs the CLIs with `npm ci --ignore-scripts` and runs
+  only bun's and claude-code's install scripts, explicitly, as a non-root
+  user. Which packages have install scripts was taken from the lockfile and
+  the registry metadata for the pinned versions; the two scripts' own code
+  could not be reviewed when this was written. The build fails if
+  `bun`, `netlify` or `claude` does not run afterwards. A version bump that
+  adds an install script needs a look at that list.
 - DNS lookups from the internal network go to Docker's resolver; depending on
   the Docker version it may forward them, so data could leak out encoded in
   DNS names.
@@ -298,7 +390,11 @@ public HTTPS site works through it and that nothing gets out around it.
 - The build run still reads the scraped data and renders it, and its output is
   what gets published: a sealed build keeps a compromised build from reaching
   the network, not from shaping `dist/`. The published-output gates in the
-  build decide what may ship.
+  build and the publish diff gate (sizes and counts against the last accepted
+  build) decide what may ship; neither can tell a subtle, same-shaped change.
+- The deploy floor and the diff gate need the pipeline's `AA_MIN_HEAD` support
+  in `scripts/deploy-gate.sh` and `scripts/publish-diff-gate.ts`; without them
+  the wrapper records the floor but passes nothing, and runs no gate.
 - The hash check and the offline build need the pipeline's `AA_SKIP_BUILD`
   support (protected-paths PR); until then the scrape run builds, commits and
   can write `dist/`.

@@ -209,4 +209,45 @@ describe('IMAP TLS configuration', () => {
   test('refuses to run when TLS verification is globally disabled', () => {
     expect(() => buildImapConfig({ ...env, NODE_TLS_REJECT_UNAUTHORIZED: '0' })).toThrow(/NODE_TLS_REJECT_UNAUTHORIZED/);
   });
+
+  // The container's email-ingest run connects to the egress relay
+  // (IMAP_CONNECT_HOST=egress, IMAP_CONNECT_PORT=9993); TLS stays end to end
+  // with IMAP_HOST, so the relay can neither read nor impersonate the server.
+  const cert = (name: string) => ({ subject: { CN: name }, subjectaltname: `DNS:${name}` }) as never;
+
+  test('without a relay it connects to IMAP_HOST:IMAP_PORT directly', () => {
+    const cfg = buildImapConfig({ ...env, IMAP_HOST: 'imap.example.com', IMAP_PORT: '993' });
+    expect([cfg.imap.host, cfg.imap.port]).toEqual(['imap.example.com', 993]);
+    expect(cfg.imap.tlsOptions.servername).toBe('imap.example.com');
+  });
+
+  test('through the relay: connects to IMAP_CONNECT_HOST:PORT, verifies IMAP_HOST', () => {
+    const cfg = buildImapConfig({ ...env, IMAP_HOST: 'imap.example.com', IMAP_CONNECT_HOST: 'egress', IMAP_CONNECT_PORT: '9993' });
+    expect(cfg.imap.host).toBe('egress');
+    expect(cfg.imap.port).toBe(9993);
+    expect(cfg.imap.tls).toBe(true);
+    expect(cfg.imap.autotls).toBe('never');
+    const t = cfg.imap.tlsOptions;
+    expect(t.rejectUnauthorized).toBe(true);
+    expect(t.servername).toBe('imap.example.com');
+    expect(t.host).toBe('imap.example.com'); // overrides node-imap's tlsOptions.host (= the relay)
+    // Whatever host name the TLS layer passes in, identity is IMAP_HOST's.
+    expect(t.checkServerIdentity('egress', cert('imap.example.com'))).toBeUndefined();
+    expect(t.checkServerIdentity('egress', cert('egress'))).toBeInstanceOf(Error);
+    expect(t.checkServerIdentity('imap.example.com', cert('evil.example'))).toBeInstanceOf(Error);
+  });
+
+  test('relay settings are validated; IMAP_HOST must be a name when relayed', () => {
+    const relay = { ...env, IMAP_HOST: 'imap.example.com', IMAP_CONNECT_HOST: 'egress' };
+    expect(buildImapConfig(relay).imap.port).toBe(993); // IMAP_CONNECT_PORT defaults to IMAP_PORT
+    for (const bad of ['0', '65536', '99x', '-1']) {
+      expect(() => buildImapConfig({ ...relay, IMAP_CONNECT_PORT: bad })).toThrow(/IMAP_CONNECT_PORT/);
+    }
+    for (const bad of ['egress:9993', 'a b', 'http://egress', '']) {
+      if (bad) expect(() => buildImapConfig({ ...relay, IMAP_CONNECT_HOST: bad })).toThrow(/IMAP_CONNECT_HOST/);
+    }
+    expect(() => buildImapConfig({ ...relay, IMAP_HOST: '192.168.1.5' })).toThrow(/IMAP_HOST/);
+    expect(() => buildImapConfig({ ...env, IMAP_CONNECT_PORT: '9993' })).toThrow(/without IMAP_CONNECT_HOST/);
+    expect(() => buildImapConfig({ ...env, IMAP_PORT: 'imap' })).toThrow(/IMAP_PORT/);
+  });
 });

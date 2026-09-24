@@ -74,13 +74,16 @@ describe('docker/compose.yaml hardening', () => {
     });
   }
 
-  test('pipeline is on the internal network only; the mail service on the normal one; offline has no network', () => {
+  test('pipeline and the mail service are on the internal network only (no direct route out); offline has no network', () => {
     expect(svc.network_mode).toBeUndefined();
     expect(svc.networks).toEqual(['sealed']);
     expect(compose.networks.sealed.internal).toBe(true);
     expect(mail.network_mode).toBeUndefined();
-    expect(mail.networks).toEqual(['outside']);
+    expect(mail.networks).toEqual(['sealed']);
     expect(compose.networks.outside?.internal).toBeFalsy();
+    // Only the egress container sits on the network with a route out.
+    const onOutside = Object.entries(compose.services).filter(([, x]) => (x as { networks?: string[] }).networks?.includes('outside'));
+    expect(onOutside.map(([n]) => n)).toEqual(['egress']);
     expect(offline.network_mode).toBe('none');
     expect(offline.networks).toBeUndefined();
     expect(offline.depends_on).toBeUndefined();
@@ -106,10 +109,41 @@ describe('docker/compose.yaml hardening', () => {
     expect(offEnv).toEqual(withoutProxy);
   });
 
-  test('the mail service is the pipeline service on the normal network', () => {
-    const { build: _build, networks: _n, ...base } = svc;
-    const { networks: _m, ...rest } = mail;
+  test('the mail service is the pipeline service plus the IMAP relay address (TLS still verified against IMAP_HOST)', () => {
+    const { build: _build, environment: env, ...base } = svc;
+    const { environment: mailEnv, ...rest } = mail;
     expect(rest).toEqual(base);
+    expect(mailEnv).toEqual({ ...env, IMAP_CONNECT_HOST: 'egress', IMAP_CONNECT_PORT: '9993' });
+    const ingest = read('src/ingest/email-ingestion.ts');
+    for (const k of ['IMAP_CONNECT_HOST', 'IMAP_CONNECT_PORT']) expect(ingest).toContain(`env.${k}`);
+    expect(ingest).toMatch(/servername: host,/);
+    expect(ingest).toContain('rejectUnauthorized: true');
+  });
+
+  test('egress runs the IMAP relay on an unprivileged port, to the host aa-run.sh validated', () => {
+    expect(egress.environment).toEqual({ AA_IMAP_HOST: '${AA_IMAP_HOST:-}', AA_IMAP_PORT: '${AA_IMAP_PORT:-993}' });
+    const start = read('docker/egress/start.sh');
+    expect(start).toMatch(/socat -d TCP4-LISTEN:9993,fork,reuseaddr,max-children=\d+/);
+    // socat connects to the checked, pinned address, never to the name.
+    expect(start).toContain('"TCP4:$ip:$port,connect-timeout=20"');
+    expect(start).toContain('getent ahostsv4 "$host"');
+    expect(start).toContain('/usr/sbin/squid -N -d 1 -f /etc/squid/aa-egress.conf');
+    // No capability for a port below 1024.
+    expect(egress.cap_add).toBeUndefined();
+    expect(Number(start.match(/TCP4-LISTEN:(\d+)/)![1])).toBeGreaterThan(1023);
+  });
+
+  test.skipIf(process.platform === 'win32')('egress relay refuses every non-public address and IP-literal or local names', () => {
+    const check = (flag: string, v: string) => Bun.spawnSync(['bash', join(ROOT, 'docker/egress/start.sh'), flag, v]).exitCode;
+    for (const ip of ['10.1.2.3', '127.0.0.1', '169.254.169.254', '172.16.0.1', '172.31.255.255', '192.168.1.1', '100.64.0.1', '0.0.0.0',
+      '192.0.2.1', '198.18.0.1', '198.51.100.7', '203.0.113.9', '224.0.0.1', '255.255.255.255', '1.2.3', '1.2.3.4.5', '1.2.3.256', 'a.b.c.d', '']) {
+      expect(check('--check-ip', ip), ip).not.toBe(0);
+    }
+    for (const ip of ['8.8.8.8', '142.250.1.108', '172.32.0.1', '100.128.0.1', '11.0.0.1']) expect(check('--check-ip', ip), ip).toBe(0);
+    for (const n of ['192.168.1.1', '8.8.8.8', 'localhost', 'x.local', 'host.docker.internal', 'imap.gmail.com:993', 'a..b', '']) {
+      expect(check('--check-name', n), n).not.toBe(0);
+    }
+    expect(check('--check-name', 'imap.gmail.com')).toBe(0);
   });
 
   test('egress proxy: non-root, read-only, no capabilities, no privilege escalation, no published ports, on both networks', () => {
@@ -216,12 +250,35 @@ describe('docker/Dockerfile', () => {
     expect(dockerfile.match(/^ARG BASE_IMAGE=/gm)?.length).toBe(1);
     expect(read('docker/compose.yaml')).toMatch(/dockerfile: docker\/Dockerfile\n\s+target: pipeline/);
   });
-  test('egress stage: squid from Ubuntu with system packages upgraded, run as the unprivileged proxy user', () => {
+  test('egress stage: squid and socat from Ubuntu with system packages upgraded, run as the unprivileged proxy user', () => {
     expect(egressStage).toMatch(/apt-get update \\\n && apt-get -y [^\n]*upgrade --no-install-recommends/);
-    expect(egressStage).toContain('apt-get install -y --no-install-recommends squid');
+    expect(egressStage).toContain('apt-get install -y --no-install-recommends squid socat');
     expect(egressStage).toMatch(/^USER proxy$/m);
-    expect(egressStage).toContain('"-f", "/etc/squid/aa-egress.conf"');
-    expect(egressStage).not.toMatch(/^COPY /m);
+    expect(egressStage).toContain('ENTRYPOINT ["/usr/local/bin/aa-egress-start"]');
+    // Its only file from the repo is its start script.
+    expect([...egressStage.matchAll(/^COPY (.+)$/gm)].map((m) => m[1])).toEqual(['docker/egress/start.sh /usr/local/bin/aa-egress-start']);
+    expect(read('docker/Dockerfile.dockerignore')).toContain('!docker/egress/start.sh');
+  });
+  test('CLI install: no package install scripts except an explicit allowlist, npm as a non-root user', () => {
+    const cli = pipelineStage.slice(pipelineStage.indexOf('# Pinned CLIs'), pipelineStage.indexOf('# Stable Chromium path'));
+    expect(cli).toMatch(/npm ci --prefix \/opt\/aa-cli --ignore-scripts/);
+    const code = cli.split('\n').filter((l) => !l.startsWith('#')).join('\n');
+    expect(code).not.toMatch(/npm (ci|install)(?![^\n]*--ignore-scripts)/);
+    // Exactly the two install scripts the pipeline needs, run explicitly.
+    const scripts = [...cli.matchAll(/cd (\/opt\/aa-cli\/node_modules\/\S+) && asuser node (\S+)\)/g)].map((m) => `${m[1]} ${m[2]}`);
+    expect(scripts).toEqual([
+      '/opt/aa-cli/node_modules/bun install.js',
+      '/opt/aa-cli/node_modules/@anthropic-ai/claude-code install.cjs',
+    ]);
+    expect(cli).toMatch(/asuser\(\) \{ setpriv --reuid="\$u" --regid="\$g" --init-groups /);
+    expect(cli).toContain('asuser npm ci');
+    expect(cli).toContain('chown -R root:root /opt/aa-cli');
+    expect(cli).toContain('bun --version && netlify --version && claude --version');
+    // Every package in the lockfile with an install script is either run or named as skipped.
+    const lock = JSON.parse(read('docker/cli/package-lock.json'));
+    const withScripts = Object.entries(lock.packages as Record<string, { hasInstallScript?: boolean }>)
+      .filter(([, p]) => p.hasInstallScript).map(([k]) => k.replace(/^.*node_modules\//, ''));
+    for (const name of withScripts) expect(cli, name).toContain(name);
   });
   test('system packages are upgraded on every build; the base date and Chromium version are recorded', () => {
     expect(pipelineStage).toMatch(/apt-get update \\\n && apt-get -y [^\n]*upgrade --no-install-recommends/);
@@ -265,9 +322,33 @@ describe('docker/aa-run.sh least privilege', () => {
       expect(policy(name)).not.toMatch(/GH_TOKEN|NETLIFY_AUTH_TOKEN/);
     }
     expect(policy('scrape')).toContain('SECRETS=no');
-    expect(policy('publish')).toContain('SECRETS=gsc');
+    expect(policy('publish')).toContain('SECRETS=files; SECRET_FILES="gcp-kpi-reader.json";');
     expect(policy('publish')).toContain('DOTENV=no');
-    expect(wrapper).toContain('gcp-kpi-reader.json:/home/pwuser/.config/agentathens/gcp-kpi-reader.json:ro');
+    expect(policy('visibility')).toContain('SECRETS=files; SECRET_FILES="bing-api-key gcp-kpi-reader.json";');
+    expect(wrapper).toContain('secret_mounts+=(-v "$SECRETS_DIR/$sf:/home/pwuser/.config/agentathens/$sf:ro")');
+    // Only the runs that need every key get the folder.
+    const whole = wrapper.split('\n').filter((l) => /^\s+[a-z|-]+\)\s+TOKENS=.*SECRETS=yes/.test(l)).map((l) => l.trim().split(')')[0]).sort();
+    expect(whole).toEqual(['daily', 'doctor', 'legacy']);
+  });
+
+  test('site and the diff gate run offline, without .env or tokens', () => {
+    expect(policy('site')).toBe('        site)       TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; NET=no; LIMIT=45 ;;');
+    expect(policy('diff-gate')).toMatch(/TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; DIST=ro; NET=no;/);
+    expect(read('docker/entrypoint.sh')).toContain('diff-gate) exec bun run scripts/publish-diff-gate.ts dist /handoff/publish-stats.json "$@" ;;');
+  });
+
+  test('no run mounts anything under docs/ writable; the decisions queue is generated into data/', () => {
+    expect(wrapper).not.toContain('DECISIONS-QUEUE');
+    expect(read('docker/integrity-check.sh')).not.toContain('DECISIONS-QUEUE');
+    expect(read('docker/integrity-check.sh')).toContain("DATA_PATHS_RE='^data/'");
+    expect(read('scripts/decisions-queue.ts')).toContain("join(ROOT, 'data', 'DECISIONS-QUEUE.md')");
+  });
+
+  test('tokens are exported only in the subshell that execs docker compose run', () => {
+    expect(wrapper).not.toMatch(/export "\$key=/);
+    expect(wrapper).toMatch(/compose_run\(\) \{\n\s+\(\n[\s\S]{0,200}export "\$\{run_env_keys\[\$i\]\}=\$\{run_env_vals\[\$i\]\}"[\s\S]{0,80}exec "\$\{COMPOSE\[@\]\}" run "\$@"\n\s+\)/);
+    // Every container run goes through it.
+    expect(wrapper).not.toMatch(/"\$\{COMPOSE\[@\]\}" run --rm/);
   });
 
   test('email ingest runs on its own with the mailbox keys; the Chrome scrape run sees no .env by default', () => {

@@ -7,7 +7,7 @@
 // pin the two guards that make that impossible. @see specs/db-loss-incident-2026-06-30.md
 import { describe, test, expect, beforeEach, afterEach } from "bun:test";
 import { Database } from "bun:sqlite";
-import { mkdtempSync, mkdirSync, rmSync, existsSync, writeFileSync, readdirSync, statSync } from "fs";
+import { mkdtempSync, mkdirSync, rmSync, existsSync, writeFileSync, readdirSync, statSync, utimesSync } from "fs";
 import { randomBytes } from "crypto";
 import { join } from "path";
 import { tmpdir } from "os";
@@ -147,5 +147,41 @@ describe("dud-aware prune (Step 2)", () => {
     expect(r.exitCode).toBe(0);
     for (const g of goods) expect(existsSync(join(backupDir, g))).toBe(true);
     expect(existsSync(join(backupDir, "events-2026-06-25.db.gz"))).toBe(false);
+  });
+});
+
+// docker/aa-run.sh keeps its tiered backups (newest 20, daily 14 d, weekly
+// 8 w, monthly 6 m) in the same folder, named events-YYYY-MM-DD-HHMM.db.gz
+// plus -wal/-shm companions. This legacy host script prunes by age and size;
+// it must only ever touch its own events-YYYY-MM-DD.db.gz names.
+describe("prune never touches the wrapper's tiered backups", () => {
+  test("old, tiny wrapper-named backups and their companions all survive a run", () => {
+    mkdirSync(backupDir, { recursive: true });
+    const wrapperNames = [
+      "events-2025-03-02-0800.db.gz", // a monthly generation
+      "events-2026-05-10-0800.db.gz", // a weekly generation
+      "events-2026-05-10-0800.db-wal.gz",
+      "events-2026-05-10-0800.db-shm.gz",
+    ];
+    const old = new Date("2025-01-01T00:00:00Z");
+    for (const n of wrapperNames) {
+      writeFileSync(join(backupDir, n), Buffer.alloc(114, 0)); // below the dud floor too
+      utimesSync(join(backupDir, n), old, old);
+    }
+    // A legacy backup of its own that is past retention: still pruned.
+    const legacyOld = join(backupDir, "events-2025-01-01.db.gz");
+    writeFileSync(legacyOld, Buffer.alloc(3_000, 1)); // above the (test) dud floor
+    utimesSync(legacyOld, old, old);
+
+    const src = join(workDir, "events.db");
+    makeValidDb(src, 200);
+    const r = runBackup({ SOURCE_DB: src, BACKUP_RETENTION_DAYS: "7", BACKUP_MIN_SIZE_RATIO: "0.5" });
+    expect(r.exitCode).toBe(0);
+    for (const n of wrapperNames) expect(existsSync(join(backupDir, n))).toBe(true);
+    expect(existsSync(legacyOld)).toBe(false);
+    // The size floor compared against its own previous backup only (the
+    // tiny wrapper files would otherwise never be "prior"), and the report
+    // counts only its own files.
+    expect(new TextDecoder().decode(r.stdout)).toContain("1 backup(s) in");
   });
 });

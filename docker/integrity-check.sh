@@ -16,8 +16,10 @@
 #      agent sessions load as instructions, or .npmrc, which package installs
 #      obey);
 #   4. nothing was staged for your next commit, no other branch, tag or the
-#      stash moved, and no symlink appeared in the folders runs may write
-#      (a later Mac-side job could otherwise write through it into $HOME);
+#      stash moved, and nothing but regular files and folders is in the
+#      folders runs may write: no symlink (a later Mac-side job could
+#      otherwise write through it into $HOME), FIFO (a Mac-side read or copy
+#      would hang on it), socket or device file;
 #   5. git's object store only grew: every file that was in .git/objects is
 #      still there, same size and inode, and any loose object or pack that was
 #      written or touched during the run still holds exactly the content its
@@ -57,7 +59,9 @@ unset GIT_DIR GIT_WORK_TREE GIT_COMMON_DIR GIT_INDEX_FILE GIT_OBJECT_DIRECTORY \
       GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_CONFIG_PARAMETERS GIT_CONFIG_COUNT
 
 # What a pipeline commit may touch (run_deploy's allowlist is a subset).
-DATA_PATHS_RE='^(data/|docs/DECISIONS-QUEUE\.md$)'
+# Nothing under docs/: the decisions queue is generated into data/ now, and
+# no file agents read as documentation may be written by a run.
+DATA_PATHS_RE='^data/'
 # Root-level entries the pipeline itself creates.
 ROOT_RUNTIME_RE='^(\.pipeline-[a-z-]+\.lock|\.pipeline-publish-ready|\.auto-enrich\.lock\.d|temp|tmp|temp-[a-z-]+|dist|logs|node_modules|\.netlify|\.cache)$'
 
@@ -174,12 +178,15 @@ other_refs_hash() {
         | shasum -a 256 | awk '{print $1}'
 }
 
-# Symlinks in the folders runs may write. A Mac-side job writing a log or
-# data file through one would land wherever the link points.
-find_rw_symlinks() {
+# Anything but regular files and folders in the folders runs may write. A
+# Mac-side job writing a log or data file through a symlink would land
+# wherever the link points; a FIFO makes a Mac-side read or copy (the
+# database backup, a log reader) block forever; sockets and device files have
+# no business there either. `find` only lists them, it never opens one.
+find_rw_special() {
     local d
-    for d in data dist logs temp tmp temp-descriptions temp-briefs temp-research; do
-        [ -d "$REPO/$d" ] && find "$REPO/$d" -type l 2>/dev/null
+    for d in $RW_DIRS; do
+        { [ -d "$REPO/$d" ] || [ -L "$REPO/$d" ]; } && find "$REPO/$d" ! -type f ! -type d 2>/dev/null
     done
 }
 
@@ -254,7 +261,7 @@ remote_ref_lines() {
 # attribute a run could plant under data/ applies to anything read here.
 tracked_changes() {
     local f idx cur h
-    (cd "$REPO" && git diff-files --name-only -- . ':(exclude)data' ':(exclude,literal)docs/DECISIONS-QUEUE.md' 2>/dev/null) \
+    (cd "$REPO" && git diff-files --name-only -- . ':(exclude)data' 2>/dev/null) \
         | LC_ALL=C sort -u | while IFS= read -r f; do
         [ -n "$f" ] || continue
         idx="$(cd "$REPO" && git ls-files -s -- ":(literal)$f" 2>/dev/null | awk 'NR == 1 {print $2}')"
@@ -642,8 +649,8 @@ case "$MODE" in
             check_remote_refs "$STATE_FILE"
             check_reflogs "$STATE_FILE" "$pre_head" "$pre_pdata"
         fi
-        links="$(find_rw_symlinks)"
-        [ -z "$links" ] || quarantine "symlink(s) appeared in folders runs may write: $(echo "$links" | head -5 | tr '\n' ' ')" "" ""
+        special="$(find_rw_special)"
+        [ -z "$special" ] || quarantine "symlink(s) or special file(s) (FIFO, socket, device) appeared in folders runs may write: $(echo "$special" | head -5 | tr '\n' ' ')" "" ""
         rm -f "$STATE_FILE"
         echo "integrity-check: PASS ($JOB)"
         ;;

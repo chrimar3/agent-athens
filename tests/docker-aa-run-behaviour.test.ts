@@ -6,13 +6,15 @@
 // What is asserted comes from the recorded argv: which tokens each run gets,
 // what it can see and write, which compose service (network) it uses, and the
 // order of the runs.
-import { beforeEach, describe, expect, test } from 'bun:test';
+import { beforeEach, describe, expect, setDefaultTimeout, test } from 'bun:test';
 import { createHash } from 'crypto';
 import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, symlinkSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
 const ROOT = join(import.meta.dir, '..');
+// Several tests drive two or three whole freshness runs through the stub.
+setDefaultTimeout(60_000);
 const GIT_ID = ['GIT_AUTHOR_EMAIL', 'GIT_AUTHOR_NAME', 'GIT_COMMITTER_EMAIL', 'GIT_COMMITTER_NAME'];
 const HASH_A = 'a'.repeat(64);
 const HASH_B = 'b'.repeat(64);
@@ -21,7 +23,11 @@ const DEPLOY_ID = '0123456789abcdef01234567';
 const DOCKER_STUB = `#!/bin/bash
 # Test stub for docker: records argv (one ARG line per argument), answers the
 # queries aa-run.sh makes, and prints the result lines the pipeline would.
-{ echo "=== CALL"; echo "SECRETS_DIR_ENV \${AA_SECRETS_DIR:-}"; for a in "$@"; do printf 'ARG %s\\n' "$a"; done; } >> "$STUB_DIR/docker.log"
+# ENV lines: which token / mailbox variables (and the relay settings) are in
+# this docker process's own environment, with their values (fixture values).
+{ echo "=== CALL"; echo "SECRETS_DIR_ENV \${AA_SECRETS_DIR:-}"
+  for k in $STUB_ENV_KEYS; do [ -n "\${!k+x}" ] && printf 'ENV %s=%s\\n' "$k" "\${!k}"; done
+  for a in "$@"; do printf 'ARG %s\\n' "$a"; done; } >> "$STUB_DIR/docker.log"
 case "$1" in
     image) [ "$3" = "-f" ] && date -u +%Y-%m-%dT%H:%M:%SZ; exit 0 ;;
     kill) touch "$STUB_DIR/killed-$2"; exit 0 ;;
@@ -65,6 +71,11 @@ case "$job" in
     build) mark_publish; [ -n "\${STUB_PLANT:-}" ] && echo planted > "$AA_REPO/CLAUDE.md"; echo "BUILD-RESULT dist_hash=\${STUB_BUILD_HASH}" ;;
     freshness) [ -n "\${STUB_SCRAPE_BUILDS:-}" ] && mark_publish ;;
     publish) echo "PUBLISH-RESULT deploy_id=\${STUB_DEPLOY_ID} dist_hash=\${STUB_PUBLISH_HASH} state=ready" ;;
+    diff-gate)
+        case " $* " in *" --accept "*) echo "diff-gate: accepted"; exit 0 ;; esac
+        [ "\${STUB_DIFF_RC:-0}" = 0 ] && { echo "diff-gate: ok"; exit 0; }
+        printf 'event pages dropped 61%% (412 -> 160)\\n\\033]0;evil\\007title\\n\\nsitemap shrank 58%%\\n'
+        exit "\${STUB_DIFF_RC}" ;;
     verify-live) printf '%s\\n' "LIVE deploy_id=\${STUB_DEPLOY_ID}" "LIVE settings_hash=3333333333333333333333333333333333333333333333333333333333333333" "LIVE snippets=0" \
         "LIVE snippets_hash=4444444444444444444444444444444444444444444444444444444444444444" "LIVE page home status=200" "LIVE page event status=200" \
         "LIVE header home content-security-policy=1111111111111111111111111111111111111111111111111111111111111111" "LIVE header event content-security-policy=1111111111111111111111111111111111111111111111111111111111111111" \
@@ -75,10 +86,23 @@ exit 0
 `;
 
 const OSASCRIPT_STUB = `#!/bin/bash
-# Test stub: records the notification text (the last argument).
+# Test stub: records the notification text (the last argument), and any token
+# the alert path holds in its environment (it must hold none).
 for a in "$@"; do last="$a"; done
 printf '%s\\n' "$last" >> "$STUB_DIR/notify.log"
+for k in $STUB_ENV_KEYS; do [ -n "\${!k+x}" ] && printf '%s\\n' "$k" >> "$STUB_DIR/notify-env.log"; done
+exit 0
 `;
+// Every variable a run may be handed from docker.env, plus the relay settings.
+const TOKEN_KEYS = [
+  'GH_TOKEN', 'NETLIFY_AUTH_TOKEN', 'NETLIFY_SITE_ID', 'CLAUDE_CODE_OAUTH_TOKEN', ...GIT_ID,
+  'EMAIL_USER', 'EMAIL_PASSWORD', 'IMAP_HOST', 'IMAP_PORT',
+];
+const FIXTURE_VALUES: Record<string, string> = {
+  GH_TOKEN: 'gh-fixture', NETLIFY_AUTH_TOKEN: 'nf-fixture', NETLIFY_SITE_ID: 'site-fixture', CLAUDE_CODE_OAUTH_TOKEN: 'claude-fixture',
+  GIT_AUTHOR_NAME: 'fixture', GIT_AUTHOR_EMAIL: 'f@example.invalid', GIT_COMMITTER_NAME: 'fixture', GIT_COMMITTER_EMAIL: 'f@example.invalid',
+  EMAIL_USER: 'mailbox@example.invalid', EMAIL_PASSWORD: 'mailbox-fixture', IMAP_HOST: 'imap.example.invalid',
+};
 
 let fx: string; // fixture root
 let repo: string;
@@ -165,13 +189,14 @@ function run(args: string[], extra: Record<string, string> = {}) {
       STUB_PUBLISH_HASH: HASH_A,
       STUB_DEPLOY_ID: DEPLOY_ID,
       STUB_NOSNIFF: createHash('sha256').update('nosniff').digest('hex'),
+      STUB_ENV_KEYS: [...TOKEN_KEYS, 'AA_IMAP_HOST', 'AA_IMAP_PORT'].join(' '),
       ...extra,
     },
   });
   return { code: r.exitCode, out: r.stdout.toString() + r.stderr.toString() };
 }
 
-type Call = { args: string[]; secretsEnv: string };
+type Call = { args: string[]; secretsEnv: string; env: Record<string, string> };
 function calls(): Call[] {
   const log = join(stub, 'docker.log');
   if (!existsSync(log)) return [];
@@ -183,11 +208,14 @@ function calls(): Call[] {
       return {
         secretsEnv: (lines.find((l) => l.startsWith('SECRETS_DIR_ENV ')) ?? '').slice('SECRETS_DIR_ENV '.length),
         args: lines.filter((l) => l.startsWith('ARG ')).map((l) => l.slice(4)),
+        env: Object.fromEntries(
+          lines.filter((l) => l.startsWith('ENV ')).map((l) => [l.slice(4, l.indexOf('=')), l.slice(l.indexOf('=') + 1)]),
+        ),
       };
     });
 }
 const after = (args: string[], flag: string) => args.flatMap((a, i) => (a === flag ? [args[i + 1]] : []));
-type Run = { name: string; service: string; job: string; jobArgs: string[]; tokens: string[]; gitConfig: string[]; aaFlags: string[]; mounts: string[]; secretsEnv: string };
+type Run = { name: string; service: string; job: string; jobArgs: string[]; tokens: string[]; gitConfig: string[]; aaFlags: string[]; mounts: string[]; secretsEnv: string; env: Record<string, string> };
 function runs(): Run[] {
   return calls()
     .filter((c) => c.args[0] === 'compose' && c.args.includes('run'))
@@ -204,6 +232,7 @@ function runs(): Run[] {
         aaFlags: envs.filter((e) => e.startsWith('AA_')).sort(),
         mounts: after(c.args, '-v'),
         secretsEnv: c.secretsEnv,
+        env: c.env,
       };
     });
 }
@@ -364,11 +393,37 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
     expect(notifications().match(/AA_OFFSITE_CMD/g)?.length).toBe(1); // alerted once
   });
 
-  test('visibility is the run that gets the whole API-key folder', () => {
+  test('visibility gets only the Bing and Search Console key files, not the API-key folder', () => {
+    writeFileSync(join(secrets, 'bing-api-key'), 'k\n');
+    chmodSync(join(secrets, 'bing-api-key'), 0o600);
+    writeFileSync(join(secrets, 'other-key.json'), '{}\n');
+    chmodSync(join(secrets, 'other-key.json'), 0o600);
     expect(run(['visibility']).code).toBe(0);
     const [v] = runs();
     expect(v.tokens).toEqual([]);
-    expect(secretsFolderMounted(v)).toBe(true);
+    expect(secretsFolderMounted(v)).toBe(false);
+    const keyMounts = v.mounts.filter((m) => target(m).startsWith('/home/pwuser/.config/agentathens/'));
+    expect(keyMounts.sort()).toEqual([
+      `${secrets}/bing-api-key:/home/pwuser/.config/agentathens/bing-api-key:ro`,
+      `${secrets}/gcp-kpi-reader.json:/home/pwuser/.config/agentathens/gcp-kpi-reader.json:ro`,
+    ]);
+    expect(v.mounts.some((m) => m.includes('other-key.json'))).toBe(false);
+  });
+
+  test('a key file that is a symlink is never mounted', () => {
+    Bun.spawnSync(['mv', join(secrets, 'gcp-kpi-reader.json'), join(home, 'real-key.json')]);
+    symlinkSync(join(home, 'real-key.json'), join(secrets, 'gcp-kpi-reader.json'));
+    expect(run(['visibility']).code).toBe(0);
+    expect(runs()[0].mounts.some((m) => m.includes('gcp-kpi-reader.json') || m.includes('real-key.json'))).toBe(false);
+  });
+
+  test('site builds offline, without .env or tokens', () => {
+    expect(run(['site']).code).toBe(0);
+    const [s] = runs();
+    expect([s.service, s.job]).toEqual(['pipeline-offline', 'site']);
+    expect(s.tokens).toEqual([]);
+    expect(dotenvAbsent(s)).toBe(true);
+    expect(secretsFolderMounted(s)).toBe(false);
   });
 
   test('verify-live and restore get only the Netlify token and site id', () => {
@@ -590,5 +645,235 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
       expect(run(['enrichment'], { AA_JOB_TIMEOUT_MIN: v }).code).toBe(2);
     }
     expect(runs()).toEqual([]);
+  });
+
+  // ---- Tokens live only in the docker process of their own run ----------
+  test('each compose run holds exactly its own tokens; no other command the wrapper runs holds any', () => {
+    writeFileSync(join(state, 'deploys.log'), '');
+    expect(run(['freshness']).code).toBe(0);
+    const rs = runs();
+    expect(rs.length).toBe(4);
+    for (const r of rs) {
+      const held = Object.keys(r.env).filter((k) => !k.startsWith('AA_IMAP_')).sort();
+      expect(held).toEqual(r.tokens);
+      for (const k of held) expect(r.env[k]).toBe(FIXTURE_VALUES[k]);
+    }
+    // docker ps / rm / kill / compose rm egress: no token in their environment.
+    for (const c of calls().filter((x) => !(x.args[0] === 'compose' && x.args.includes('run')))) {
+      expect(Object.keys(c.env).filter((k) => !k.startsWith('AA_IMAP_'))).toEqual([]);
+    }
+    // The alert path (osascript, curl, the email sender) neither.
+    run(['freshness'], { STUB_PUBLISH_HASH: HASH_B }); // raises an alert
+    expect(notifications()).toContain('not the hash the build run reported');
+    const notifyEnv = existsSync(join(stub, 'notify-env.log')) ? readFileSync(join(stub, 'notify-env.log'), 'utf8') : '';
+    expect(notifyEnv.split('\n').filter((k) => k && !k.startsWith('AA_IMAP_'))).toEqual([]);
+    expect(readFileSync(join(repo, 'docker/aa-run.sh'), 'utf8')).not.toMatch(/export "\$key=/);
+  });
+
+  // ---- docs/DECISIONS-QUEUE.md is no longer an instruction channel -------
+  test('no run gets a writable path under docs/ (the decisions queue is generated into data/)', () => {
+    mkdirSync(join(repo, 'docs'));
+    writeFileSync(join(repo, 'docs/DECISIONS-QUEUE.md'), '# queue\n');
+    expect(run(['freshness']).code).toBe(0);
+    for (const r of runs()) {
+      expect(r.mounts.filter((m) => target(m).startsWith('/workspace/docs'))).toEqual([`${repo}/docs:/workspace/docs:ro`]);
+      expect(r.mounts.some((m) => m.includes('DECISIONS-QUEUE'))).toBe(false);
+    }
+  });
+
+  // ---- Email ingest through the egress relay ------------------------------
+  test('the relay host comes from docker.env, is exported for compose, and is the IMAP_HOST ingest verifies', () => {
+    expect(run(['freshness']).code).toBe(0);
+    const rs = runs();
+    for (const r of rs) {
+      expect(r.env.AA_IMAP_HOST).toBe('imap.example.invalid');
+      expect(r.env.AA_IMAP_PORT).toBe('993');
+    }
+    expect(rs[0].env.IMAP_HOST).toBe('imap.example.invalid');
+
+    // No IMAP_HOST in docker.env: Gmail, the ingest code's own default, for both.
+    const envFile = join(state, 'docker.env');
+    writeFileSync(envFile, readFileSync(envFile, 'utf8').replace('IMAP_HOST=imap.example.invalid\n', ''));
+    Bun.spawnSync(['rm', '-f', join(stub, 'docker.log')]);
+    expect(run(['freshness']).code).toBe(0);
+    const [ingest] = runs();
+    expect(ingest.service).toBe('pipeline-mail');
+    expect(ingest.env.AA_IMAP_HOST).toBe('imap.gmail.com');
+    expect(ingest.env.IMAP_HOST).toBe('imap.gmail.com');
+    expect(ingest.tokens).toEqual(['EMAIL_PASSWORD', 'EMAIL_USER', 'IMAP_HOST']);
+  });
+
+  test('an IMAP_HOST that is an IP address or a local name is refused before anything runs', () => {
+    const envFile = join(state, 'docker.env');
+    const base = readFileSync(envFile, 'utf8');
+    for (const bad of ['192.168.1.10', '10.0.0.5', '127.0.0.1', '8.8.8.8', '127.1', 'localhost', 'nas.local', 'host.docker.internal',
+      'router.lan', 'imap.example.com:993', 'imap.example.com/x', '-imap.example.com', 'a..b', '::1', 'imap example.com']) {
+      writeFileSync(envFile, base.replace('IMAP_HOST=imap.example.invalid', `IMAP_HOST=${bad}`));
+      const r = run(['freshness']);
+      expect(r.code, bad).toBe(4);
+      expect(r.out).toContain('is not a public host name');
+    }
+    for (const bad of ['0', '70000', '99x']) {
+      writeFileSync(envFile, base.replace('IMAP_PORT=', `IMAP_PORT=${bad}`));
+      expect(run(['freshness']).code, bad).toBe(4);
+    }
+    expect(runs()).toEqual([]);
+    writeFileSync(envFile, base.replace('IMAP_HOST=imap.example.invalid', 'IMAP_HOST=IMAP.Mail.Example.com'));
+    expect(run(['enrichment']).code).toBe(0);
+  });
+
+  // ---- Backups copy only plain files -------------------------------------
+  test('a symlinked data/events.db is not followed into the backups: alert, no copy', () => {
+    const backups = join(home, 'agent-athens-backups');
+    writeFileSync(join(home, 'private.txt'), 'not the database\n');
+    Bun.spawnSync(['rm', '-f', join(repo, 'data/events.db')]);
+    symlinkSync(join(home, 'private.txt'), join(repo, 'data/events.db'));
+    const r = run(['enrichment']);
+    expect(notifications()).toContain('data/events.db is not a regular file');
+    expect(readdirSync(backups).filter((f) => f.startsWith('events-'))).toEqual([]);
+    expect(r.code).toBe(6); // …and the run's integrity check quarantines the link in data/
+  });
+
+  test.skipIf(process.platform === 'win32')('a FIFO as data/events.db-wal is refused without hanging', () => {
+    const backups = join(home, 'agent-athens-backups');
+    expect(Bun.spawnSync(['mkfifo', join(repo, 'data/events.db-wal')]).exitCode).toBe(0);
+    const r = run(['enrichment']);
+    expect(notifications()).toContain('data/events.db-wal is not a regular file');
+    expect(readdirSync(backups).filter((f) => f.startsWith('events-'))).toEqual([]);
+    expect(r.code).toBe(6);
+    expect(r.out).toContain('special file(s)');
+  });
+
+  test("regular database files are backed up as before; the legacy host script's backups are never pruned", () => {
+    writeFileSync(join(repo, 'data/events.db-wal'), 'wal\n');
+    const backups = join(home, 'agent-athens-backups');
+    mkdirSync(backups, { recursive: true });
+    const legacy = ['events-2024-01-01.db.gz', 'events-2024-02-01.db.gz'];
+    for (const f of legacy) writeFileSync(join(backups, f), 'legacy\n');
+    expect(run(['enrichment']).code).toBe(0);
+    for (const f of legacy) expect(existsSync(join(backups, f)), f).toBe(true);
+    const files = readdirSync(join(home, 'agent-athens-backups'));
+    expect(files.filter((f) => /^events-\d{4}-\d\d-\d\d-\d{4}\.db\.gz$/.test(f)).length).toBe(1);
+    expect(files.filter((f) => /\.db-wal\.gz$/.test(f)).length).toBe(1);
+  });
+
+  // ---- Deploy floor (AA_MIN_HEAD) ----------------------------------------
+  const repoHead = () => Bun.spawnSync(['git', 'rev-parse', 'HEAD'], { cwd: repo }).stdout.toString().trim();
+  const withMinHeadGate = () => {
+    writeFileSync(join(repo, 'scripts/deploy-gate.sh'), '#!/bin/bash\n# fixture: honours AA_MIN_HEAD\nexit 0\n');
+    git('add', 'scripts/deploy-gate.sh');
+    git('commit', '-qm', 'deploy gate');
+  };
+
+  test('a recorded deploy records the repo HEAD as the floor; later publishes get AA_MIN_HEAD', () => {
+    withMinHeadGate();
+    expect(run(['freshness']).code).toBe(0);
+    expect(readFileSync(join(state, 'min-head'), 'utf8').trim()).toBe(repoHead());
+    expect(runs().find((r) => r.job === 'publish')!.aaFlags.some((f) => f.startsWith('AA_MIN_HEAD='))).toBe(false); // first publish: no floor yet
+
+    expect(run(['freshness']).code).toBe(0);
+    const publishes = runs().filter((r) => r.job === 'publish');
+    expect(publishes[1].aaFlags).toContain(`AA_MIN_HEAD=${repoHead()}`);
+    // Only publish runs get it.
+    for (const r of runs().filter((x) => x.job !== 'publish')) expect(r.aaFlags.some((f) => f.startsWith('AA_MIN_HEAD'))).toBe(false);
+  });
+
+  test('without pipeline support the floor is recorded but not passed; a deploy that is not recorded moves nothing', () => {
+    expect(run(['freshness']).code).toBe(0);
+    expect(readFileSync(join(state, 'min-head'), 'utf8').trim()).toBe(repoHead());
+    expect(run(['freshness']).code).toBe(0);
+    for (const r of runs()) expect(r.aaFlags.some((f) => f.startsWith('AA_MIN_HEAD'))).toBe(false);
+
+    writeFileSync(join(state, 'min-head'), `${'c'.repeat(40)}\n`);
+    expect(run(['freshness'], { STUB_PUBLISH_HASH: HASH_B }).code).toBe(10); // hash mismatch: not recorded
+    expect(readFileSync(join(state, 'min-head'), 'utf8').trim()).toBe('c'.repeat(40));
+  });
+
+  test('a min-head file that is not one commit id is not passed on, and alerts', () => {
+    withMinHeadGate();
+    writeFileSync(join(state, 'min-head'), 'HEAD; rm -rf /\n');
+    expect(run(['freshness']).code).toBe(0);
+    const publish = runs().find((r) => r.job === 'publish')!;
+    expect(publish.aaFlags.some((f) => f.startsWith('AA_MIN_HEAD'))).toBe(false);
+    expect(notifications()).toContain('min-head is not a 40-hex commit id');
+    expect(readFileSync(join(state, 'min-head'), 'utf8').trim()).toBe(repoHead()); // the new deploy re-records it
+  });
+
+  // ---- Publish diff gate ---------------------------------------------------
+  const withDiffGate = () => {
+    writeFileSync(join(repo, 'scripts/publish-diff-gate.ts'), '// fixture\n');
+    git('add', 'scripts/publish-diff-gate.ts');
+    git('commit', '-qm', 'diff gate');
+  };
+  const STATS_MOUNT = () => `${state}/diff-gate:/handoff:rw`;
+
+  test('diff gate passes: offline run between build and publish, dist read-only, only its own stats folder', () => {
+    withDiffGate();
+    expect(run(['freshness']).code).toBe(0);
+    const rs = runs();
+    expect(rs.map((x) => [x.name, x.service, x.job])).toEqual([
+      ['agent-athens-freshness-ingest', 'pipeline-mail', 'ingest'],
+      ['agent-athens-freshness', 'pipeline', 'freshness'],
+      ['agent-athens-freshness-build', 'pipeline-offline', 'build'],
+      ['agent-athens-freshness-diff-gate', 'pipeline-offline', 'diff-gate'],
+      ['agent-athens-freshness-publish', 'pipeline', 'publish'],
+    ]);
+    const gate = rs[3];
+    expect(gate.jobArgs).toEqual([]);
+    expect(gate.tokens).toEqual([]);
+    expect(Object.keys(gate.env).filter((k) => !k.startsWith('AA_IMAP_'))).toEqual([]);
+    expect(distReadOnly(gate)).toBe(true);
+    expect(gitReadOnly(gate)).toBe(true);
+    expect(dotenvAbsent(gate)).toBe(true);
+    expect(handoffMounted(gate)).toBe(false); // not the publish marker's folder
+    expect(gate.mounts).toContain(STATS_MOUNT());
+    for (const x of rs.filter((r) => r !== gate)) expect(x.mounts).not.toContain(STATS_MOUNT());
+    expect(Bun.spawnSync(['bash', '-c', `ls -ld '${join(state, 'diff-gate')}'`]).stdout.toString()).toStartWith('drwx------');
+    expect(deploysLog()).toContain(DEPLOY_ID);
+  });
+
+  test('diff gate anomaly (exit 3): nothing published, sanitized reasons alerted, then AA_ACCEPT_DIFF=1 publish accepts and publishes', () => {
+    withDiffGate();
+    const r = run(['freshness'], { STUB_DIFF_RC: '3' });
+    expect(r.code).toBe(12);
+    expect(runs().map((x) => x.job)).toEqual(['ingest', 'freshness', 'build', 'diff-gate']);
+    expect(deploysLog()).toBe('');
+    const n = notifications();
+    expect(n).toContain('publish held by the diff gate');
+    expect(n).toContain('event pages dropped 61% (412 -> 160)');
+    expect(n).toContain('sitemap shrank 58%');
+    expect(n).toContain('AA_ACCEPT_DIFF=1 docker/aa-run.sh publish');
+    expect(n).not.toContain('\u001b');
+    expect(n).not.toContain('\u0007');
+    expect(r.out).toContain('AA_ACCEPT_DIFF=1 docker/aa-run.sh publish');
+    expect(existsSync(join(state, 'build-hash'))).toBe(true); // the build can still be published after review
+
+    // A plain publish is held again; the accept run passes --accept, then publishes.
+    expect(run(['publish'], { STUB_DIFF_RC: '3' }).code).toBe(12);
+    const accepted = run(['publish'], { STUB_DIFF_RC: '3', AA_ACCEPT_DIFF: '1' });
+    expect(accepted.code).toBe(0);
+    const last = runs().slice(-2);
+    expect(last.map((x) => [x.name, x.job])).toEqual([['agent-athens-publish-diff-gate', 'diff-gate'], ['agent-athens-publish', 'publish']]);
+    expect(last[0].jobArgs).toEqual(['--accept']);
+    expect(deploysLog()).toContain(DEPLOY_ID);
+  });
+
+  test('AA_ACCEPT_DIFF is ignored by scheduled freshness runs', () => {
+    withDiffGate();
+    expect(run(['freshness'], { STUB_DIFF_RC: '3', AA_ACCEPT_DIFF: '1' }).code).toBe(12);
+    expect(runs().find((x) => x.job === 'diff-gate')!.jobArgs).toEqual([]);
+  });
+
+  test('diff gate error (any other exit): nothing published, alert, exit 13', () => {
+    withDiffGate();
+    const r = run(['freshness'], { STUB_DIFF_RC: '2' });
+    expect(r.code).toBe(13);
+    expect(runs().map((x) => x.job)).not.toContain('publish');
+    expect(notifications()).toContain('diff gate failed (exit 2)');
+  });
+
+  test('without scripts/publish-diff-gate.ts no gate runs', () => {
+    expect(run(['freshness'], { STUB_DIFF_RC: '3' }).code).toBe(0);
+    expect(runs().map((x) => x.job)).not.toContain('diff-gate');
   });
 });

@@ -36,12 +36,17 @@ case "$token_kind" in
            "replace it with a fine-grained token limited to chrimar3/agent-athens: Contents read/write, Issues read/write, Metadata read, 90-day expiry" ;;
 esac
 
-# Off-machine backups: without AA_OFFSITE_CMD every backup lives on this Mac.
+# Off-machine backups: without AA_OFFSITE_CMD every backup lives on this Mac
+# (one disk failure, theft or ransomware away from losing them all). A
+# failure unless the owner opted out explicitly with AA_OFFSITE_OPTOUT=1.
 if [ -n "${AA_OFFSITE_CMD:-}" ]; then
     ok "AA_OFFSITE_CMD set (backups are also copied off this Mac)"
+elif [ "${AA_OFFSITE_OPTOUT:-}" = "1" ]; then
+    warn "AA_OFFSITE_CMD not set — database backups exist only on this Mac (AA_OFFSITE_OPTOUT=1: accepted by you)" \
+         "set AA_OFFSITE_CMD to a script that copies a file to storage this Mac can write but not delete, then re-run docker/install-launchd.sh --apply"
 else
-    warn "AA_OFFSITE_CMD not set — database backups exist only on this Mac" \
-         "set it to a script that copies a file to storage this Mac can write but not delete, then re-run docker/install-launchd.sh --apply so scheduled runs inherit it"
+    bad "AA_OFFSITE_CMD not set — database backups exist only on this Mac" \
+        "set it to a script that copies a file to storage this Mac can write but not delete, then re-run docker/install-launchd.sh --apply so scheduled runs inherit it (or set AA_OFFSITE_OPTOUT=1 to accept on-Mac-only backups)"
 fi
 
 # Secrets in the repo's .env files. Only runs that fetch mail still see .env

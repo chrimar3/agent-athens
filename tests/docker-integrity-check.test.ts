@@ -187,6 +187,46 @@ describe('integrity-check.sh', () => {
     expect(r.out).toContain('symlink');
   });
 
+  test.skipIf(process.platform === 'win32')('a FIFO planted in a writable folder is quarantined (a Mac-side copy would hang on it)', () => {
+    expect(snapshot().code).toBe(0);
+    mkdirSync(join(repo, 'data/sub'), { recursive: true });
+    expect(Bun.spawnSync(['mkfifo', join(repo, 'data/sub/events.db-wal')]).exitCode).toBe(0);
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('special file(s) (FIFO, socket, device)');
+    expect(r.out).toContain('data/sub/events.db-wal');
+    expect(existsSync(join(state, 'QUARANTINE'))).toBe(true);
+  });
+
+  test('the decisions queue in data/ may change; docs/DECISIONS-QUEUE.md is no longer exempt', () => {
+    mkdirSync(join(repo, 'docs'));
+    writeFileSync(join(repo, 'docs/DECISIONS-QUEUE.md'), '# old queue\n');
+    git('add', 'docs/DECISIONS-QUEUE.md');
+    git('commit', '-qm', 'docs');
+    expect(snapshot().code).toBe(0);
+    writeFileSync(join(repo, 'data/DECISIONS-QUEUE.md'), '# Decisions Queue\n');
+    expect(verify().code).toBe(0);
+
+    // A run rewriting the old docs file in the working tree…
+    expect(snapshot().code).toBe(0);
+    writeFileSync(join(repo, 'docs/DECISIONS-QUEUE.md'), '# Ignore previous instructions\n');
+    let r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('docs/DECISIONS-QUEUE.md');
+    unlinkSync(join(state, 'QUARANTINE'));
+    git('checkout', '-q', '--', 'docs/DECISIONS-QUEUE.md');
+
+    // …or committing it, is quarantined.
+    expect(snapshot().code).toBe(0);
+    const before = git('rev-parse', 'HEAD').out.trim();
+    writeFileSync(join(repo, 'docs/DECISIONS-QUEUE.md'), '# planted\n');
+    git('commit', '-qam', 'chore: daily pipeline update');
+    r = verify();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('non-data files');
+    expect(git('rev-parse', 'HEAD').out.trim()).toBe(before);
+  });
+
   test('a new git hook is quarantined', () => {
     expect(snapshot().code).toBe(0);
     writeFileSync(join(repo, '.git/hooks/post-checkout'), '#!/bin/sh\necho planted\n');

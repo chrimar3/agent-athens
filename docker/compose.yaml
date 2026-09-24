@@ -14,18 +14,20 @@
 # ports are published. Tokens are passed per run by aa-run.sh.
 #
 # Network: pipeline runs sit on an internal network with no route out; the only
-# way out is the `egress` proxy (docker/egress/squid.conf), which refuses the
-# Mac itself, the LAN, link-local/cloud metadata and every other private range,
-# and ports other than 80/443. Email ingest (IMAP is not HTTP) uses
-# `pipeline-mail`; the build run has no network at all.
+# way out is the `egress` container: its proxy (docker/egress/squid.conf)
+# refuses the Mac itself, the LAN, link-local/cloud metadata and every other
+# private range, and ports other than 80/443; its IMAP relay forwards to one
+# mail server only (IMAP is not HTTP, so email ingest cannot use the proxy).
+# The offline runs (build, site, diff gate) have no network at all.
 # Guarded by tests/docker-hardening.test.ts.
 name: agent-athens
 
-# One definition, three pipeline services, identical except for the network:
+# One definition, three pipeline services:
 #   pipeline          internal network only; HTTP(S) through the egress proxy
-#   pipeline-mail     normal network (IMAP needs a direct connection); HTTP(S)
-#                     still defaults to the proxy. Email ingest only.
-#   pipeline-offline  no network at all (the sealed build run)
+#   pipeline-mail     the same, plus IMAP_CONNECT_HOST/PORT pointing email
+#                     ingest at the egress relay (egress:9993). Email ingest
+#                     (and the legacy runs that fetch mail) only.
+#   pipeline-offline  no network at all (build, site, diff gate)
 # Compose merges `<<: *pipeline` as a YAML merge key;
 # tests/docker-hardening.test.ts checks every service.
 x-pipeline: &pipeline
@@ -98,8 +100,13 @@ services:
         condition: service_healthy
   pipeline-mail:
     <<: *pipeline
-    environment: *proxy-env
-    networks: [outside]
+    environment:
+      <<: *proxy-env
+      # src/ingest/email-ingestion.ts connects here and still verifies the
+      # server's certificate as IMAP_HOST (TLS end to end through the relay).
+      IMAP_CONNECT_HOST: egress
+      IMAP_CONNECT_PORT: "9993"
+    networks: [sealed]
     depends_on:
       egress:
         condition: service_healthy
@@ -107,10 +114,14 @@ services:
     <<: *pipeline
     network_mode: none               # no network interface except loopback
 
-  # Forward proxy, the pipeline's only way out. Squid from the same
+  # The pipeline's only way out: Squid (forward proxy, port 3128) and a socat
+  # TCP relay for email ingest (port 9993 -> AA_IMAP_HOST:AA_IMAP_PORT, the
+  # one IMAP server in docker.env, validated by aa-run.sh; the address it
+  # resolves to is checked to be public and then pinned). Both from the same
   # digest-pinned Playwright/Ubuntu base as the pipeline image (shared layers;
-  # `docker/aa-run.sh image` builds both). Denies by destination IP after DNS
-  # resolution, so a public name pointing at a private address is refused too.
+  # `docker/aa-run.sh image` builds both); docker/egress/start.sh runs them.
+  # Squid denies by destination IP after DNS resolution, so a public name
+  # pointing at a private address is refused too.
   egress:
     build:
       context: ..
@@ -121,9 +132,9 @@ services:
     # Not agent-athens-*: aa-run.sh reads those names as pipeline job runs.
     container_name: aa-egress
     init: true
-    user: "13:13"                    # Ubuntu's `proxy` user; port 3128 needs no capability
+    user: "13:13"                    # Ubuntu's `proxy` user; ports 3128 and 9993 need no capability
     read_only: true
-    cap_drop: [ALL]                  # squid running unprivileged needs none
+    cap_drop: [ALL]                  # squid and socat running unprivileged need none
     security_opt:
       - no-new-privileges:true
     pids_limit: 128
@@ -131,6 +142,11 @@ services:
     cpus: 1
     tmpfs:
       - /tmp:size=16m,mode=1777
+    environment:
+      # Set by aa-run.sh from docker.env (the same for every run, so a running
+      # egress container is never recreated under another job).
+      AA_IMAP_HOST: ${AA_IMAP_HOST:-}
+      AA_IMAP_PORT: ${AA_IMAP_PORT:-993}
     volumes:
       - type: bind
         source: ./egress/squid.conf
@@ -148,5 +164,5 @@ networks:
   # No route out of Docker at all: only the egress container is reachable.
   sealed:
     internal: true
-  # Ordinary NAT network: the egress proxy's side, and email ingest.
+  # Ordinary NAT network: the egress container's side only.
   outside: {}

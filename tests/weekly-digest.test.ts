@@ -50,6 +50,8 @@ describe('renderDigest', () => {
     const md = renderDigest(inputs);
     expect(md).toContain('7');
     expect(md).toContain('DECISIONS-QUEUE.md');
+    // Generated into data/ (untrusted, pipeline-written), linked from docs/digest/.
+    expect(md).toContain('(../../data/DECISIONS-QUEUE.md)');
   });
 
   test('a clean 7/7 week renders PASS without zero-save language', () => {

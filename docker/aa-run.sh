@@ -10,7 +10,11 @@
 # Least privilege per run:
 #   - each run receives only the tokens it needs (TOKENS below); the token file
 #     lives in ~/.config/agentathens-docker/, of which containers see only the
-#     handoff/ subfolder (build and publish runs: the publish marker);
+#     handoff/ subfolder (build and publish runs: the publish marker) and the
+#     diff-gate/ subfolder (the publish diff gate's stats). Token values are
+#     exported only in the subshell that execs `docker compose run`, never in
+#     this script's own environment (so no alert sender, git or backup
+#     command it runs ever holds them);
 #   - the repo root is never mounted: /workspace is an empty per-run tmpfs and
 #     every top-level entry is mounted onto it by its exact name — the data
 #     folders (RW_TOP) read-write, everything else (code, docs, specs, config,
@@ -19,10 +23,11 @@
 #     runs that never commit. (A repo-root mount on the Mac's case-insensitive
 #     disk would reach the real .env or bunfig.toml as /workspace/.ENV or
 #     /workspace/BUNFIG.TOML, around the per-name overlays.);
-#   - runs other than the offline build reach the network only through the
-#     egress proxy (docker/egress/squid.conf): public hosts on ports 80/443,
-#     never the Mac, the LAN or cloud metadata. Email ingest (IMAP) is the one
-#     run with a direct route out;
+#   - runs other than the offline ones (build, site, diff gate) reach the
+#     network only through the egress container (docker/egress/): the HTTP
+#     proxy for public hosts on ports 80/443, never the Mac, the LAN or cloud
+#     metadata, and a TCP relay pinned to the one IMAP server in docker.env
+#     (IMAP_HOST) for email ingest. No run has a direct route out;
 #   - runs that write data/events.db wait for each other (locks the pipeline
 #     keeps at the repo root now live on each container's own tmpfs);
 #   - freshness runs in separate containers: email ingest, a scrape run that
@@ -33,7 +38,10 @@
 #     the one the build run reported;
 #   - every container run has a wall-clock limit (docker kill when it fires);
 #   - backups are copied on the Mac (plain file copy, nothing parsed) into
-#     ~/agent-athens-backups, which no container mounts.
+#     ~/agent-athens-backups, which no container mounts;
+#   - with the pipeline's support: every publish gets the HEAD recorded after
+#     the last recorded deploy as a floor (AA_MIN_HEAD), and a build's dist/
+#     must pass scripts/publish-diff-gate.ts before it is published.
 # docker/integrity-check.sh runs around every container run.
 #
 # Exit codes: the job's own exit code; 2 usage; 3 Docker unavailable;
@@ -41,6 +49,8 @@
 # check failed; 7 image too old; 8 live site not deployed by the pipeline;
 # 10 build/publish dist hash missing or mismatched (deploy not recorded);
 # 11 another run that writes the database was still running after 2 h;
+# 12 publish held by the diff gate (AA_ACCEPT_DIFF=1 docker/aa-run.sh publish
+# after review); 13 the diff gate itself failed (nothing published);
 # 124 a run hit its time limit.
 # 0 without running when the same job is already running.
 set -euo pipefail
@@ -63,7 +73,9 @@ log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] aa-run: $*"; }
 GIT_ID="GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL"
 # Mailbox settings src/ingest/email-ingestion.ts reads. From docker.env when
 # set there (then the repo .env no longer needs them); runs that fetch mail
-# still see the repo .env too, for installs that keep them there.
+# still see the repo .env too, for installs that keep them there. IMAP_HOST
+# (and IMAP_PORT) must be in docker.env if not Gmail: the egress relay is
+# pinned to them, and runs that fetch mail get that IMAP_HOST explicitly.
 MAIL_KEYS="EMAIL_USER EMAIL_PASSWORD IMAP_HOST IMAP_PORT"
 # Top-level repo entries a run may write (created on the Mac if missing).
 # Every other entry is mounted read-only, so no run can change what the Mac or
@@ -73,29 +85,32 @@ MAIL_KEYS="EMAIL_USER EMAIL_PASSWORD IMAP_HOST IMAP_PORT"
 RW_TOP="data dist logs node_modules temp tmp temp-descriptions temp-briefs temp-research"
 
 # Per run: TOKENS, SECRETS (yes = mount ~/.config/agentathens read-only;
-# gsc = only the Search Console key file; no = an empty folder), DOTENV (repo
-# .env visible), GITRW (may commit), DIST (ro = dist/ mounted read-only),
-# NET (proxy = internal network, out only through the egress proxy; mail = a
-# direct route out as well, for IMAP; no = the offline compose service),
-# LIMIT (wall-clock minutes; AA_JOB_TIMEOUT_MIN overrides every run's limit).
+# files = only the key files named in SECRET_FILES; no = an empty folder),
+# DOTENV (repo .env visible), GITRW (may commit), DIST (ro = dist/ mounted
+# read-only), NET (proxy = internal network, out only through the egress
+# proxy; mail = the same, plus IMAP through the egress relay; no = the offline
+# compose service), LIMIT (wall-clock minutes; AA_JOB_TIMEOUT_MIN overrides
+# every run's limit).
 #   scrape       sealed-build pipeline: data phases only, never commits or builds
 #   scrape-build older pipeline: scrape + build + commit in one run
 #   build        builds dist/ and commits artifacts to pipeline-data, offline
+#   diff-gate    scripts/publish-diff-gate.ts over the built dist/, offline
 job_policy() {
-    DIST=rw; NET=proxy
+    DIST=rw; NET=proxy; SECRET_FILES=""
     case "$1" in
         scrape)     TOKENS=""; SECRETS=no; DOTENV=${SCRAPE_DOTENV:-no}; GITRW=no; DIST=ro; NET=${SCRAPE_NET:-proxy}; LIMIT=180 ;;
         scrape-build) TOKENS="$GIT_ID"; SECRETS=no; DOTENV=${SCRAPE_DOTENV:-no}; GITRW=yes; NET=${SCRAPE_NET:-proxy}; LIMIT=180 ;;
         build)      TOKENS="$GIT_ID"; SECRETS=no; DOTENV=no; GITRW=yes; NET=no; LIMIT=45 ;;
         ingest)     TOKENS="$MAIL_KEYS"; SECRETS=no; DOTENV=yes; GITRW=no; NET=mail; LIMIT=30 ;;
         restore)    TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=10 ;;
-        publish)    TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID $GIT_ID"; SECRETS=gsc; DOTENV=no; GITRW=yes; DIST=ro; LIMIT=30 ;;
+        diff-gate)  TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; DIST=ro; NET=no; LIMIT=15 ;;
+        publish)    TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID $GIT_ID"; SECRETS=files; SECRET_FILES="gcp-kpi-reader.json"; DOTENV=no; GITRW=yes; DIST=ro; LIMIT=30 ;;
         verify-live) TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=10 ;;
         legacy)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN $GIT_ID $MAIL_KEYS"; SECRETS=yes; DOTENV=yes; GITRW=yes; NET=mail; LIMIT=180 ;;
         daily)      TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN $GIT_ID $MAIL_KEYS"; SECRETS=yes; DOTENV=yes; GITRW=yes; NET=mail; LIMIT=360 ;;
         enrichment) TOKENS="CLAUDE_CODE_OAUTH_TOKEN"; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=90 ;;
-        visibility) TOKENS=""; SECRETS=yes; DOTENV=no; GITRW=no; LIMIT=30 ;;
-        site)       TOKENS=""; SECRETS=no; DOTENV=yes; GITRW=no; LIMIT=45 ;;
+        visibility) TOKENS=""; SECRETS=files; SECRET_FILES="bing-api-key gcp-kpi-reader.json"; DOTENV=no; GITRW=no; LIMIT=30 ;;
+        site)       TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; NET=no; LIMIT=45 ;;
         test|shell) TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=120 ;;
         doctor)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN $GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=no; LIMIT=10 ;;
         *) return 1 ;;
@@ -205,12 +220,18 @@ inside() { case "$1/" in "$2"/*) return 0 ;; esac; return 1; }  # $1 path inside
 # .pipeline-publish-ready at the repo root, which now stays on the
 # container's own tmpfs and never reaches the Mac.
 HANDOFF_DIR="$STATE_DIR/handoff"
+# Publish diff gate: scripts/publish-diff-gate.ts DIST STATS compares the
+# built site with the stats of the last accepted one (exit 0 ok and stats
+# written, 3 anomaly, anything else an error). Its stats live in a host folder
+# of their own, mounted into the diff-gate run only.
+DIFF_GATE_DIR="$STATE_DIR/diff-gate"
 MARKER_SUPPORT=no
 if grep -q 'AA_PUBLISH_MARKER' "$REPO/scripts/daily-automated.sh" 2>/dev/null; then MARKER_SUPPORT=yes; fi
 if [ "$MARKER_SUPPORT" = "yes" ]; then PUBLISH_MARKER="$HANDOFF_DIR/publish-ready"; else PUBLISH_MARKER="$REPO/.pipeline-publish-ready"; fi
 clear_marker() { rm -f "$PUBLISH_MARKER" "$REPO/.pipeline-publish-ready"; }
 [ -f "$ENV_FILE" ] || fail "env file $ENV_FILE missing" "mkdir -p '$STATE_DIR' && cp docker/docker.env.example '$ENV_FILE' && chmod 600 '$ENV_FILE', then fill in the tokens" 4
-if inside "$ENV_FILE" "$REPO" || inside "$ENV_FILE" "$SECRETS_DIR" || inside "$ENV_FILE" "$BACKUPS_DIR" || inside "$ENV_FILE" "$HANDOFF_DIR"; then
+if inside "$ENV_FILE" "$REPO" || inside "$ENV_FILE" "$SECRETS_DIR" || inside "$ENV_FILE" "$BACKUPS_DIR" || inside "$ENV_FILE" "$HANDOFF_DIR" \
+    || inside "$ENV_FILE" "$DIFF_GATE_DIR"; then
     fail "env file $ENV_FILE is inside a folder a container can mount" "move it to $STATE_DIR/docker.env" 4
 fi
 # GNU `stat -f` means "filesystem status", so pick the form by OS.
@@ -220,10 +241,55 @@ case "$perm" in
     *) fail "env file $ENV_FILE has mode $perm (holds tokens)" "chmod 600 '$ENV_FILE'" 4 ;;
 esac
 { [ -d "$REPO/.git" ] && [ ! -L "$REPO/.git" ]; } || fail "$REPO/.git is not a directory (git worktree or symlink?)" "run the pipeline from the main clone" 2
+
+# One value from the env file, as run_container would pass it (the last
+# non-empty KEY= line wins). Parsed, never sourced.
+env_file_value() {  # $1 key
+    local line v=""
+    while IFS= read -r line || [ -n "$line" ]; do
+        case "$line" in "$1="?*) v="${line#*=}" ;; esac
+    done < "$ENV_FILE"
+    printf '%s' "$v"
+}
+# The egress relay forwards raw TCP to one IMAP server (email ingest cannot
+# use the HTTP proxy). It must be a public DNS name: never an IP literal
+# (192.168.x.x, 127.1 …) or a local name, which would turn the relay into a
+# route to the Mac or the LAN. The egress container also refuses a name that
+# resolves to a private address. Not secret: exported for compose (the egress
+# service's environment); identical for every run, so a running proxy is
+# never recreated under another job.
+valid_mail_host() {  # $1 → 0 if a plausible public host name
+    local h="$1" lc
+    [ "${#h}" -le 253 ] || return 1
+    printf '%s' "$h" | grep -qE '^[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$' || return 1
+    case "${h##*.}" in *[!0-9]*) ;; *) return 1 ;; esac   # all-digit last label: an IPv4 literal
+    lc="$(printf '%s' "$h" | tr '[:upper:]' '[:lower:]')"
+    case "$lc" in *.localhost|*.local|*.internal|*.lan|*.home.arpa|*.localdomain|*.docker) return 1 ;; esac
+    return 0
+}
+IMAP_RELAY_HOST="$(env_file_value IMAP_HOST)"
+[ -n "$IMAP_RELAY_HOST" ] || IMAP_RELAY_HOST=imap.gmail.com   # email-ingestion.ts's default
+valid_mail_host "$IMAP_RELAY_HOST" \
+    || fail "IMAP_HOST in $ENV_FILE ('$(printf '%s' "$IMAP_RELAY_HOST" | LC_ALL=C tr -cd 'A-Za-z0-9.:_-' | cut -c1-80)') is not a public host name — IP addresses and local names are refused, because the egress relay forwards email ingest's connection to it" \
+            "set IMAP_HOST to your mail provider's IMAP host name (e.g. imap.gmail.com), or remove the line for Gmail" 4
+IMAP_RELAY_PORT="$(env_file_value IMAP_PORT)"
+[ -n "$IMAP_RELAY_PORT" ] || IMAP_RELAY_PORT=993
+case "$IMAP_RELAY_PORT" in
+    *[!0-9]*) relay_port_ok=no ;;
+    *) relay_port_ok=yes; { [ "${#IMAP_RELAY_PORT}" -le 5 ] && [ $((10#$IMAP_RELAY_PORT)) -ge 1 ] && [ $((10#$IMAP_RELAY_PORT)) -le 65535 ]; } || relay_port_ok=no ;;
+esac
+[ "$relay_port_ok" = "yes" ] || fail "IMAP_PORT in $ENV_FILE is not a TCP port (1-65535)" "set IMAP_PORT=993 (implicit TLS) or remove the line" 4
+export AA_IMAP_HOST="$IMAP_RELAY_HOST" AA_IMAP_PORT="$IMAP_RELAY_PORT"
 # Sealed build: the pipeline can run its data phases without building
 # (AA_SKIP_BUILD) and build in a separate `build` mode (protected-paths PR).
 SEALED=no
 if grep -q 'AA_SKIP_BUILD' "$REPO/scripts/daily-automated.sh" 2>/dev/null; then SEALED=yes; fi
+# Deploy floor: scripts/deploy-gate.sh refuses a HEAD that is not AA_MIN_HEAD
+# or a descendant of it (protected-paths PR). The floor is the host repo's
+# HEAD after the last deploy recorded in deploys.log, kept host-only.
+MIN_HEAD_FILE="$STATE_DIR/min-head"
+MIN_HEAD_SUPPORT=no
+if grep -q 'AA_MIN_HEAD' "$REPO/scripts/deploy-gate.sh" 2>/dev/null; then MIN_HEAD_SUPPORT=yes; fi
 mkdir -p "$BACKUPS_DIR" "$SECRETS_DIR" "$STATE_DIR" "$REPO/logs"
 chmod 700 "$STATE_DIR" "$SECRETS_DIR"
 if [ "$MARKER_SUPPORT" = "yes" ]; then mkdir -p "$HANDOFF_DIR" && chmod 700 "$HANDOFF_DIR"; fi
@@ -276,8 +342,8 @@ fi
 
 NAME="agent-athens-$JOB"
 # build and publish share dist/ with the freshness run's own build/publish.
-running="^/${NAME}(-ingest|-build|-publish)?\$"
-case "$JOB" in build|publish) running="^/agent-athens-(freshness(-ingest|-build|-publish)?|$JOB)\$" ;; esac
+running="^/${NAME}(-ingest|-build|-diff-gate|-publish)?\$"
+case "$JOB" in build|publish) running="^/agent-athens-(freshness(-ingest|-build|-diff-gate|-publish)?|$JOB(-diff-gate)?)\$" ;; esac
 if [ -n "$(docker ps -q --filter "name=$running")" ]; then
     log "$JOB is already running in container $NAME — skipping."
     exit 0
@@ -349,14 +415,29 @@ backup_skipped() {  # $1 reason
 }
 backup_db() {
     local db="$REPO/data/events.db" stamp waited=0 f
-    [ -f "$db" ] || { backup_skipped "no data/events.db"; return 0; }
+    { [ -e "$db" ] || [ -L "$db" ]; } || { backup_skipped "no data/events.db"; return 0; }
     while [ -n "$(docker ps -q --filter 'name=^/agent-athens-')" ]; do
         [ "$waited" -ge 600 ] && { backup_skipped "another pipeline container was still running after 10 min"; return 0; }
         sleep 15; waited=$((waited + 15))
     done
+    # Containers write data/: the database and its -wal/-shm must be plain
+    # files, checked now that no container runs. A symlink would copy
+    # whatever it points at on the Mac into the backups (and off-site); a
+    # FIFO would hang the copy; a device file has no business there. Refused
+    # with an alert, never followed.
+    if [ -L "$REPO/data" ] || [ ! -d "$REPO/data" ]; then
+        backup_skipped "data/ is not a plain folder (a symlink?) — nothing copied; see docs/security/incident-response.md"; return 0
+    fi
+    for f in "" -wal -shm; do
+        { [ -e "$db$f" ] || [ -L "$db$f" ]; } || continue
+        if [ -L "$db$f" ] || [ ! -f "$db$f" ]; then
+            backup_skipped "data/events.db$f is not a regular file (symlink, FIFO, socket or device) — nothing copied; see docs/security/incident-response.md"; return 0
+        fi
+    done
     stamp="$(date +%Y-%m-%d-%H%M)"
     for f in "" -wal -shm; do
-        if [ -f "$db$f" ] && ! cp -p "$db$f" "$BACKUPS_DIR/events-$stamp.db$f"; then
+        [ -f "$db$f" ] || continue
+        if ! cp -p "$db$f" "$BACKUPS_DIR/events-$stamp.db$f" || [ -L "$BACKUPS_DIR/events-$stamp.db$f" ] || [ ! -f "$BACKUPS_DIR/events-$stamp.db$f" ]; then
             backup_skipped "copying data/events.db$f to $BACKUPS_DIR failed (disk full?)"; return 0
         fi
     done
@@ -389,10 +470,15 @@ backup_db() {
 # of the last 8 weeks and of each of the last 6 months. Names are
 # events-YYYY-MM-DD-HHMM.db.gz, so the date is parsed from the name, and the
 # names sort newest first in reverse order (cp -p keeps the database's mtime,
-# so file times are not the backup times).
+# so file times are not the backup times). Only that exact name pattern is
+# ever considered: the older host script scripts/backup-events-db.sh keeps its
+# own events-YYYY-MM-DD.db.gz in the same folder, and this prune must neither
+# count nor delete those.
 backup_sets() {
     local f
-    for f in "$BACKUPS_DIR"/events-*.db.gz; do [ -f "$f" ] && printf '%s\n' "$f"; done | LC_ALL=C sort -r
+    for f in "$BACKUPS_DIR"/events-[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9].db.gz; do
+        [ -f "$f" ] && [ ! -L "$f" ] && printf '%s\n' "$f"
+    done | LC_ALL=C sort -r
 }
 prune_backups() {
     local f d day week month keep days="" weeks="" months="" n=0 nd=0 nw=0 nm=0
@@ -419,20 +505,59 @@ prune_backups() {
 
 is_dotenv() { case "$1" in .env.example) return 1 ;; .env|.env.*) return 0 ;; esac; return 1; }
 
+# This run's environment for the container: KEY into run_container's
+# run_env_keys/run_env_vals (bash dynamic scope; a later value for the same
+# key replaces the earlier one) and `-e KEY` into its env_flags. The value is
+# never exported here.
+run_env_set() {  # $1 key, $2 value
+    local i=0
+    while [ "$i" -lt "$run_env_n" ]; do
+        if [ "${run_env_keys[$i]}" = "$1" ]; then run_env_vals[$i]="$2"; return 0; fi
+        i=$((i + 1))
+    done
+    run_env_keys[$run_env_n]="$1"; run_env_vals[$run_env_n]="$2"; run_env_n=$((run_env_n + 1))
+    env_flags+=(-e "$1")
+}
+# `docker compose run "$@"` with this run's values exported only in the
+# subshell that execs docker: `docker compose run -e KEY` takes the value from
+# its own environment, and neither this script, the watchdog, the integrity
+# check, the alert senders nor any later run ever has it in theirs. `export`
+# is a builtin, so no value appears in a process argument list either.
+compose_run() {
+    (
+        i=0
+        while [ "$i" -lt "$run_env_n" ]; do
+            export "${run_env_keys[$i]}=${run_env_vals[$i]}"
+            i=$((i + 1))
+        done
+        exec "${COMPOSE[@]}" run "$@"
+    )
+}
+
 # Run one container under a policy. $1 policy, $2 container name, rest: entrypoint args.
 run_container() {
     local policy="$1" name="$2"; shift 2
     job_policy "$policy" || fail "internal: no policy '$policy'" "report this" 2
     export AA_SECRETS_DIR="$EMPTY_DIR"
     [ "$SECRETS" = "yes" ] && export AA_SECRETS_DIR="$SECRETS_DIR"
-    local secret_mounts=()
-    # The publish run submits sitemaps to Search Console: that one key file only.
-    if [ "$SECRETS" = "gsc" ] && [ -f "$SECRETS_DIR/gcp-kpi-reader.json" ]; then
-        secret_mounts+=(-v "$SECRETS_DIR/gcp-kpi-reader.json:/home/pwuser/.config/agentathens/gcp-kpi-reader.json:ro")
+    local secret_mounts=() sf
+    # Runs that need one or two API keys get those files, not the folder: the
+    # publish run the Search Console key (sitemap submission), visibility the
+    # Bing and Search Console keys. A symlink is never mounted (it would
+    # mount whatever it points at).
+    if [ "$SECRETS" = "files" ]; then
+        for sf in $SECRET_FILES; do
+            if [ -f "$SECRETS_DIR/$sf" ] && [ ! -L "$SECRETS_DIR/$sf" ]; then
+                secret_mounts+=(-v "$SECRETS_DIR/$sf:/home/pwuser/.config/agentathens/$sf:ro")
+            fi
+        done
     fi
 
-    # Only this run's tokens. The env file is parsed, never sourced.
-    local env_flags=() line key lineno=0
+    # Only this run's tokens. The env file is parsed, never sourced, and the
+    # values stay in this shell's (unexported) arrays until compose_run
+    # exports them in the subshell that execs docker.
+    local env_flags=() line key lineno=0 run_env_n=0
+    local run_env_keys run_env_vals; run_env_keys=(); run_env_vals=()
     while IFS= read -r line || [ -n "$line" ]; do
         lineno=$((lineno + 1))
         case "$line" in ''|'#'*) continue ;; esac
@@ -443,8 +568,22 @@ run_container() {
         # otherwise hide the one in the repo .env (bun never overrides a set
         # variable with .env).
         [ -n "${line#*=}" ] || continue
-        case " $TOKENS " in *" $key "*) export "$key=${line#*=}"; env_flags+=(-e "$key") ;; esac
+        case " $TOKENS " in *" $key "*) run_env_set "$key" "${line#*=}" ;; esac
     done < "$ENV_FILE"
+    # Runs that fetch mail verify the server as the IMAP_HOST the egress relay
+    # is pinned to (validated above), whatever the repo .env says.
+    [ "$NET" = "mail" ] && run_env_set IMAP_HOST "$IMAP_RELAY_HOST"
+    # The deploy floor: never publish a HEAD older than the one recorded
+    # after the last recorded deploy (scripts/deploy-gate.sh refuses it).
+    if [ "$policy" = "publish" ] && [ "$MIN_HEAD_SUPPORT" = "yes" ]; then
+        local min_head
+        if min_head="$(read_min_head)"; then
+            [ -n "$min_head" ] && env_flags+=(-e "AA_MIN_HEAD=$min_head")
+        else
+            log "WARNING: $MIN_HEAD_FILE does not hold a commit id — publishing without a deploy floor"
+            bash "$HERE/integrity-check.sh" notify "Job $JOB: $MIN_HEAD_FILE is not a 40-hex commit id; published without a deploy floor. Check it (host-only file), then delete it or write the live deploy's commit" >/dev/null 2>&1 || true
+        fi
+    fi
     [ -n "${AA_DEFER_PUBLISH:-}" ] && env_flags+=(-e AA_DEFER_PUBLISH)
     [ -n "${AA_SKIP_INGEST:-}" ] && env_flags+=(-e AA_SKIP_INGEST)
     [ -n "${AA_SKIP_BUILD:-}" ] && env_flags+=(-e AA_SKIP_BUILD)
@@ -495,10 +634,8 @@ run_container() {
         mounts+=(-v "$REPO/$entry:/workspace/$entry:$mode")
     done < <(ls -A1 "$REPO")
     mounts+=(${secret_mounts[@]+"${secret_mounts[@]}"})
-    # The one file under a read-only folder that the pipeline writes.
-    if [ -f "$REPO/docs/DECISIONS-QUEUE.md" ] && [ ! -L "$REPO/docs/DECISIONS-QUEUE.md" ] && [ ! -L "$REPO/docs" ]; then
-        mounts+=(-v "$REPO/docs/DECISIONS-QUEUE.md:/workspace/docs/DECISIONS-QUEUE.md")
-    fi
+    # Nothing under docs/ is writable in any run (the decisions queue is
+    # generated into data/, see scripts/decisions-queue.ts).
     if [ "$GITRW" = "yes" ]; then
         mounts+=(-v "$REPO/.git:/workspace/.git:rw" \
             -v "$REPO/.git/config:/workspace/.git/config:ro" -v "$REPO/.git/hooks:/workspace/.git/hooks:ro")
@@ -515,6 +652,13 @@ run_container() {
                 mounts+=(-v "$HANDOFF_DIR:/handoff:rw")
                 env_flags+=(-e "AA_PUBLISH_MARKER=/handoff/publish-ready") ;;
         esac
+    fi
+    # The diff gate's stats (scripts/publish-diff-gate.ts) persist in a host
+    # folder of their own, mounted into the diff-gate run only, at the path
+    # the gate is given (/handoff/publish-stats.json). The Mac never reads it.
+    if [ "$policy" = "diff-gate" ]; then
+        mkdir -p "$DIFF_GATE_DIR" && chmod 700 "$DIFF_GATE_DIR"
+        mounts+=(-v "$DIFF_GATE_DIR:/handoff:rw")
     fi
     local service=pipeline
     [ "$NET" = "no" ] && service=pipeline-offline
@@ -551,16 +695,18 @@ run_container() {
     local out="$STATE_DIR/state/$name.out" timeout_flag="$STATE_DIR/state/$name.timeout"
     start_watchdog "$name" "$LIMIT"
     set +e
-    if [ "$policy" = "publish" ] || [ "$policy" = "verify-live" ] || [ "$policy" = "build" ]; then
-        # Output is read back on the Mac (deploy record / live check / build hash).
-        "${COMPOSE[@]}" run --rm -T ${env_flags[@]+"${env_flags[@]}"} \
-            ${mounts[@]+"${mounts[@]}"} --name "$name" "$service" "$@" 2>&1 | tee "$out"
-        rc=${PIPESTATUS[0]}
-    else
-        "${COMPOSE[@]}" run --rm ${tty[@]+"${tty[@]}"} ${env_flags[@]+"${env_flags[@]}"} \
-            ${mounts[@]+"${mounts[@]}"} --name "$name" "$service" "$@"
-        rc=$?
-    fi
+    case "$policy" in
+        publish|verify-live|build|diff-gate)
+            # Output is read back on the Mac (deploy record / live check /
+            # build hash / the diff gate's reasons).
+            compose_run --rm -T ${env_flags[@]+"${env_flags[@]}"} \
+                ${mounts[@]+"${mounts[@]}"} --name "$name" "$service" "$@" 2>&1 | tee "$out"
+            rc=${PIPESTATUS[0]} ;;
+        *)
+            compose_run --rm ${tty[@]+"${tty[@]}"} ${env_flags[@]+"${env_flags[@]}"} \
+                ${mounts[@]+"${mounts[@]}"} --name "$name" "$service" "$@"
+            rc=$? ;;
+    esac
     set -e
     stop_watchdog
     if [ -f "$timeout_flag" ]; then
@@ -620,6 +766,78 @@ record_deploy() {
     BUILD_HASH=""
     echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $id $hash" >> "$DEPLOYS_LOG"
     log "recorded deploy $id"
+    record_min_head
+}
+
+# The host repo's HEAD, read with the integrity check's git environment (the
+# check has just verified .git's config and hooks): nothing inherited may
+# point git at another repository, object store or replacement objects.
+host_head() {
+    (
+        unset GIT_DIR GIT_WORK_TREE GIT_COMMON_DIR GIT_INDEX_FILE GIT_OBJECT_DIRECTORY \
+              GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_CONFIG_PARAMETERS GIT_CONFIG_COUNT
+        export GIT_NO_REPLACE_OBJECTS=1
+        cd "$REPO" && git rev-parse --verify -q HEAD
+    ) 2>/dev/null
+}
+is_sha1() { case "$1" in *[!0-9a-f]*) return 1 ;; esac; [ "${#1}" -eq 40 ]; }
+# After a recorded deploy: its HEAD becomes the floor every later publish
+# must equal or descend from (host-only file; no container mounts $STATE_DIR).
+record_min_head() {
+    local h
+    h="$(host_head || true)"
+    if is_sha1 "$h"; then
+        printf '%s\n' "$h" > "$MIN_HEAD_FILE"
+        log "recorded deploy floor (min HEAD) $h"
+    else
+        log "WARNING: could not read the repo's HEAD as a 40-hex commit id — deploy floor not updated"
+    fi
+}
+read_min_head() {  # prints the floor ("" when none recorded); 1 if the file is not one commit id
+    local h
+    [ -e "$MIN_HEAD_FILE" ] || return 0
+    [ -f "$MIN_HEAD_FILE" ] && [ ! -L "$MIN_HEAD_FILE" ] || return 1
+    h="$(cat "$MIN_HEAD_FILE")"
+    is_sha1 "$h" || return 1
+    printf '%s' "$h"
+}
+
+# The diff gate's own output, for an alert: printable characters only, at
+# most 5 non-empty lines of 160 characters, 600 in all (it came out of a
+# container that read the built site).
+gate_reasons() {  # $1 container output file
+    LC_ALL=C tr -cd '[:print:]\n' < "$1" | grep -v '^[[:space:]]*$' | head -5 | cut -c1-160 \
+        | tr '\n' ' ' | cut -c1-600
+}
+# Before a sealed publish, when the pipeline has scripts/publish-diff-gate.ts:
+# the gate compares the built dist/ (read-only, no network, no token) with the
+# stats of the last accepted build. Returns only when publishing may go on;
+# otherwise alerts and exits (12 held, 13 gate error). AA_ACCEPT_DIFF=1 on a
+# `publish` job runs it with --accept (the owner reviewed the change: the new
+# stats become the baseline).
+run_diff_gate() {  # $1 container name
+    [ "$SEALED" = "yes" ] && [ -f "$REPO/scripts/publish-diff-gate.ts" ] || return 0
+    # No build to judge: the publish run itself refuses that (exit 10).
+    [ -s "$BUILD_HASH_FILE" ] || return 0
+    local name="$1" rc=0 accept=() reasons
+    if [ "$JOB" = "publish" ] && [ "${AA_ACCEPT_DIFF:-}" = "1" ]; then
+        accept=(--accept)
+        log "AA_ACCEPT_DIFF=1: the diff gate accepts this build's dist/ as the new baseline"
+    fi
+    run_container diff-gate "$name" diff-gate ${accept[@]+"${accept[@]}"} || rc=$?
+    case "$rc" in
+        0) log "diff gate passed"; return 0 ;;
+        3)
+            reasons="$(gate_reasons "$STATE_DIR/state/$name.out")"
+            log "ALERT: publish held by the diff gate: $reasons"
+            echo "aa-run: next: review the change (dist/, the gate's reasons above); if it is expected, run: AA_ACCEPT_DIFF=1 docker/aa-run.sh publish" >&2
+            bash "$HERE/integrity-check.sh" notify "Job $JOB: publish held by the diff gate — $reasons — Review; if expected: AA_ACCEPT_DIFF=1 docker/aa-run.sh publish" >/dev/null 2>&1 || true
+            exit 12 ;;
+        *)
+            log "ALERT: the diff gate failed (exit $rc) — nothing published"
+            bash "$HERE/integrity-check.sh" notify "Job $JOB: the publish diff gate failed (exit $rc); nothing was published. See ~/.config/agentathens-docker/logs" >/dev/null 2>&1 || true
+            exit 13 ;;
+    esac
 }
 
 # docker/check-live.sh judges the container's strict LIVE lines against the
@@ -661,7 +879,7 @@ case "$JOB" in
                 export AA_SKIP_INGEST=1
             else
                 # Older pipeline: ingest still runs inside the scrape run, which
-                # then needs .env and a direct route out (IMAP) as well.
+                # then needs .env and the IMAP relay (pipeline-mail) as well.
                 SCRAPE_DOTENV=yes; SCRAPE_NET=mail
             fi
             export AA_DEFER_PUBLISH=1
@@ -686,6 +904,7 @@ case "$JOB" in
             fi
             if [ -f "$PUBLISH_MARKER" ]; then
                 clear_lock "$REPO/.pipeline-publish.lock"
+                run_diff_gate "$NAME-diff-gate"
                 run_container publish "$NAME-publish" publish
             else
                 log "nothing to publish (no publish marker at $PUBLISH_MARKER)"
@@ -705,6 +924,7 @@ case "$JOB" in
         ;;
     publish)
         clear_lock "$REPO/.pipeline-publish.lock"
+        run_diff_gate "$NAME-diff-gate"
         run_container publish "$NAME" publish "$@"
         ;;
     restore)

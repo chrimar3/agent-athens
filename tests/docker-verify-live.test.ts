@@ -387,10 +387,18 @@ describe('docker/doctor-checks.sh', () => {
     expect(doctor('NETLIFY_AUTH_TOKEN=x\n').out).toContain('GH_TOKEN not set');
   });
 
-  test('warns (does not fail) when AA_OFFSITE_CMD is unset', () => {
+  test('fails when AA_OFFSITE_CMD is unset (every backup would live only on this Mac)', () => {
     const r = doctor('GH_TOKEN=github_pat_x\n');
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('FAIL  AA_OFFSITE_CMD not set');
+    expect(r.out).toContain('AA_OFFSITE_OPTOUT=1');
+  });
+
+  test('only warns when the owner opted out explicitly with AA_OFFSITE_OPTOUT=1', () => {
+    const r = doctor('GH_TOKEN=github_pat_x\n', { AA_OFFSITE_OPTOUT: '1' });
     expect(r.code).toBe(0);
     expect(r.out).toContain('warn  AA_OFFSITE_CMD not set');
+    expect(doctor('GH_TOKEN=github_pat_x\n', { AA_OFFSITE_OPTOUT: 'yes' }).code).toBe(1); // exactly 1
   });
 
   test('the in-container doctor refuses a non-fine-grained token too', () => {
