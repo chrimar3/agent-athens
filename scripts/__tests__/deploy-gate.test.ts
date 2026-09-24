@@ -462,6 +462,124 @@ esac
   });
 });
 
+// ---------------------------------------------------------------------------
+// Security loop round 8 — the deploy floor. AA_MIN_HEAD (the HEAD of the last
+// successful publish, recorded on the Mac by the host wrapper) must be 40
+// lowercase hex (else exit 2); when set, a full-gate deploy refuses unless
+// HEAD is that commit or descends from it, so older reviewed code cannot be
+// republished to roll the site back past a fix.
+// ---------------------------------------------------------------------------
+describe('deploy-gate.sh — deploy floor (AA_MIN_HEAD, round 8)', () => {
+  let repos: string[] = [];
+  afterAll(() => { for (const r of repos) rmSync(r, { recursive: true, force: true }); });
+
+  /** Fixture: baseline A, then reviewed B and C on origin/main; HEAD at C. */
+  function history() {
+    const r = mkFixtureRepo(); repos.push(r);
+    const a = headSha(r);
+    writeFileSync(join(r, 'src/app.ts'), 'export const x = 2;\n');
+    sh(r, ['git', 'commit', '-qam', 'B']);
+    const b = headSha(r);
+    writeFileSync(join(r, 'src/app.ts'), 'export const x = 3;\n');
+    sh(r, ['git', 'commit', '-qam', 'C']);
+    const c = headSha(r);
+    mergeUpstream(r);
+    return { r, a, b, c };
+  }
+  const gate = (r: string, minHead: string | undefined, ...args: string[]) =>
+    sh(r, ['bash', GATE, ...args], minHead === undefined ? {} : { AA_MIN_HEAD: minHead });
+
+  test('HEAD equal to the floor, or descending from it → PASS naming the floor', () => {
+    const { r, b, c } = history();
+    stamp(r, headSha(r));
+    const same = gate(r, c);
+    expect(same.code).toBe(0);
+    expect(same.out).toContain(`at or after the last published HEAD ${c.slice(0, 9)}`);
+    expect(gate(r, b).code).toBe(0);
+  });
+
+  test('THE THREAT: an older reviewed commit (still an ancestor of origin/main) below the floor → REFUSED', () => {
+    const { r, b, c } = history();
+    sh(r, ['git', 'reset', '-q', '--hard', b]);
+    stamp(r, headSha(r));
+    expect(gate(r, undefined).code).toBe(0); // precondition: the origin gate alone lets it through
+    const res = gate(r, c);
+    expect(res.code).toBe(1);
+    expect(res.err).toContain('[deploy-floor]');
+    expect(res.err).toContain(c.slice(0, 12));
+    expect(res.err).toContain('roll the site back');
+    expect(res.out).not.toContain('PASS');
+  });
+
+  test('a floor on a side branch (not an ancestor of HEAD) → REFUSED', () => {
+    const { r, c } = history();
+    sh(r, ['git', 'checkout', '-q', '-b', 'side', 'HEAD~2']);
+    writeFileSync(join(r, 'src/side.ts'), 'export const s = 1;\n');
+    sh(r, ['git', 'add', '-A']);
+    sh(r, ['git', 'commit', '-qm', 'side']);
+    const side = headSha(r);
+    sh(r, ['git', 'checkout', '-q', c]);
+    stamp(r, headSha(r));
+    const res = gate(r, side);
+    expect(res.code).toBe(1);
+    expect(res.err).toContain('[deploy-floor]');
+  });
+
+  test('a floor commit that is not in the repository → REFUSED (fails closed)', () => {
+    const { r } = history();
+    stamp(r, headSha(r));
+    const res = gate(r, 'f'.repeat(40));
+    expect(res.code).toBe(1);
+    expect(res.err).toContain('is not a commit in this repository');
+  });
+
+  test('a planted refs/replace graft cannot make an older HEAD look like a descendant of the floor', () => {
+    const { r, b, c } = history();
+    sh(r, ['git', 'reset', '-q', '--hard', b]);
+    // With replace refs honoured, B would appear to have C as its parent.
+    expect(sh(r, ['git', 'replace', '--graft', b, c]).code).toBe(0);
+    expect(sh(r, ['git', 'merge-base', '--is-ancestor', c, b]).code).toBe(0); // precondition: the graft fools plain git
+    stamp(r, headSha(r));
+    const res = gate(r, c);
+    expect(res.code).toBe(1);
+    expect(res.err).toContain('[deploy-floor]');
+  });
+
+  test('a malformed AA_MIN_HEAD → exit 2 with a clear message, in every mode, before anything else', () => {
+    const { r, c } = history();
+    stamp(r, headSha(r));
+    for (const bad of [c.toUpperCase(), c.slice(0, 12), `${c}0`, `${c}\n`, 'main', 'HEAD', `--${c.slice(2)}`, ' '.repeat(40)]) {
+      for (const args of [[], ['--local-only'], ['--allow-descendant']]) {
+        const res = gate(r, bad, ...args);
+        expect(`${JSON.stringify(bad)} ${args} → ${res.code}`).toBe(`${JSON.stringify(bad)} ${args} → 2`);
+        expect(res.err).toContain('AA_MIN_HEAD must be a full 40-character lowercase hex commit SHA');
+        expect(res.err).not.toContain('\n\n');
+      }
+    }
+    // The message never echoes control characters from the value.
+    const nl = gate(r, `${'a'.repeat(20)}\u001b[31m${'a'.repeat(15)}`);
+    expect(nl.code).toBe(2);
+    expect(nl.err).not.toContain('\u001b');
+  });
+
+  test('--local-only checks the format but not the floor (it authorises nothing); unset or empty means no floor', () => {
+    const { r, b, c } = history();
+    sh(r, ['git', 'reset', '-q', '--hard', b]);
+    stamp(r, headSha(r));
+    expect(gate(r, c, '--local-only').code).toBe(0);
+    expect(gate(r, '').code).toBe(0);
+    expect(gate(r, undefined).code).toBe(0);
+  });
+
+  test('the floor check sits after the origin gate, inside the replace-objects scope (source pins)', () => {
+    const src = readFileSync(GATE, 'utf-8');
+    const floor = src.indexOf('# deploy-floor:begin');
+    expect(floor).toBeGreaterThan(src.indexOf('# origin-gate:end'));
+    expect(src.indexOf('export GIT_NO_REPLACE_OBJECTS=1')).toBeLessThan(src.indexOf('# deploy-floor-arg:begin'));
+    expect(src.slice(floor, src.indexOf('# deploy-floor:end'))).toContain('merge-base --is-ancestor "$MIN_HEAD" "$HEAD_SHA"');
+  });
+});
+
 describe('redeploy.sh — quarantine, gates, then deploy', () => {
   interface RP { dir: string; calls: string; state: string; home: string }
   /** Temp project: copy of redeploy.sh, stub deploy-gate.sh, stub bun + netlify. */

@@ -38,8 +38,17 @@
 #
 # --local-only (used ONLY by a deferred producing run, AA_DEFER_PUBLISH=1,
 # which never deploys and holds no network credentials): checks (1)-(4) and
-# skips (5). It authorises nothing: `publish` re-runs the full gate before any
-# push or deploy. It cannot be combined with --allow-descendant.
+# skips (5) and (6). It authorises nothing: `publish` re-runs the full gate
+# before any push or deploy. It cannot be combined with --allow-descendant.
+#
+# (6) DEPLOY FLOOR (security loop round 8): AA_MIN_HEAD, when set, is the HEAD
+# of the last successful publish, recorded on the Mac by the host wrapper. It
+# must be a full 40-character lowercase hex SHA (anything else: exit 2). The
+# gate then refuses (exit 1) unless HEAD is AA_MIN_HEAD or a descendant of it
+# (`git merge-base --is-ancestor`, replace refs ignored), so an older — still
+# reviewed — commit on origin/main cannot be republished to roll the site back
+# past a fix. A floor commit missing from the local repository refuses too.
+# Emergency rollback stays `netlify rollback` / restoreSiteDeploy (not gated).
 
 set -euo pipefail
 
@@ -70,6 +79,14 @@ if [[ "$ALLOW_DESCENDANT" == "1" && "$LOCAL_ONLY" == "1" ]]; then
     echo "deploy-gate: REFUSED — --local-only and --allow-descendant cannot be combined (publish must run the full gate)" >&2
     exit 1
 fi
+
+# deploy-floor-arg:begin (security loop round 8; pinned by scripts/__tests__/deploy-gate.test.ts)
+MIN_HEAD="${AA_MIN_HEAD:-}"
+if [[ -n "$MIN_HEAD" && ! "$MIN_HEAD" =~ ^[0-9a-f]{40}$ ]]; then
+    echo "deploy-gate: REFUSED — AA_MIN_HEAD must be a full 40-character lowercase hex commit SHA (got ${#MIN_HEAD} character(s): '$(printf '%s' "${MIN_HEAD:0:48}" | LC_ALL=C tr -c '[:alnum:]' '?')'). Next: pass the HEAD recorded by the last successful publish, or unset AA_MIN_HEAD" >&2
+    exit 2
+fi
+# deploy-floor-arg:end
 
 GATE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -196,5 +213,19 @@ if ! git -C "$ROOT" merge-base --is-ancestor "$HEAD_SHA" "$og_tip"; then
 fi
 # origin-gate:end
 
-echo "deploy-gate: PASS — dist/ corresponds to HEAD ${HEAD_SHA:0:9}, source scope clean, dist hash verified, HEAD is reviewed code on origin/$PRODUCTION_BRANCH (${og_tip:0:9})"
+# ---- condition 6: deploy floor — never behind the last publish -------------
+# deploy-floor:begin (keep both markers; pinned by scripts/__tests__/deploy-gate.test.ts)
+floor_note=""
+if [[ -n "$MIN_HEAD" ]]; then
+    if ! git -C "$ROOT" cat-file -e "${MIN_HEAD}^{commit}" 2>/dev/null; then
+        fail "[deploy-floor] AA_MIN_HEAD ${MIN_HEAD:0:12} (the last published HEAD) is not a commit in this repository, so HEAD ${HEAD_SHA:0:12} cannot be shown to descend from it; failing closed. Fetch origin, or check the recorded publish HEAD"
+    fi
+    if [[ "$HEAD_SHA" != "$MIN_HEAD" ]] && ! git -C "$ROOT" merge-base --is-ancestor "$MIN_HEAD" "$HEAD_SHA" 2>/dev/null; then
+        fail "[deploy-floor] HEAD ${HEAD_SHA:0:12} is not AA_MIN_HEAD ${MIN_HEAD:0:12} (the last published HEAD) or a descendant of it — deploying it would roll the site back to older code. Deploy origin/$PRODUCTION_BRANCH at or after the last publish; for an emergency rollback use netlify rollback"
+    fi
+    floor_note=", at or after the last published HEAD ${MIN_HEAD:0:9}"
+fi
+# deploy-floor:end
+
+echo "deploy-gate: PASS — dist/ corresponds to HEAD ${HEAD_SHA:0:9}, source scope clean, dist hash verified, HEAD is reviewed code on origin/$PRODUCTION_BRANCH (${og_tip:0:9})${floor_note}"
 exit 0
