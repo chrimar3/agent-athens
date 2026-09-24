@@ -20,6 +20,7 @@ current when a credential is added or moved.
 | msmtp app password | `~/.msmtprc` | deadman watchdog email (host) | Send mail as that account | Dedicated alerts mailbox |
 | ntfy topic | `~/.config/agentathens/ntfy-topic` or `AGENTATHENS_NTFY_TOPIC` | deadman and integrity-check alerts | Read or spoof alerts | Long random topic, or ntfy access tokens. **The topic that used to be in `config/monitoring.json` is public in git history: treat it as burned, create a new one and resubscribe your phone** |
 | Google Maps browser keys | saved third-party pages under `data/event-pages/`, `data/html-to-parse/` | nothing: they belong to the scraped sites | none for this project (they are the other sites' public browser keys) | the project has no Maps key of its own; the folders are allowlisted in `.github/gitleaks.toml` |
+| Ruleset read token (`RULESET_READ_TOKEN`) | GitHub → Settings → Environments → `repo-settings` → Environment secrets (never a repository secret, never on the Mac) | the weekly `repo-settings` workflow (`.github/scripts/check-branch-rules.sh`): ruleset bypass lists, private vulnerability reporting, secret scanning and push protection | Read this repository's administration settings (rulesets, webhooks, deploy keys, collaborators); no writes | Fine-grained PAT, Repository access "Only select repositories" = `chrimar3/agent-athens`, Repository permissions: Administration = **Read-only** (Metadata read is implied), nothing else; never Read and write. 90-day expiry. The `repo-settings` environment's deployment branches must be limited to `main`, so no other branch's workflow can read it |
 | IndexNow key | `config/indexnow.json` | freshness: IndexNow ping | None — public by design (the key file is served) | — |
 
 ## File permissions on the Mac
@@ -36,7 +37,13 @@ you, or if it sits in a folder a container mounts (the repo,
 ## Rotation schedule
 
 - GitHub and Netlify tokens: every 90 days (set the expiry when creating them
-  and a calendar reminder a week before).
+  and a calendar reminder a week before). For `RULESET_READ_TOKEN`: create the
+  replacement with the same settings, paste it over the environment secret
+  (Settings → Environments → `repo-settings`), run the `repo-settings`
+  workflow by hand (Actions → repo-settings → Run workflow) and check it
+  passes, then delete the old token (GitHub → Settings → Developer settings →
+  Fine-grained tokens). An expired token makes the weekly check fail closed
+  with a permission message, not pass.
 - Everything else: on any suspicion (see `incident-response.md`) and at least
   yearly.
 

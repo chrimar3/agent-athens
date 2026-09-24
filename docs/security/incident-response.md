@@ -26,9 +26,15 @@ each step says how to confirm it worked. Credential details:
    passwords; Claude → claude.ai settings; Google Cloud → Credentials.
 2. Put the new value in `~/.config/agentathens-docker/docker.env` or `.env`, then run
    `docker/aa-run.sh doctor`.
+   `RULESET_READ_TOKEN` (read-only on this repository's settings) is not in
+   either file: revoke it under GitHub → Settings → Developer settings →
+   Fine-grained tokens, store the replacement as the secret of the
+   `repo-settings` environment (Settings → Environments), and run the
+   `repo-settings` workflow by hand to confirm it passes.
 3. Check what the old token did:
    - GitHub: the repo's commit list and Settings → Security log for pushes you
-     didn't make.
+     didn't make. For `RULESET_READ_TOKEN`, check that the environment's
+     deployment branches are still `main` only.
    - Netlify: Site → Deploys for deploys you didn't trigger; Team → Audit log.
    - Gmail: Security → Recent activity.
 4. If it was committed to git, rotating it is the fix. Rewriting history does
@@ -39,8 +45,17 @@ each step says how to confirm it worked. Credential details:
 (`verify-live` alerts you when the live deploy is not one the pipeline
 recorded in `~/.config/agentathens-docker/deploys.log`.)
 
-1. Netlify → Deploys → pick the last deploy you trust → *Publish deploy*.
-   Confirm on https://agentathens.com in a private window.
+1. Put the last deploy the pipeline verified back live, from the container
+   (no Netlify login on the Mac needed; only ids in `deploys.log` are
+   accepted, and the restore is recorded so `verify-live` expects it):
+   ```bash
+   tail -5 ~/.config/agentathens-docker/deploys.log   # pick the last one you trust
+   docker/aa-run.sh restore <deploy_id>
+   docker/aa-run.sh verify-live
+   ```
+   Confirm on https://agentathens.com in a private window. (Restoring in the
+   Netlify UI works too, but `verify-live` will then keep alerting until the
+   live deploy is one the pipeline recorded.)
 2. Rotate the Netlify token (above), then check the deploy list and audit log
    for who deployed.
 3. Find the source: compare `git log` with the Netlify deploy messages. If a
@@ -59,8 +74,10 @@ recorded in `~/.config/agentathens-docker/deploys.log`.)
    ls -lt ~/agent-athens-backups | head          # pick one from before the problem
    docker/restore-backup.sh ~/agent-athens-backups/events-YYYY-MM-DD-HHMM.db.gz
    ```
-3. Build and review the site locally (`docker/aa-run.sh site`, then
-   `bun run serve`) before re-enabling publishing.
+3. Build and review the site locally before re-enabling publishing:
+   `docker/aa-run.sh site` builds it in the offline container (no network,
+   no `.env`, no tokens), then `bun run serve`. A suspect database is only
+   ever opened inside the container.
 
 ## A job was quarantined
 
