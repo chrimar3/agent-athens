@@ -798,6 +798,12 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     '.github/workflows/live-site-check.yml',
     'tests/security/untrusted-db.test.ts',
     'tests/security/publish-trust-protected.test.ts',
+    // Round 9.
+    'scripts/run-tests.sh',
+    'scripts/phase1-exit-gate.ts',
+    '.github/scripts/live-page-content.ts',
+    'tests/security/test-discovery.test.ts',
+    'tests/security/weekly-digest-host.test.ts',
   ];
   /** Listed by name in path-guard.json even where a broader glob already covers
    *  them, so narrowing that glob later cannot silently drop them. */
@@ -874,6 +880,9 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     'scripts/monitor-search-visibility.ts',
     '.github/scripts/default-branch-file.sh',
     'tests/branch-rules-check.test.ts',
+    'scripts/run-tests.sh',
+    'scripts/phase1-exit-gate.ts',
+    '.github/scripts/live-page-content.ts',
   ];
   const MUST_NOT_PROTECT = [
     '.claude/notes/ledger.md',

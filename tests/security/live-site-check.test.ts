@@ -7,6 +7,12 @@
  * script CSP free of 'unsafe-inline' / 'unsafe-eval' and of a host-wide
  * googletagmanager.com source, HSTS max-age >= 15552000 and nosniff. A stub
  * curl (CURL_BIN) serves fixture headers; nothing touches the network.
+ *
+ * Round 9 — the content canary (.github/scripts/live-page-content.ts): every
+ * <script src> on those pages must be same-origin or exactly the allowed GA4
+ * loader, no <base href> may leave the site, and the template invariants (a
+ * <title> naming agent-athens, the canonical link) must be there. Fixture
+ * pages: a clean pair, an extra external script, a missing marker.
  */
 import { afterAll, describe, expect, test } from 'bun:test';
 import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
@@ -37,15 +43,22 @@ const headers = (over: Record<string, string | null> = {}) => {
   };
   return Object.entries(base).filter(([, v]) => v !== null).map(([k, v]) => `${k}: ${v}`);
 };
+const GTAG = 'https://www.googletagmanager.com/gtag/js?id=G-G7Y6RQ6RF9';
+const page = (o: { title?: string; canonical?: string | null; head?: string; body?: string } = {}) =>
+  `<!DOCTYPE html>\n<html lang="el">\n<head>\n  <meta charset="UTF-8">\n  <title>${o.title ?? 'Εκδηλώσεις στην Αθήνα | agent-athens'}</title>\n` +
+  (o.canonical === null ? '' : `  <link rel="canonical" href="${o.canonical ?? `${SITE}/`}">\n`) +
+  `  <script async src="${GTAG}"></script>\n  <script>window.dataLayer = window.dataLayer || [];</script>\n  <script src="/js/filters.js" defer></script>\n${o.head ?? ''}</head>\n<body><main>${o.body ?? ''}</main></body>\n</html>\n`;
+const HOME_HTML = page();
+const EVENT_HTML = page({ title: 'Some Concert | Gazarte | agent-athens', canonical: EVENT });
 const SITEMAP = (loc: string) => `<?xml version="1.0"?><urlset><url><loc>${loc}</loc></url><url><loc>${SITE}/other/</loc></url></urlset>`;
 
 function fixture(pages: { home?: Page; sitemap?: Page; event?: Page; extra?: Record<string, Page> }) {
   const dir = mkdtempSync(join(tmpdir(), 'aa-live-check-'));
   tmpDirs.push(dir);
   const all: Record<string, Page> = {
-    [`${SITE}/`]: { status: '200', headers: headers(), body: '<html></html>', ...pages.home },
+    [`${SITE}/`]: { status: '200', headers: headers(), body: HOME_HTML, ...pages.home },
     [`${SITE}/sitemap-events.xml`]: { status: '200', headers: ['content-type: application/xml'], body: SITEMAP(EVENT), ...pages.sitemap },
-    [EVENT]: { status: '200', headers: headers(), body: '<html></html>', ...pages.event },
+    [EVENT]: { status: '200', headers: headers(), body: EVENT_HTML, ...pages.event },
     ...pages.extra,
   };
   let i = 0;
@@ -79,7 +92,7 @@ cp "$D/$k.h" "$H"; cp "$D/$k.b" "$O"; printf '%s' "$(cat "$D/$k.s")"
 }
 
 function run(fx: { dir: string; curl: string }, env: Record<string, string> = {}) {
-  const r = Bun.spawnSync(['bash', SCRIPT], { cwd: ROOT, stdout: 'pipe', stderr: 'pipe', env: { PATH: process.env.PATH ?? '/usr/bin:/bin', CURL_BIN: fx.curl, ...env } });
+  const r = Bun.spawnSync(['bash', SCRIPT], { cwd: ROOT, stdout: 'pipe', stderr: 'pipe', env: { PATH: process.env.PATH ?? '/usr/bin:/bin', CURL_BIN: fx.curl, BUN_BIN: process.execPath, ...env } });
   const calls = existsSync(join(fx.dir, 'calls')) ? readFileSync(join(fx.dir, 'calls'), 'utf-8').trim().split('\n') : [];
   return { code: r.exitCode, out: r.stdout.toString(), err: r.stderr.toString(), calls };
 }
@@ -199,6 +212,65 @@ describe('live-site-check.sh — each failure fails the run', () => {
   });
 });
 
+describe('live-site-check.sh — content canary (round 9)', () => {
+  const failsWith = (pages: Parameters<typeof fixture>[0], msg: string, env: Record<string, string> = {}) => {
+    const r = run(fixture(pages), env);
+    expect(r.code).toBe(1);
+    expect(r.out).not.toContain('PASS');
+    expect(r.err).toContain(msg);
+    return r;
+  };
+
+  test('the clean fixture pages carry the loader, a same-origin script and the invariants, and pass', () => {
+    expect(HOME_HTML).toContain(`<script async src="${GTAG}">`);
+    expect(HOME_HTML).toContain('<script src="/js/filters.js"');
+    const r = run(fixture({}));
+    expect(r.code).toBe(0);
+    expect(r.out).toContain('the title and canonical invariants are present');
+  });
+
+  for (const [name, tag] of [
+    ['an extra external script', '<script src="https://evil.example/x.js"></script>'],
+    ['a protocol-relative external script', '<script src="//evil.example/x.js"></script>'],
+    ['another GTM container on the allowed host', '<script src="https://www.googletagmanager.com/gtm.js?id=GTM-EVIL"></script>'],
+    ['the gtag loader with another id', '<script src="https://www.googletagmanager.com/gtag/js?id=G-EVIL1234"></script>'],
+    ['the gtag loader with an extra parameter', `<script src="${GTAG}&amp;l=x"></script>`],
+    ['an entity-encoded external URL', '<script src="https&#58;//evil.example/x.js"></script>'],
+    ['an upper-case SRC attribute', '<SCRIPT SRC="https://evil.example/x.js"></SCRIPT>'],
+    ['an SVG script href', '<svg><script xlink:href="https://evil.example/x.js"></script></svg>'],
+  ] as const) {
+    test(`${name} fails the page`, () => {
+      failsWith({ event: { body: page({ title: 'X | agent-athens', canonical: EVENT, body: tag }) } }, 'content: event page: <script');
+      failsWith({ home: { body: page({ head: tag }) } }, 'is not an allowed script URL');
+    });
+  }
+
+  test('a <base href> off the site fails (it would re-point the relative scripts)', () => {
+    failsWith({ home: { body: page({ head: '<base href="https://evil.example/">' }) } }, 'points off the site');
+  });
+
+  test('a missing or foreign invariant marker fails', () => {
+    failsWith({ home: { body: page({ title: 'Totally Legit Page' }) } }, 'no <title> naming the site');
+    failsWith({ home: { body: page({ canonical: null }) } }, 'no <link rel="canonical">');
+    failsWith({ home: { body: page({ canonical: 'https://evil.example/' }) } }, 'canonical link "https://evil.example/" is not https://agentathens.com/');
+    failsWith({ home: { body: page({ canonical: `${SITE}/other` }) } }, 'is not https://agentathens.com/');
+    failsWith({ event: { body: page({ title: 'X | agent-athens', canonical: `${SITE}/` }) } }, 'is not an event page under https://agentathens.com/events/');
+    // The English event template's self canonical is fine.
+    expect(run(fixture({ event: { body: page({ title: 'X | agent-athens', canonical: `${SITE}/en/events/x/` }) } })).code).toBe(0);
+    failsWith({ event: { body: '<html></html>' } }, 'content: event page: no <title>');
+  });
+
+  test('quoted page text is printable (no injected workflow commands)', () => {
+    const r = failsWith({ home: { body: page({ title: '\u001b[31m\n::error::pwn' }) } }, 'no <title> naming the site');
+    expect(r.err).not.toContain('\u001b');
+    for (const line of `${r.out}\n${r.err}`.split('\n')) expect(line.startsWith('::')).toBe(false);
+  });
+
+  test('when bun cannot run the content check, the run fails', () => {
+    failsWith({}, 'the page content check could not run', { BUN_BIN: '/nonexistent/bun' });
+  });
+});
+
 describe('live-site-check.yml', () => {
   const raw = readFileSync(WORKFLOW, 'utf-8');
   const wf = parseYaml(raw) as { on?: Record<string, unknown>; permissions: Record<string, string>; jobs: Record<string, { permissions?: unknown; environment?: unknown; steps: Array<{ uses?: string; run?: string; env?: Record<string, string>; with?: Record<string, unknown> }> }> };
@@ -213,6 +285,18 @@ describe('live-site-check.yml', () => {
       expect(job.environment).toBeUndefined();
     }
     expect(raw).not.toContain('secrets.');
+  });
+
+  test('installs the pinned bun and the locked dependencies (no install scripts) before the check', () => {
+    const steps = wf.jobs['live-site-check'].steps;
+    const setup = steps.findIndex((s) => (s.uses ?? '').startsWith('oven-sh/setup-bun@'));
+    const install = steps.findIndex((s) => s.run === 'bun install --frozen-lockfile --ignore-scripts');
+    const check = steps.findIndex((s) => s.run === 'bash .github/scripts/live-site-check.sh');
+    expect(steps[setup].uses).toBe('oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6');
+    expect(String(steps[setup].with?.['bun-version'])).toMatch(/^1\.3\.\d+$/);
+    expect(setup).toBeGreaterThan(-1);
+    expect(install).toBeGreaterThan(setup);
+    expect(check).toBeGreaterThan(install);
   });
 
   test('runs the committed script with the pinned checkout (no token persisted)', () => {

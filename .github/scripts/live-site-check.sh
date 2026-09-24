@@ -19,6 +19,14 @@
 #     container on that host);
 #   - Strict-Transport-Security with max-age >= 15552000 (180 days);
 #   - X-Content-Type-Options: nosniff.
+# Round 9 adds a content canary: .github/scripts/live-page-content.ts (run with
+# bun, HTMLRewriter parse, nothing executed) fails a page whose <script src>
+# is neither same-origin nor exactly an allowed external script (the
+# publish gate's src/validators/external-script-allowlist.ts, from the
+# checked-out default branch), whose <base href> leaves the site, or that
+# lacks the invariants the templates always emit (a <title> naming
+# agent-athens; a canonical link to $SITE/ on the homepage, under
+# $SITE/events/ on the event page). If bun cannot run it, the check fails.
 # A failure exits 1, which fails the workflow, and GitHub emails the owner.
 # It needs no token and writes nothing (it cannot open an issue by design).
 #
@@ -26,12 +34,15 @@
 # and is cut short, so a hostile response cannot inject log commands.
 #
 # Env: SITE (default https://agentathens.com; must be https://<host>),
-# CURL_BIN (default curl; the test seam), CURL_MAX_TIME (default 30 s).
+# CURL_BIN (default curl; the test seam), CURL_MAX_TIME (default 30 s),
+# BUN_BIN (default bun).
 # Tested by tests/security/live-site-check.test.ts with a stub curl.
 set -u
 
 SITE="${SITE:-https://agentathens.com}"
 CURL="${CURL_BIN:-curl}"
+BUN="${BUN_BIN:-bun}"
+CONTENT_CHECK="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/live-page-content.ts"
 MAX_TIME="${CURL_MAX_TIME:-30}"
 MIN_HSTS=15552000
 
@@ -143,7 +154,11 @@ fetch_page() {
   return 0
 }
 
-fetch_page "homepage $SITE/" "$SITE/" home && check_page "homepage $SITE/" home
+CONTENT_ARGS=()
+if fetch_page "homepage $SITE/" "$SITE/" home; then
+  check_page "homepage $SITE/" home
+  CONTENT_ARGS+=(--page home "$WORK/home.b")
+fi
 
 EVENT_URL=""
 if fetch_page "sitemap $SITE/sitemap-events.xml" "$SITE/sitemap-events.xml" sitemap; then
@@ -157,7 +172,25 @@ if fetch_page "sitemap $SITE/sitemap-events.xml" "$SITE/sitemap-events.xml" site
   fi
 fi
 if [ -n "$EVENT_URL" ]; then
-  fetch_page "event page $EVENT_URL" "$EVENT_URL" event && check_page "event page $EVENT_URL" event
+  if fetch_page "event page $EVENT_URL" "$EVENT_URL" event; then
+    check_page "event page $EVENT_URL" event
+    CONTENT_ARGS+=(--page event "$WORK/event.b")
+  fi
+fi
+
+# Content canary (round 9) over the pages that answered 200.
+if [ ${#CONTENT_ARGS[@]} -gt 0 ]; then
+  content_rc=0
+  "$BUN" "$CONTENT_CHECK" --site "$SITE" "${CONTENT_ARGS[@]}" > "$WORK/content.out" 2>"$WORK/content.err" || content_rc=$?
+  if [ "$content_rc" -ne 0 ]; then
+    n=0
+    while IFS= read -r line && [ "$n" -lt 20 ]; do
+      [ -n "$line" ] || continue
+      problems+=("content: $(clean "$line" 300)")
+      n=$((n + 1))
+    done < "$WORK/content.out"
+    [ "$n" -gt 0 ] || problems+=("content: the page content check could not run (exit $content_rc: $(clean "$(head -1 "$WORK/content.err" 2>/dev/null)" 160))")
+  fi
 fi
 
 if [ ${#problems[@]} -gt 0 ]; then
@@ -165,5 +198,5 @@ if [ ${#problems[@]} -gt 0 ]; then
   echo "live-site-check: Next: check what is live (Netlify → Deploys) and the headers the build ships (dist/_headers, netlify.toml); if the site was not deployed by the pipeline, follow docs/security/incident-response.md" >&2
   exit 1
 fi
-echo "live-site-check: PASS — $SITE/ and $EVENT_URL answer 200 with a script-restricting CSP (no unsafe-inline/unsafe-eval, no host-wide googletagmanager.com), HSTS max-age >= $MIN_HSTS and nosniff"
+echo "live-site-check: PASS — $SITE/ and $EVENT_URL answer 200 with a script-restricting CSP (no unsafe-inline/unsafe-eval, no host-wide googletagmanager.com), HSTS max-age >= $MIN_HSTS and nosniff; their scripts are same-origin or the allowed loader, and the title and canonical invariants are present"
 exit 0

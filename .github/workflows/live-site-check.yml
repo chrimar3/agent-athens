@@ -6,8 +6,11 @@
 # (the first <loc> of the live sitemap-events.xml, same origin only) answer
 # 200 without a redirect and carry an enforced script CSP with no
 # 'unsafe-inline' / 'unsafe-eval' and no host-wide googletagmanager.com source,
-# HSTS with max-age >= 180 days, and X-Content-Type-Options: nosniff. The
-# logic is .github/scripts/live-site-check.sh (tests/security/live-site-check.test.ts).
+# HSTS with max-age >= 180 days, and X-Content-Type-Options: nosniff. Round 9
+# adds a content canary: every <script src> on those pages is same-origin or
+# exactly the allowed GA4 loader, and the title and canonical invariants are
+# present (.github/scripts/live-page-content.ts, run with bun). The logic is
+# .github/scripts/live-site-check.sh (tests/security/live-site-check.test.ts).
 #
 # It holds no secret and only a contents: read token (it opens no issue: a
 # failed scheduled run is emailed to the owner by GitHub). Actions are pinned
@@ -30,6 +33,10 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.3.0"
+      - run: bun install --frozen-lockfile --ignore-scripts
 
-      - name: Check the live site's status and security headers
+      - name: Check the live site's status, security headers and scripts
         run: bash .github/scripts/live-site-check.sh
