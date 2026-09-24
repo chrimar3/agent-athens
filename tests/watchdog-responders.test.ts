@@ -74,6 +74,13 @@ describe('lastKnownGoodDeploy (host-only deploys.log)', () => {
     expect(lastKnownGoodDeploy(file(''))).toBeNull();
   });
 
+  test('restore records written by docker/aa-run.sh restore are skipped (round 6)', () => {
+    const p = file(`2026-09-21T08:00:00Z ${GOOD_ID} ${GOOD_HASH}\n2026-09-22T09:00:00Z ${GOOD_ID} restore\n`);
+    expect(lastKnownGoodDeploy(p)).toEqual({ at: '2026-09-21T08:00:00Z', deployId: GOOD_ID, distHash: GOOD_HASH });
+    // A malformed "restore" line is not a restore record: still null.
+    expect(lastKnownGoodDeploy(file(`2026-09-21T08:00:00Z ${GOOD_ID} ${GOOD_HASH}\n2026-09-22T09:00:00Z ../x restore\n`))).toBeNull();
+  });
+
   test('a malformed LAST line → null (never silently falls back to an older entry)', () => {
     expect(lastKnownGoodDeploy(file(`2026-09-21T08:00:00Z ${GOOD_ID} ${GOOD_HASH}\ngarbage line\n`))).toBeNull();
     expect(lastKnownGoodDeploy(file(`2026-09-21T08:00:00Z ../../x ${GOOD_HASH}\n`))).toBeNull();

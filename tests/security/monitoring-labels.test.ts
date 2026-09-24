@@ -16,7 +16,7 @@ const ROOT = join(import.meta.dir, '..', '..');
 const cfg = JSON.parse(readFileSync(join(ROOT, 'config', 'monitoring.json'), 'utf-8')) as { pipeline_health_labels: string[] };
 const labels = cfg.pipeline_health_labels;
 
-const DOCKER_JOBS = ['visibility', 'freshness', 'enrichment', 'enrichment-13', 'enrichment-16', 'enrichment-19', 'verify-live', 'verify-live-20', 'image-refresh'];
+const DOCKER_JOBS = ['visibility', 'freshness', 'enrichment', 'enrichment-13', 'enrichment-16', 'enrichment-19', 'verify-live', 'verify-live-0', 'verify-live-6', 'verify-live-18', 'image-refresh'];
 
 describe('config/monitoring.json pipeline_health_labels', () => {
   test('lists every container job label', () => {

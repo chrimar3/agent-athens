@@ -64,6 +64,7 @@ export interface KnownGoodDeploy {
 
 // `<ISO-8601-UTC> <deploy_id> <dist_hash>`, as the host wrapper appends it.
 const DEPLOY_RECORD_RE = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z) ([0-9A-Za-z]{1,64}) ([0-9a-f]{64})$/;
+const RESTORE_RECORD_RE = /^\S+ [0-9a-f]{20,40} restore$/;
 
 /** Newest record in the host's verified-deploys log, or null when the file is
  *  missing, empty or its LAST non-empty line is malformed (never silently
@@ -75,7 +76,11 @@ export function lastKnownGoodDeploy(path: string): KnownGoodDeploy | null {
   } catch {
     return null;
   }
-  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
+  // docker/aa-run.sh restore appends "<time> <id> restore" (round 6) so the
+  // live check expects the restored deploy; such a line records no newly
+  // verified deploy and is skipped. Any other malformed newest line still
+  // yields null (alert only).
+  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean).filter((l) => !RESTORE_RECORD_RE.test(l));
   const m = lines.length ? lines[lines.length - 1].match(DEPLOY_RECORD_RE) : null;
   return m ? { at: m[1], deployId: m[2], distHash: m[3] } : null;
 }

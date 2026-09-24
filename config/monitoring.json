@@ -11,7 +11,9 @@
     "com.agentathens.docker.enrichment-16",
     "com.agentathens.docker.enrichment-19",
     "com.agentathens.docker.verify-live",
-    "com.agentathens.docker.verify-live-20",
+    "com.agentathens.docker.verify-live-0",
+    "com.agentathens.docker.verify-live-6",
+    "com.agentathens.docker.verify-live-18",
     "com.agentathens.docker.image-refresh"
   ],
   "notify": { "enabled": true },
