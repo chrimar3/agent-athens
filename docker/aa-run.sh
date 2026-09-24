@@ -130,15 +130,27 @@ chmod 700 "$STATE_DIR"
 
 docker image inspect agent-athens-pipeline:local >/dev/null 2>&1 \
     || fail "image agent-athens-pipeline:local not built" "run 'docker/aa-run.sh image'" 3
-created="$(docker image inspect -f '{{.Created}}' agent-athens-pipeline:local | cut -c1-10)"
-if [ "$(uname -s)" = "Darwin" ]; then age_days=$(( ($(date +%s) - $(date -j -f %Y-%m-%d "$created" +%s)) / 86400 ))
-else age_days=$(( ($(date +%s) - $(date -d "$created" +%s)) / 86400 )); fi
 # Stale images are refused for the runs that load outside content; checks,
-# restores and the live-site check still run.
+# restores and the live-site check still run. Two clocks: the local build
+# (system packages: `image-refresh` rebuilds and upgrades them) and the
+# Playwright base (Chromium: only a newer base digest updates it, so a rebuild
+# does not reset this one). docker/image-age.sh reads both; unknown = too old.
 case "$JOB" in doctor|shell|verify-live|restore) stale_ok=yes ;; *) stale_ok=no ;; esac
-if [ "$age_days" -gt 30 ] && [ "$stale_ok" = "no" ] && [ -z "${AA_ALLOW_STALE_IMAGE:-}" ]; then
-    fail "image is $age_days days old — Chromium and system packages are missing security fixes" \
-         "run 'docker/aa-run.sh image-refresh' (or set AA_ALLOW_STALE_IMAGE=1 for one run)" 7
+if [ "$stale_ok" = "no" ] && [ -z "${AA_ALLOW_STALE_IMAGE:-}" ]; then
+    max_base_days="${AA_MAX_BASE_AGE_DAYS:-60}"
+    case "$max_base_days" in ''|*[!0-9]*) fail "AA_MAX_BASE_AGE_DAYS='$max_base_days' is not a number of days" "unset it (default 60) or set a whole number" 2 ;; esac
+    ages="$(bash "$HERE/image-age.sh" agent-athens-pipeline:local)"
+    age_days="$(printf '%s\n' "$ages" | sed -n 's/^local_days=\(-\{0,1\}[0-9][0-9]*\)$/\1/p')"
+    base_days="$(printf '%s\n' "$ages" | sed -n 's/^base_days=\(-\{0,1\}[0-9][0-9]*\)$/\1/p')"
+    chromium="$(printf '%s\n' "$ages" | sed -n 's/^chromium=\([0-9.]*\)$/ (Chromium \1)/p')"
+    if [ "${age_days:-999}" -gt 30 ]; then
+        fail "image is ${age_days:-an unknown number of} days old — system packages are missing security fixes" \
+             "run 'docker/aa-run.sh image-refresh' (or set AA_ALLOW_STALE_IMAGE=1 for one run)" 7
+    fi
+    if [ "${base_days:-999}" -gt "$max_base_days" ]; then
+        fail "the Playwright base image$chromium is ${base_days:-an unknown number of} days old (limit $max_base_days) — Chromium is missing security fixes, and rebuilding does not update it" \
+             "merge the pending Dependabot PR that bumps the BASE_IMAGE digest in docker/Dockerfile, pull it, then run 'docker/aa-run.sh image' (or set AA_ALLOW_STALE_IMAGE=1 for one run; AA_MAX_BASE_AGE_DAYS changes the limit)" 7
+    fi
 fi
 
 # Hold off idle sleep for the whole run, as daily-automated.sh does with
@@ -325,17 +337,22 @@ record_deploy() {
     log "recorded deploy $id"
 }
 
+# docker/check-live.sh judges the container's strict LIVE lines against the
+# host-only deploys.log and live-site baseline: unrecorded or rolled-back
+# deploy, snippet injection, changed site settings, missing security headers
+# or a CSP that allows inline scripts. AA_ACCEPT_LIVE_BASELINE=1 re-baselines
+# the site settings after the owner reviewed a change.
 check_live() {  # $1 container output
-    local live
-    live="$(grep -E '^LIVE deploy_id=[0-9a-f]{20,40}$' "$1" | tail -1 | sed -E 's/^LIVE deploy_id=//' || true)"
-    [ -n "$live" ] || { bash "$HERE/integrity-check.sh" notify "verify-live could not read the live deploy id"; exit 8; }
-    if [ -f "$DEPLOYS_LOG" ] && awk '{print $2}' "$DEPLOYS_LOG" | grep -qxF "$live"; then
-        log "live site is pipeline deploy $live"
-    else
-        log "ALERT: live deploy $live is not one the pipeline recorded"
-        bash "$HERE/integrity-check.sh" notify "Live site runs deploy $live, which the pipeline did not make. See docs/security/incident-response.md"
-        exit 8
-    fi
+    local rc=0 report l
+    report="$(bash "$HERE/check-live.sh" "$1" "$DEPLOYS_LOG" "$STATE_DIR/live-baseline")" || rc=$?
+    while IFS= read -r l; do
+        if [ -n "$l" ]; then log "$l"; fi
+    done <<EOF
+$report
+EOF
+    [ "$rc" -eq 0 ] && return 0
+    bash "$HERE/integrity-check.sh" notify "Live site check: $(printf '%s\n' "$report" | sed -n 's/^ALERT //p' | head -3 | tr '\n' ' ')" || true
+    exit 8
 }
 
 case "$JOB" in

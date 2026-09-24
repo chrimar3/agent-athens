@@ -31,11 +31,15 @@ remote="$(git remote get-url origin 2>/dev/null || true)"
 [[ -f .netlify/state.json ]] && ok ".netlify/state.json present" || bad ".netlify/state.json missing" "run 'netlify link' once on the Mac in the repo"
 
 [[ ! -e "$HOME/agent-athens-backups" ]] && ok "backups folder not visible to the container" || bad "backups folder is mounted into the container" "remove that mount; aa-run.sh backs up on the Mac"
-[[ -d "$HOME/.config/agentathens" ]] && ok "secrets dir mounted read-only" || warn "~/.config/agentathens not mounted" "GSC/Bing metrics will report missing credentials"
+[[ -d "$HOME/.config/agentathens" ]] && ok "secrets dir mounted read-only" || warn "secrets dir (~/.config/agentathens) not mounted" "GSC/Bing metrics will report missing credentials"
 
 for var in GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN; do
     [[ -n "${!var:-}" ]] && ok "$var set" || bad "$var not set" "add it to the env file (docker/docker.env.example)"
 done
+# Fine-grained tokens (github_pat_…) can be limited to this repository; a
+# classic token reaches every repo the account can. Only the prefix is checked.
+[[ "${GH_TOKEN:-}" == github_pat_?* ]] && ok "GH_TOKEN is fine-grained (github_pat_ prefix)" \
+    || bad "GH_TOKEN is not a fine-grained token (no github_pat_ prefix)" "replace it with a fine-grained token limited to chrimar3/agent-athens (docs/security/credentials.md)"
 [[ -f .env || -n "${EMAIL_USER:-}" ]] && ok "email credentials (.env or env file)" || warn "no EMAIL_USER" "email ingestion will be skipped"
 
 if login="$(timeout 30 gh api user --jq .login 2>/dev/null)" && [[ -n "$login" ]]; then ok "GitHub token valid ($login)"; else bad "GitHub token rejected or GitHub unreachable" "check GH_TOKEN is valid and not expired"; fi
