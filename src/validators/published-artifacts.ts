@@ -19,6 +19,7 @@ import { INLINE_SCRIPT_HASHES, COPIED_SCRIPT_ALLOWLIST } from './inline-script-a
 import { BASE_URL } from '../config/site-url';
 import { renderHeadersFile } from '../generators/security-headers';
 import { VERIFICATION_FILE_ALLOWLIST, VERIFICATION_FILE_PATTERNS, VERIFICATION_META_ALLOWLIST } from './verification-allowlist';
+import { externalScriptSrcIssue } from './external-script-allowlist';
 
 const LD_BLOCK = /<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g;
 const SCRIPT_BLOCK = /<script\b[\s\S]*?<\/script>/g;
@@ -183,10 +184,12 @@ function externalHostIssue(value: string, allowed: ReadonlySet<string>): { url: 
 }
 
 function scriptHostIssue(src: string): string | null {
-  const { url, ok } = externalHostIssue(src, ALLOWED_SCRIPT_HOSTS);
-  if (ok) return null;
+  const { url } = externalHostIssue(src, ALLOWED_SCRIPT_HOSTS);
   if (!url) return `unparseable <script src> "${src.trim().slice(0, 80)}" (${FIX_SCRIPT_HOST})`;
-  return `script from unlisted source ${url.protocol}//${url.hostname} (${FIX_SCRIPT_HOST})`;
+  // Security loop round 6: an allowed host is not enough — any container on
+  // www.googletagmanager.com would run as the site. An external script must be
+  // exactly an entry of ALLOWED_EXTERNAL_SCRIPT_URLS (the GA4 loader).
+  return externalScriptSrcIssue(src);
 }
 
 function linkResourceIssue(rel: string, href: string | undefined): string | null {

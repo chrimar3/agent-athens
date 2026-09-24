@@ -46,7 +46,7 @@ describe('malformed markup is judged as the browser parses it', () => {
   }
 
   test('an unclosed external script is named with its host', () => {
-    expect(issues(page('<script src="//evil.example/x.js">')).join('\n')).toMatch(/script from unlisted source https:\/\/evil\.example/);
+    expect(issues(page('<script src="//evil.example/x.js">')).join('\n')).toMatch(/external script https:\/\/evil\.example\/x\.js is not an allowed script URL/);
   });
 
   for (const [name, html] of [
@@ -89,7 +89,7 @@ describe('validatePublishedArtifacts: _headers is required, ownership proofs are
 
   test('a page with an unclosed external script fails the walk', () => {
     writeFileSync(join(dir, 'x.html'), page('<script src="//evil.example/x.js">'));
-    expect(failures()).toMatch(/^x\.html: .*script from unlisted source/m);
+    expect(failures()).toMatch(/^x\.html: .*external script https:\/\/evil\.example\/x\.js is not an allowed script URL/m);
   });
 
   for (const [path, content] of [
