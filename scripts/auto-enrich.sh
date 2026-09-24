@@ -97,6 +97,26 @@ CLAUDE_BIN="${CLAUDE_BIN_OVERRIDE:-$CLAUDE_BIN}"
 # WebSearch/WebFetch stay: research needs them, and with secrets unreadable an
 # injected fetch has nothing sensitive to carry out.
 ALLOWED_TOOLS="Read,Glob,Grep,WebSearch,WebFetch,Write,Bash(bun run scripts/db-read.ts *),Bash(bun run scripts/write-description.ts *),Bash(bun run scripts/auto-gate-check.ts *),Bash(bun run scripts/write-tags.ts *),Bash(bun run scripts/save-batch.ts *)"
+# disallowed-tools:begin (security loop round 7; extracted by tests/security/unattended-disallowed-tools.test.ts — keep both markers)
+# The unattended session refuses risky tools regardless of project settings:
+# .claude/settings.json allows Bash(cat *)/grep/head/tail for interactive use,
+# and --allowedTools only ADDS to that; a deny rule is the one rule class an
+# allow cannot out-vote (see tests/settings-security-pins.test.ts). None of
+# these is needed: the brief's reads go through the Read/Grep tools and
+# scripts/db-read.ts. COMMA-separated like ALLOWED_TOOLS, so the spaced
+# Bash(...) patterns survive the single-string pass-through. WebFetch and
+# WebSearch are NOT here: research needs them (see ALLOWED_TOOLS above).
+# Read(/proc/**) is project-relative in Claude Code's rule syntax (a single
+# leading slash is relative to the project), so the absolute /proc is spelled
+# Read(//proc/**); both are listed. Read(~/**) is added only when the project
+# is not under $HOME: on the Mac the repo lives in the owner's home folder and
+# denying ~/** would deny the repo itself (the db-guard hook scopes Read to the
+# repo there); the named secret folders under ~ are denied either way.
+DISALLOWED_TOOLS="Bash(cat *),Bash(grep *),Bash(head *),Bash(tail *),Bash(sqlite3 *),Bash(curl *),Bash(wget *),Bash(nc *),Bash(env),Bash(env *),Bash(printenv),Bash(printenv *),Read(/proc/**),Read(//proc/**),Read(.env*),Read(**/.env*),Read(~/.ssh/**),Read(~/.claude/**),Read(~/.claude.json),Read(~/.config/**),Read(~/.netrc)"
+if [[ -n "${HOME:-}" && "$HOME" != "/" && "$PROJECT_DIR/" != "${HOME%/}/"* ]]; then
+    DISALLOWED_TOOLS="$DISALLOWED_TOOLS,Read(~/**)"
+fi
+# disallowed-tools:end
 MAX_BATCHES=2
 EVENTS_PER_BATCH=3  # 4→3 on 2026-08-11 canary iteration: the ~30 remaining upcoming stubs are the research-heavy tail (easy events enriched Jul 28-Aug 5); canary batches of 4 were still in research at the 1200s kill with zero writes. 3 fits the observed per-hard-event cost. Revisit upward after 7 consecutive clean days. History: raised 4→5 on 2026-04-09 (S81); architectural target 10 events × 6 slots = 60/day; S89 (2026-04-20): overnight slots unloaded with laptop lid closed — effective 40/day until always-on hardware.
 MIN_QUEUE=3
@@ -575,6 +595,7 @@ for brief in "${BATCH_FILES[@]}"; do
         --verbose \
         --include-partial-messages \
         --allowedTools "$ALLOWED_TOOLS" \
+        --disallowedTools "$DISALLOWED_TOOLS" \
         < /dev/null > "$BATCH_OUT" 2>&1 &
     CLAUDE_PID=$!
 

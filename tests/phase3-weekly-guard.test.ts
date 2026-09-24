@@ -219,3 +219,124 @@ describe('phase3-weekly --guard-selftest-only — behaviour', () => {
     expect(r.out).toContain('settings wiring');
   });
 });
+
+// ---------------------------------------------------------------------------
+// 3. Round 7: the session refuses risky tools whatever the worktree's settings
+//    allow (full suite: tests/security/unattended-disallowed-tools.test.ts)
+// ---------------------------------------------------------------------------
+
+describe('phase3-weekly — --disallowedTools on the session invocation (round 7)', () => {
+  test('the exact invocation carries the deny list next to the allow list', () => {
+    expect(invocation).toContain('--disallowedTools "$PHASE3_DISALLOWED_TOOLS"');
+    const deny = src.split('\n').find((l) => l.startsWith('PHASE3_DISALLOWED_TOOLS="')) ?? '';
+    for (const t of ['WebFetch', 'WebSearch', 'Bash(cat *)', 'Bash(curl *)', 'Bash(printenv *)', 'Read(.env*)', 'Read(//proc/**)']) {
+      expect(deny).toContain(t);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 4. Round 7: layer 1 does not move a ref while a container job runs
+// ---------------------------------------------------------------------------
+
+describe('phase3-weekly — layer 1 waits for agent-athens-* containers before its first git write (round 7)', () => {
+  const BEGIN = '# container-wait:begin';
+  const END = '# container-wait:end';
+  const fn = src.slice(src.indexOf('\n', src.indexOf(BEGIN)) + 1, src.indexOf(END));
+
+  /** Run wait_for_container_jobs with a stub docker (or none) and an instant
+   *  sleep. `dockerBody` runs as the stub (bash builtins only: PATH holds just
+   *  the stubs); it can read/advance a counter file. */
+  function runWait(dockerBody: string | null, env: Record<string, string> = {}) {
+    const bin = mkdtempSync(join(tmpdir(), 'aa-phase3-wait-'));
+    const calls = join(bin, 'calls.log');
+    writeFileSync(join(bin, 'sleep'), `#!/bin/bash\necho "sleep $*" >> "${calls}"\n`, { mode: 0o755 });
+    if (dockerBody !== null) {
+      writeFileSync(join(bin, 'docker'), `#!/bin/bash\necho "docker $*" >> "${calls}"\n${dockerBody}\n`, { mode: 0o755 });
+    }
+    const harness = [
+      'BENCH=/tmp/bench',
+      'log(){ echo "$*"; }',
+      fn,
+      'if wait_for_container_jobs; then echo RESULT=0; else echo RESULT=1; fi',
+    ].join('\n');
+    writeFileSync(join(bin, 'h.sh'), harness);
+    // PATH is ONLY the stub dir: a real docker on the machine is never reached.
+    const r = Bun.spawnSync(['/bin/bash', join(bin, 'h.sh')], { env: { PATH: bin, COUNTER: join(bin, 'n'), ...env } });
+    let log = '';
+    try { log = readFileSync(calls, 'utf8'); } catch { /* no calls */ }
+    return { out: new TextDecoder().decode(r.stdout) + new TextDecoder().decode(r.stderr), calls: log };
+  }
+  const count = (s: string, needle: string) => s.split('\n').filter((l) => l === needle).length;
+  const RUNNING = 'echo 3f2a1b0c9d8e';
+
+  test('no container running → proceeds at once, one docker ps with the exact name filter, no sleep', () => {
+    const r = runWait('exit 0');
+    expect(r.out).toContain('RESULT=0');
+    expect(r.calls).toBe('docker ps -q --filter name=^/agent-athens-\n');
+  });
+
+  test('no docker CLI on PATH → proceeds, saying why', () => {
+    const r = runWait(null);
+    expect(r.out).toContain('RESULT=0');
+    expect(r.out).toContain('no docker CLI on PATH');
+    expect(r.calls).toBe('');
+  });
+
+  test('docker not running (docker ps fails) → proceeds, saying why', () => {
+    const r = runWait('echo "Cannot connect to the Docker daemon" >&2; exit 1');
+    expect(r.out).toContain('RESULT=0');
+    expect(r.out).toContain('docker is not running');
+  });
+
+  test('a running job → polls every 30s until it is gone, then proceeds', () => {
+    const r = runWait('n=0; [ -f "$COUNTER" ] && n=$(<"$COUNTER"); echo $((n+1)) > "$COUNTER"; [ "$n" -lt 3 ] && echo 3f2a1b0c9d8e; exit 0');
+    expect(r.out).toContain('RESULT=0');
+    expect(count(r.calls, 'sleep 30')).toBe(3);
+    expect(count(r.calls, 'docker ps -q --filter name=^/agent-athens-')).toBe(4);
+    expect(r.out).toContain('waiting for it before committing');
+    expect(r.out).toContain('proceeding');
+  });
+
+  test('still running at the limit → gives up with a clear line and returns non-zero (AA_PHASE3_WAIT_MIN=1: 2 polls)', () => {
+    const r = runWait(RUNNING, { AA_PHASE3_WAIT_MIN: '1' });
+    expect(r.out).toContain('RESULT=1');
+    expect(r.out).toContain('GAVE UP');
+    expect(r.out).toContain('did NOT commit');
+    expect(count(r.calls, 'sleep 30')).toBe(2);
+  });
+
+  test('the default limit is 3h: 360 polls of 30s', () => {
+    const r = runWait(RUNNING);
+    expect(r.out).toContain('RESULT=1');
+    expect(r.out).toContain('after 180 min');
+    expect(count(r.calls, 'sleep 30')).toBe(360);
+  });
+
+  test('AA_PHASE3_WAIT_MIN=0 checks once and gives up at once if a job runs', () => {
+    const r = runWait(RUNNING, { AA_PHASE3_WAIT_MIN: '0' });
+    expect(r.out).toContain('RESULT=1');
+    expect(count(r.calls, 'sleep 30')).toBe(0);
+  });
+
+  test('a non-numeric AA_PHASE3_WAIT_MIN is refused (non-zero, no docker call)', () => {
+    for (const bad of ['abc', '-5', '1.5', '10m', '$(id)']) {
+      const r = runWait(RUNNING, { AA_PHASE3_WAIT_MIN: bad });
+      expect(r.out).toContain('RESULT=1');
+      expect(r.out).toContain('is not a whole number of minutes');
+      expect(r.calls).toBe('');
+    }
+  });
+
+  test('placement: the wait gates layer 1 before its first git write, and a give-up exits 1 before any commit', () => {
+    const l1 = src.indexOf('# ---------- layer 1');
+    const gate = src.indexOf('if ! wait_for_container_jobs; then', l1);
+    const firstGit = src.indexOf('git -C "$BASELINE_WT"', l1);
+    expect(gate).toBeGreaterThan(l1);
+    expect(gate).toBeLessThan(firstGit);
+    expect(gate).toBeLessThan(src.indexOf('>> "$BENCH/PHASE3-LOG.md"', l1));
+    const branch = src.slice(gate, src.indexOf('\nfi\n', gate));
+    expect(branch).toContain('exit 1');
+    expect(branch).not.toContain('git ');
+  });
+});

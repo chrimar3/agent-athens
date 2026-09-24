@@ -114,6 +114,49 @@ run_guard_selftest() {
   return 0
 }
 
+# container-wait:begin (security loop round 7; extracted VERBATIM by tests/phase3-weekly-guard.test.ts — keep both markers)
+# Layer 1 commits in the benchmark worktree on the host, which moves a branch
+# ref of the shared repository. The host integrity check
+# (docker/integrity-check.sh) compares refs around each container job and
+# quarantines everything when one moved during the job, so layer 1 must not
+# commit while a pipeline container (named agent-athens-*) is running. Before
+# layer 1's first git write, wait until `docker ps` lists none, polling every
+# 30s for at most AA_PHASE3_WAIT_MIN minutes (default 180). No docker CLI on
+# PATH, or a docker that cannot list containers (not running), means no job
+# can be running: proceed. On timeout: log it and return 1, and the caller
+# exits non-zero without committing. The polls are counted rather than timed
+# by the wall clock, so a sleeping laptop does not use up the budget.
+wait_for_container_jobs() {
+  local max_min="${AA_PHASE3_WAIT_MIN:-180}" polls=0 max_polls running
+  if [[ ! "$max_min" =~ ^[0-9]{1,5}$ ]]; then
+    log "L1: REFUSED — AA_PHASE3_WAIT_MIN='$max_min' is not a whole number of minutes. Nothing committed. Next: unset it (default 180) or set e.g. AA_PHASE3_WAIT_MIN=60, then rerun bash scripts/phase3-weekly.sh."
+    return 1
+  fi
+  max_polls=$(( 10#$max_min * 2 ))
+  if ! command -v docker >/dev/null 2>&1; then
+    log "L1: no docker CLI on PATH — no container job can be running; proceeding"
+    return 0
+  fi
+  while :; do
+    if ! running="$(docker ps -q --filter 'name=^/agent-athens-' 2>/dev/null)"; then
+      log "L1: docker is not running (docker ps failed) — no container job can be running; proceeding"
+      return 0
+    fi
+    if [ -z "$running" ]; then
+      [ "$polls" -eq 0 ] || log "L1: no agent-athens-* container running any more (waited ${polls} poll(s) of 30s); proceeding"
+      return 0
+    fi
+    if [ "$polls" -ge "$max_polls" ]; then
+      log "L1: GAVE UP — an agent-athens-* container was still running after ${max_min} min; layer 1 did NOT commit (a ref moved mid-job would trip the integrity check). Measurements stay uncommitted in $BENCH. Next: when no job runs (docker ps --filter name=agent-athens-), rerun bash scripts/phase3-weekly.sh or commit them by hand."
+      return 1
+    fi
+    [ "$polls" -gt 0 ] || log "L1: an agent-athens-* container is running; waiting for it before committing (poll every 30s, at most ${max_min} min)"
+    sleep 30
+    polls=$(( polls + 1 ))
+  done
+}
+# container-wait:end
+
 log "=== phase3-weekly start ==="
 
 # --guard-selftest-only: run ONLY the guard self-test and exit with its status.
@@ -170,6 +213,11 @@ if ! bun run "$BENCH/tooling/t1-event-index-diag.ts" "$PHASE3_WT/data/events.db"
   layer1_status="${layer1_status};t1diag-failed"; log "L1 WARN: t1 diagnostic failed"
 fi
 
+# Round 7: no ref moves while a container job runs (container-wait above).
+if ! wait_for_container_jobs; then
+  log "=== phase3-weekly done (layer 1 not committed; layer 2 not run) ==="
+  exit 1
+fi
 log "L1: heartbeat + commit on benchmark branch"
 echo "" >> "$BENCH/PHASE3-LOG.md"
 echo "- HEARTBEAT $(date '+%Y-%m-%d %H:%M') weekly routine: layer1=$layer1_status (raw results in probe-runs/$(date '+%Y-%m-%d')/)" >> "$BENCH/PHASE3-LOG.md"
@@ -249,8 +297,24 @@ Do, in order: (1) the measurement-verdict step — compare the fresh probe/conso
 # AA_ALLOW_HOST_RUN=1. Pinned by tests/phase3-weekly-guard.test.ts and
 # tests/host-run-guard.test.ts.
 PHASE3_ALLOWED_TOOLS="Read,Glob,Grep,Edit,MultiEdit,Write,TodoWrite,Bash(bun run src/generate-site.ts),Bash(bun test),Bash(bunx tsc --noEmit -p .),Bash(git status),Bash(git status *),Bash(git diff),Bash(git diff *),Bash(git log *),Bash(git show *),Bash(git add *),Bash(git commit *),Bash(git merge *),Bash(git switch *),Bash(git branch *),Bash(git rev-parse *),Bash(ls *),Bash(wc *)"
+# disallowed-tools:begin (security loop round 7; extracted by tests/security/unattended-disallowed-tools.test.ts — keep both markers)
+# Refused regardless of project settings (the worktree's .claude/settings.json
+# allows Bash(cat *)/grep/head/tail for interactive use; a deny rule is the one
+# rule class --allowedTools cannot out-vote). The session needs none of them:
+# it has no web tools, reads through Read/Glob/Grep and runs only the commands
+# in PHASE3_ALLOWED_TOOLS. COMMA-separated like the allow list. Read(/proc/**)
+# is project-relative in Claude Code's rule syntax, so the absolute /proc is
+# spelled Read(//proc/**); both are listed. Read(~/**) is added only when
+# neither the worktree nor the benchmark dir is under $HOME: on the Mac both
+# are, and denying ~/** would deny them (the db-guard unattended profile scopes
+# Read there); the named secret folders under ~ are denied either way.
+PHASE3_DISALLOWED_TOOLS="WebFetch,WebSearch,Bash(cat *),Bash(grep *),Bash(head *),Bash(tail *),Bash(sqlite3 *),Bash(curl *),Bash(wget *),Bash(nc *),Bash(env),Bash(env *),Bash(printenv),Bash(printenv *),Read(/proc/**),Read(//proc/**),Read(.env*),Read(**/.env*),Read(~/.ssh/**),Read(~/.claude/**),Read(~/.claude.json),Read(~/.config/**),Read(~/.netrc)"
+if [[ -n "${HOME:-}" && "$HOME" != "/" && "$PHASE3_WT/" != "${HOME%/}/"* && "$BENCH/" != "${HOME%/}/"* ]]; then
+  PHASE3_DISALLOWED_TOOLS="$PHASE3_DISALLOWED_TOOLS,Read(~/**)"
+fi
+# disallowed-tools:end
 (
-  cd "$PHASE3_WT" && AA_UNATTENDED_SESSION=phase3 AA_SESSION_EXTRA_ROOTS="$BENCH" "$CLAUDE_BIN" -p "$PROMPT" --permission-mode default --allowedTools "$PHASE3_ALLOWED_TOOLS" --add-dir "$BENCH" >> "$SESSION_LOG" 2>&1
+  cd "$PHASE3_WT" && AA_UNATTENDED_SESSION=phase3 AA_SESSION_EXTRA_ROOTS="$BENCH" "$CLAUDE_BIN" -p "$PROMPT" --permission-mode default --allowedTools "$PHASE3_ALLOWED_TOOLS" --disallowedTools "$PHASE3_DISALLOWED_TOOLS" --add-dir "$BENCH" >> "$SESSION_LOG" 2>&1
 ) &
 CLAUDE_PID=$!
 ( sleep "$MAX_SESSION_SECONDS" && kill -9 "$CLAUDE_PID" 2>/dev/null && echo "[watchdog] killed session after ${MAX_SESSION_SECONDS}s" >> "$SESSION_LOG" ) &
