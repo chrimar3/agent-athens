@@ -17,6 +17,10 @@
  * /repos/{owner}/{repo}/rulesets/{id}, and only to a token that can administer
  * the repository: absent → fail closed naming the permission. The fake `gh`
  * serves those per-ruleset payloads too and records which token read them.
+ *
+ * Round 8: private vulnerability reporting, secret scanning and push
+ * protection must be enabled (read with the same admin-read token, failing
+ * closed when hidden), and the token lives in the `repo-settings` environment.
  */
 import { describe, test, expect, beforeAll, afterAll } from 'bun:test';
 import { mkdtempSync, rmSync, writeFileSync, chmodSync, mkdirSync } from 'fs';
@@ -49,10 +53,20 @@ const FULL = [PR_RULE, checks(...REQUIRED), { type: 'deletion', ruleset_id: 1 }]
  *  ruleset); a value of 'fail' makes that read fail like a 403. */
 type Rulesets = Record<string, unknown>;
 
-function fakeGh(payload: unknown, fail = false, rulesets: Rulesets = {}) {
+/** Round 8: the security-settings payloads. 'fail' makes that read fail like a 403. */
+type Settings = { pvr?: unknown; repo?: unknown };
+const SA_ON = { secret_scanning: { status: 'enabled' }, secret_scanning_push_protection: { status: 'enabled' } };
+const SETTINGS_OK: Settings = { pvr: { enabled: true }, repo: { full_name: REPO, security_and_analysis: SA_ON } };
+
+function fakeGh(payload: unknown, fail = false, rulesets: Rulesets = {}, settings: Settings = {}) {
   const dir = join(work, `gh-${seq++}`);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, 'rules.json'), JSON.stringify(payload));
+  const st = { ...SETTINGS_OK, ...settings };
+  for (const [name, body] of Object.entries(st)) {
+    if (body === 'fail') writeFileSync(join(dir, `${name}.fail`), '');
+    else writeFileSync(join(dir, `${name}.json`), JSON.stringify(body));
+  }
   for (const [id, body] of Object.entries(rulesets)) {
     if (body === 'fail') writeFileSync(join(dir, `ruleset-${id}.fail`), '');
     else writeFileSync(join(dir, `ruleset-${id}.json`), JSON.stringify(body));
@@ -71,6 +85,14 @@ case "$*" in
     if [ -e "${dir}/ruleset-$id.fail" ]; then echo "gh: HTTP 404 Not Found" >&2; exit 1; fi
     if [ -e "${dir}/ruleset-$id.json" ]; then cat "${dir}/ruleset-$id.json"; else printf '{"id":%s,"enforcement":"active","bypass_actors":[]}\\n' "$id"; fi
     exit 0;;
+  "api repos/${REPO}/private-vulnerability-reporting")
+    printf 'pvr %s\\n' "\${GH_TOKEN:-<unset>}" >> "${dir}/settings-tokens.log"
+    if [ -e "${dir}/pvr.fail" ]; then echo "gh: HTTP 403 Resource not accessible by personal access token" >&2; exit 1; fi
+    cat "${dir}/pvr.json"; exit 0;;
+  "api repos/${REPO}")
+    printf 'repo %s\\n' "\${GH_TOKEN:-<unset>}" >> "${dir}/settings-tokens.log"
+    if [ -e "${dir}/repo.fail" ]; then echo "gh: HTTP 403 Resource not accessible by personal access token" >&2; exit 1; fi
+    cat "${dir}/repo.json"; exit 0;;
 esac
 echo "fake-gh: unexpected call: $*" >&2; exit 64
 `);
@@ -299,5 +321,76 @@ describe('REQUIRED_CHECKS matches the workflows', () => {
     const step = Object.values(wf.jobs).flatMap((j) => j.steps).find((st) => (st.run ?? '').includes('check-branch-rules.sh'))!;
     expect(step.env?.GH_TOKEN).toBe('${{ github.token }}');
     expect(step.env?.RULESET_TOKEN).toBe('${{ secrets.RULESET_READ_TOKEN }}');
+  });
+
+  // Round 8: the admin-read token is an environment secret, reachable from main only.
+  test('only the branch-rules job names the repo-settings environment, and only it reads RULESET_READ_TOKEN', () => {
+    const raw = readFileSync(join(ROOT, '.github', 'workflows', 'repo-settings.yml'), 'utf-8');
+    const wf = parseYaml(raw) as { jobs: Record<string, { environment?: unknown; steps: Array<{ env?: Record<string, string> }> }> };
+    expect(wf.jobs['branch-rules'].environment).toBe('repo-settings');
+    for (const [name, job] of Object.entries(wf.jobs)) {
+      const usesToken = job.steps.some((st) => Object.values(st.env ?? {}).some((v) => v.includes('RULESET_READ_TOKEN')));
+      if (usesToken) expect(`${name}:${String(job.environment)}`).toBe(`${name}:repo-settings`);
+    }
+    const header = raw.replace(/\n#\s*/g, ' ');
+    expect(header).toContain('deployment branches');
+    expect(header).toMatch(/Administration = Read-only/);
+    expect(header).toContain('never Read and write');
+  });
+
+  test('no message suggests a read-write Administration token', () => {
+    const src = readFileSync(SCRIPT, 'utf-8');
+    expect(src).not.toMatch(/if bypass actors stay hidden, Read and write/);
+    expect(src).toContain("set to Read-only (never Read and write)");
+  });
+});
+
+describe('check-branch-rules.sh — security settings (round 8)', () => {
+  test('both settings are read with RULESET_TOKEN when it is set', () => {
+    const gh = fakeGh(FULL);
+    const r = run(gh, { GH_TOKEN: 'job-token', RULESET_TOKEN: 'admin-token' });
+    expect(r.code).toBe(0);
+    expect(r.out).toContain('private vulnerability reporting, secret scanning and push protection are enabled');
+    expect(readFileSync(join(ghDir(gh), 'settings-tokens.log'), 'utf-8')).toBe('pvr admin-token\nrepo admin-token\n');
+  });
+
+  test('private vulnerability reporting disabled → FAILED, named', () => {
+    const r = run(fakeGh(FULL, false, {}, { pvr: { enabled: false } }));
+    expect(r.code).toBe(1);
+    expect(r.err).toContain('private vulnerability reporting is disabled');
+    expect(r.out).not.toContain('PASS');
+  });
+
+  test('private vulnerability reporting unreadable or malformed → fails closed with the permission hint', () => {
+    for (const pvr of ['fail', { enabled: 'yes' }, [], { message: 'Not Found' }]) {
+      const r = run(fakeGh(FULL, false, {}, { pvr }));
+      expect(r.code).toBe(1);
+      expect(r.err).toContain('failing closed');
+      expect(r.err).toContain("'Administration' repository permission set to Read-only");
+      expect(r.out).not.toContain('PASS');
+    }
+  });
+
+  test('secret scanning or push protection disabled (or absent) → FAILED, each named', () => {
+    for (const feature of ['secret_scanning', 'secret_scanning_push_protection']) {
+      for (const value of [{ status: 'disabled' }, undefined]) {
+        const sa: Record<string, unknown> = { ...SA_ON, [feature]: value };
+        if (value === undefined) delete sa[feature];
+        const r = run(fakeGh(FULL, false, {}, { repo: { full_name: REPO, security_and_analysis: sa } }));
+        expect(r.code).toBe(1);
+        expect(r.err).toContain(`${feature} is not enabled`);
+        expect(r.out).not.toContain('PASS');
+      }
+    }
+  });
+
+  test('security_and_analysis hidden from the token, or the repo read failing → fails closed with the permission hint', () => {
+    for (const repo of ['fail', { full_name: REPO }, { full_name: REPO, security_and_analysis: null }]) {
+      const r = run(fakeGh(FULL, false, {}, { repo }));
+      expect(r.code).toBe(1);
+      expect(r.err).toContain('failing closed');
+      expect(r.err).toContain('RULESET_READ_TOKEN');
+      expect(r.out).not.toContain('PASS');
+    }
   });
 });

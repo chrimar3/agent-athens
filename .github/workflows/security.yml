@@ -22,7 +22,9 @@
 # package.json or bun.lock (Dependabot PRs included). Security loop round 2
 # cleared the lockfile from 53 advisories (1 critical, 26 high) to 2 listed
 # high ones with no fix; it is meant to be a required check (the weekly
-# repo-settings workflow verifies that).
+# repo-settings workflow verifies that). Round 8: the ignore list is read from
+# the DEFAULT branch (AUDIT_IGNORE_REF; .github/scripts/default-branch-file.sh),
+# so a PR cannot ignore an advisory it introduces in the same diff.
 #
 # Both jobs run PR code read-only: a contents:read token, not persisted.
 name: security
@@ -108,4 +110,6 @@ jobs:
 
       - if: steps.scope.outputs.run == 'true'
         name: Audit dependencies (fail on unlisted high or critical)
+        env:
+          AUDIT_IGNORE_REF: ${{ github.event.repository.default_branch }}
         run: bash .github/scripts/dependency-audit.sh

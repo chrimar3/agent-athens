@@ -24,12 +24,22 @@
 #     which the job's own token cannot: the workflow passes a separate
 #     RULESET_TOKEN (the RULESET_READ_TOKEN secret) for these reads only. When
 #     bypass_actors is absent the check FAILS, naming the permission needed.
+#   - (round 8) private vulnerability reporting enabled (GET /repos/{owner}/
+#     {repo}/private-vulnerability-reporting; SECURITY.md sends reporters
+#     there), and secret scanning and push protection enabled (the
+#     security_and_analysis block of GET /repos/{owner}/{repo}). Both are read
+#     with RULESET_TOKEN too; an unreadable or missing answer FAILS, naming
+#     the permission.
+# RULESET_READ_TOKEN must be a fine-grained token for this repository only
+# with the Administration permission set to Read-only (round 8: never read
+# and write); the workflow exposes it only inside the `repo-settings`
+# environment, whose deployment branches are limited to main.
 # Fails CLOSED: an API error, a payload that is not a list, or no rules at all
 # exits 1 and never prints PASS.
 #
 # Env: REPO (owner/name), BRANCH (e.g. main), GH_BIN (default gh; test seam),
 # GH_TOKEN (the job token, for the rules endpoint), RULESET_TOKEN (optional;
-# used instead of GH_TOKEN for the per-ruleset reads).
+# used instead of GH_TOKEN for the per-ruleset and security-settings reads).
 # Tested by tests/branch-rules-check.test.ts.
 set -u
 
@@ -38,7 +48,7 @@ REPO="${REPO:-}"
 BRANCH="${BRANCH:-}"
 REQUIRED_CHECKS=(ci path-guard secret-scan dependency-audit shellcheck analyze)
 SETUP_HINT="Settings → Rules → Rulesets → New branch ruleset targeting main: enable 'Require a pull request before merging' with 'Require review from Code Owners', 'Dismiss stale pull request approvals when new commits are pushed' and 'Require approval of the most recent reviewable push', 'Require status checks to pass' with ${REQUIRED_CHECKS[*]}, and leave the Bypass list empty"
-TOKEN_HINT="GitHub shows a ruleset's bypass list only to a token that can administer the repository: store a fine-grained personal access token for this repository with the 'Administration' repository permission (try Read-only first; if bypass actors stay hidden, Read and write) as the Actions secret RULESET_READ_TOKEN"
+TOKEN_HINT="GitHub shows a ruleset's bypass list and the repository's security settings only to a token that can read its administration settings: store a fine-grained personal access token for this repository only, with the 'Administration' repository permission set to Read-only (never Read and write), as the secret RULESET_READ_TOKEN of the repo-settings environment"
 
 refuse() {
   echo "branch-rules: FAILED — $1" >&2
@@ -84,7 +94,8 @@ for c in "${REQUIRED_CHECKS[@]}"; do
 done
 
 # Bypass actors (round 7): every ruleset that contributes a rule must list none.
-# RULESET_TOKEN, when set, is used for these reads only.
+# RULESET_TOKEN, when set, is used for these reads and the round-8 security
+# settings only.
 ruleset_gh() {
   if [ -n "${RULESET_TOKEN:-}" ]; then GH_TOKEN="$RULESET_TOKEN" "$GH" "$@"; else "$GH" "$@"; fi
 }
@@ -105,6 +116,26 @@ while IFS= read -r id; do
   fi
 done < "$WORK/ids.txt"
 
+# Security settings (round 8), read with RULESET_TOKEN like the rulesets.
+if ! ruleset_gh api "repos/$REPO/private-vulnerability-reporting" > "$WORK/pvr.json" 2>"$WORK/err"; then
+  problems+=("could not read whether private vulnerability reporting is enabled (GET repos/$REPO/private-vulnerability-reporting): $(head -1 "$WORK/err" | tr -d '[:cntrl:]' | cut -c1-200) (failing closed). Next: $TOKEN_HINT")
+elif ! jq -e 'type == "object" and (.enabled | type == "boolean")' "$WORK/pvr.json" >/dev/null 2>&1; then
+  problems+=("the private vulnerability reporting answer has no boolean 'enabled' (failing closed). Next: $TOKEN_HINT")
+elif ! jq -e '.enabled == true' "$WORK/pvr.json" >/dev/null; then
+  problems+=("private vulnerability reporting is disabled: SECURITY.md tells reporters to use it. Enable it under Settings → Code security → Private vulnerability reporting")
+fi
+if ! ruleset_gh api "repos/$REPO" > "$WORK/repo.json" 2>"$WORK/err"; then
+  problems+=("could not read the repository settings (GET repos/$REPO): $(head -1 "$WORK/err" | tr -d '[:cntrl:]' | cut -c1-200) (failing closed). Next: $TOKEN_HINT")
+elif ! jq -e 'type == "object" and (.security_and_analysis | type == "object")' "$WORK/repo.json" >/dev/null 2>&1; then
+  problems+=("the repository's security_and_analysis settings are not visible to this token, so secret scanning cannot be confirmed (failing closed). Next: $TOKEN_HINT")
+else
+  for feature in secret_scanning secret_scanning_push_protection; do
+    if ! jq -e --arg f "$feature" '.security_and_analysis[$f].status == "enabled"' "$WORK/repo.json" >/dev/null; then
+      problems+=("$feature is not enabled: a pushed secret is neither blocked nor reported. Enable it under Settings → Code security → Secret Protection")
+    fi
+  done
+fi
+
 if [ ${#problems[@]} -gt 0 ]; then
   printf 'branch-rules: FAILED — %s\n' "${problems[@]}" >&2
   echo "branch-rules: Next: $SETUP_HINT" >&2
@@ -112,5 +143,5 @@ if [ ${#problems[@]} -gt 0 ]; then
 fi
 
 reviews="$(jq -r -s '[.[] | select(.type == "pull_request") | .parameters.required_approving_review_count // 0] | max' "$WORK/rules.jsonl")"
-echo "branch-rules: PASS — $BRANCH requires a PR with code-owner review, stale-approval dismissal and last-push approval, the checks ${REQUIRED_CHECKS[*]}, and no ruleset has bypass actors (approvals required: $reviews)"
+echo "branch-rules: PASS — $BRANCH requires a PR with code-owner review, stale-approval dismissal and last-push approval, the checks ${REQUIRED_CHECKS[*]}, and no ruleset has bypass actors (approvals required: $reviews); private vulnerability reporting, secret scanning and push protection are enabled"
 exit 0

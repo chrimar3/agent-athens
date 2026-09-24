@@ -23,6 +23,22 @@
 # secret (a fine-grained token for this repository with the Administration
 # permission) is passed as RULESET_TOKEN and used for those reads only.
 # Without it the check fails closed and says which permission is missing.
+#
+# Round 8: the check also fails when private vulnerability reporting, secret
+# scanning or push protection is disabled (read with the same token).
+#
+# RULESET_READ_TOKEN hygiene (round 8): the token is a secret of the
+# `repo-settings` ENVIRONMENT, not a repository secret, and the job below is
+# the only one that names that environment. Owner setup (Settings →
+# Environments → New environment `repo-settings`):
+#   - Deployment branches and tags: "Selected branches and tags" with the
+#     single rule `main` — so no other branch's copy of this workflow (a PR
+#     branch, a stale branch) can reach the token;
+#   - Environment secret RULESET_READ_TOKEN: a fine-grained personal access
+#     token, Repository access "Only select repositories" = this repository,
+#     Repository permissions: Administration = Read-only (Metadata read is
+#     implied), nothing else; never Read and write. Expiry and rotation:
+#     docs/security/credentials.md; if it leaks: docs/security/incident-response.md.
 name: repo-settings
 
 on:
@@ -36,6 +52,8 @@ permissions:
 jobs:
   branch-rules:
     runs-on: ubuntu-latest
+    # RULESET_READ_TOKEN lives in this environment (deployment branches: main).
+    environment: repo-settings
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:

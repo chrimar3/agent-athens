@@ -39,6 +39,10 @@
 # a JUnit report and .github/scripts/test-report-check.sh refuses unless it is
 # complete, names every expected file, has no failures and meets the committed
 # floor in .github/scripts/test-report-floor.json.
+#
+# Security loop round 8: that floor file is read from the DEFAULT branch
+# (FLOOR_REF; .github/scripts/default-branch-file.sh), for the file list and
+# the report check alike, so a PR cannot relax it in the same diff.
 name: ci
 
 on:
@@ -63,6 +67,8 @@ jobs:
           bun-version: "1.3.0"
       - run: bun install --frozen-lockfile --ignore-scripts
       - name: Test (tests/, src/, and the deploy-gate and pre-commit seams)
+        env:
+          FLOOR_REF: ${{ github.event.repository.default_branch }}
         run: |
           set -euo pipefail
           # The file list comes from the report checker, so the files run and
@@ -74,6 +80,8 @@ jobs:
           rm -f "$RUNNER_TEMP/junit.xml"
           bun test --reporter=junit --reporter-outfile="$RUNNER_TEMP/junit.xml" "${FILES[@]/#/./}"
       - name: Test report is complete (a test calling process.exit cannot force this job green)
+        env:
+          FLOOR_REF: ${{ github.event.repository.default_branch }}
         run: bash .github/scripts/test-report-check.sh "$RUNNER_TEMP/junit.xml"
       - run: bun run typecheck
 

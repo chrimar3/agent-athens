@@ -16,6 +16,13 @@
 #     .github/scripts/test-report-floor.json (committed; .github/** is a
 #     protected path, so a PR cannot lower the floor it is judged by).
 #
+# Round 8: with FLOOR_REF set (ci passes the default branch), the floor file
+# is read from origin/$FLOOR_REF through default-branch-file.sh, so a PR
+# cannot lower the floor, exclude its own test file or drop a required one in
+# the same diff even with the owner's path-guard approval; the checked-out copy
+# is used only while the default branch has no floor file (logged). Unset
+# (local runs), the checked-out file is used.
+#
 # Expected files: every *.test.ts under tests/ and src/ (outside node_modules),
 # plus the floor file's also_required list (must exist), minus its exclude
 # list. `--list` prints exactly that set, and ci passes the same set to
@@ -31,7 +38,9 @@
 # Exit: 0 = report complete and clean; 1 = refused (fails closed).
 set -u
 
-FLOOR_FILE=".github/scripts/test-report-floor.json"
+FLOOR_PATH=".github/scripts/test-report-floor.json"
+FLOOR_FILE="$FLOOR_PATH"
+FLOOR_REF="${FLOOR_REF:-}"
 
 refuse() {
   echo "test-report: REFUSED — $1 (failing closed)" >&2
@@ -39,24 +48,30 @@ refuse() {
 }
 
 command -v jq >/dev/null 2>&1 || refuse "jq is not on PATH"
-[ -f "$FLOOR_FILE" ] || refuse "$FLOOR_FILE not found — run from the repository root"
+[ -f "$FLOOR_PATH" ] || [ -n "$FLOOR_REF" ] || refuse "$FLOOR_PATH not found — run from the repository root"
+
+WORK="$(mktemp -d)" || refuse "could not create a temp dir"
+trap 'rm -rf "$WORK"' EXIT
+
+if [ -n "$FLOOR_REF" ]; then
+  bash "$(dirname "${BASH_SOURCE[0]}")/default-branch-file.sh" "$FLOOR_REF" "$FLOOR_PATH" "$WORK/floor.json" \
+    || refuse "could not read $FLOOR_PATH from the default branch $FLOOR_REF"
+  FLOOR_FILE="$WORK/floor.json"
+fi
 jq -e '
   (.min_executed_tests | type == "number" and . > 0 and floor == .)
   and (.exclude | type == "array" and all(type == "string"))
   and (.also_required | type == "array" and all(type == "string"))
 ' "$FLOOR_FILE" >/dev/null 2>&1 \
-  || refuse "$FLOOR_FILE must be JSON with a positive integer min_executed_tests and string lists exclude and also_required"
+  || refuse "$FLOOR_PATH must be JSON with a positive integer min_executed_tests and string lists exclude and also_required"
 MIN="$(jq -r '.min_executed_tests' "$FLOOR_FILE")"
-
-WORK="$(mktemp -d)" || refuse "could not create a temp dir"
-trap 'rm -rf "$WORK"' EXIT
 
 # --- the expected test files ----------------------------------------------------
 jq -r '.exclude[]' "$FLOOR_FILE" > "$WORK/exclude"
 jq -r '.also_required[]' "$FLOOR_FILE" > "$WORK/also"
 while IFS= read -r f; do
   [ -n "$f" ] || continue
-  [ -f "$f" ] || refuse "$FLOOR_FILE lists also_required '$f', which does not exist — fix the floor file"
+  [ -f "$f" ] || refuse "$FLOOR_PATH lists also_required '$f', which does not exist — fix the floor file"
 done < "$WORK/also"
 {
   find tests src -name '*.test.ts' -not -path '*/node_modules/*' 2>/dev/null
@@ -92,7 +107,7 @@ FAILURES="$(attr failures)"
 
 EXECUTED=$(( TESTS - SKIPPED ))
 [ "$EXECUTED" -ge "$MIN" ] \
-  || refuse "only $EXECUTED executed test(s) (tests $TESTS - skipped $SKIPPED), below the committed floor of $MIN in $FLOOR_FILE"
+  || refuse "only $EXECUTED executed test(s) (tests $TESTS - skipped $SKIPPED), below the committed floor of $MIN in $FLOOR_PATH"
 
 grep -o '<testsuite [^>]*>' "$REPORT" | sed -n 's/.* file="\([^"]*\)".*/\1/p' | LC_ALL=C sort -u > "$WORK/reported"
 LC_ALL=C comm -23 "$WORK/expected" "$WORK/reported" > "$WORK/missing"

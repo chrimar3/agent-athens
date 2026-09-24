@@ -10,13 +10,22 @@
 # date (YYYY-MM-DD). A malformed entry, or one past its review_by date, fails
 # the job BEFORE the audit runs: an ignore must not outlive its reason.
 #
-# Env (test seams): AUDIT_IGNORE_FILE (default .github/audit-ignore.json),
-# BUN_BIN (default bun), AUDIT_TODAY (default today, UTC).
-# Tested by tests/dependency-audit.test.ts.
+# Round 8: with AUDIT_IGNORE_REF set (the workflow passes the default branch),
+# the ignore list is read from origin/$AUDIT_IGNORE_REF through
+# default-branch-file.sh, so a PR cannot ignore the advisory it introduces in
+# the same diff; the checked-out copy is used only while the default branch
+# has no ignore list (logged).
+#
+# Env (test seams): AUDIT_IGNORE_FILE (default .github/audit-ignore.json; the
+# repository path when AUDIT_IGNORE_REF is set), AUDIT_IGNORE_REF, BUN_BIN
+# (default bun), AUDIT_TODAY (default today, UTC).
+# Tested by tests/dependency-audit.test.ts and
+# tests/security/default-branch-config.test.ts.
 set -u
 
 BUN="${BUN_BIN:-bun}"
 IGNORE_FILE="${AUDIT_IGNORE_FILE:-.github/audit-ignore.json}"
+IGNORE_REF="${AUDIT_IGNORE_REF:-}"
 TODAY="${AUDIT_TODAY:-$(date -u +%F)}"
 
 refuse() {
@@ -25,6 +34,13 @@ refuse() {
 }
 
 command -v jq >/dev/null 2>&1 || refuse "jq is not on PATH" "install jq"
+if [ -n "$IGNORE_REF" ]; then
+  WORK="$(mktemp -d)" || refuse "could not create a temp dir" "check the runner's disk"
+  trap 'rm -rf "$WORK"' EXIT
+  bash "$(dirname "${BASH_SOURCE[0]}")/default-branch-file.sh" "$IGNORE_REF" "$IGNORE_FILE" "$WORK/audit-ignore.json" \
+    || refuse "could not read $IGNORE_FILE from the default branch $IGNORE_REF" "check that origin/$IGNORE_REF is reachable"
+  IGNORE_FILE="$WORK/audit-ignore.json"
+fi
 [ -f "$IGNORE_FILE" ] || refuse "$IGNORE_FILE is missing" "restore it (an empty list is {\"ignore\": []})"
 jq -e '.ignore | type == "array"' "$IGNORE_FILE" >/dev/null 2>&1 \
   || refuse "$IGNORE_FILE is not JSON with an .ignore list" "fix the file"
