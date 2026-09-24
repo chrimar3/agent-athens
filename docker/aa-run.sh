@@ -9,10 +9,22 @@
 #
 # Least privilege per run:
 #   - each run receives only the tokens it needs (TOKENS below); the token file
-#     lives in ~/.config/agentathens-docker/, a folder no container ever mounts;
-#   - every top-level repo entry except the data folders (RW_TOP) is mounted
-#     read-only — code, docs, specs, config, .netlify, .env — plus .git/config
-#     and .git/hooks always, and all of .git for runs that never commit;
+#     lives in ~/.config/agentathens-docker/, of which containers see only the
+#     handoff/ subfolder (build and publish runs: the publish marker);
+#   - the repo root is never mounted: /workspace is an empty per-run tmpfs and
+#     every top-level entry is mounted onto it by its exact name — the data
+#     folders (RW_TOP) read-write, everything else (code, docs, specs, config,
+#     .netlify) read-only, .env only for runs that need it, symlinks never —
+#     plus .git/config and .git/hooks read-only always, and all of .git for
+#     runs that never commit. (A repo-root mount on the Mac's case-insensitive
+#     disk would reach the real .env or bunfig.toml as /workspace/.ENV or
+#     /workspace/BUNFIG.TOML, around the per-name overlays.);
+#   - runs other than the offline build reach the network only through the
+#     egress proxy (docker/egress/squid.conf): public hosts on ports 80/443,
+#     never the Mac, the LAN or cloud metadata. Email ingest (IMAP) is the one
+#     run with a direct route out;
+#   - runs that write data/events.db wait for each other (locks the pipeline
+#     keeps at the repo root now live on each container's own tmpfs);
 #   - freshness runs in separate containers: email ingest, a scrape run that
 #     cannot write dist/ or .git, a build run with no network and no token,
 #     then — only if the host integrity check passes — a publish run that
@@ -28,6 +40,7 @@
 # 4 env file or secrets folder problem; 5 paused by a quarantine; 6 integrity
 # check failed; 7 image too old; 8 live site not deployed by the pipeline;
 # 10 build/publish dist hash missing or mismatched (deploy not recorded);
+# 11 another run that writes the database was still running after 2 h;
 # 124 a run hit its time limit.
 # 0 without running when the same job is already running.
 set -euo pipefail
@@ -48,33 +61,38 @@ fail() {
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] aa-run: $*"; }
 
 GIT_ID="GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL"
-# Top-level repo entries a run may write. Every other entry is mounted
-# read-only over the repo mount, so no run can change what the Mac or an agent
-# session later executes or reads as instructions. Root-level runtime files
-# (locks, the publish marker) stay writable through the repo root, and
-# integrity-check.sh flags any other new root entry.
+# Mailbox settings src/ingest/email-ingestion.ts reads. From docker.env when
+# set there (then the repo .env no longer needs them); runs that fetch mail
+# still see the repo .env too, for installs that keep them there.
+MAIL_KEYS="EMAIL_USER EMAIL_PASSWORD IMAP_HOST IMAP_PORT"
+# Top-level repo entries a run may write (created on the Mac if missing).
+# Every other entry is mounted read-only, so no run can change what the Mac or
+# an agent session later executes or reads as instructions. node_modules is
+# never the Mac's: compose gives every run the image's Linux modules. Anything
+# else a run writes at the root (lock files) stays on its own /workspace tmpfs.
 RW_TOP="data dist logs node_modules temp tmp temp-descriptions temp-briefs temp-research"
 
 # Per run: TOKENS, SECRETS (yes = mount ~/.config/agentathens read-only;
 # gsc = only the Search Console key file; no = an empty folder), DOTENV (repo
 # .env visible), GITRW (may commit), DIST (ro = dist/ mounted read-only),
-# NET (no = the offline compose service), LIMIT (wall-clock minutes;
-# AA_JOB_TIMEOUT_MIN overrides every run's limit).
+# NET (proxy = internal network, out only through the egress proxy; mail = a
+# direct route out as well, for IMAP; no = the offline compose service),
+# LIMIT (wall-clock minutes; AA_JOB_TIMEOUT_MIN overrides every run's limit).
 #   scrape       sealed-build pipeline: data phases only, never commits or builds
 #   scrape-build older pipeline: scrape + build + commit in one run
 #   build        builds dist/ and commits artifacts to pipeline-data, offline
 job_policy() {
-    DIST=rw; NET=yes
+    DIST=rw; NET=proxy
     case "$1" in
-        scrape)     TOKENS=""; SECRETS=no; DOTENV=${SCRAPE_DOTENV:-no}; GITRW=no; DIST=ro; LIMIT=180 ;;
-        scrape-build) TOKENS="$GIT_ID"; SECRETS=no; DOTENV=${SCRAPE_DOTENV:-no}; GITRW=yes; LIMIT=180 ;;
+        scrape)     TOKENS=""; SECRETS=no; DOTENV=${SCRAPE_DOTENV:-no}; GITRW=no; DIST=ro; NET=${SCRAPE_NET:-proxy}; LIMIT=180 ;;
+        scrape-build) TOKENS="$GIT_ID"; SECRETS=no; DOTENV=${SCRAPE_DOTENV:-no}; GITRW=yes; NET=${SCRAPE_NET:-proxy}; LIMIT=180 ;;
         build)      TOKENS="$GIT_ID"; SECRETS=no; DOTENV=no; GITRW=yes; NET=no; LIMIT=45 ;;
-        ingest)     TOKENS=""; SECRETS=no; DOTENV=yes; GITRW=no; LIMIT=30 ;;
+        ingest)     TOKENS="$MAIL_KEYS"; SECRETS=no; DOTENV=yes; GITRW=no; NET=mail; LIMIT=30 ;;
         restore)    TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=10 ;;
         publish)    TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID $GIT_ID"; SECRETS=gsc; DOTENV=no; GITRW=yes; DIST=ro; LIMIT=30 ;;
         verify-live) TOKENS="NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID"; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=10 ;;
-        legacy)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN $GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=yes; LIMIT=180 ;;
-        daily)      TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN $GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=yes; LIMIT=360 ;;
+        legacy)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN $GIT_ID $MAIL_KEYS"; SECRETS=yes; DOTENV=yes; GITRW=yes; NET=mail; LIMIT=180 ;;
+        daily)      TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN $GIT_ID $MAIL_KEYS"; SECRETS=yes; DOTENV=yes; GITRW=yes; NET=mail; LIMIT=360 ;;
         enrichment) TOKENS="CLAUDE_CODE_OAUTH_TOKEN"; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=90 ;;
         visibility) TOKENS=""; SECRETS=yes; DOTENV=no; GITRW=no; LIMIT=30 ;;
         site)       TOKENS=""; SECRETS=no; DOTENV=yes; GITRW=no; LIMIT=45 ;;
@@ -145,20 +163,33 @@ stop_watchdog() {
     wait "$WATCHDOG_PID" 2>/dev/null || true
     WATCHDOG_PID=""
 }
+# `docker compose run` starts the egress proxy (depends_on) and leaves it
+# running; stop it once no pipeline container is left using it.
+EGRESS_USED=no
+stop_egress() {
+    [ "$EGRESS_USED" = "yes" ] || return 0
+    if [ -n "$(docker ps -q --filter 'name=^/agent-athens-' 2>/dev/null)" ]; then
+        log "leaving the egress proxy running: another pipeline run still uses it"
+        return 0
+    fi
+    "${COMPOSE[@]}" rm -s -f egress >/dev/null 2>&1 || true
+}
 # shellcheck disable=SC2317,SC2329  # invoked by the EXIT trap
 cleanup() {
     stop_watchdog
+    stop_egress
     rmdir "$EMPTY_DIR" 2>/dev/null || true
 }
 trap cleanup EXIT
 export AA_SECRETS_DIR="$EMPTY_DIR"
 
+# Both images come from docker/Dockerfile (pipeline and egress stages).
 if [ "$JOB" = "image" ]; then
-    "${COMPOSE[@]}" build "$@" pipeline
+    "${COMPOSE[@]}" build "$@" pipeline egress
     exit $?
 fi
 if [ "$JOB" = "image-refresh" ]; then
-    "${COMPOSE[@]}" build --no-cache --pull pipeline
+    "${COMPOSE[@]}" build --no-cache --pull pipeline egress
     exit $?
 fi
 
@@ -168,8 +199,18 @@ if [ -f "$STATE_DIR/QUARANTINE" ]; then
 fi
 
 inside() { case "$1/" in "$2"/*) return 0 ;; esac; return 1; }  # $1 path inside dir $2
+# The one host folder outside the repo that build and publish runs may write:
+# the deferred-publish marker. Mounted only when the pipeline supports
+# AA_PUBLISH_MARKER (protected-paths PR); older pipelines write
+# .pipeline-publish-ready at the repo root, which now stays on the
+# container's own tmpfs and never reaches the Mac.
+HANDOFF_DIR="$STATE_DIR/handoff"
+MARKER_SUPPORT=no
+if grep -q 'AA_PUBLISH_MARKER' "$REPO/scripts/daily-automated.sh" 2>/dev/null; then MARKER_SUPPORT=yes; fi
+if [ "$MARKER_SUPPORT" = "yes" ]; then PUBLISH_MARKER="$HANDOFF_DIR/publish-ready"; else PUBLISH_MARKER="$REPO/.pipeline-publish-ready"; fi
+clear_marker() { rm -f "$PUBLISH_MARKER" "$REPO/.pipeline-publish-ready"; }
 [ -f "$ENV_FILE" ] || fail "env file $ENV_FILE missing" "mkdir -p '$STATE_DIR' && cp docker/docker.env.example '$ENV_FILE' && chmod 600 '$ENV_FILE', then fill in the tokens" 4
-if inside "$ENV_FILE" "$REPO" || inside "$ENV_FILE" "$SECRETS_DIR" || inside "$ENV_FILE" "$BACKUPS_DIR"; then
+if inside "$ENV_FILE" "$REPO" || inside "$ENV_FILE" "$SECRETS_DIR" || inside "$ENV_FILE" "$BACKUPS_DIR" || inside "$ENV_FILE" "$HANDOFF_DIR"; then
     fail "env file $ENV_FILE is inside a folder a container can mount" "move it to $STATE_DIR/docker.env" 4
 fi
 # GNU `stat -f` means "filesystem status", so pick the form by OS.
@@ -178,13 +219,14 @@ case "$perm" in
     600|400) ;;
     *) fail "env file $ENV_FILE has mode $perm (holds tokens)" "chmod 600 '$ENV_FILE'" 4 ;;
 esac
-[ -d "$REPO/.git" ] || fail "$REPO/.git is not a directory (git worktree?)" "run the pipeline from the main clone" 2
+{ [ -d "$REPO/.git" ] && [ ! -L "$REPO/.git" ]; } || fail "$REPO/.git is not a directory (git worktree or symlink?)" "run the pipeline from the main clone" 2
 # Sealed build: the pipeline can run its data phases without building
 # (AA_SKIP_BUILD) and build in a separate `build` mode (protected-paths PR).
 SEALED=no
 if grep -q 'AA_SKIP_BUILD' "$REPO/scripts/daily-automated.sh" 2>/dev/null; then SEALED=yes; fi
 mkdir -p "$BACKUPS_DIR" "$SECRETS_DIR" "$STATE_DIR" "$REPO/logs"
 chmod 700 "$STATE_DIR" "$SECRETS_DIR"
+if [ "$MARKER_SUPPORT" = "yes" ]; then mkdir -p "$HANDOFF_DIR" && chmod 700 "$HANDOFF_DIR"; fi
 # The secrets folder holds API keys (and the alert topic): same rule as the
 # env file — nothing in it may be readable by other accounts on the Mac.
 loose="$(find "$SECRETS_DIR" -type f \( -perm -040 -o -perm -004 \) 2>/dev/null | head -1)"
@@ -197,8 +239,10 @@ esac
 [ "$timeout_ok" = "yes" ] || fail "AA_JOB_TIMEOUT_MIN must be a whole number of minutes above 0 (got '${AA_JOB_TIMEOUT_MIN:-}')" \
     "unset it (per-job defaults) or set e.g. AA_JOB_TIMEOUT_MIN=60" 2
 
-docker image inspect agent-athens-pipeline:local >/dev/null 2>&1 \
-    || fail "image agent-athens-pipeline:local not built" "run 'docker/aa-run.sh image'" 3
+for img in agent-athens-pipeline:local agent-athens-egress:local; do
+    docker image inspect "$img" >/dev/null 2>&1 \
+        || fail "image $img not built" "run 'docker/aa-run.sh image' (builds the pipeline and the egress proxy)" 3
+done
 # Stale images are refused for the runs that load outside content; checks,
 # restores and the live-site check still run. Two clocks: the local build
 # (system packages: `image-refresh` rebuilds and upgrades them) and the
@@ -239,11 +283,13 @@ if [ -n "$(docker ps -q --filter "name=$running")" ]; then
     exit 0
 fi
 
-# Stale locks. A killed container leaves its lock file behind, naming a PID
-# from the container's own PID namespace. The next container reuses low PIDs,
-# so daily-automated.sh can find "itself" alive under that PID and skip every
-# run from then on. No container of this job is running (checked above), so
-# the lock is stale unless a pipeline still runs directly on the Mac.
+# Lock files at the repo root. Containers no longer see or leave them: each
+# run's /workspace root is its own tmpfs, so the pipeline's locks there only
+# guard that one run, and wait_for_db_writers below does the cross-container
+# exclusion they used to. What a lock at the real repo root still means is a
+# pipeline running directly on the Mac (AA_ALLOW_HOST_RUN=1): skip while that
+# one is alive; anything else there is a leftover (from a dead host run, or a
+# container from before the tmpfs root) and is removed, harmlessly.
 host_owner() {  # $1 lock file → 0 if its PID is a live host pipeline process
     local pid
     pid="$(cat "$1" 2>/dev/null || true)"
@@ -260,6 +306,34 @@ clear_lock() {  # $1 path
     fi
     log "Removing stale $(basename "$path") left by an earlier container run."
     rm -rf "$path"
+}
+
+# Cross-container exclusion for runs that write data/events.db (ingest,
+# scrape/freshness, build, enrichment, daily, site). The pipeline's own
+# locks (.pipeline-<mode>.lock, .auto-enrich.lock.d shared by daily and
+# enrichment) now live on each container's private tmpfs and cannot see each
+# other, so the wrapper waits here while another such container runs:
+# polling every 30 s, for up to 2 h, then it gives up with an alert (exit 11).
+# The same job already running is skipped earlier, as before.
+DB_WRITERS_RE='^/agent-athens-(freshness|freshness-ingest|freshness-build|build|enrichment|daily|site)$'
+writes_db() { case "$1" in ingest|scrape|scrape-build|build|legacy|daily|enrichment|site) return 0 ;; esac; return 1; }
+wait_for_db_writers() {
+    local poll="${AA_DB_WAIT_POLL_SEC:-30}" max="${AA_DB_WAIT_MAX_SEC:-7200}" waited=0 busy msg
+    case "$poll" in ''|*[!0-9]*) poll=30 ;; esac
+    case "$max" in ''|*[!0-9]*) max=7200 ;; esac
+    [ "$poll" -ge 1 ] || poll=1
+    while busy="$(docker ps --format '{{.Names}}' --filter "name=$DB_WRITERS_RE" 2>/dev/null | head -1)"; [ -n "$busy" ]; do
+        if [ "$waited" -ge "$max" ]; then
+            msg="$busy, another run that writes data/events.db, was still running after $((max / 60)) min"
+            bash "$HERE/integrity-check.sh" notify "Job $JOB did not run: $msg" >/dev/null 2>&1 || true
+            echo "aa-run: $msg" >&2
+            echo "aa-run: next: check it with 'docker ps' and its log in ~/.config/agentathens-docker/logs; the next scheduled $JOB runs as usual" >&2
+            exit 11
+        fi
+        [ "$waited" -eq 0 ] && log "waiting for $busy to finish: it writes data/events.db too (checking every ${poll}s, up to $((max / 60)) min)"
+        sleep "$poll"; waited=$((waited + poll))
+    done
+    [ "$waited" -eq 0 ] || log "no other database-writing run left after ${waited}s — going ahead"
 }
 
 # Plain byte copy of the database before any run that writes it. Nothing on
@@ -365,6 +439,10 @@ run_container() {
         printf '%s' "$line" | grep -qE '^[A-Za-z_][A-Za-z0-9_]*=' \
             || fail "$ENV_FILE line $lineno is not KEY=value" "fix that line (no 'export', no spaces around '=')" 4
         key="${line%%=*}"
+        # An empty KEY= line passes nothing: an empty EMAIL_PASSWORD would
+        # otherwise hide the one in the repo .env (bun never overrides a set
+        # variable with .env).
+        [ -n "${line#*=}" ] || continue
         case " $TOKENS " in *" $key "*) export "$key=${line#*=}"; env_flags+=(-e "$key") ;; esac
     done < "$ENV_FILE"
     [ -n "${AA_DEFER_PUBLISH:-}" ] && env_flags+=(-e AA_DEFER_PUBLISH)
@@ -375,35 +453,73 @@ run_container() {
     env_flags+=(-e GIT_CONFIG_COUNT=2 -e GIT_CONFIG_KEY_0=gc.auto -e GIT_CONFIG_VALUE_0=0 \
         -e GIT_CONFIG_KEY_1=maintenance.auto -e GIT_CONFIG_VALUE_1=false)
 
-    local mounts=() entry
+    # The repo root itself is never mounted (/workspace is the container's own
+    # tmpfs): each top-level entry is mounted by its exact name, so on the
+    # Mac's case-insensitive disk no other spelling of a name reaches the file.
+    # The data folders are created here first: a run can no longer create a
+    # top-level folder on the Mac.
+    local d
+    for d in $RW_TOP; do
+        [ "$d" = "node_modules" ] && continue
+        [ -e "$REPO/$d" ] || [ -L "$REPO/$d" ] || mkdir "$REPO/$d"
+    done
+    local mounts=() entry mode
     while IFS= read -r entry; do
-        case "$entry" in .git|.pipeline-*|.auto-enrich.lock.d) continue ;; esac
-        case " $RW_TOP " in *" $entry "*) continue ;; esac
+        case "$entry" in
+            .git) continue ;;           # below
+            node_modules) continue ;;   # the image's Linux modules (compose volume), never the Mac's
+            # A host-run pipeline's lock files and marker: not the container's
+            # business (it keeps its own locks on its tmpfs root).
+            .pipeline-*|.auto-enrich.lock.d) continue ;;
+        esac
+        case "$entry" in *:*) fail "repo entry '$entry' contains ':' and cannot be mounted" "rename it" 2 ;; esac
+        # A top-level symlink would mount whatever it points at (anywhere on
+        # the Mac): never followed.
+        if [ -L "$REPO/$entry" ]; then
+            log "not mounting '$entry': it is a symlink, and top-level symlinks are never followed into a container"
+            continue
+        fi
+        # .env files exist in the container only for runs that need them —
+        # absent otherwise, not even as an empty file.
+        if is_dotenv "$entry"; then
+            [ "$DOTENV" = "yes" ] && mounts+=(-v "$REPO/$entry:/workspace/$entry:ro")
+            continue
+        fi
+        mode=ro
+        case " $RW_TOP " in *" $entry "*) mode=rw ;; esac
+        # dist/ is written only by the build run; scrape and publish see it read-only.
+        [ "$entry" = "dist" ] && [ "$DIST" = "ro" ] && mode=ro
         # The Netlify CLI keeps working files under .netlify/ while deploying;
         # only the publish run (no browser, no outside input) may write it.
-        [ "$entry" = ".netlify" ] && [ "$policy" = "publish" ] && continue
-        case "$entry" in *:*) fail "repo entry '$entry' contains ':' and cannot be mounted" "rename it" 2 ;; esac
-        if [ "$DOTENV" = "no" ] && [ -f "$REPO/$entry" ] && is_dotenv "$entry"; then
-            mounts+=(-v "/dev/null:/workspace/$entry:ro")    # hidden, not just read-only
-        else
-            mounts+=(-v "$REPO/$entry:/workspace/$entry:ro")
-        fi
+        [ "$entry" = ".netlify" ] && [ "$policy" = "publish" ] && mode=rw
+        mounts+=(-v "$REPO/$entry:/workspace/$entry:$mode")
     done < <(ls -A1 "$REPO")
     mounts+=(${secret_mounts[@]+"${secret_mounts[@]}"})
     # The one file under a read-only folder that the pipeline writes.
-    [ -f "$REPO/docs/DECISIONS-QUEUE.md" ] && mounts+=(-v "$REPO/docs/DECISIONS-QUEUE.md:/workspace/docs/DECISIONS-QUEUE.md")
+    if [ -f "$REPO/docs/DECISIONS-QUEUE.md" ] && [ ! -L "$REPO/docs/DECISIONS-QUEUE.md" ] && [ ! -L "$REPO/docs" ]; then
+        mounts+=(-v "$REPO/docs/DECISIONS-QUEUE.md:/workspace/docs/DECISIONS-QUEUE.md")
+    fi
     if [ "$GITRW" = "yes" ]; then
-        mounts+=(-v "$REPO/.git/config:/workspace/.git/config:ro" -v "$REPO/.git/hooks:/workspace/.git/hooks:ro")
+        mounts+=(-v "$REPO/.git:/workspace/.git:rw" \
+            -v "$REPO/.git/config:/workspace/.git/config:ro" -v "$REPO/.git/hooks:/workspace/.git/hooks:ro")
     else
         mounts+=(-v "$REPO/.git:/workspace/.git:ro")
     fi
-    # dist/ is written only by the build run; scrape and publish see it read-only.
-    if [ "$DIST" = "ro" ]; then
-        mkdir -p "$REPO/dist"    # else the run could create it through the repo root
-        mounts+=(-v "$REPO/dist:/workspace/dist:ro")
+    # The deferred-publish marker crosses from the build run to the Mac and on
+    # to the publish run through $STATE_DIR/handoff, the only host folder
+    # outside the repo those runs can write (scrape-build is the build run of
+    # pipelines without a separate build step).
+    if [ "$MARKER_SUPPORT" = "yes" ]; then
+        case "$policy" in
+            build|scrape-build|publish)
+                mounts+=(-v "$HANDOFF_DIR:/handoff:rw")
+                env_flags+=(-e "AA_PUBLISH_MARKER=/handoff/publish-ready") ;;
+        esac
     fi
     local service=pipeline
     [ "$NET" = "no" ] && service=pipeline-offline
+    [ "$NET" = "mail" ] && service=pipeline-mail
+    [ "$service" = "pipeline-offline" ] || EGRESS_USED=yes
     local tty=()
     [ -t 0 ] && [ -t 1 ] || tty=(-T)
 
@@ -417,6 +533,7 @@ run_container() {
                     "run 'docker/aa-run.sh build' (or freshness) first; publish deploys only what the last build run reported" 10
     fi
 
+    if writes_db "$policy"; then wait_for_db_writers; fi
     docker rm -f "$name" >/dev/null 2>&1 || true   # leftover from a killed run
     local state="$STATE_DIR/state/$name.pre" rc
     # A snapshot still here means an earlier run of this container never
@@ -452,7 +569,8 @@ run_container() {
         rc=124
     fi
     log "$name finished with exit code $rc"
-    bash "$HERE/integrity-check.sh" verify "$state" "$name" || exit 6
+    # A run that fails the check leaves nothing behind to publish.
+    bash "$HERE/integrity-check.sh" verify "$state" "$name" || { clear_marker; false; } || exit 6
     rm -f "$state"
     if [ "$policy" = "build" ] && [ "$rc" -eq 0 ]; then record_build "$out" || rc=10; fi
     if [ "$policy" = "publish" ] && [ "$rc" -eq 0 ]; then record_deploy "$out"; fi
@@ -525,9 +643,16 @@ EOF
 case "$JOB" in
     freshness)
         clear_lock "$REPO/.pipeline-freshness.lock"
+        wait_for_db_writers
         backup_db
         if grep -q 'AA_DEFER_PUBLISH' "$REPO/scripts/daily-automated.sh"; then
-            rm -f "$REPO/.pipeline-publish-ready"
+            clear_marker
+            if [ "$MARKER_SUPPORT" = "no" ]; then
+                # The marker the build writes at the repo root stays on that
+                # container's own tmpfs: say so rather than skip publishing silently.
+                log "WARNING: scripts/daily-automated.sh has no AA_PUBLISH_MARKER support — the publish marker cannot reach the Mac, so nothing will be published"
+                bash "$HERE/integrity-check.sh" notify "Freshness will not publish: scripts/daily-automated.sh lacks AA_PUBLISH_MARKER support (protected-paths PR), so the build's publish marker cannot leave its container" >/dev/null 2>&1 || true
+            fi
             if grep -q 'AA_SKIP_INGEST' "$REPO/scripts/daily-automated.sh"; then
                 # Email first, in a run with the mailbox password and no browser;
                 # the scrape run then sees no .env at all.
@@ -535,7 +660,9 @@ case "$JOB" in
                 run_container ingest "$NAME-ingest" ingest || log "WARNING: email ingest failed; continuing with scraping"
                 export AA_SKIP_INGEST=1
             else
-                SCRAPE_DOTENV=yes   # older pipeline: ingest still runs inside the scrape run
+                # Older pipeline: ingest still runs inside the scrape run, which
+                # then needs .env and a direct route out (IMAP) as well.
+                SCRAPE_DOTENV=yes; SCRAPE_NET=mail
             fi
             export AA_DEFER_PUBLISH=1
             if [ "$SEALED" = "yes" ]; then
@@ -546,7 +673,7 @@ case "$JOB" in
                 unset AA_DEFER_PUBLISH AA_SKIP_INGEST AA_SKIP_BUILD
                 [ "$rc" -eq 0 ] || exit "$rc"
                 # Only the build run may mark a publish.
-                rm -f "$REPO/.pipeline-publish-ready"
+                clear_marker
                 # Offline build: dist/, the deploy gate and the pipeline-data
                 # commit, with git identity only and no network at all.
                 clear_lock "$REPO/.pipeline-build.lock"
@@ -557,11 +684,11 @@ case "$JOB" in
                 unset AA_DEFER_PUBLISH AA_SKIP_INGEST
                 [ "$rc" -eq 0 ] || exit "$rc"
             fi
-            if [ -f "$REPO/.pipeline-publish-ready" ]; then
+            if [ -f "$PUBLISH_MARKER" ]; then
                 clear_lock "$REPO/.pipeline-publish.lock"
                 run_container publish "$NAME-publish" publish
             else
-                log "nothing to publish (no .pipeline-publish-ready marker)"
+                log "nothing to publish (no publish marker at $PUBLISH_MARKER)"
             fi
         else
             # Pipeline without deferred publishing: one run holding all tokens.
@@ -573,6 +700,7 @@ case "$JOB" in
             "run 'docker/aa-run.sh freshness', which builds inside its scrape run" 2
         clear_lock "$REPO/.pipeline-build.lock"
         rm -f "$BUILD_HASH_FILE"
+        clear_marker    # a stale marker must not outlive the build that replaces it
         run_container build "$NAME" build "$@"
         ;;
     publish)
@@ -591,7 +719,7 @@ case "$JOB" in
         ;;
     doctor)
         # Host-side checks (token type, off-site backup) plus the container's.
-        hrc=0; bash "$HERE/doctor-checks.sh" "$ENV_FILE" || hrc=$?
+        hrc=0; bash "$HERE/doctor-checks.sh" "$ENV_FILE" "$REPO" || hrc=$?
         rc=0; run_container doctor "$NAME" doctor || rc=$?
         [ "$rc" -ne 0 ] && exit "$rc"
         exit "$hrc"
@@ -603,12 +731,14 @@ case "$JOB" in
         ;;
     daily)
         clear_lock "$REPO/.pipeline-full.lock"
+        wait_for_db_writers
         backup_db
         run_container daily "$NAME" daily "$@"
         ;;
     enrichment)
         clear_lock "$REPO/.pipeline-enrichment.lock"
         [ -z "$(docker ps -q --filter 'name=^/agent-athens-daily$')" ] && clear_lock "$REPO/.auto-enrich.lock.d"
+        wait_for_db_writers
         backup_db
         run_container enrichment "$NAME" enrichment "$@"
         ;;

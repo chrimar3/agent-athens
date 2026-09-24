@@ -4,10 +4,11 @@
 # inherit — before the in-container docker/doctor.sh runs. Same output format
 # as doctor.sh; exits 1 if a check failed. Never prints a token value.
 #
-#   docker/doctor-checks.sh ENV_FILE
+#   docker/doctor-checks.sh ENV_FILE [REPO]
 set -u
 ENV_FILE="${1:-}"
-[ -n "$ENV_FILE" ] || { echo "usage: $0 ENV_FILE" >&2; exit 2; }
+REPO="${2:-}"
+[ -n "$ENV_FILE" ] || { echo "usage: $0 ENV_FILE [REPO]" >&2; exit 2; }
 
 fails=0
 ok()   { printf 'ok    %s\n' "$1"; }
@@ -41,6 +42,26 @@ if [ -n "${AA_OFFSITE_CMD:-}" ]; then
 else
     warn "AA_OFFSITE_CMD not set — database backups exist only on this Mac" \
          "set it to a script that copies a file to storage this Mac can write but not delete, then re-run docker/install-launchd.sh --apply so scheduled runs inherit it"
+fi
+
+# Secrets in the repo's .env files. Only runs that fetch mail still see .env
+# (read-only), but it sits inside the folder every run's code and data come
+# from; docker.env (never mounted) is the place for them. Key names only.
+if [ -n "$REPO" ]; then
+    found=""
+    for f in "$REPO"/.env "$REPO"/.env.*; do
+        [ -f "$f" ] || continue
+        case "$(basename "$f")" in .env.example) continue ;; esac
+        keys="$(sed -n 's/^[[:space:]]*\(export[[:space:]][[:space:]]*\)\{0,1\}\([A-Za-z_][A-Za-z0-9_]*\)=[[:space:]]*[^[:space:]#].*/\2/p' "$f" \
+            | grep -iE 'PASS|SECRET|TOKEN|KEY|CREDENTIAL|PRIVATE|AUTH' | sort -u | tr '\n' ' ')"
+        [ -n "$keys" ] && found="$found $(basename "$f"): ${keys% }"
+    done
+    if [ -n "$found" ]; then
+        warn "the repo's .env still holds secret-looking keys —$found" \
+             "move EMAIL_USER, EMAIL_PASSWORD, IMAP_HOST and IMAP_PORT into $ENV_FILE (the ingest run gets them from there), check with one 'docker/aa-run.sh freshness' that email still arrives, then delete them from the repo .env; for any other key, see docker/README.md whether a run still reads it"
+    else
+        ok "no secret-looking keys in the repo's .env files"
+    fi
 fi
 
 if [ "$fails" -gt 0 ]; then echo "doctor (Mac): $fails check(s) failed"; exit 1; fi

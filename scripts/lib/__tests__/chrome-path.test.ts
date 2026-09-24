@@ -20,7 +20,22 @@ describe('chromeLaunchArgs', () => {
     expect(chromeLaunchArgs({ AA_CONTAINER: '0' })).toEqual([]);
   });
   test('disables it only inside the pipeline container', () => {
-    expect(chromeLaunchArgs({ AA_CONTAINER: '1' })).toContain('--no-sandbox');
+    expect(chromeLaunchArgs({ AA_CONTAINER: '1' })).toEqual(['--no-sandbox', '--disable-setuid-sandbox']);
+  });
+  test('inside the container, sends every request (localhost too) through the egress proxy', () => {
+    expect(chromeLaunchArgs({ AA_CONTAINER: '1', HTTPS_PROXY: 'http://egress:3128' })).toEqual([
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--proxy-server=http://egress:3128',
+      '--proxy-bypass-list=<-loopback>',
+    ]);
+  });
+  test('never adds proxy flags on the Mac, even with HTTPS_PROXY set there', () => {
+    expect(chromeLaunchArgs({ HTTPS_PROXY: 'http://proxy.example:3128' })).toEqual([]);
+    expect(chromeLaunchArgs({ AA_CONTAINER: '0', HTTPS_PROXY: 'http://proxy.example:3128' })).toEqual([]);
+  });
+  test('no proxy flags inside the container when HTTPS_PROXY is empty or unset (offline build)', () => {
+    expect(chromeLaunchArgs({ AA_CONTAINER: '1', HTTPS_PROXY: '' })).toEqual(['--no-sandbox', '--disable-setuid-sandbox']);
   });
   test('no scraper hard-codes a sandbox-disabling flag', () => {
     const offenders = readdirSync(SCRIPTS)

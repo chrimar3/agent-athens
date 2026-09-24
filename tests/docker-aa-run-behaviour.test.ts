@@ -8,7 +8,7 @@
 // order of the runs.
 import { beforeEach, describe, expect, test } from 'bun:test';
 import { createHash } from 'crypto';
-import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'fs';
+import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, symlinkSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
@@ -25,24 +25,45 @@ const DOCKER_STUB = `#!/bin/bash
 case "$1" in
     image) [ "$3" = "-f" ] && date -u +%Y-%m-%dT%H:%M:%SZ; exit 0 ;;
     kill) touch "$STUB_DIR/killed-$2"; exit 0 ;;
+    ps)
+        # A container named in $STUB_DIR/busy counts as running for the next
+        # $STUB_DIR/busy-polls queries whose name filter matches it.
+        filter=""; prev=""
+        for a in "$@"; do [ "$prev" = "--filter" ] && filter="\${a#name=}"; prev="$a"; done
+        [ -f "$STUB_DIR/busy" ] || exit 0
+        b="$(cat "$STUB_DIR/busy")"
+        printf '/%s\\n' "$b" | grep -qE "$filter" || exit 0
+        n="$(cat "$STUB_DIR/busy-polls" 2>/dev/null || echo 1)"; n=$((n - 1))
+        echo "$n" > "$STUB_DIR/busy-polls"
+        [ "$n" -gt 0 ] || rm "$STUB_DIR/busy"
+        case " $* " in *" -q "*) echo 0123abcd ;; *) echo "$b" ;; esac
+        exit 0 ;;
     compose) ;;
     *) exit 0 ;;
 esac
-name=""; job=""; prev=""; svc_next=0
+name=""; job=""; prev=""; svc_next=0; handoff=""; marker_env=""
 for a in "$@"; do
     if [ "$svc_next" = 2 ]; then job="$a"; break; fi
     if [ "$svc_next" = 1 ]; then svc_next=2; continue; fi
     if [ "$prev" = "--name" ]; then name="$a"; svc_next=1; fi
+    case "$prev:$a" in -v:*:/handoff:rw) handoff="\${a%:/handoff:rw}" ;; -e:AA_PUBLISH_MARKER=*) marker_env=1 ;; esac
     prev="$a"
 done
-if [ -n "\${STUB_HANG:-}" ]; then
+# The publish marker as the pipeline writes it: into the handoff folder when
+# given AA_PUBLISH_MARKER, else at its own /workspace root — a tmpfs the Mac
+# never sees (modelled as a file outside the fixture repo).
+mark_publish() {
+    [ -n "\${STUB_NO_MARKER:-}" ] && return 0
+    if [ -n "$marker_env" ] && [ -n "$handoff" ]; then touch "$handoff/publish-ready"; else touch "$STUB_DIR/container-root-marker"; fi
+}
+if [ -n "$name" ] && [ -n "\${STUB_HANG:-}" ]; then
     i=0
     while [ "$i" -lt 100 ]; do [ -f "$STUB_DIR/killed-$name" ] && exit 137; sleep 0.1; i=$((i + 1)); done
     exit 0
 fi
 case "$job" in
-    build) touch "$AA_REPO/.pipeline-publish-ready"; echo "BUILD-RESULT dist_hash=\${STUB_BUILD_HASH}" ;;
-    freshness) [ -n "\${STUB_SCRAPE_BUILDS:-}" ] && touch "$AA_REPO/.pipeline-publish-ready" ;;
+    build) mark_publish; [ -n "\${STUB_PLANT:-}" ] && echo planted > "$AA_REPO/CLAUDE.md"; echo "BUILD-RESULT dist_hash=\${STUB_BUILD_HASH}" ;;
+    freshness) [ -n "\${STUB_SCRAPE_BUILDS:-}" ] && mark_publish ;;
     publish) echo "PUBLISH-RESULT deploy_id=\${STUB_DEPLOY_ID} dist_hash=\${STUB_PUBLISH_HASH} state=ready" ;;
     verify-live) printf '%s\\n' "LIVE deploy_id=\${STUB_DEPLOY_ID}" "LIVE settings_hash=3333333333333333333333333333333333333333333333333333333333333333" "LIVE snippets=0" \
         "LIVE snippets_hash=4444444444444444444444444444444444444444444444444444444444444444" "LIVE page home status=200" "LIVE page event status=200" \
@@ -92,10 +113,10 @@ beforeEach(() => {
   for (const f of readdirSync(join(ROOT, 'docker'))) {
     if (/\.(sh|ya?ml)$/.test(f)) copyFileSync(join(ROOT, 'docker', f), join(repo, 'docker', f));
   }
-  writePipeline('AA_DEFER_PUBLISH AA_SKIP_INGEST AA_SKIP_BUILD');
+  writePipeline('AA_DEFER_PUBLISH AA_SKIP_INGEST AA_SKIP_BUILD AA_PUBLISH_MARKER');
   writeFileSync(join(repo, 'data/events.db'), 'fixture bytes, not a database\n');
   writeFileSync(join(repo, 'dist/index.html'), '<p>fixture</p>\n');
-  writeFileSync(join(repo, '.env'), 'EMAIL_PASSWORD=fixture\n');
+  writeFileSync(join(repo, '.env'), 'EMAIL_PASSWORD=dotenv-secret-value\n');
   writeFileSync(join(repo, '.env.example'), 'EMAIL_PASSWORD=\n');
   Bun.spawnSync(['git', 'init', '-q'], { cwd: repo, env: { PATH: process.env.PATH ?? '', HOME: home } });
   git('add', 'docker', 'scripts', 'data');
@@ -117,7 +138,10 @@ beforeEach(() => {
       'GIT_AUTHOR_EMAIL=f@example.invalid',
       'GIT_COMMITTER_NAME=fixture',
       'GIT_COMMITTER_EMAIL=f@example.invalid',
-      'EMAIL_PASSWORD=never-passed',
+      'EMAIL_USER=mailbox@example.invalid',
+      'EMAIL_PASSWORD=mailbox-fixture',
+      'IMAP_HOST=imap.example.invalid',
+      'IMAP_PORT=',
       '',
     ].join('\n'),
   );
@@ -187,15 +211,24 @@ const notifications = () => (existsSync(join(stub, 'notify.log')) ? readFileSync
 const deploysLog = () => (existsSync(join(state, 'deploys.log')) ? readFileSync(join(state, 'deploys.log'), 'utf8') : '');
 
 // Per-run views of the mounts.
-const dotenvMasked = (r: Run) => r.mounts.includes('/dev/null:/workspace/.env:ro');
+const target = (m: string) => m.split(':')[1];
+const dotenvAbsent = (r: Run) => !r.mounts.some((m) => target(m) === '/workspace/.env');
 const dotenvVisible = (r: Run) => r.mounts.includes(`${repo}/.env:/workspace/.env:ro`);
 const gitReadOnly = (r: Run) => r.mounts.includes(`${repo}/.git:/workspace/.git:ro`);
 const gitWritable = (r: Run) =>
   !gitReadOnly(r) &&
+  r.mounts.includes(`${repo}/.git:/workspace/.git:rw`) &&
   r.mounts.includes(`${repo}/.git/config:/workspace/.git/config:ro`) &&
   r.mounts.includes(`${repo}/.git/hooks:/workspace/.git/hooks:ro`);
 const distReadOnly = (r: Run) => r.mounts.includes(`${repo}/dist:/workspace/dist:ro`);
-const distMounted = (r: Run) => r.mounts.some((m) => m.startsWith(`${repo}/dist:`));
+const distWritable = (r: Run) => r.mounts.includes(`${repo}/dist:/workspace/dist:rw`);
+const handoffMounted = (r: Run) => r.mounts.includes(`${state}/handoff:/handoff:rw`);
+const MARKER_FLAG = 'AA_PUBLISH_MARKER=/handoff/publish-ready';
+const egressStops = () => calls().filter((c) => c.args[0] === 'compose' && c.args.includes('rm') && c.args.at(-1) === 'egress').length;
+const busy = (name: string, polls: number) => {
+  writeFileSync(join(stub, 'busy'), `${name}\n`);
+  writeFileSync(join(stub, 'busy-polls'), `${polls}\n`);
+};
 const gscMounted = (r: Run) => r.mounts.some((m) => m.includes('gcp-kpi-reader.json'));
 const secretsFolderMounted = (r: Run) => r.secretsEnv === secrets;
 
@@ -205,23 +238,32 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
     expect(r.code).toBe(0);
     const rs = runs();
     expect(rs.map((x) => [x.name, x.service, x.job])).toEqual([
-      ['agent-athens-freshness-ingest', 'pipeline', 'ingest'],
+      ['agent-athens-freshness-ingest', 'pipeline-mail', 'ingest'],
       ['agent-athens-freshness', 'pipeline', 'freshness'],
       ['agent-athens-freshness-build', 'pipeline-offline', 'build'],
       ['agent-athens-freshness-publish', 'pipeline', 'publish'],
     ]);
     const [ingest, scrape, build, publish] = rs;
 
-    expect(ingest.tokens).toEqual([]);
+    // The mailbox settings come from docker.env (an empty IMAP_PORT= passes nothing).
+    expect(ingest.tokens).toEqual(['EMAIL_PASSWORD', 'EMAIL_USER', 'IMAP_HOST']);
     expect(scrape.tokens).toEqual([]);
     expect(build.tokens).toEqual(GIT_ID);
     expect(publish.tokens).toEqual(['GH_TOKEN', 'NETLIFY_AUTH_TOKEN', 'NETLIFY_SITE_ID', ...GIT_ID].sort());
     expect(scrape.aaFlags).toEqual(['AA_DEFER_PUBLISH', 'AA_SKIP_BUILD', 'AA_SKIP_INGEST']);
-    for (const x of [ingest, build, publish]) expect(x.aaFlags).toEqual([]);
+    expect(ingest.aaFlags).toEqual([]);
+    for (const x of [build, publish]) expect(x.aaFlags).toEqual([MARKER_FLAG]);
+
+    // The publish marker: only build and publish see the handoff folder.
+    expect(handoffMounted(build)).toBe(true);
+    expect(handoffMounted(publish)).toBe(true);
+    for (const x of [ingest, scrape]) expect(handoffMounted(x)).toBe(false);
+    expect(existsSync(join(state, 'handoff/publish-ready'))).toBe(true); // the stub's publish run leaves it
+    expect(existsSync(join(repo, '.pipeline-publish-ready'))).toBe(false);
 
     expect(dotenvVisible(ingest)).toBe(true);
     for (const x of [scrape, build, publish]) {
-      expect(dotenvMasked(x)).toBe(true);
+      expect(dotenvAbsent(x)).toBe(true);
       expect(dotenvVisible(x)).toBe(false);
     }
     expect(gitReadOnly(ingest)).toBe(true);
@@ -231,8 +273,8 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
 
     expect(distReadOnly(scrape)).toBe(true);
     expect(distReadOnly(publish)).toBe(true);
-    expect(distMounted(build)).toBe(false); // writable through the repo mount
-    expect(distMounted(ingest)).toBe(false);
+    expect(distWritable(build)).toBe(true);
+    for (const x of rs) expect(x.mounts.filter((m) => target(m) === '/workspace/dist').length).toBe(1);
 
     for (const x of rs) {
       expect(secretsFolderMounted(x)).toBe(false);
@@ -264,19 +306,20 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
   });
 
   test('older pipeline without AA_SKIP_BUILD keeps the scrape+build run and records as before', () => {
-    writePipeline('AA_DEFER_PUBLISH AA_SKIP_INGEST');
+    writePipeline('AA_DEFER_PUBLISH AA_SKIP_INGEST AA_PUBLISH_MARKER');
     const r = run(['freshness'], { STUB_SCRAPE_BUILDS: '1', STUB_PUBLISH_HASH: HASH_B });
     expect(r.code).toBe(0);
     const rs = runs();
     expect(rs.map((x) => [x.job, x.service])).toEqual([
-      ['ingest', 'pipeline'],
+      ['ingest', 'pipeline-mail'],
       ['freshness', 'pipeline'],
       ['publish', 'pipeline'],
     ]);
     expect(rs[1].tokens).toEqual(GIT_ID);
-    expect(rs[1].aaFlags).toEqual(['AA_DEFER_PUBLISH', 'AA_SKIP_INGEST']);
+    expect(rs[1].aaFlags).toEqual(['AA_DEFER_PUBLISH', MARKER_FLAG, 'AA_SKIP_INGEST']);
+    expect(handoffMounted(rs[1])).toBe(true); // this scrape run is also the build run
     expect(gitWritable(rs[1])).toBe(true);
-    expect(distMounted(rs[1])).toBe(false);
+    expect(distWritable(rs[1])).toBe(true);
     expect(deploysLog()).toContain(` ${DEPLOY_ID} ${HASH_B}`);
     expect(run(['build']).code).toBe(2); // no separate build step to run
   });
@@ -291,8 +334,9 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
       ['agent-athens-publish', 'pipeline', 'publish'],
     ]);
     expect(rs[0].tokens).toEqual(GIT_ID);
-    expect(dotenvMasked(rs[0])).toBe(true);
+    expect(dotenvAbsent(rs[0])).toBe(true);
     expect(distReadOnly(rs[1])).toBe(true);
+    expect(handoffMounted(rs[0]) && handoffMounted(rs[1])).toBe(true);
     expect(deploysLog()).toContain(DEPLOY_ID);
 
     const again = run(['publish']);
@@ -307,7 +351,8 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
     expect([e.name, e.service, e.job]).toEqual(['agent-athens-enrichment', 'pipeline', 'enrichment']);
     expect(e.tokens).toEqual(['CLAUDE_CODE_OAUTH_TOKEN']);
     expect(e.aaFlags).toEqual([]);
-    expect(dotenvMasked(e)).toBe(true);
+    expect(dotenvAbsent(e)).toBe(true);
+    expect(handoffMounted(e)).toBe(false);
     expect(gitReadOnly(e)).toBe(true);
     expect(secretsFolderMounted(e)).toBe(false);
     expect(gscMounted(e)).toBe(false);
@@ -335,7 +380,7 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
     for (const x of [v, rs]) {
       expect(x.service).toBe('pipeline');
       expect(x.tokens).toEqual(['NETLIFY_AUTH_TOKEN', 'NETLIFY_SITE_ID']);
-      expect(dotenvMasked(x)).toBe(true);
+      expect(dotenvAbsent(x)).toBe(true);
       expect(gitReadOnly(x)).toBe(true);
       expect(secretsFolderMounted(x)).toBe(false);
     }
@@ -359,6 +404,10 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
     expect(d.code).not.toBe(0);
     expect(d.out).toContain('github_pat_');
     expect(d.out).not.toContain('gh-fixture');
+    // …and warns while the repo .env still holds secrets, naming keys, never values.
+    expect(d.out).toContain("the repo's .env still holds secret-looking keys — .env: EMAIL_PASSWORD");
+    expect(d.out).not.toContain('dotenv-secret-value');
+    expect(d.out).not.toContain('mailbox-fixture');
   });
 
   test('a leftover snapshot is verified before a new one is taken', () => {
@@ -415,6 +464,125 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh behaviour (stub 
     expect(notifications()).toContain('ran past its 90-minute limit');
     expect(r.out).toContain('integrity-check: PASS');
     expect(existsSync(join(state, 'state/agent-athens-enrichment.pre'))).toBe(false);
+  });
+
+  test('no repo-root mount: every top-level entry is mounted by name with its own mode; symlinks and .env skipped', () => {
+    mkdirSync(join(repo, 'config'));
+    mkdirSync(join(repo, '.netlify'));
+    writeFileSync(join(repo, 'README.md'), 'fixture\n');
+    writeFileSync(join(repo, '.env.local'), 'SECRET_TOKEN=x\n');
+    writeFileSync(join(repo, '.pipeline-freshness.lock'), '999999\n'); // a host run's leftover
+    symlinkSync(home, join(repo, 'linked'));
+    const r = run(['enrichment']);
+    expect(r.code).toBe(0);
+    expect(r.out).toContain("not mounting 'linked'");
+    const [e] = runs();
+
+    for (const m of e.mounts) {
+      expect(m.startsWith(`${repo}:`)).toBe(false); // never the repo root
+      expect(target(m)).not.toBe('/workspace');
+    }
+    // The data folders exist on the host now and are writable; node_modules
+    // is never the host's.
+    for (const d of ['temp', 'tmp', 'temp-descriptions', 'temp-briefs', 'temp-research', 'logs', 'data', 'dist']) {
+      expect(existsSync(join(repo, d))).toBe(true);
+      expect(e.mounts).toContain(`${repo}/${d}:/workspace/${d}:rw`);
+    }
+    expect(existsSync(join(repo, 'node_modules'))).toBe(false);
+    expect(e.mounts.some((m) => target(m) === '/workspace/node_modules')).toBe(false);
+    // Everything else read-only, each exactly once.
+    for (const x of ['config', '.netlify', 'README.md', 'docker', 'scripts', '.env.example']) {
+      expect(e.mounts.filter((m) => target(m) === `/workspace/${x}`)).toEqual([`${repo}/${x}:/workspace/${x}:ro`]);
+    }
+    expect(gitReadOnly(e)).toBe(true);
+    // Not mounted at all: .env files (no DOTENV), the symlink, a host run's lock.
+    for (const x of ['.env', '.env.local', 'linked', '.pipeline-freshness.lock']) {
+      expect(e.mounts.some((m) => target(m) === `/workspace/${x}`)).toBe(false);
+    }
+    // Every host entry is accounted for: mounted once, or deliberately skipped.
+    const skipped = new Set(['.git', '.env', '.env.local', 'linked', '.pipeline-freshness.lock']);
+    for (const entry of readdirSync(repo)) {
+      if (skipped.has(entry)) continue;
+      expect(e.mounts.filter((m) => target(m) === `/workspace/${entry}`).length).toBe(1);
+    }
+  });
+
+  test('.env files are read-only in runs that fetch mail, absent everywhere else', () => {
+    writeFileSync(join(repo, '.env.local'), 'SECRET_TOKEN=x\n');
+    expect(run(['freshness']).code).toBe(0);
+    const [ingest, ...rest] = runs();
+    expect(ingest.mounts).toContain(`${repo}/.env:/workspace/.env:ro`);
+    expect(ingest.mounts).toContain(`${repo}/.env.local:/workspace/.env.local:ro`);
+    for (const x of rest) expect(x.mounts.some((m) => ['/workspace/.env', '/workspace/.env.local'].includes(target(m)))).toBe(false);
+    for (const x of runs()) expect(x.mounts.some((m) => m.startsWith('/dev/null:'))).toBe(false);
+  });
+
+  test('without AA_PUBLISH_MARKER support: no handoff, nothing published, and the operator is told', () => {
+    writePipeline('AA_DEFER_PUBLISH AA_SKIP_INGEST AA_SKIP_BUILD');
+    const r = run(['freshness']);
+    expect(r.code).toBe(0);
+    expect(runs().map((x) => x.job)).toEqual(['ingest', 'freshness', 'build']);
+    for (const x of runs()) {
+      expect(handoffMounted(x)).toBe(false);
+      expect(x.aaFlags).not.toContain(MARKER_FLAG);
+    }
+    expect(existsSync(join(stub, 'container-root-marker'))).toBe(true); // written, but inside the container
+    expect(r.out).toContain('nothing to publish');
+    expect(notifications()).toContain('AA_PUBLISH_MARKER');
+    expect(existsSync(join(state, 'handoff'))).toBe(false);
+  });
+
+  test('a stale publish marker is cleared before a new build', () => {
+    mkdirSync(join(state, 'handoff'), { recursive: true });
+    writeFileSync(join(state, 'handoff/publish-ready'), '');
+    expect(run(['build'], { STUB_NO_MARKER: '1' }).code).toBe(0);
+    expect(existsSync(join(state, 'handoff/publish-ready'))).toBe(false);
+    expect(Bun.spawnSync(['bash', '-c', `ls -ld '${join(state, 'handoff')}'`]).stdout.toString()).toStartWith('drwx------');
+  });
+
+  test('a build that fails the integrity check leaves no publish marker and no build hash', () => {
+    const r = run(['build'], { STUB_PLANT: '1' });
+    expect(r.code).toBe(6);
+    expect(existsSync(join(state, 'QUARANTINE'))).toBe(true);
+    expect(existsSync(join(state, 'handoff/publish-ready'))).toBe(false);
+    expect(existsSync(join(state, 'build-hash'))).toBe(false);
+  });
+
+  test('a database-writing run waits while another one runs, then goes ahead', () => {
+    busy('agent-athens-enrichment', 3);
+    const r = run(['build'], { AA_DB_WAIT_POLL_SEC: '1' });
+    expect(r.code).toBe(0);
+    expect(r.out).toContain('waiting for agent-athens-enrichment to finish');
+    expect(r.out).toContain('going ahead');
+    expect(runs().map((x) => x.job)).toEqual(['build']);
+  });
+
+  test('a database-writing run gives up after the wait limit with an alert (exit 11)', () => {
+    busy('agent-athens-freshness', 999);
+    const r = run(['enrichment'], { AA_DB_WAIT_POLL_SEC: '1', AA_DB_WAIT_MAX_SEC: '2' });
+    expect(r.code).toBe(11);
+    expect(r.out).toContain('agent-athens-freshness, another run that writes data/events.db, was still running');
+    expect(notifications()).toContain('Job enrichment did not run');
+    expect(runs()).toEqual([]);
+  });
+
+  test('runs that do not write the database do not wait; the same job already running is skipped', () => {
+    busy('agent-athens-enrichment', 999);
+    expect(run(['visibility'], { AA_DB_WAIT_MAX_SEC: '0' }).code).toBe(0);
+    expect(runs().map((x) => x.job)).toEqual(['visibility']);
+    // Another pipeline container still runs: the egress proxy is left up.
+    expect(egressStops()).toBe(0);
+    const same = run(['enrichment']);
+    expect(same.code).toBe(0);
+    expect(same.out).toContain('already running');
+    expect(runs().length).toBe(1);
+  });
+
+  test('the egress proxy is stopped after a networked job, and not started for the offline build', () => {
+    expect(run(['enrichment']).code).toBe(0);
+    expect(egressStops()).toBe(1);
+    expect(run(['build']).code).toBe(0);
+    expect(egressStops()).toBe(1);
   });
 
   test('a bad AA_JOB_TIMEOUT_MIN is refused before anything runs', () => {

@@ -10,9 +10,34 @@ container and can reach only:
 |---|---|
 | The repo's data folders (read-write) | The pipeline writes `data/`, `logs/`, `temp-*`; `dist/` only in the build run (read-only for scrape and publish) |
 | Everything else in the repo, incl. `docs/`, `.netlify/`, `.git/config`, `.git/hooks` (**read-only**) | So nothing it does can change code or instructions your Mac or an agent session later runs |
+| The repo's `.env` (read-only, **only the runs that fetch email**) | Mailbox password, for installs that keep it there (it can move to `docker.env`) |
 | `~/.config/agentathens` (read-only, **only runs that need it**) | GSC/Bing API keys |
+| `~/.config/agentathens-docker/handoff/` (**only build and publish runs**) | The "ready to publish" marker, from the build run to the Mac to the publish run |
 | The tokens its run needs, and no others | See the table below |
-| The internet and your local network, **except the build run**, which has no network | Scraping, email, enrichment and publishing need it |
+| Public websites on ports 80/443, **through the egress proxy only**; the build run has no network at all | Scraping, enrichment and publishing need it. Your Mac itself, your LAN and cloud-metadata addresses are refused |
+| Your mail server directly, **email ingest only** | IMAP is not HTTP and cannot go through the proxy (see Known limits) |
+
+**The repo folder is never mounted as a whole.** Inside the container
+`/workspace` is an empty, private tmpfs, and `aa-run.sh` mounts each
+top-level entry of the repo onto it by its exact name, read-only or
+read-write. That matters on a Mac: its disk ignores upper/lower case, so with
+the whole folder mounted, `/workspace/.ENV` or `/workspace/BUNFIG.TOML` would
+have reached the real `.env` or `bunfig.toml` around the per-name read-only
+overlays. Now any other spelling of a name simply does not exist. Also:
+- `.env` files are **not mounted at all** for runs that don't need them (not
+  even as an empty file), and read-only for the runs that fetch email;
+- a top-level entry that is a symlink is never mounted (logged and skipped),
+  so it cannot pull a folder from elsewhere on the Mac into a run;
+- the data folders (`data/`, `dist/`, `logs/`, `temp/`, `tmp/`, `temp-*`) are
+  created on the Mac before the run if missing; the Mac's `node_modules` is
+  never mounted (every run gets the image's Linux modules);
+- lock files the pipeline writes at the repo root stay on the run's own tmpfs.
+  So that runs in different containers still don't write the database at the
+  same time, `aa-run.sh` makes every run that writes `data/events.db`
+  (ingest, scrape, build, enrichment, daily, site) wait while another such run
+  is going — checked every 30 s, for up to 2 hours, then it gives up with an
+  alert (exit 11). A freshness run and an enrichment run therefore no longer
+  overlap. The same job already running is still simply skipped.
 
 It cannot reach the rest of your home folder, the keychain, SSH keys, browser
 profiles, other projects, the backups, the token file or the Mac's system
@@ -31,14 +56,14 @@ fail if any of that is weakened.
 
 | Run | Schedule | Tokens | API-key folder | `.env` | `.git` | `dist/` | Network | Time limit |
 |---|---|---|---|---|---|---|---|---|
-| `visibility` | 07:30 | none | read-only | hidden | read-only | writable | yes | 30 min |
-| `freshness`, ingest | 08:00 | none (mailbox password from `.env`) | none | read-only | read-only | writable | yes | 30 min |
-| `freshness`, scrape | right after | **none**; loads web pages | none | hidden | read-only | **read-only** | yes | 3 h |
-| `freshness`, build | right after, only if the integrity check passes | git identity only (commits to `pipeline-data`) | none | hidden | may commit | writable | **none** | 45 min |
-| `freshness`, publish | right after, only if the integrity check passes | GitHub, Netlify, git identity: never loads a web page | Search Console key only | hidden | may commit | **read-only** | yes | 30 min |
-| `enrichment` | 10:00, 13:00, 16:30, 19:00 | Claude only | none | hidden | read-only | writable | yes | 90 min |
-| `verify-live` | 00:15, 06:15, 12:15, 18:15 | Netlify token + site id only: live deploy id, snippet injection, a hash of the security-relevant site settings, and the security headers and CSP of the home page and one event page. The Mac alerts on an unrecorded or rolled-back deploy, any snippet, changed settings (baseline `~/.config/agentathens-docker/live-baseline`, created on the first clean run; after reviewing an intended change: `AA_ACCEPT_LIVE_BASELINE=1 docker/aa-run.sh verify-live`), a missing header or a CSP allowing inline scripts | none | hidden | read-only | writable | yes | 10 min |
-| `restore ID` | by hand / watchdog | Netlify token + site id only | none | hidden | read-only | writable | yes | 10 min |
+| `visibility` | 07:30 | none | read-only | absent | read-only | writable | proxy | 30 min |
+| `freshness`, ingest | 08:00 | mailbox settings (`EMAIL_*`, `IMAP_*`) from `docker.env` if set there | none | read-only | read-only | writable | proxy + **direct** (IMAP) | 30 min |
+| `freshness`, scrape | right after | **none**; loads web pages | none | absent | read-only | **read-only** | proxy | 3 h |
+| `freshness`, build | right after, only if the integrity check passes | git identity only (commits to `pipeline-data`) | none | absent | may commit | writable | **none** | 45 min |
+| `freshness`, publish | right after, only if the integrity check passes | GitHub, Netlify, git identity: never loads a web page | Search Console key only | absent | may commit | **read-only** | proxy | 30 min |
+| `enrichment` | 10:00, 13:00, 16:30, 19:00 | Claude only | none | absent | read-only | writable | proxy | 90 min |
+| `verify-live` | 00:15, 06:15, 12:15, 18:15 | Netlify token + site id only: live deploy id, snippet injection, a hash of the security-relevant site settings, and the security headers and CSP of the home page and one event page. The Mac alerts on an unrecorded or rolled-back deploy, any snippet, changed settings (baseline `~/.config/agentathens-docker/live-baseline`, created on the first clean run; after reviewing an intended change: `AA_ACCEPT_LIVE_BASELINE=1 docker/aa-run.sh verify-live`), a missing header or a CSP allowing inline scripts | none | absent | read-only | writable | proxy | 10 min |
+| `restore ID` | by hand / watchdog | Netlify token + site id only | none | absent | read-only | writable | proxy | 10 min |
 | `image-refresh` | Sundays 05:30 | none: rebuilds from scratch and runs `apt-get upgrade`, so Ubuntu packages get their fixes. It does not update Chromium (see Known limits) | – | – | – | – | – | – |
 
 `build` and `publish` can also be run by hand, in that order: `publish` refuses
@@ -59,7 +84,17 @@ Which freshness you get depends on the pipeline in `scripts/daily-automated.sh`
 only deferred publishing (`AA_DEFER_PUBLISH`), the scrape run also builds and
 commits (git identity, `.git` committable, `dist/` writable) and there is no
 hash check; with neither, freshness runs as one step holding both publishing
-tokens.
+tokens (and, like the legacy `daily` run, fetching email, so with a direct
+route out).
+
+**Publish marker.** The build run says "ready to publish" by writing a marker
+file. It used to land at the repo root, which is now each run's private tmpfs,
+so with `AA_PUBLISH_MARKER` support in the pipeline the wrapper mounts
+`~/.config/agentathens-docker/handoff/` (mode 700) at `/handoff` into the
+build and publish runs only and points the pipeline there
+(`AA_PUBLISH_MARKER=/handoff/publish-ready`); a stale marker is removed
+before every build. Without that support the marker cannot reach the Mac:
+freshness then publishes nothing and alerts you to merge the pipeline change.
 
 **Time limits.** Every container run is stopped (`docker kill`) when it runs
 past its limit (`AA_JOB_TIMEOUT_MIN=<minutes>` overrides it for every run of
@@ -113,7 +148,8 @@ weekly digest and phase3-weekly.
 1. **Docker Desktop** — install it, then in Settings:
    - General → *Start Docker Desktop when you sign in*: on.
    - Resources → File sharing: remove `/Users` and share only the repo folder,
-     `~/agent-athens-backups` and `~/.config/agentathens`. This is what stops a
+     `~/agent-athens-backups`, `~/.config/agentathens` and
+     `~/.config/agentathens-docker/handoff`. This is what stops a
      misconfigured mount from ever exposing the rest of your home folder.
    - Leave *Expose daemon on tcp://localhost:2375* **off**.
 2. **Least-privilege tokens** — create these new, instead of reusing your own
@@ -143,7 +179,8 @@ weekly digest and phase3-weekly.
    docker/aa-run.sh doctor    # every line should say ok
    ```
    `doctor` also refuses a GitHub token that isn't fine-grained
-   (`github_pat_…`) and warns while `AA_OFFSITE_CMD` is unset.
+   (`github_pat_…`), checks the egress proxy, and warns while `AA_OFFSITE_CMD`
+   is unset or the repo's `.env` still holds secret-looking keys.
 5. **Try one real run** by hand, then switch the schedule over:
    ```bash
    docker/aa-run.sh freshness
@@ -173,12 +210,64 @@ host jobs exactly as they were.
 - Update the image after dependency or Dockerfile changes: `docker/aa-run.sh image`.
 - Poke around inside: `docker/aa-run.sh shell` (no tokens).
 - Rotate a token: edit the env file; the next run picks it up.
+- Proxy log (what the runs fetched, and what was refused): `docker logs aa-egress`
+  while a job runs (the proxy is stopped after each job).
+- **Email credentials out of the repo:** put `EMAIL_USER`, `EMAIL_PASSWORD`
+  (and `IMAP_HOST`/`IMAP_PORT` if not Gmail) in `docker.env`, run
+  `docker/aa-run.sh freshness` once to see email still arrives, then delete
+  them from the repo's `.env`. The ingest run gets them from `docker.env`
+  (values there win); `doctor` warns while the repo `.env` still holds keys
+  that look like secrets (it names the keys, never the values).
+
+## Egress proxy
+
+Every run except the build run sits on an internal Docker network with no
+route out. Its only way out is the `egress` service: Squid, built from the
+same pinned base image as the pipeline (`docker/aa-run.sh image` builds both),
+configured by `docker/egress/squid.conf`. It allows HTTP and HTTPS to public
+addresses on ports 80 and 443, and refuses:
+- the Mac itself (`host.docker.internal`, `gateway.docker.internal`) and other
+  local names (`*.internal`, `*.local`, `*.localhost`, `*.lan`);
+- private, loopback, link-local (incl. the `169.254.169.254` metadata address),
+  CGNAT (`100.64/10`), `0/8`, multicast and reserved IPv4 ranges, and IPv6
+  loopback, unique-local and link-local ranges;
+- any other port, and CONNECT to anything but 443.
+
+Addresses are checked **after DNS resolution**: a public name that resolves
+to a private address is refused. Every HTTP client the pipeline uses reads the
+`HTTP(S)_PROXY` variables compose sets; Chromium gets `--proxy-server` plus
+`--proxy-bypass-list=<-loopback>`, so even a page's requests to `localhost` go
+to the proxy and are refused. A tool that ignores the proxy settings simply has
+no network. The proxy runs as an unprivileged user with every capability
+dropped, a read-only filesystem and no published port, is started by
+`docker compose run` before the job, and stopped by `aa-run.sh` after it
+(unless another job still uses it). `doctor` checks that it refuses the Mac,
+the gateway, the metadata address, a LAN address and a non-web port, that a
+public HTTPS site works through it and that nothing gets out around it.
 
 ## Known limits
 
-- Every run except the build run can still reach the internet and your local
-  network (scraping, email, enrichment and publishing need it). Treat anything
-  else on your LAN as reachable from them.
+- The proxy stops runs reaching your Mac, your LAN and cloud metadata. It does
+  **not** stop a compromised run from sending what it can read to a public
+  host of the attacker's choosing, or tunnelling anything inside HTTPS: the
+  pipeline needs arbitrary public sites. Least privilege per run (what it can
+  read, which tokens it holds) is what limits that.
+- Email ingest (and the legacy `daily`/one-step freshness runs, which fetch
+  email too) runs on an ordinary network with a direct route out, because IMAP
+  cannot go through an HTTP proxy: those runs can still reach your LAN and the
+  Mac. Ingest runs no browser and holds only the mailbox settings.
+- DNS lookups from the internal network go to Docker's resolver; depending on
+  the Docker version it may forward them, so data could leak out encoded in
+  DNS names.
+- Between jobs the wrapper stops the proxy only when no other pipeline
+  container is running; a job starting in the same second can lose its proxy
+  and fail (the next scheduled run works).
+- Runs that commit get `.git` writable, with `.git/config` and `.git/hooks`
+  read-only on top by exact name. On the Mac's case-insensitive disk,
+  `.git/CONFIG` inside such a run still reaches the real `.git/config`; the
+  integrity check after the run catches any change there and quarantines.
+- A tracked top-level symlink is not mounted, so inside a run git sees it as
+  deleted; the integrity check refuses a commit that records that.
 - The publish run holds the GitHub and Netlify tokens. It runs no browser and
   reads no outside input; the deploy and push gates decide *what* it may
   publish. The dist-hash check compares what the publish run *reports* with

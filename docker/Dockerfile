@@ -13,7 +13,26 @@
 # that load outside content once the base is older than 60 days, measured from
 # the label and image-info below, not from when this image was built.
 ARG BASE_IMAGE=mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
-FROM ${BASE_IMAGE}
+
+# --- egress: the pipeline's forward proxy (compose service `egress`) --------
+# Squid from Ubuntu on the same pinned base: no second image to pin or keep
+# fresh (Dependabot bumps one digest), shared layers on disk, and `apt-get
+# upgrade` on every rebuild like the pipeline stage. Configuration is
+# docker/egress/squid.conf, mounted read-only by compose. Runs as the
+# unprivileged `proxy` user (port 3128 needs no capability).
+FROM ${BASE_IMAGE} AS egress
+RUN rm -f /etc/apt/sources.list.d/nodesource* \
+ && apt-get update \
+ && apt-get -y -o Dpkg::Options::=--force-confold upgrade --no-install-recommends \
+ && apt-get install -y --no-install-recommends squid \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* \
+ && /usr/sbin/squid -v | head -1
+USER proxy
+ENTRYPOINT ["/usr/sbin/squid", "-N", "-d", "1", "-f", "/etc/squid/aa-egress.conf"]
+
+# --- pipeline: the job image (compose services pipeline*; the default target)
+FROM ${BASE_IMAGE} AS pipeline
 ARG BASE_IMAGE
 # The base's own creation time as the registry reports it. Optional: supplied
 # by `docker/aa-run.sh image` (--build-arg AA_BASE_CREATED=...) when it has the
@@ -85,10 +104,10 @@ COPY docker/doctor.sh /usr/local/bin/aa-doctor
 RUN chmod 0755 /usr/local/bin/stat /usr/local/bin/aa-entrypoint /usr/local/bin/aa-doctor \
  && [ "$(/usr/local/bin/stat -f %m /etc/hostname)" = "$(/usr/bin/stat -c %Y /etc/hostname)" ]
 
-# Linux dependencies of the project. The repo is bind-mounted over /workspace at
-# run time; compose mounts a fresh anonymous volume at /workspace/node_modules
-# that Docker fills from this layer, so the Mac's own (darwin) node_modules are
-# never used or touched.
+# Linux dependencies of the project. At run time /workspace is an empty tmpfs
+# that aa-run.sh mounts the repo's top-level entries onto; compose mounts a
+# fresh anonymous volume at /workspace/node_modules that Docker fills from
+# this layer, so the Mac's own (darwin) node_modules are never used or touched.
 WORKDIR /workspace
 COPY package.json bun.lock bunfig.toml ./
 RUN bun install --frozen-lockfile --ignore-scripts \
