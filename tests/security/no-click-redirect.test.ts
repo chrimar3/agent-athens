@@ -8,6 +8,11 @@
  * pages). Nothing used it, so it was removed rather than hardened. These pins
  * keep it from coming back unnoticed: a new function needs a deliberate change
  * to this test (netlify/** is a protected path either way).
+ *
+ * Security loop round 8: the /__edge-probe capability probe
+ * (netlify/edge-functions/edge-probe.ts and its [[edge_functions]] block) was
+ * removed as well. No code runs at Netlify's edge or as a function: the site
+ * is static files plus headers.
  */
 import { describe, expect, test } from 'bun:test';
 import { existsSync, readdirSync, readFileSync, statSync } from 'fs';
@@ -43,5 +48,25 @@ describe('the /go/ click redirect', () => {
     const hits = [...walk(join(ROOT, 'src')), ...walk(join(ROOT, 'static'))]
       .filter((f) => /["'`(]\/go\//.test(readFileSync(f, 'utf-8')));
     expect(hits).toEqual([]);
+  });
+});
+
+describe('no edge functions (round 8)', () => {
+  test('netlify/ holds no function or edge-function source at all', () => {
+    for (const d of ['functions', 'edge-functions']) {
+      const dir = join(ROOT, 'netlify', d);
+      expect(`${d}: ${JSON.stringify(existsSync(dir) ? readdirSync(dir) : [])}`).toBe(`${d}: []`);
+    }
+    expect(existsSync(join(ROOT, 'netlify', 'edge-functions', 'edge-probe.ts'))).toBe(false);
+  });
+
+  test('netlify.toml declares no [functions], [[edge_functions]] or [[functions]] table and no functions directory', () => {
+    const toml = readFileSync(join(ROOT, 'netlify.toml'), 'utf-8');
+    const tables = toml.split('\n').filter((l) => !/^\s*#/.test(l));
+    const code = tables.join('\n');
+    expect(code).not.toMatch(/^\s*\[\[?\s*(edge_functions|functions)\b/m);
+    expect(code).not.toMatch(/^\s*(edge_)?functions\s*=/m);
+    expect(code).not.toContain('__edge-probe');
+    expect(code).not.toMatch(/edge-functions|functions\s*=\s*"/);
   });
 });

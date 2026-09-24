@@ -21,8 +21,9 @@ You can expect:
 ## In scope
 
 - Code in this repository: the site generator, scrapers, email ingestion, the
-  enrichment tooling and its guards, the Netlify function, CI workflows and the
-  container setup under `docker/`.
+  enrichment tooling and its guards, the Netlify configuration (the site runs
+  no Netlify functions or edge functions), CI workflows and the container
+  setup under `docker/`.
 - The published site, https://agentathens.com: cross-site scripting, open
   redirects, header or configuration weaknesses.
 - Ways that content from a scraped page, a newsletter, or an issue or pull

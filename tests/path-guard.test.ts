@@ -695,7 +695,7 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     // Code deployed to production with the site (round 5: the unused go.ts
     // click redirect was removed; any future function is still protected).
     'netlify/functions/any-future-function.ts',
-    'netlify/edge-functions/edge-probe.ts',
+    'netlify/edge-functions/any-future-edge-function.ts',
     'docker/Dockerfile',
     // Disclosure channel and review routing.
     'SECURITY.md',
@@ -855,6 +855,8 @@ describe('.github/path-guard.json — the shipped glob list', () => {
       'docker/cli/package.json', 'docker/cli/package-lock.json',
       // Round 5: stands for any function added later (go.ts was removed).
       'netlify/functions/any-future-function.ts',
+      // Round 8: likewise for edge functions (edge-probe.ts was removed).
+      'netlify/edge-functions/any-future-edge-function.ts',
     ]);
     for (const p of MUST_PROTECT) {
       if (allowMissing.has(p)) continue;
