@@ -49,6 +49,7 @@
     "@resvg/resvg-js": "^2.6.2",
     "@types/luxon": "^3.7.1",
     "cheerio": "^1.2.0",
+    "fuse.js": "^7.1.0",
     "he": "^1.2.0",
     "imap-simple": "^5.1.0",
     "luxon": "^3.7.2",
