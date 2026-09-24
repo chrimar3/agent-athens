@@ -910,7 +910,7 @@ run_deploy() {
 
         # Netlify API responses occasionally embed ASCII control chars in
         # description fields that break strict jq parsing — strip before parse.
-        local DEPLOY_ID
+        local DEPLOY_ID deploy_id_recovered=0
         DEPLOY_ID=$(tr -d '\000-\010\013\014\016-\037' <"$deploy_tmp" \
             | jq -r '.deploy_id // .id // empty' 2>/dev/null)
         # The id is interpolated into JSON for the API calls below and printed
@@ -932,7 +932,15 @@ run_deploy() {
             # Diagnostic: specs/2026-05-20-deploy-pipeline-diagnostic.md
             log "[deploy] CLI parse failed (cli_exit=$cli_exit); querying listSiteDeploys for server-side artifact"
             local cutoff
-            cutoff=$(date -u -v-10M +%Y-%m-%dT%H:%M:%SZ)
+            # Portable 10-minute bound (security loop round 9): BSD `date -v`
+            # does not exist in the Linux container, and an empty cutoff made
+            # every deploy with today's title match. No cutoff → no recovery.
+            cutoff=$(date -u -d '-10 minutes' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null \
+                || date -u -v-10M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null) || cutoff=""
+            if [[ ! "$cutoff" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$ ]]; then
+                log_error "[deploy] could not parse deploy_id and cannot compute the 10-min recovery window on this system (cli_exit=$cli_exit); failing"
+                return 1
+            fi
             DEPLOY_ID=$(netlify api listSiteDeploys \
                 --data "{\"site_id\":\"$SITE_ID\",\"per_page\":10}" 2>/dev/null \
                 | tr -d '\000-\010\013\014\016-\037' \
@@ -944,6 +952,9 @@ run_deploy() {
                 log_error "[deploy] could not parse deploy_id AND no server-side artifact within 10-min window matching message (cli_exit=$cli_exit); failing"
                 return 1
             fi
+            # Matched by title only, which anyone holding the Netlify token can
+            # set: never report such a deploy to the host as verified.
+            deploy_id_recovered=1
             log "[deploy] recovered DEPLOY_ID=$DEPLOY_ID via listSiteDeploys; entering state-poll"
         fi
 
@@ -973,7 +984,11 @@ run_deploy() {
             if [[ $publishing -eq 1 ]]; then
                 rm -f "$PUBLISH_MARKER"
                 log "[publish] deferred build published (deploy $DEPLOY_ID); marker removed"
-                print_publish_result "$DEPLOY_ID"
+                if [[ $deploy_id_recovered -eq 1 ]]; then
+                    log_error "[publish] deploy $DEPLOY_ID is live, but its id was recovered by title match, not from the CLI: no result line printed, so the host does not record it as known-good (verify-live will flag it until you check it in Netlify and publish again)"
+                else
+                    print_publish_result "$DEPLOY_ID"
+                fi
             fi
             return 0
         fi
