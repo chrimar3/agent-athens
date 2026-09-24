@@ -58,7 +58,7 @@ export function renderDigest(i: DigestInputs): string {
   lines.push('<!-- COMPUTED by scripts/weekly-digest.ts -->');
   lines.push(`# Agent Athens — Week ${i.weekLabel}`);
   lines.push('');
-  lines.push(`**Phase-1 exit gate: ${i.exitGate}** · Deploys **${deployCount}/7** · Enrichment **${totalSaves} saves**${zeroSaveDays > 0 ? ` (**${zeroSaveDays} zero-save day${zeroSaveDays === 1 ? '' : 's'}**)` : ''} · Decisions pending: **${i.decisionsPending}** ([queue](../DECISIONS-QUEUE.md))`);
+  lines.push(`**Phase-1 exit gate: ${i.exitGate}** · Deploys **${deployCount}/7** · Enrichment **${totalSaves} saves**${zeroSaveDays > 0 ? ` (**${zeroSaveDays} zero-save day${zeroSaveDays === 1 ? '' : 's'}**)` : ''} · Decisions pending: **${i.decisionsPending}** ([queue](../../data/DECISIONS-QUEUE.md))`);
   lines.push('');
 
   lines.push('## Pipeline');
@@ -125,7 +125,7 @@ if (import.meta.main) {
   const weekLabel = `${now.year}-W${String(now.weekNumber).padStart(2, '0')}`;
   const windowDates = Array.from({ length: 7 }, (_, k) => now.minus({ days: 7 - k }).toISODate()!);
 
-  // Container-written files (logs/, data/, docs/DECISIONS-QUEUE.md) are read
+  // Container-written files (logs/, data/ incl. data/DECISIONS-QUEUE.md) are read
   // with readTailBounded (security loop round 9): no-follow, regular files
   // only, never blocks on a FIFO, bounded size.
   // Missing or refused log → 0/7, honestly.
@@ -176,7 +176,7 @@ if (import.meta.main) {
 
   let decisionsPending = 0;
   try {
-    const m = (readTailBounded(join(ROOT, 'docs', 'DECISIONS-QUEUE.md'), 1024 * 1024) ?? '').match(/\*\*Pending: (\d{1,6})\*\*/);
+    const m = (readTailBounded(join(ROOT, 'data', 'DECISIONS-QUEUE.md'), 1024 * 1024) ?? '').match(/\*\*Pending: (\d{1,6})\*\*/);
     decisionsPending = m ? parseInt(m[1]) : 0;
   } catch { /* queue not yet generated */ }
 

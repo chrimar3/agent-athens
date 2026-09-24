@@ -138,6 +138,13 @@ describe('weekly digest runs the gate under a wall clock and reads an exact verd
     }
     expect(src).not.toMatch(/Bun\.spawnSync\(\['bun'/);
   });
+
+  test('the decisions queue is read from data/ (container-written, untrusted), never docs/ (round 9)', () => {
+    const src = readFileSync(join(ROOT, 'scripts', 'weekly-digest.ts'), 'utf8');
+    expect(src).toContain("join(ROOT, 'data', 'DECISIONS-QUEUE.md')");
+    expect(src).not.toContain("join(ROOT, 'docs', 'DECISIONS-QUEUE.md')");
+    expect(src).toContain('(../../data/DECISIONS-QUEUE.md)');
+  });
 });
 
 describe('container-derived strings are inert in the digest Markdown', () => {
