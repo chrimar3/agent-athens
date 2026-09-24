@@ -106,6 +106,7 @@ function buildItemListElements(events: Event[], locale: Locale): Array<Record<st
       price: event.price,
       ticketUrl: event.ticketUrl,
       ticketUrlResolved: event.ticketUrlResolved,
+      source: event.source,
       venue: event.venue,
       eventStatus: eventStatus ?? undefined,
       selfCanonicalUrl,
