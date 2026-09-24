@@ -13,6 +13,7 @@
 
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { normalizeGreek } from '../utils/normalize-greek';
 
 // ============================================================================
 // Types
@@ -245,6 +246,27 @@ function getBlacklistTerms(): string[] {
   }
 
   return terms;
+}
+
+/** Greek names of the rejected cities (config/rejected-locations.json). */
+export function getRejectedCityNames(): string[] {
+  loadConfigs();
+  return rejectedConfig?.cities.map(city => city.greek) ?? [];
+}
+
+/**
+ * The city a title places the event in, if any: whole word, case- and
+ * accent-insensitive, nominative only — the genitive names an origin
+ * ("Κρατική Ορχήστρα Θεσσαλονίκης" plays Athens). Build-time hold-back only;
+ * checkLocation's blacklist deletes rows, so it is deliberately not widened.
+ */
+export function titleNamesCity(title: string, cities: string[]): string | null {
+  const text = normalizeGreek(title);
+  for (const city of cities) {
+    const word = normalizeGreek(city);
+    if (new RegExp(`(?<!\\p{L})${word}(?!\\p{L})`, 'u').test(text)) return city;
+  }
+  return null;
 }
 
 /**

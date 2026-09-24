@@ -5,6 +5,8 @@
 import { Database } from 'bun:sqlite';
 import { downloadImage } from './download-image';
 import { optimizeImage } from './optimize-image';
+import { isQuarantinedRowSource, QUARANTINE_PATH } from './quarantine-filter';
+import { loadQuarantine, type QuarantineRegistry } from '../utils/quarantine';
 
 /**
  * Process a single event image: download, optimize, and update DB.
@@ -14,8 +16,15 @@ export async function processEventImage(
   eventId: string,
   imageUrl: string,
   source: string,
-  db: Database
+  db: Database,
+  opts: { quarantine?: QuarantineRegistry } = {},
 ): Promise<string | null> {
+  const quarantine = opts.quarantine ?? loadQuarantine(QUARANTINE_PATH);
+  if (isQuarantinedRowSource(source, quarantine)) {
+    console.log(`  ⏭ Skipped ${eventId}: source ${source} is quarantined`);
+    return null;
+  }
+
   // Download
   const buffer = await downloadImage(imageUrl, source);
   if (!buffer) return null;

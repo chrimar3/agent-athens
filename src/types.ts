@@ -12,6 +12,7 @@ export interface Event {
   hasNativeGreek: boolean;    // true when full_description_gr column is populated
   startDate: string;  // ISO 8601
   endDate?: string;
+  presumedEndDate?: string;  // build-time only: last listed day of a dated-instance run; a presumption, never a stated end
   type: EventType;
   genres: string[];
   tags: string[];
