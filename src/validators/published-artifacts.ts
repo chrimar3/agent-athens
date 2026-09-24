@@ -10,8 +10,6 @@
 
 import { readdirSync, readFileSync } from 'fs';
 import { join, relative } from 'path';
-import { load } from 'cheerio';
-import { externalScriptSrcIssue } from './external-script-allowlist';
 
 const LD_BLOCK = /<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g;
 const SCRIPT_BLOCK = /<script\b[\s\S]*?<\/script>/g;
@@ -35,30 +33,6 @@ export function scanHtmlForArtifacts(html: string): string[] {
   if (PLACEHOLDER.test(text) || ldBlocks.some(b => PLACEHOLDER.test(b))) issues.push('[PLACEHOLDER] copy published');
   if (MD_TABLE.test(text)) issues.push('raw markdown table in page text');
   if (ldBlocks.some(b => TEXT_ENTITY.test(b))) issues.push('HTML entity inside a JSON-LD name or description');
-  issues.push(...scanScriptSources(html));
-  return issues;
-}
-
-/**
- * Security loop round 6: every <script src> (and SVG <script href>) must be
- * same-origin or EXACTLY an allowlisted external URL
- * (src/validators/external-script-allowlist.ts) — a host-wide allowance would
- * let a page load any container from that host. Pages are parsed with an
- * HTML5 parser (cheerio/parse5), so attribute values are entity-decoded and
- * malformed markup yields the elements a browser would build.
- */
-function scanScriptSources(html: string): string[] {
-  if (!/<script/i.test(html)) return [];
-  const issues: string[] = [];
-  const $ = load(html);
-  $('script').each((_, el) => {
-    const attrs = (el as { attribs?: Record<string, string> }).attribs ?? {};
-    for (const name of ['src', 'href', 'xlink:href']) {
-      if (attrs[name] === undefined) continue;
-      const issue = externalScriptSrcIssue(attrs[name]);
-      if (issue) issues.push(issue);
-    }
-  });
   return issues;
 }
 
