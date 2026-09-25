@@ -1,0 +1,68 @@
+# Weekly check that main is protected the way the review design assumes.
+#
+# The required checks (ci, path-guard, secret-scan, dependency-audit,
+# shellcheck, and CodeQL's analyze job), the PR requirement and code-owner
+# review only protect main if a repository RULESET enforces them. That
+# setting lives in GitHub, not in this repo, so this job reads it back every
+# week with the job's own read-only token and fails (the owner gets the usual
+# failed-workflow notification) if any piece is missing.
+#
+# It reads GET /repos/{owner}/{repo}/rules/branches/main, which reports the
+# rules in effect from RULESETS. Classic branch protection is not reported by
+# that endpoint, so the owner must configure a ruleset (Settings → Rules →
+# Rulesets → target main) with: "Require a pull request before merging" with
+# "Require review from Code Owners", "Dismiss stale pull request approvals
+# when new commits are pushed" and "Require approval of the most recent
+# reviewable push", and "Require status checks to pass" listing ci,
+# path-guard, secret-scan, dependency-audit, shellcheck and analyze, and an
+# empty Bypass list. See .github/scripts/check-branch-rules.sh.
+#
+# Round 7: bypass actors are visible only through GET
+# /repos/{owner}/{repo}/rulesets/{id}, and only to a token that can administer
+# the repository; the job token (contents: read) cannot. The RULESET_READ_TOKEN
+# secret (a fine-grained token for this repository with the Administration
+# permission) is passed as RULESET_TOKEN and used for those reads only.
+# Without it the check fails closed and says which permission is missing.
+#
+# Round 8: the check also fails when private vulnerability reporting, secret
+# scanning or push protection is disabled (read with the same token).
+#
+# RULESET_READ_TOKEN hygiene (round 8): the token is a secret of the
+# `repo-settings` ENVIRONMENT, not a repository secret, and the job below is
+# the only one that names that environment. Owner setup (Settings →
+# Environments → New environment `repo-settings`):
+#   - Deployment branches and tags: "Selected branches and tags" with the
+#     single rule `main` — so no other branch's copy of this workflow (a PR
+#     branch, a stale branch) can reach the token;
+#   - Environment secret RULESET_READ_TOKEN: a fine-grained personal access
+#     token, Repository access "Only select repositories" = this repository,
+#     Repository permissions: Administration = Read-only (Metadata read is
+#     implied), nothing else; never Read and write. Expiry and rotation:
+#     docs/security/credentials.md; if it leaks: docs/security/incident-response.md.
+name: repo-settings
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  branch-rules:
+    runs-on: ubuntu-latest
+    # RULESET_READ_TOKEN lives in this environment (deployment branches: main).
+    environment: repo-settings
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Check the main branch ruleset
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RULESET_TOKEN: ${{ secrets.RULESET_READ_TOKEN }}
+          REPO: ${{ github.repository }}
+          BRANCH: main
+        run: bash .github/scripts/check-branch-rules.sh

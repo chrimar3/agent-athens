@@ -5,12 +5,8 @@
       "Bash(bun test)",
       "Bash(sqlite3 -readonly data/events.db *)",
       "Bash(./scripts/session-diagnostic.sh)",
-      "Bash(cat *)",
       "Bash(ls *)",
-      "Bash(head *)",
-      "Bash(tail *)",
-      "Bash(wc *)",
-      "Bash(grep *)"
+      "Bash(wc *)"
     ],
     "deny": [
       "Bash(rm:*)",
@@ -48,7 +44,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Bash|Write|Edit|MultiEdit|NotebookEdit|mcp__[a-z0-9_]+__(write_file|edit_file|move_file|create_directory)",
+        "matcher": "*",
         "hooks": [
           {
             "type": "command",

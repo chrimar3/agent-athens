@@ -7,6 +7,12 @@
  * failure. The staging block is extracted VERBATIM from the script text
  * (between `# staging:begin` / `# staging:end`) and executed under bash in a
  * throwaway git repo — never the project repo, never data/events.db.
+ *
+ * Security loop round 3: the artifact commit moved to refs/heads/pipeline-data
+ * and is built with git plumbing, so the block now stages into a TEMPORARY
+ * index ($pd_index via GIT_INDEX_FILE) with hash-object + update-index. These
+ * tests were adapted deliberately: they read the temporary index, and they
+ * also pin that the REAL index is never touched.
  */
 import { describe, test, expect, beforeAll, afterAll } from 'bun:test';
 import { mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync } from 'fs';
@@ -62,22 +68,31 @@ function makeRepo(dir: string): void {
  * missing entry last, a loop that aborts on first failure (`… || { …; break; }`)
  * stages the tracked path anyway and the pin passes vacuously.
  */
-function runInRepo(dir: string, body: string): { status: number | null; stderr: string; log: string; staged: string[] } {
+function runInRepo(dir: string, body: string): { status: number | null; stderr: string; log: string; staged: string[]; realStaged: string[] } {
   const logFile = join(dir, 'pipeline.log');
+  const pdIndex = join(dir, '.git', 'pd-test-index');
   const harness = [
     'set -u',
     `LOG_FILE=${JSON.stringify(logFile)}`,
     'log() { echo "[LOG] $*" >> "$LOG_FILE"; }',
     'log_error() { echo "[ERROR] $*" >> "$LOG_FILE"; }',
     'PIPELINE_ALLOWLIST=("missing.json" "tracked.json")',
+    // run_deploy's commit_pipeline_data seeds the temporary index from the
+    // parent pipeline-data tree; HEAD's tree stands in for it here.
+    `pd_index=${JSON.stringify(pdIndex)}`,
+    'pd_blob=""',
+    'GIT_INDEX_FILE="$pd_index" git read-tree HEAD',
     body,
     'exit 0',
   ].join('\n');
   const r = spawnSync('bash', ['-c', harness], { cwd: dir, encoding: 'utf-8' });
-  const staged = spawnSync('git', ['diff', '--cached', '--name-only'], { cwd: dir, encoding: 'utf-8' })
-    .stdout.split('\n').filter(Boolean);
+  const diffCached = (env: Record<string, string>) =>
+    spawnSync('git', ['diff', '--cached', '--name-only'], { cwd: dir, encoding: 'utf-8', env: { ...process.env, ...env } })
+      .stdout.split('\n').filter(Boolean);
+  const staged = existsSync(pdIndex) ? diffCached({ GIT_INDEX_FILE: pdIndex }) : [];
+  const realStaged = diffCached({});
   const log = existsSync(logFile) ? readFileSync(logFile, 'utf-8') : '';
-  return { status: r.status, stderr: r.stderr, log, staged };
+  return { status: r.status, stderr: r.stderr, log, staged, realStaged };
 }
 
 describe('daily-automated.sh staging block — per-path git add (issue #5)', () => {
@@ -93,10 +108,10 @@ describe('daily-automated.sh staging block — per-path git add (issue #5)', () 
     require('fs').mkdirSync(dir);
     makeRepo(dir);
     const r = runInRepo(dir, OLD_SINGLE_CALL);
-    expect(r.staged).toEqual([]);
+    expect(r.realStaged).toEqual([]);
   });
 
-  test('stages the tracked path and logs the missing one (continuing)', () => {
+  test('stages the tracked path into the TEMPORARY index and logs the missing one (continuing)', () => {
     const dir = join(tmp, 'new-form');
     require('fs').mkdirSync(dir);
     makeRepo(dir);
@@ -104,9 +119,9 @@ describe('daily-automated.sh staging block — per-path git add (issue #5)', () 
     const r = runInRepo(dir, block);
     expect(r.status).toBe(0);
     expect(r.staged).toEqual(['tracked.json']);
-    expect(r.log).toContain('[staging] git add failed for missing.json');
-    // git's own "pathspec did not match" goes to LOG_FILE, not the terminal.
-    expect(r.log).toContain('missing.json');
+    expect(r.realStaged).toEqual([]);          // the real index is never touched
+    expect(r.log).toContain('[staging] could not stage missing.json');
+    // Nothing from git leaks to the terminal; diagnostics go to LOG_FILE.
     expect(r.stderr).toBe('');
   });
 
@@ -115,17 +130,20 @@ describe('daily-automated.sh staging block — per-path git add (issue #5)', () 
     expect(block).not.toContain(OLD_SINGLE_CALL);
     // The failure must go through log_error (tees to stderr → launchd-stderr.log),
     // not log: a swallowed staging failure is the silent outage issue #5 is about.
-    expect(block).toMatch(/\|\| log_error "\[staging\] git add failed for \$f/);
+    expect(block).toMatch(/\|\| log_error "\[staging\] could not stage \$f/);
     expect(block).toContain('for f in "${PIPELINE_ALLOWLIST[@]}"');
+    // Plumbing into the temporary index only — never the porcelain add.
+    expect(block).toContain('GIT_INDEX_FILE="$pd_index" git update-index');
+    expect(block).not.toMatch(/\bgit add\b/);
   });
 });
 
 describe('daily-automated.sh seam guards — staging block placement and allowlist', () => {
-  test('staging block sits after the allowlist and before the staging guard loop', () => {
+  test('staging block sits after the allowlist and before the tree guard', () => {
     const allowlist = daily.indexOf('local PIPELINE_ALLOWLIST=(');
     const begin = daily.indexOf(BEGIN);
     const end = daily.indexOf(END);
-    const guard = daily.indexOf('done < <(git diff --cached --name-only)');
+    const guard = daily.indexOf('pd_tree_only_allowlisted "$pd_tree"');
     expect(allowlist).toBeGreaterThan(-1);
     expect(begin).toBeGreaterThan(allowlist);
     expect(end).toBeGreaterThan(begin);

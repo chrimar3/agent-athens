@@ -2,9 +2,16 @@
 node_modules/
 .bun/
 
-# Environment
+# Environment and credentials — never commit (public repo)
 .env
-.env.local
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*credentials*.json
+.msmtprc
 
 # Logs
 logs/
@@ -55,8 +62,9 @@ data/health-reports/
 data/search-visibility-log.csv
 data/banned-phrase-matches.csv
 
-# Local Netlify folder
+# Local Netlify folder (site id / CLI state)
 .netlify
+.netlify/
 .git-old/
 
 # Pipeline lock files (runtime state)
@@ -79,3 +87,6 @@ package-lock.json
 /design-system-audit.html
 /diagnostic-report.md
 data/responder-state.json
+
+# Deferred-publish marker written by daily-automated.sh (runtime state)
+.pipeline-publish-ready

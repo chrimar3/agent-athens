@@ -1,0 +1,115 @@
+# Security scans: `secret-scan` (gitleaks) and `dependency-audit` (bun audit).
+#
+# secret-scan — on a PR, scans only the PR's own commits (base..head); on a push
+# to main, the pushed range; on the weekly schedule or a manual run, the whole
+# history. gitleaks is downloaded at a pinned version and its tarball is checked
+# against a pinned SHA-256 before it runs (no third-party action, so no action
+# token and no licence key). The allowlist lives in .github/gitleaks.toml and
+# covers scraped third-party HTML only. Meant to be a required check.
+# Security loop round 3: the scan logic is .github/scripts/secret-scan.sh
+# (tests/secret-scan.test.ts). It reads gitleaks.toml from the DEFAULT branch
+# (or, for a push, from the commit before the push) — never the checked-out
+# copy — so a PR cannot widen its own allowlist; with no config there it uses
+# gitleaks' default rules and no allowlist. It also ignores inline
+# `gitleaks:allow` comments and any .gitleaksignore file in the tree.
+#
+# dependency-audit — `bun audit` against the committed lockfile, BLOCKING on
+# any high or critical advisory not listed in .github/audit-ignore.json (each
+# entry: advisory id, package, reason, review_by date; an expired or malformed
+# entry fails the job too). The logic lives in .github/scripts/dependency-
+# audit.sh (tests/dependency-audit.test.ts). It runs weekly (catching new
+# advisories against an unchanged lockfile) and on PRs that change
+# package.json or bun.lock (Dependabot PRs included). Security loop round 2
+# cleared the lockfile from 53 advisories (1 critical, 26 high) to 2 listed
+# high ones with no fix; it is meant to be a required check (the weekly
+# repo-settings workflow verifies that). Round 8: the ignore list is read from
+# the DEFAULT branch (AUDIT_IGNORE_REF; .github/scripts/default-branch-file.sh),
+# so a PR cannot ignore an advisory it introduces in the same diff.
+#
+# Both jobs run PR code read-only: a contents:read token, not persisted.
+name: security
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install gitleaks (pinned version, checksum-verified)
+        env:
+          GITLEAKS_VERSION: "8.30.1"
+          GITLEAKS_SHA256: "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
+        run: |
+          set -euo pipefail
+          tarball="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -sSfL -o "$RUNNER_TEMP/$tarball" \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/${tarball}"
+          echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/$tarball" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/$tarball" -C "$RUNNER_TEMP" gitleaks
+
+      # The config comes from the default branch (or the pre-push commit), not
+      # from this checkout: see .github/scripts/secret-scan.sh.
+      - name: Scan for committed secrets
+        env:
+          GITLEAKS_BIN: ${{ runner.temp }}/gitleaks
+          CONFIG_REF: ${{ github.event.repository.default_branch }}
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_AFTER: ${{ github.event.after }}
+        run: bash .github/scripts/secret-scan.sh
+
+  dependency-audit:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Skip PRs that do not change dependencies
+        id: scope
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" != "pull_request" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          git fetch --no-tags --depth=1 origin "$PR_BASE"
+          if git diff --quiet "$PR_BASE" HEAD -- package.json bun.lock; then
+            echo "dependency-audit: package.json and bun.lock unchanged — skipping"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # 1.3.11 rather than ci's 1.3.0: `bun audit --audit-level` was checked
+      # against this version, and the audit does not run project code.
+      - if: steps.scope.outputs.run == 'true'
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.3.11"
+
+      - if: steps.scope.outputs.run == 'true'
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - if: steps.scope.outputs.run == 'true'
+        name: Audit dependencies (fail on unlisted high or critical)
+        env:
+          AUDIT_IGNORE_REF: ${{ github.event.repository.default_branch }}
+        run: bash .github/scripts/dependency-audit.sh

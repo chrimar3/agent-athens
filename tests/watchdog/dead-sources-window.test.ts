@@ -34,7 +34,7 @@ function isoDaysAgo(days: number, offsetMinutes = 0): string {
   return new Date(Date.now() - days * 86_400_000 + offsetMinutes * 60_000).toISOString();
 }
 
-let deadSourcesSignal: () => string[];
+let deadSourcesSignal: () => Promise<string[]>;
 
 beforeAll(async () => {
   const db = new Database(FIXTURE_DB, { create: true });
@@ -116,39 +116,39 @@ describe("deadSourcesSignal — long-dead sources stay surfaced, dormant ones st
     expect(row).toBeNull(); // if this ever passes the window, the long-dead case is no longer exercised
   });
 
-  test("hard-failing source dead >30 days is STILL reported (the 2026-08-04 blind spot)", () => {
-    expect(deadSourcesSignal()).toContain("clubber");
+  test("hard-failing source dead >30 days is STILL reported (the 2026-08-04 blind spot)", async () => {
+    expect(await deadSourcesSignal()).toContain("clubber");
   });
 
-  test("dormant/seasonal source (0 events but success=1, produced >30d ago) is NOT reported", () => {
-    expect(deadSourcesSignal()).not.toContain("benaki");
+  test("dormant/seasonal source (0 events but success=1, produced >30d ago) is NOT reported", async () => {
+    expect(await deadSourcesSignal()).not.toContain("benaki");
   });
 
-  test("fresh death within the window is still reported (original rule preserved)", () => {
-    expect(deadSourcesSignal()).toContain("halfnote");
+  test("fresh death within the window is still reported (original rule preserved)", async () => {
+    expect(await deadSourcesSignal()).toContain("halfnote");
   });
 
-  test("brand-new source with fewer than 3 runs is NOT reported", () => {
-    expect(deadSourcesSignal()).not.toContain("ra");
+  test("brand-new source with fewer than 3 runs is NOT reported", async () => {
+    expect(await deadSourcesSignal()).not.toContain("ra");
   });
 
-  test("a QUARANTINED long-dead source is filtered from the alert set (Phase 2A — no repeat spam)", () => {
+  test("a QUARANTINED long-dead source is filtered from the alert set (Phase 2A — no repeat spam)", async () => {
     const { writeFileSync } = require("node:fs") as typeof import("node:fs");
     const qPath = join(dir, "quarantine-clubber.json");
     writeFileSync(qPath, JSON.stringify({ sources: { clubber: { since: "2026-08-11", reason: "captcha" } } }));
     process.env.DEADMAN_QUARANTINE_PATH = qPath;
     try {
-      expect(deadSourcesSignal()).not.toContain("clubber");
+      expect(await deadSourcesSignal()).not.toContain("clubber");
     } finally {
       process.env.DEADMAN_QUARANTINE_PATH = join(dir, "empty-quarantine.json");
     }
   });
 
-  test("mixed hard-fail/quiet-success streak beyond the window stays conservative — NOT reported", () => {
-    expect(deadSourcesSignal()).not.toContain("snfcc");
+  test("mixed hard-fail/quiet-success streak beyond the window stays conservative — NOT reported", async () => {
+    expect(await deadSourcesSignal()).not.toContain("snfcc");
   });
 
-  test("healthy source is NOT reported", () => {
-    expect(deadSourcesSignal()).not.toContain("more");
+  test("healthy source is NOT reported", async () => {
+    expect(await deadSourcesSignal()).not.toContain("more");
   });
 });

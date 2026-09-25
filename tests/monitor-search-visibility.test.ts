@@ -124,51 +124,51 @@ describe('lastRowBefore', () => {
 });
 
 describe('getEnrichmentStats', () => {
-  test('returns integer count when DB has rows in last 24h', () => {
+  test('returns integer count when DB has rows in last 24h', async () => {
     setupEventsDb(TMP_DB, [
       new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
       new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString(),
       new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(), // excluded
     ]);
     writeFileSync(TMP_CSV, CSV_HEADER + '\n');
-    const stats = getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
+    const stats = await getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
     expect(stats.enrichedLast24h).toBe(2);
   });
 
-  test('returns 0 (not STALE) when DB empty and no prior row exists', () => {
+  test('returns 0 (not STALE) when DB empty and no prior row exists', async () => {
     setupEventsDb(TMP_DB, []);
     writeFileSync(TMP_CSV, CSV_HEADER + '\n');
-    const stats = getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
+    const stats = await getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
     expect(stats.enrichedLast24h).toBe(0);
   });
 
-  test('returns STALE_ENRICHMENT when DB empty and prior row had 0', () => {
+  test('returns STALE_ENRICHMENT when DB empty and prior row had 0', async () => {
     setupEventsDb(TMP_DB, []);
     writeFileSync(
       TMP_CSV,
       CSV_HEADER + '\n' + row27('2026-04-22', { enriched: 0 }) + '\n',
     );
-    const stats = getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
+    const stats = await getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
     expect(stats.enrichedLast24h).toBe('STALE_ENRICHMENT');
   });
 
-  test('returns 0 (not STALE) when DB empty but prior row had nonzero', () => {
+  test('returns 0 (not STALE) when DB empty but prior row had nonzero', async () => {
     setupEventsDb(TMP_DB, []);
     writeFileSync(
       TMP_CSV,
       CSV_HEADER + '\n' + row27('2026-04-22', { enriched: 33 }) + '\n',
     );
-    const stats = getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
+    const stats = await getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
     expect(stats.enrichedLast24h).toBe(0);
   });
 
-  test('returns empty string when DB path is missing', () => {
+  test('returns empty string when DB path is missing', async () => {
     writeFileSync(TMP_CSV, CSV_HEADER + '\n');
-    const stats = getEnrichmentStats('2026-04-23', MISSING_DB, TMP_CSV);
+    const stats = await getEnrichmentStats('2026-04-23', MISSING_DB, TMP_CSV);
     expect(stats.enrichedLast24h).toBe('');
   });
 
-  test('works against a WAL-mode DB (regression — readonly:true breaks WAL open)', () => {
+  test('works against a WAL-mode DB (regression — readonly:true breaks WAL open)', async () => {
     const db = new Database(TMP_DB);
     db.run(`PRAGMA journal_mode=WAL`);
     db.run(`CREATE TABLE events (id TEXT PRIMARY KEY, enriched_at TEXT)`);
@@ -176,7 +176,7 @@ describe('getEnrichmentStats', () => {
     db.run(`INSERT INTO events (id, enriched_at) VALUES (?, ?)`, ['evt', now]);
     db.close();
     writeFileSync(TMP_CSV, CSV_HEADER + '\n');
-    const stats = getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
+    const stats = await getEnrichmentStats('2026-04-23', TMP_DB, TMP_CSV);
     expect(stats.enrichedLast24h).toBe(1);
   });
 });

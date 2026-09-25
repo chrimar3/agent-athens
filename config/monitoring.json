@@ -1,7 +1,21 @@
 {
   "deploy_stale_hours": 36,
   "enrich_stale_hours": 36,
-  "pipeline_health_labels": ["com.agentathens.daily", "com.agentathens.auto-enrich"],
+  "pipeline_health_labels": [
+    "com.agentathens.daily",
+    "com.agentathens.auto-enrich",
+    "com.agentathens.docker.visibility",
+    "com.agentathens.docker.freshness",
+    "com.agentathens.docker.enrichment",
+    "com.agentathens.docker.enrichment-13",
+    "com.agentathens.docker.enrichment-16",
+    "com.agentathens.docker.enrichment-19",
+    "com.agentathens.docker.verify-live",
+    "com.agentathens.docker.verify-live-0",
+    "com.agentathens.docker.verify-live-6",
+    "com.agentathens.docker.verify-live-18",
+    "com.agentathens.docker.image-refresh"
+  ],
   "notify": { "enabled": true },
   "email": {
     "enabled": true,
@@ -10,7 +24,6 @@
   },
   "push": {
     "enabled": true,
-    "server": "https://ntfy.sh",
-    "topic": "agentathens-deadman-04118827a9792c841fe0f93211efa3f1"
+    "server": "https://ntfy.sh"
   }
 }

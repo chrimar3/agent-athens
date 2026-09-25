@@ -1,0 +1,43 @@
+# CodeQL static analysis (SAST) for the TypeScript sources: injection sinks,
+# unsafe HTML building, shell-string construction and similar patterns that
+# the unit tests only catch where someone thought to write a test.
+#
+# build-mode none: TypeScript is analysed from source, nothing is built or
+# run. Results go to the repository's Security tab (code scanning).
+#
+# Least privilege: the workflow token is read-only; the analyze job alone gets
+# security-events: write, which is what uploading results needs. The checkout
+# keeps no token. Actions are pinned to full commit SHAs (resolved with
+# `git ls-remote`); Dependabot bumps them with the version comment.
+name: codeql
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "41 4 * * 3"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: github/codeql-action/init@1c5b675653bb5c22dbe9b12b556ec555138e09fd # v4.38.1
+        with:
+          languages: javascript-typescript
+          build-mode: none
+
+      - uses: github/codeql-action/analyze@1c5b675653bb5c22dbe9b12b556ec555138e09fd # v4.38.1
+        with:
+          category: "/language:javascript-typescript"
