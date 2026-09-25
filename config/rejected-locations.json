@@ -94,6 +94,18 @@
     {
       "greek": "Τρίπολη",
       "latin": "Tripoli"
+    },
+    {
+      "greek": "ΛΑΡΙΣΑ",
+      "latin": "Larisa"
+    },
+    {
+      "greek": "Λιβαδειά",
+      "latin": "Livadeia"
+    },
+    {
+      "greek": "ΛΙΒΑΔΕΙΑ",
+      "latin": "Livadia"
     }
   ],
   "regions": [
@@ -258,6 +270,46 @@
     {
       "name": "Δημοτικό Γήπεδο Σερρών \\",
       "reason": "Serres (trailing backslash variation)"
+    },
+    {
+      "name": "Circus Entertainment Hub",
+      "reason": "Larissa venue (confirmed by the owner 2026-09-24; cometogether city=Λάρισα) - was wrongly whitelisted as Gazi"
+    },
+    {
+      "name": "Eightball",
+      "reason": "Thessaloniki club (cometogether city=Θεσσαλονίκη)"
+    },
+    {
+      "name": "Eightball Club",
+      "reason": "Thessaloniki club (cometogether city=Θεσσαλονίκη)"
+    },
+    {
+      "name": "The HOST club",
+      "reason": "Thessaloniki, Λουδία 1 Λαδάδικα (cometogether)"
+    },
+    {
+      "name": "Artbox Fargani Theater",
+      "reason": "Thessaloniki theatre (cometogether city=Θεσσαλονίκη)"
+    },
+    {
+      "name": "Κινηματοθέατρο ΚΟΛΟΣΣΑΙΟΝ",
+      "reason": "Thessaloniki (cometogether city=Θεσσαλονίκη)"
+    },
+    {
+      "name": "Μαιευτήριο Comedy Club",
+      "reason": "Thessaloniki comedy club (cometogether city=Θεσσαλονίκη)"
+    },
+    {
+      "name": "ΘΕΑΤΡΟ ΣΟΦΟΥΛΗ",
+      "reason": "Kalamaria, Thessaloniki (cometogether city=Καλαμαριά)"
+    },
+    {
+      "name": "Frida Bar n’ Stage",
+      "reason": "Patras (cometogether city=Πάτρα)"
+    },
+    {
+      "name": "Frida Stage",
+      "reason": "Patras (same venue as Frida Bar n’ Stage)"
     }
   ],
   "problematic_entries": {

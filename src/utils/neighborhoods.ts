@@ -1,4 +1,5 @@
 const NEIGHBORHOOD_GREEK: Record<string, string> = {
+  'Agios Dimitrios': 'Άγιος Δημήτριος',
   'Aigaleo': 'Αιγάλεω',
   'Alimos': 'Άλιμος',
   'Ambelokipi': 'Αμπελόκηποι',
@@ -32,10 +33,12 @@ const NEIGHBORHOOD_GREEK: Record<string, string> = {
   'Mets': 'Μετς',
   'Monastiraki': 'Μοναστηράκι',
   'Moschato': 'Μοσχάτο',
+  'Nea Filadelfeia': 'Νέα Φιλαδέλφεια',
   'Nea Ionia': 'Νέα Ιωνία',
   'Nea Smyrni': 'Νέα Σμύρνη',
   'Neapoli': 'Νεάπολη',
   'Neos Kosmos': 'Νέος Κόσμος',
+  'Nikaia': 'Νίκαια',
   'Omonia': 'Ομόνοια',
   'Omonoia': 'Ομόνοια',
   'Paleo Faliro': 'Παλαιό Φάληρο',
@@ -63,6 +66,7 @@ const NEIGHBORHOOD_GREEK: Record<string, string> = {
   'Viktoria': 'Βικτώρια',
   'Votanikos': 'Βοτανικός',
   'Vouliagmeni': 'Βουλιαγμένη',
+  'Vyronas': 'Βύρωνας',
   'Zografou': 'Ζωγράφου',
 };
 
