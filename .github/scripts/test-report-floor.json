@@ -1,0 +1,6 @@
+{
+  "_comment": "Read by .github/scripts/test-report-check.sh (security loop round 5). min_executed_tests: the fewest tests (tests - skipped in the JUnit report) the required ci job accepts; set on 2026-09-24 below the ci-scope count then (4131 tests - 179 skipped = 3952 executed) with a margin. Raise it as the suite grows; a PR cannot lower it (.github/** is a protected path). exclude: test files ci does not run (migrations.test.ts copies the production data/events.db, absent in CI). also_required: test files outside tests/ and src/ that ci runs.",
+  "min_executed_tests": 3800,
+  "exclude": ["src/db/__tests__/migrations.test.ts"],
+  "also_required": ["scripts/__tests__/deploy-gate.test.ts", "scripts/__tests__/precommit-tsc.test.ts"]
+}

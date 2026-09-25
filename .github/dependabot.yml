@@ -1,0 +1,58 @@
+# Dependabot version updates. Weekly, one grouped PR per ecosystem so the
+# owner reviews one diff rather than a stream of single bumps. Security
+# updates (enabled in the repo settings) still open on their own.
+#
+# `bun` rather than `npm`: the lockfile is bun.lock, which the npm ecosystem
+# does not update, and ci installs with --frozen-lockfile.
+#
+# Every PR this opens touches a protected path (package.json, bun.lock,
+# .github/workflows/ or docker/), so path-guard marks it needs-input and the
+# owner merges it by hand after review.
+#
+# `docker` covers docker/Dockerfile: the digest-pinned base image (and the
+# Chromium it carries) would otherwise never get an update PR.
+#
+# `npm` in /docker/cli (security loop round 4) covers the command-line tools
+# baked into that image (claude-code, netlify-cli, bun), pinned by
+# docker/cli/package-lock.json and installed with `npm ci`. That lockfile is
+# npm's, not bun's, so it needs its own npm entry; without it those pinned
+# versions never get a security or version PR.
+version: 2
+updates:
+  - package-ecosystem: "bun"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    groups:
+      bun-dependencies:
+        patterns: ["*"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  - package-ecosystem: "docker"
+    directory: "/docker"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      docker:
+        patterns: ["*"]
+
+  - package-ecosystem: "npm"
+    directory: "/docker/cli"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    groups:
+      container-cli:
+        patterns: ["*"]

@@ -20,9 +20,14 @@ set -uo pipefail
 
 BASELINE_WT="/Users/chrism/Project with Claude/AgentAthens/agent-athens-visibility-baseline"
 BENCH="$BASELINE_WT/benchmark/visibility-baseline-20260708"
-PHASE3_WT="/Users/chrism/Project with Claude/AgentAthens/agent-athens-phase3"
+# *_OVERRIDE are test seams (tests/phase3-weekly-guard.test.ts), like
+# LOG_DIR_OVERRIDE in auto-enrich.sh. launchd never sets them.
+PHASE3_WT="${PHASE3_WT_OVERRIDE:-/Users/chrism/Project with Claude/AgentAthens/agent-athens-phase3}"
 MAIN_REPO="/Users/chrism/Project with Claude/AgentAthens/agent-athens"
-LOG_DIR="$MAIN_REPO/logs"
+# Host-only log folder (security loop round 4): pipeline containers can write
+# $MAIN_REPO/logs, so a symlink planted there would make this host job
+# truncate or append into any file the owner can write.
+LOG_DIR="${PHASE3_LOG_DIR_OVERRIDE:-${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/logs}"
 RUN_LOG="$LOG_DIR/phase3-weekly.log"
 CLAUDE_BIN="${CLAUDE_BIN:-$HOME/.local/bin/claude}"
 [ -x "$CLAUDE_BIN" ] || CLAUDE_BIN="$(command -v claude || echo /usr/local/bin/claude)"
@@ -31,7 +36,135 @@ MAX_SESSION_SECONDS=10800  # 3h watchdog for layer 2
 ts() { date '+%Y-%m-%d %H:%M:%S'; }
 log() { echo "[$(ts)] $*" | tee -a "$RUN_LOG"; }
 
+mkdir -p "$LOG_DIR" 2>/dev/null || true
+# Refuse to write through a symlink, even in the host-only folder.
+for f in "$LOG_DIR" "$RUN_LOG" "$LOG_DIR/phase3-auth-precheck-last.log"; do
+  if [ -L "$f" ]; then
+    echo "[phase3-weekly] REFUSED — $f is a symlink; something planted it. Inspect it, delete it, then rerun bash scripts/phase3-weekly.sh." >&2
+    exit 1
+  fi
+done
+# The session and the self-test must see the same hook profile: the
+# unattended one. The enrichment profile (stricter) is never this script's.
+unset AA_ENRICHMENT_SESSION
+
+# ---------- guard self-test (security loop round 2) ----------
+# The L2 session reads third-party text (Perplexity answers, DB-derived
+# diagnostics). Its boundary is the db-guard PreToolUse hook in the Phase-3
+# worktree (that worktree's .claude/settings.json wires
+# $CLAUDE_PROJECT_DIR/scripts/hooks/db-guard.ts). Before any claude call, run
+# THAT hook directly, under the same env the session gets, on known-bad calls
+# (must exit 2 exactly: Claude Code treats any other non-zero exit as a
+# non-blocking hook error and runs the tool) and known-good calls (must exit 0,
+# proving the hook ran rather than crashed), and check the settings route every
+# tool to it. Any mismatch skips L2: a skipped judgment session is recoverable,
+# an unguarded one over third-party text is not. Mirrors run_guard_selftest in
+# scripts/auto-enrich.sh. DB_GUARD_HOOK_OVERRIDE is a test seam.
+run_guard_selftest() {
+  # hook-override-guard:begin (security loop round 6; pinned by tests/security/hook-override-seam.test.ts)
+  # The seam points the self-test at ANOTHER hook file, so a scheduled run that
+  # inherits it would "pass" against a stub while the session still uses the
+  # worktree's real (possibly broken) hook. Test and interactive use only:
+  # refused inside the container (AA_CONTAINER=1) and in a launchd job
+  # (XPC_SERVICE_NAME=com.agentathens.*).
+  if [ -n "${DB_GUARD_HOOK_OVERRIDE:-}" ] && { [ "${AA_CONTAINER:-}" = "1" ] || [[ "${XPC_SERVICE_NAME:-}" == com.agentathens* ]]; }; then
+    log "Guard self-test REFUSED — DB_GUARD_HOOK_OVERRIDE is a test seam and is not honoured in a container or launchd run. L2 skipped before any claude call. Next: remove DB_GUARD_HOOK_OVERRIDE from the job's environment (plist, docker/aa-run.sh env) and re-run."
+    return 1
+  fi
+  # hook-override-guard:end
+  local hook="${DB_GUARD_HOOK_OVERRIDE:-$PHASE3_WT/scripts/hooks/db-guard.ts}"
+  local failures=() probe name expected json rc
+  # name|expected-exit|hook-json
+  local probes=(
+    "bun run outside the repo|2|{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"bun run /tmp/x.ts\"}}"
+    "Read ~/.ssh/id_rsa|2|{\"tool_name\":\"Read\",\"tool_input\":{\"file_path\":\"~/.ssh/id_rsa\"}}"
+    "sqlite3 writefile|2|{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"sqlite3 -readonly data/events.db \\\"SELECT writefile('src/x.ts','x')\\\"\"}}"
+    "cat of a key file|2|{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"cat ~/.config/agentathens/perplexity-api-key\"}}"
+    "WebFetch (no web tools)|2|{\"tool_name\":\"WebFetch\",\"tool_input\":{\"url\":\"https://example.com/\",\"prompt\":\"x\"}}"
+    "build (must be allowed)|0|{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"bun run src/generate-site.ts\"}}"
+    "Write PHASE3-LOG.md (must be allowed)|0|{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"$BENCH/PHASE3-LOG.md\",\"content\":\"x\"}}"
+  )
+  for probe in "${probes[@]}"; do
+    name="${probe%%|*}"
+    expected="${probe#*|}"; expected="${expected%%|*}"
+    json="${probe#*|*|}"
+    rc=0
+    printf '%s' "$json" | AA_UNATTENDED_SESSION=phase3 AA_SESSION_EXTRA_ROOTS="$BENCH" bun "$hook" >/dev/null 2>&1 || rc=$?
+    [ "$rc" = "$expected" ] || failures+=("$name: expected exit $expected, got $rc")
+  done
+  # Settings wiring: some PreToolUse entry must run db-guard.ts for every tool
+  # (matcher "*", empty, or a regex matching each name below). A matcher that
+  # skips Read or WebFetch leaves those calls unguarded.
+  if ! AA_SETTINGS_PATH="$PHASE3_WT/.claude/settings.json" bun -e '
+    const s = JSON.parse(require("fs").readFileSync(process.env.AA_SETTINGS_PATH, "utf8"));
+    const wired = (s.hooks?.PreToolUse ?? []).filter((e) => (e.hooks ?? []).some((h) => String(h.command ?? "").includes("scripts/hooks/db-guard.ts")));
+    const covers = (m, t) => m === undefined || m === "" || m === "*" || new RegExp("^(?:" + m + ")$").test(t);
+    const tools = ["Bash", "Read", "Glob", "Grep", "Write", "Edit", "MultiEdit", "WebFetch", "WebSearch", "Task", "mcp__any__tool"];
+    process.exit(tools.every((t) => wired.some((e) => covers(e.matcher, t))) ? 0 : 1);
+  ' >/dev/null 2>&1; then
+    failures+=("settings wiring: $PHASE3_WT/.claude/settings.json does not route every tool (matcher \"*\") to scripts/hooks/db-guard.ts")
+  fi
+  if [ ${#failures[@]} -gt 0 ]; then
+    local f
+    for f in "${failures[@]}"; do log "Guard self-test FAILED — $f"; done
+    log "Guard self-test FAILED: the Phase-3 worktree's db-guard hook ($hook) does not enforce the unattended boundary. L2 skipped before any claude call. Next: bring the Phase-3 worktree's scripts/hooks/db-guard.ts and .claude/settings.json up to main (unattended profile with a Bash allowlist, matcher \"*\"), then run: bash scripts/phase3-weekly.sh --guard-selftest-only"
+    return 1
+  fi
+  log "Guard self-test passed (out-of-repo bun run, key reads, sqlite3 writefile and web tools refused with exit 2; build and log write allowed)"
+  return 0
+}
+
+# container-wait:begin (security loop round 7; extracted VERBATIM by tests/phase3-weekly-guard.test.ts — keep both markers)
+# Layer 1 commits in the benchmark worktree on the host, which moves a branch
+# ref of the shared repository. The host integrity check
+# (docker/integrity-check.sh) compares refs around each container job and
+# quarantines everything when one moved during the job, so layer 1 must not
+# commit while a pipeline container (named agent-athens-*) is running. Before
+# layer 1's first git write, wait until `docker ps` lists none, polling every
+# 30s for at most AA_PHASE3_WAIT_MIN minutes (default 180). No docker CLI on
+# PATH, or a docker that cannot list containers (not running), means no job
+# can be running: proceed. On timeout: log it and return 1, and the caller
+# exits non-zero without committing. The polls are counted rather than timed
+# by the wall clock, so a sleeping laptop does not use up the budget.
+wait_for_container_jobs() {
+  local max_min="${AA_PHASE3_WAIT_MIN:-180}" polls=0 max_polls running
+  if [[ ! "$max_min" =~ ^[0-9]{1,5}$ ]]; then
+    log "L1: REFUSED — AA_PHASE3_WAIT_MIN='$max_min' is not a whole number of minutes. Nothing committed. Next: unset it (default 180) or set e.g. AA_PHASE3_WAIT_MIN=60, then rerun bash scripts/phase3-weekly.sh."
+    return 1
+  fi
+  max_polls=$(( 10#$max_min * 2 ))
+  if ! command -v docker >/dev/null 2>&1; then
+    log "L1: no docker CLI on PATH — no container job can be running; proceeding"
+    return 0
+  fi
+  while :; do
+    if ! running="$(docker ps -q --filter 'name=^/agent-athens-' 2>/dev/null)"; then
+      log "L1: docker is not running (docker ps failed) — no container job can be running; proceeding"
+      return 0
+    fi
+    if [ -z "$running" ]; then
+      [ "$polls" -eq 0 ] || log "L1: no agent-athens-* container running any more (waited ${polls} poll(s) of 30s); proceeding"
+      return 0
+    fi
+    if [ "$polls" -ge "$max_polls" ]; then
+      log "L1: GAVE UP — an agent-athens-* container was still running after ${max_min} min; layer 1 did NOT commit (a ref moved mid-job would trip the integrity check). Measurements stay uncommitted in $BENCH. Next: when no job runs (docker ps --filter name=agent-athens-), rerun bash scripts/phase3-weekly.sh or commit them by hand."
+      return 1
+    fi
+    [ "$polls" -gt 0 ] || log "L1: an agent-athens-* container is running; waiting for it before committing (poll every 30s, at most ${max_min} min)"
+    sleep 30
+    polls=$(( polls + 1 ))
+  done
+}
+# container-wait:end
+
 log "=== phase3-weekly start ==="
+
+# --guard-selftest-only: run ONLY the guard self-test and exit with its status.
+# Placed before smoke mode and layer 1 so it has no side effects.
+if [ "${1:-}" = "--guard-selftest-only" ]; then
+  run_guard_selftest
+  exit $?
+fi
 
 # ---------- smoke mode ----------
 if [ "${PHASE3_SMOKE:-0}" = "1" ] || [ -f /tmp/phase3-smoke ]; then
@@ -55,7 +188,18 @@ layer1_status="ok"
 cd "$BASELINE_WT" || { log "FATAL: baseline worktree missing"; exit 1; }
 
 log "L1: refreshing DB snapshot for diagnostic"
-cp "$MAIN_REPO/data/events.db" "$PHASE3_WT/data/events.db" 2>>"$RUN_LOG" || layer1_status="db-copy-failed"
+# data/ is container-writable: a symlink there would make cp copy any file
+# the owner can read into the worktree the L2 session reads.
+if [ -L "$MAIN_REPO/data/events.db" ]; then
+  log "L1: REFUSED to copy $MAIN_REPO/data/events.db — it is a symlink (inspect and delete it)"
+  layer1_status="db-copy-refused-symlink"
+elif [ -e "$MAIN_REPO/data/events.db" ] && [ ! -f "$MAIN_REPO/data/events.db" ]; then
+  # Security loop round 8: a FIFO or device there would block cp forever.
+  log "L1: REFUSED to copy $MAIN_REPO/data/events.db — it is not a regular file (inspect and remove it)"
+  layer1_status="db-copy-refused-not-regular"
+else
+  cp "$MAIN_REPO/data/events.db" "$PHASE3_WT/data/events.db" 2>>"$RUN_LOG" || layer1_status="db-copy-failed"
+fi
 
 log "L1: Perplexity probe (20 queries x 3 runs)"
 if ! PERPLEXITY_API_KEY="$(cat "$HOME/.config/agentathens/perplexity-api-key")" \
@@ -73,6 +217,11 @@ if ! bun run "$BENCH/tooling/t1-event-index-diag.ts" "$PHASE3_WT/data/events.db"
   layer1_status="${layer1_status};t1diag-failed"; log "L1 WARN: t1 diagnostic failed"
 fi
 
+# Round 7: no ref moves while a container job runs (container-wait above).
+if ! wait_for_container_jobs; then
+  log "=== phase3-weekly done (layer 1 not committed; layer 2 not run) ==="
+  exit 1
+fi
 log "L1: heartbeat + commit on benchmark branch"
 echo "" >> "$BENCH/PHASE3-LOG.md"
 echo "- HEARTBEAT $(date '+%Y-%m-%d %H:%M') weekly routine: layer1=$layer1_status (raw results in probe-runs/$(date '+%Y-%m-%d')/)" >> "$BENCH/PHASE3-LOG.md"
@@ -81,6 +230,31 @@ git -C "$BASELINE_WT" commit --no-verify --quiet -m "phase3: weekly measurement 
   && log "L1: committed" || log "L1 WARN: nothing to commit or commit failed"
 
 # ---------- layer 2: headless judgment session ----------
+# host-guard:begin (pinned by tests/host-run-guard.test.ts; security loop round 5)
+# The judgment session reads third-party text (Perplexity answers) and may edit
+# code and then run the build and the test suite, which execute that code. On
+# the Mac that is the owner's home folder, keychain and logins, so layer 2 runs
+# only inside the container (AA_CONTAINER=1) or with an explicit, temporary
+# override. Layer 1 above has already run and committed its measurements.
+# Round 6: the override is for a person at a terminal. launchd sets
+# XPC_SERVICE_NAME to the job label, so a com.agentathens.* job (an edited
+# legacy plist) cannot use AA_ALLOW_HOST_RUN=1 to skip the container.
+if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" == "1" && "${XPC_SERVICE_NAME:-}" == com.agentathens* ]]; then
+    echo "phase3-weekly: REFUSED — AA_ALLOW_HOST_RUN=1 is for one-off manual runs only and is ignored in a launchd job (XPC_SERVICE_NAME=${XPC_SERVICE_NAME})." >&2
+    echo "phase3-weekly: next: schedule this job through docker/aa-run.sh (docker/README.md) and unload the legacy plist; for a one-off host run, start it from a terminal." >&2
+    exit 9
+fi
+if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" != "1" ]]; then
+    echo "phase3-weekly: REFUSED — the layer-2 claude session runs inside the container, not directly on this Mac (layer-1 data is committed)." >&2
+    echo "phase3-weekly: next: run layer 2 through docker/aa-run.sh (docker/README.md); for a one-off host run set AA_ALLOW_HOST_RUN=1." >&2
+    exit 9
+fi
+# host-guard:end
+if ! run_guard_selftest; then
+  echo "- HEARTBEAT-L2 $(date '+%Y-%m-%d %H:%M') judgment session SKIPPED (guard self-test failed; see $RUN_LOG)" >> "$BENCH/PHASE3-LOG.md"
+  git -C "$BASELINE_WT" add "$BENCH/PHASE3-LOG.md" && git -C "$BASELINE_WT" commit --no-verify --quiet -m "phase3: weekly L2 skipped (guard self-test)" 2>>"$RUN_LOG"
+  exit 1
+fi
 AUTH_PRECHECK_LOG="$LOG_DIR/phase3-auth-precheck-last.log"
 {
   echo "=== auth pre-check $(ts) ==="
@@ -105,8 +279,46 @@ Ground truth: CLAUDE.md in this worktree is the standing law; PHASE3-LOG.md and 
 
 Do, in order: (1) the measurement-verdict step — compare the fresh probe/console/diagnostic against the previous cycle, rule on every open prediction (P1, P2, ...) and record verdicts in PHASE3-LOG.md; (2) work the queue top-down within the law. Unattended constraints: merges to fable-impact ONLY with full gates green (build exit 0, bun test 0 fail, tsc clean); anything ambiguous, operator-owned, or gate-failing gets LOGGED and skipped, never forced; never touch the frozen instrument; never fabricate content; end by committing an updated PHASE3-LOG.md with a session summary + next-session queue.'
 
+# Security loop round 1: this session reads third-party measurement output
+# (Perplexity probe results), so it gets an explicit tool list instead of
+# "everything acceptEdits allows", and the db-guard unattended profile:
+# AA_UNATTENDED_SESSION scopes Read/Glob/Grep/Write to the Phase-3 worktree
+# plus the benchmark dir (AA_SESSION_EXTRA_ROOTS, --add-dir), refuses secrets
+# (.env*, .git, .netlify, keys, ~/.config) and unknown tools. The hook that
+# enforces it is the Phase-3 worktree's own copy, and run_guard_selftest above
+# refuses to launch this session unless that copy refuses the bad probes.
+# Round 2: no wildcard script grants. `Bash(bun run *)`/`Bash(bun test *)` ran
+# any file (bun run /tmp/x.ts), so the session gets exactly the three gates the
+# Phase-3 law names (build, full test suite, tsc). No Task (sub-agents would
+# multiply the injection surface), no web tools, no git checkout/restore/reset
+# (they write single files, e.g. an older scripts/hooks/db-guard.ts, from any
+# commit) and no git push/-C/config/remote. Write/Edit/MultiEdit are granted by
+# name, so --permission-mode default suffices: acceptEdits would add auto-
+# approved filesystem commands (mkdir, mv, cp, rm) the session does not need.
+# The session edits code and then runs the build and test suite, and both
+# execute that code. Round 5: the host-guard block above refuses layer 2 on the
+# Mac (exit 9) unless AA_CONTAINER=1 (docker/aa-run.sh, no secrets mounted) or
+# AA_ALLOW_HOST_RUN=1. Pinned by tests/phase3-weekly-guard.test.ts and
+# tests/host-run-guard.test.ts.
+PHASE3_ALLOWED_TOOLS="Read,Glob,Grep,Edit,MultiEdit,Write,TodoWrite,Bash(bun run src/generate-site.ts),Bash(bun test),Bash(bunx tsc --noEmit -p .),Bash(git status),Bash(git status *),Bash(git diff),Bash(git diff *),Bash(git log *),Bash(git show *),Bash(git add *),Bash(git commit *),Bash(git merge *),Bash(git switch *),Bash(git branch *),Bash(git rev-parse *),Bash(ls *),Bash(wc *)"
+# disallowed-tools:begin (security loop round 7; extracted by tests/security/unattended-disallowed-tools.test.ts — keep both markers)
+# Refused regardless of project settings (the worktree's .claude/settings.json
+# allows Bash(cat *)/grep/head/tail for interactive use; a deny rule is the one
+# rule class --allowedTools cannot out-vote). The session needs none of them:
+# it has no web tools, reads through Read/Glob/Grep and runs only the commands
+# in PHASE3_ALLOWED_TOOLS. COMMA-separated like the allow list. Read(/proc/**)
+# is project-relative in Claude Code's rule syntax, so the absolute /proc is
+# spelled Read(//proc/**); both are listed. Read(~/**) is added only when
+# neither the worktree nor the benchmark dir is under $HOME: on the Mac both
+# are, and denying ~/** would deny them (the db-guard unattended profile scopes
+# Read there); the named secret folders under ~ are denied either way.
+PHASE3_DISALLOWED_TOOLS="WebFetch,WebSearch,Bash(cat *),Bash(grep *),Bash(head *),Bash(tail *),Bash(sqlite3 *),Bash(curl *),Bash(wget *),Bash(nc *),Bash(env),Bash(env *),Bash(printenv),Bash(printenv *),Read(/proc/**),Read(//proc/**),Read(.env*),Read(**/.env*),Read(~/.ssh/**),Read(~/.claude/**),Read(~/.claude.json),Read(~/.config/**),Read(~/.netrc)"
+if [[ -n "${HOME:-}" && "$HOME" != "/" && "$PHASE3_WT/" != "${HOME%/}/"* && "$BENCH/" != "${HOME%/}/"* ]]; then
+  PHASE3_DISALLOWED_TOOLS="$PHASE3_DISALLOWED_TOOLS,Read(~/**)"
+fi
+# disallowed-tools:end
 (
-  cd "$PHASE3_WT" && "$CLAUDE_BIN" -p "$PROMPT" --permission-mode acceptEdits >> "$SESSION_LOG" 2>&1
+  cd "$PHASE3_WT" && AA_UNATTENDED_SESSION=phase3 AA_SESSION_EXTRA_ROOTS="$BENCH" "$CLAUDE_BIN" -p "$PROMPT" --permission-mode default --allowedTools "$PHASE3_ALLOWED_TOOLS" --disallowedTools "$PHASE3_DISALLOWED_TOOLS" --add-dir "$BENCH" >> "$SESSION_LOG" 2>&1
 ) &
 CLAUDE_PID=$!
 ( sleep "$MAX_SESSION_SECONDS" && kill -9 "$CLAUDE_PID" 2>/dev/null && echo "[watchdog] killed session after ${MAX_SESSION_SECONDS}s" >> "$SESSION_LOG" ) &

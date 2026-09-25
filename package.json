@@ -7,8 +7,8 @@
     "build": "bun run src/generate-site.ts",
     "dev": "bun run src/generate-site.ts && bun run serve",
     "serve": "bun run --watch src/serve.ts",
-    "deploy": "bash scripts/deploy-gate.sh && netlify deploy --prod --no-build --dir=dist",
-    "test": "bun run scripts/test-pipeline.ts",
+    "deploy": "bash scripts/redeploy.sh",
+    "test": "bash scripts/run-tests.sh",
     "test:full": "bun run scripts/test-pipeline.ts --full",
     "test:quick": "bun run scripts/test-pipeline.ts --no-scrape",
     "test:unit": "bun test tests/unit",
@@ -42,28 +42,34 @@
     "@types/node": "^20.0.0",
     "bun-types": "^1.3.9",
     "pa11y": "^9.1.1",
-    "tsx": "^4.20.6",
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.67.0",
     "@google-analytics/data": "^6.1.0",
-    "@google/generative-ai": "^0.24.1",
     "@resvg/resvg-js": "^2.6.2",
-    "@types/better-sqlite3": "^7.6.13",
     "@types/luxon": "^3.7.1",
-    "better-sqlite3": "^12.4.1",
-    "cheerio": "^1.1.2",
+    "cheerio": "^1.2.0",
     "fuse.js": "^7.1.0",
     "he": "^1.2.0",
     "imap-simple": "^5.1.0",
     "luxon": "^3.7.2",
-    "mailparser": "^3.7.5",
+    "mailparser": "^3.9.28",
     "node-ical": "^0.21.0",
-    "puppeteer": "^24.36.1",
-    "puppeteer-core": "^24.36.0",
+    "puppeteer": "^24.43.1",
+    "puppeteer-core": "^24.43.1",
     "satori": "^0.19.2",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.4",
     "yaml": "^2.8.3"
-  }
+  },
+  "overrides": {
+    "basic-ftp": "^5.3.1",
+    "brace-expansion": "^2.1.4",
+    "ip-address": "^10.7.2",
+    "js-yaml": "^4.3.2",
+    "semver": "^7.8.5",
+    "ws": "^8.21.0"
+  },
+  "trustedDependencies": [
+    "puppeteer"
+  ]
 }

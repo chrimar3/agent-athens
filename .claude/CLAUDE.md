@@ -101,7 +101,9 @@ bun run scripts/run-enrichment-pipeline.ts --validate --id=ID
 
 # Build & deploy
 bun run src/generate-site.ts
-bun test && git push origin main
+# Tests: `bun run test` runs the explicit list (a bare `bun test` also runs
+# test files planted in container-written data/, logs/, dist/, tmp*/, temp*/)
+bun run test && git push origin main
 
 # ARIA audit (Sprint 2 Component C — WARN-only, never blocks build)
 # Default: all hubs + 5 stratified events per EventType + all English mirrors

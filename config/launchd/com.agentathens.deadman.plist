@@ -17,16 +17,15 @@
 	<integer>5</integer>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/Users/chrism/.bun/bin/bun</string>
-		<string>run</string>
-		<string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/scripts/deadman-watchdog.ts</string>
+		<string>/bin/bash</string>
+		<string>-c</string>
+		<string>d="${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/logs"; mkdir -p "$d" &amp;&amp; exec &gt;&gt;"$d/deadman-stdout.log" 2&gt;&amp;1 &amp;&amp; exec /Users/chrism/.bun/bin/bun run "/Users/chrism/Project with Claude/AgentAthens/agent-athens/scripts/deadman-watchdog.ts"</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>
-	<key>StandardErrorPath</key>
-	<string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/deadman-stderr.log</string>
-	<key>StandardOutPath</key>
-	<string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/deadman-stdout.log</string>
+	<!-- Output goes to the host-only state folder (security loop round 4):
+		 containers can write the repo logs/ folder, so a symlink planted there
+		 would make launchd or this job write into any file the owner can write. -->
 	<key>StartInterval</key>
 	<integer>21600</integer>
 	<key>ThrottleInterval</key>

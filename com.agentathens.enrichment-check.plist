@@ -10,7 +10,8 @@
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/scripts/daily-enrichment-check.sh</string>
+        <string>-c</string>
+        <string>d="${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/logs"; mkdir -p "$d" &amp;&amp; exec &gt;&gt;"$d/enrichment-check-stdout.log" 2&gt;&amp;1 &amp;&amp; exec /bin/bash "/Users/chrism/Project with Claude/AgentAthens/agent-athens/scripts/daily-enrichment-check.sh"</string>
     </array>
 
     <!-- Working directory -->
@@ -36,10 +37,9 @@
     </dict>
 
     <!-- Logging -->
-    <key>StandardOutPath</key>
-    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/enrichment-check-stdout.log</string>
-    <key>StandardErrorPath</key>
-    <string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/enrichment-check-error.log</string>
+    <!-- Output goes to the host-only state folder (security loop round 4):
+         containers can write the repo logs/ folder, so a symlink planted there
+         would make launchd or this job write into any file the owner can write. -->
 
     <!-- Don't run at load, wait for schedule -->
     <key>RunAtLoad</key>
