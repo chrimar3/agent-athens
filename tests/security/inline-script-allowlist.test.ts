@@ -20,7 +20,7 @@ import { renderHamburgerScript } from '../../src/templates/site-chrome';
 import { renderDayLabelScript } from '../../src/templates/page';
 import { renderImageFallbackScript } from '../../src/templates/image-fallback';
 
-const SCRIPT = /<script\b((?:[^>"']|"[^"]*"|'[^']*')*)>([\s\S]*?)<\/script\s*>/gi;
+const SCRIPT = /<script\b((?:[^>"']|"[^"]*"|'[^']*')*)>([\s\S]*?)<\/script\b[^>]*>/gi;
 
 const EMITTERS: Record<string, string> = {
   'renderAnalytics': renderAnalytics(),

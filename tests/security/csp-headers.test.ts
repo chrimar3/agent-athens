@@ -82,7 +82,7 @@ describe('enforced script CSP in _headers', () => {
 
   test('a browser would accept the emitted image-fallback and GA bootstrap bodies', () => {
     for (const html of [renderImageFallbackScript(), renderAnalytics()]) {
-      for (const m of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) {
+      for (const m of html.matchAll(/<script>([\s\S]*?)<\/script\b[^>]*>/gi)) {
         const b64 = createHash('sha256').update(m[1]).digest('base64');
         expect(scriptSrc()).toContain(`'sha256-${b64}'`);
       }

@@ -96,7 +96,7 @@ describe('inline scripts: only the templates\' own, by hash', () => {
     fails(page('<script type="text/javascript">x()</script>'));
   });
   test('a template script with one character changed fails', () => {
-    const body = renderAnalytics().match(/<script>([\s\S]*?)<\/script>/)![1];
+    const body = renderAnalytics().match(/<script>([\s\S]*?)<\/script\b[^>]*>/i)![1];
     fails(page(`<script>${body} </script>`));
   });
   test('the analytics bootstrap passes unchanged', () => passes(page('', renderAnalytics())));

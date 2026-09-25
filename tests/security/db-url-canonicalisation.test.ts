@@ -12,7 +12,7 @@ const ev = (over: Partial<Event>): Event => ({ ...sampleConcert, ...over } as Ev
 
 describe('eventToRow canonicalises URL columns', () => {
   test('valid URLs are stored in canonical form', () => {
-    const row = eventToRow(ev({ url: '  HTTPS://WWW.Viva.gr/tickets/x?a=1&amp;b=2 ', imageUrl: 'https://cdn.example.com/a b.jpg'.replace(' ', '%20') }));
+    const row = eventToRow(ev({ url: '  HTTPS://WWW.Viva.gr/tickets/x?a=1&amp;b=2 ', imageUrl: 'https://cdn.example.com/a b.jpg'.replaceAll(' ', '%20') }));
     expect(row.$url).toBe('https://www.viva.gr/tickets/x?a=1&b=2');
     expect(row.$image_url).toBe('https://cdn.example.com/a%20b.jpg');
   });
