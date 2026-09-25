@@ -15,6 +15,7 @@
 
 import { Database } from 'bun:sqlite';
 import { join } from 'path';
+import { safeFetch, safeCurlText, OutboundUrlError } from '../src/utils/outbound-url';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const RATE_LIMIT_MS = 1000; // 1 request per second
@@ -51,28 +52,26 @@ interface TimeResult {
 async function fetchWithRetry(url: string, retries = MAX_RETRIES): Promise<string | null> {
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-      const response = await fetch(url, {
+      // Event URLs come from scraped data: outbound guard (public hosts only,
+      // redirects re-validated, size and time caps).
+      const response = await safeFetch(url, {
+        timeoutMs: 15000,
         headers: {
           'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
           'Accept-Language': 'el,en;q=0.9'
         },
-        signal: controller.signal
       });
-
-      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
 
-      return await response.text();
+      return response.text();
     } catch (error) {
-      if (attempt < retries) {
-        // Exponential backoff: 1s, 2s, 4s
+      // A refused URL (bad scheme, non-public host, oversize) will not change on retry.
+      const retryable = !(error instanceof OutboundUrlError) || error.code === 'timeout' || error.code === 'network';
+      if (retryable && attempt < retries) {
         await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000));
         continue;
       }
@@ -87,26 +86,18 @@ async function fetchWithRetry(url: string, retries = MAX_RETRIES): Promise<strin
  */
 async function fetchWithCurl(url: string): Promise<string | null> {
   try {
-    const proc = Bun.spawn([
-      'curl', '-s', '--http1.1', '--max-time', '15',
-      '-H', 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-      '-H', 'Accept-Language: el,en;q=0.9',
-      url
-    ], {
-      stdout: 'pipe',
-      stderr: 'pipe'
+    // Validated, address-pinned, no redirects, size/time capped.
+    const text = await safeCurlText(url, {
+      timeoutMs: 15000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+        'Accept-Language': 'el,en;q=0.9',
+      },
     });
-
-    const text = await new Response(proc.stdout).text();
-    const exitCode = await proc.exited;
-
-    if (exitCode === 0 && text.length > 0) {
-      return text;
-    }
-  } catch (error) {
-    // Curl failed
+    return text.length > 0 ? text : null;
+  } catch {
+    return null;
   }
-  return null;
 }
 
 // ============================================================================

@@ -19,7 +19,9 @@ import { slugify, generateEventSlug } from './event-page';
 import { getVenueIdentity } from '../utils/venue-identity';
 import { findVenueConfig } from '../quality/location-filter';
 import { renderEventCardList } from '../templates/card-variants';
-import { renderSavedEventsScript, renderCardSaveScript } from '../templates/action-bar';
+import { renderImageFallbackScript } from '../templates/image-fallback';
+import { renderSavedEventsScript, renderCardSaveScript, escapeAttr } from '../templates/action-bar';
+import { safeImageSrc } from '../utils/safe-url';
 import { formatSchemaDate } from '../enrichment/quality-gates';
 import { resolveEventSchemaType } from '../utils/comedy-format';
 import { generateVenueMetaDescription, generateVenueIndexMetaDescription } from '../utils/meta-descriptions';
@@ -219,7 +221,10 @@ function generateVenueSchema(venue: VenueData): string | null {
 function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>): string {
   const canonicalUrl = `${BASE_URL}/venues/${venue.slug}/`;
   const schemaJson = generateVenueSchema(venue);
-  const ogImage = venueImageMap?.get(venue.name) || `${BASE_URL}/images/og/agentathens-default.png`;
+  // venue_context.image_path is DB data: same-origin path or http(s) only, then attribute-escaped.
+  const venueImage = safeImageSrc(venueImageMap?.get(venue.name));
+  const ogImage = venueImage || `${BASE_URL}/images/og/agentathens-default.png`;
+  const ogImageAttr = escapeAttr(ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`);
 
   // Group events by type for summary
   const eventsByType = new Map<string, number>();
@@ -267,13 +272,13 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   <meta property="og:type" content="place">
   <meta property="og:locale" content="el_GR">
   <meta property="og:site_name" content="agent-athens">
-  <meta property="og:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
+  <meta property="og:image" content="${ogImageAttr}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtml(venue.name)} - Εκδηλώσεις">
   <meta name="twitter:description" content="${venue.eventCount} επερχόμενες εκδηλώσεις στο ${escapeHtml(venue.name)}">
-  <meta name="twitter:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
+  <meta name="twitter:image" content="${ogImageAttr}">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -288,6 +293,7 @@ function renderVenuePage(venue: VenueData, venueImageMap?: Map<string, string>):
   ` : ''}
 
 ${renderAnalytics()}
+${renderImageFallbackScript()}
 </head>
 <body>
   ${renderSiteNav('el')}

@@ -23,6 +23,7 @@ import {
   type ResolverEvent,
   type ResolvedTicket,
 } from '../src/ticketing/resolver';
+import { prepareUrlWrite } from './lib/url-columns';
 
 // ---------------------------------------------------------------------------
 // CLI
@@ -153,7 +154,7 @@ async function processEvent(
       };
     }
     if (!cli.dryRun && resolved.url && resolved.status !== 'unresolved') {
-      db.prepare(`
+      prepareUrlWrite(db, `
         UPDATE events SET
           ticket_url = ?,
           ticket_url_status = ?,

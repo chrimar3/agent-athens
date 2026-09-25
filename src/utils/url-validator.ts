@@ -5,6 +5,8 @@
  * are broken or redirect to homepage.
  */
 
+import { safeFetch, type Resolver } from './outbound-url';
+
 /**
  * Check if a URL is likely valid (basic validation without network request)
  * This avoids making HTTP requests during site generation
@@ -159,7 +161,10 @@ export function addUTMParameters(url: string, campaign?: string): string {
  * Validate event URL asynchronously (for use in scripts, not site generation)
  * Makes an actual HTTP request to check if URL is reachable
  */
-export async function validateEventURLAsync(url: string): Promise<{
+export async function validateEventURLAsync(
+  url: string,
+  deps: { resolver?: Resolver; fetchImpl?: typeof fetch } = {}
+): Promise<{
   valid: boolean;
   status?: number;
   redirectsToHomepage: boolean;
@@ -169,16 +174,14 @@ export async function validateEventURLAsync(url: string): Promise<{
   }
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
-
-    const response = await fetch(url, {
+    // Event URLs come from scraped data: public http(s) hosts only; the
+    // redirect is inspected, not followed.
+    const response = await safeFetch(url, {
       method: 'HEAD',
-      redirect: 'manual',
-      signal: controller.signal
+      followRedirects: false,
+      timeoutMs: 5000,
+      ...deps,
     });
-
-    clearTimeout(timeout);
 
     // Check for redirect to homepage
     if (response.status >= 300 && response.status < 400) {

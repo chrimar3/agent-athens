@@ -17,9 +17,10 @@
 import { Database } from 'bun:sqlite';
 import { join } from 'path';
 import puppeteer from 'puppeteer-core';
+import { chromePath, chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
-const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_PATH = chromePath();
 
 interface AnalysisResult {
   url: string;
@@ -354,7 +355,8 @@ async function main() {
   const browser = await puppeteer.launch({
     executablePath: CHROME_PATH,
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
+    args: chromeLaunchArgs()
   });
 
   try {

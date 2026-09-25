@@ -12,6 +12,7 @@
  */
 
 import { readFileSync, mkdirSync, existsSync } from 'fs';
+import { sanitizeOgCache } from '../validators/persisted-state';
 import { writeFileIfChangedSync } from '../utils/write-if-changed';
 import { join } from 'path';
 import satori from 'satori';
@@ -448,7 +449,10 @@ function loadOgCache(): Record<string, string> {
   const cachePath = join(DIST_DIR, '.og-cache.json');
   if (!existsSync(cachePath)) return {};
   try {
-    return JSON.parse(readFileSync(cachePath, 'utf-8'));
+    // Read-back state: keep only slug → hash entries (src/validators/persisted-state.ts).
+    const { value, dropped } = sanitizeOgCache(JSON.parse(readFileSync(cachePath, 'utf-8')));
+    if (dropped > 0) console.warn(`  ⚠️  .og-cache.json: dropped ${dropped} malformed entr${dropped === 1 ? 'y' : 'ies'}`);
+    return value;
   } catch {
     return {};
   }

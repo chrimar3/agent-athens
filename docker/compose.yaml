@@ -1,0 +1,168 @@
+# Agent Athens hardened pipeline container. Run it through docker/aa-run.sh,
+# which sets the AA_* paths below and prevents overlapping runs.
+#
+# What the container can reach on the Mac: the top-level repo entries that
+# aa-run.sh mounts one by one onto an empty /workspace (code, docs and config
+# read-only; data/, logs/, temp folders read-write; .env only for runs that
+# need it; .git read-only, or writable with .git/config and .git/hooks
+# read-only on top for runs that commit), and, only for runs that need it,
+# ~/.config/agentathens (read-only API keys; other runs get an empty folder).
+# /workspace itself is a per-run tmpfs, never the repo folder: on the Mac's
+# case-insensitive disk a repo-root mount would let /workspace/.ENV or
+# /workspace/BUNFIG.TOML reach the real files around the per-name overlays.
+# Not the backups, not the token file, nothing else from the home folder; no
+# ports are published. Tokens are passed per run by aa-run.sh.
+#
+# Network: pipeline runs sit on an internal network with no route out; the only
+# way out is the `egress` container: its proxy (docker/egress/squid.conf)
+# refuses the Mac itself, the LAN, link-local/cloud metadata and every other
+# private range, and ports other than 80/443; its IMAP relay forwards to one
+# mail server only (IMAP is not HTTP, so email ingest cannot use the proxy).
+# The offline runs (build, site, diff gate) have no network at all.
+# Guarded by tests/docker-hardening.test.ts.
+name: agent-athens
+
+# One definition, three pipeline services:
+#   pipeline          internal network only; HTTP(S) through the egress proxy
+#   pipeline-mail     the same, plus IMAP_CONNECT_HOST/PORT pointing email
+#                     ingest at the egress relay (egress:9993). Email ingest
+#                     (and the legacy runs that fetch mail) only.
+#   pipeline-offline  no network at all (build, site, diff gate)
+# Compose merges `<<: *pipeline` as a YAML merge key;
+# tests/docker-hardening.test.ts checks every service.
+x-pipeline: &pipeline
+    image: agent-athens-pipeline:local
+    pull_policy: never
+    init: true                       # reaps orphaned Chromium/claude processes
+    user: "1001:1001"                # pwuser from the base image, never root
+    read_only: true                  # image filesystem is immutable at run time
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 2048                 # Chromium and parallel claude batches are thread-heavy
+    mem_limit: 6g
+    cpus: 4
+    shm_size: 1gb                    # Chromium needs more than the 64 MB default
+    tmpfs:
+      - /tmp:size=2g,mode=1777
+      # Fresh, empty home on every run: nothing a compromised run writes to
+      # ~ (shell rc files, CLI configs) survives to the next run.
+      - /home/pwuser:size=1g,uid=1001,gid=1001,mode=0700
+      # Own tmpfs so ~/.config is pwuser's: Docker would otherwise create it
+      # as root when mounting the secrets folder inside it.
+      - /home/pwuser/.config:size=64m,uid=1001,gid=1001,mode=0700
+      # The repo root inside the container: an empty, case-sensitive tmpfs
+      # that aa-run.sh mounts each top-level entry onto by its exact name.
+      # Only the pipeline's per-run lock files land here (pwuser-owned);
+      # nothing here is executed (bind mounts below keep their own flags).
+      - /workspace:size=64m,uid=1001,gid=1001,mode=0755,noexec,nosuid,nodev
+    environment: &pipeline-env
+      TZ: Europe/Athens
+      # The pipeline's own backup step writes here (throwaway tmpfs). The real
+      # backup is a plain copy made on the Mac by aa-run.sh, out of reach of
+      # every container.
+      BACKUP_DIR: /tmp/aa-backups
+    working_dir: /workspace
+    volumes:
+      # Linux node_modules from the image, recreated every run; the Mac's
+      # darwin node_modules are never mounted.
+      - /workspace/node_modules
+      - type: bind
+        source: ${AA_SECRETS_DIR:?run through docker/aa-run.sh}
+        target: /home/pwuser/.config/agentathens
+        read_only: true
+    # No `ports:` — nothing listens for the network. Preview the site on the
+    # Mac with `bun run serve` (binds 127.0.0.1 only).
+
+# Every HTTP client the pipeline uses (bun fetch, curl, git, gh, netlify,
+# claude, Google clients) reads these; Chromium gets --proxy-server from
+# scripts/lib/chrome-path.ts. Anything that ignores them has no route out.
+x-proxy-env: &proxy-env
+    <<: *pipeline-env
+    HTTP_PROXY: http://egress:3128
+    HTTPS_PROXY: http://egress:3128
+    http_proxy: http://egress:3128
+    https_proxy: http://egress:3128
+    NO_PROXY: ""
+    no_proxy: ""
+
+services:
+  pipeline:
+    <<: *pipeline
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: pipeline
+    environment: *proxy-env
+    networks: [sealed]
+    depends_on:
+      egress:
+        condition: service_healthy
+  pipeline-mail:
+    <<: *pipeline
+    environment:
+      <<: *proxy-env
+      # src/ingest/email-ingestion.ts connects here and still verifies the
+      # server's certificate as IMAP_HOST (TLS end to end through the relay).
+      IMAP_CONNECT_HOST: egress
+      IMAP_CONNECT_PORT: "9993"
+    networks: [sealed]
+    depends_on:
+      egress:
+        condition: service_healthy
+  pipeline-offline:
+    <<: *pipeline
+    network_mode: none               # no network interface except loopback
+
+  # The pipeline's only way out: Squid (forward proxy, port 3128) and a socat
+  # TCP relay for email ingest (port 9993 -> AA_IMAP_HOST:AA_IMAP_PORT, the
+  # one IMAP server in docker.env, validated by aa-run.sh; the address it
+  # resolves to is checked to be public and then pinned). Both from the same
+  # digest-pinned Playwright/Ubuntu base as the pipeline image (shared layers;
+  # `docker/aa-run.sh image` builds both); docker/egress/start.sh runs them.
+  # Squid denies by destination IP after DNS resolution, so a public name
+  # pointing at a private address is refused too.
+  egress:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: egress
+    image: agent-athens-egress:local
+    pull_policy: never
+    # Not agent-athens-*: aa-run.sh reads those names as pipeline job runs.
+    container_name: aa-egress
+    init: true
+    user: "13:13"                    # Ubuntu's `proxy` user; ports 3128 and 9993 need no capability
+    read_only: true
+    cap_drop: [ALL]                  # squid and socat running unprivileged need none
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 256m
+    cpus: 1
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    environment:
+      # Set by aa-run.sh from docker.env (the same for every run, so a running
+      # egress container is never recreated under another job).
+      AA_IMAP_HOST: ${AA_IMAP_HOST:-}
+      AA_IMAP_PORT: ${AA_IMAP_PORT:-993}
+    volumes:
+      - type: bind
+        source: ./egress/squid.conf
+        target: /etc/squid/aa-egress.conf
+        read_only: true
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/3128"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+    networks: [sealed, outside]
+    # No `ports:`: reachable only from the pipeline networks.
+
+networks:
+  # No route out of Docker at all: only the egress container is reachable.
+  sealed:
+    internal: true
+  # Ordinary NAT network: the egress container's side only.
+  outside: {}

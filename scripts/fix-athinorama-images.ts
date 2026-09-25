@@ -17,6 +17,8 @@
 
 import { Database } from 'bun:sqlite';
 import { join } from 'path';
+import { safeFetch, OutboundUrlError } from '../src/utils/outbound-url';
+import { prepareUrlWrite } from './lib/url-columns';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const RATE_LIMIT_MS = 1500; // 1.5s between requests
@@ -45,26 +47,25 @@ function extractAthinoramaBodyImage(html: string): string | null {
 async function fetchPage(url: string, retries = 2): Promise<string | null> {
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-      const response = await fetch(url, {
+      // Event URLs come from the DB (scraped): outbound guard (public hosts
+      // only, redirects re-validated, size and time caps).
+      const response = await safeFetch(url, {
+        timeoutMs: 15000,
         headers: {
           'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
           'Accept-Language': 'el,en;q=0.9'
         },
-        signal: controller.signal
       });
-
-      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
 
-      return await response.text();
+      return response.text();
     } catch (error) {
+      const retryable = !(error instanceof OutboundUrlError) || error.code === 'timeout' || error.code === 'network';
+      if (!retryable) return null;
       if (attempt < retries) {
         await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000));
       }
@@ -109,7 +110,7 @@ async function main() {
   if (dryRun) console.log('   [DRY RUN MODE]');
   console.log('');
 
-  const updateStmt = db.prepare(`
+  const updateStmt = prepareUrlWrite(db, `
     UPDATE events
     SET image_url = ?,
         image_source = 'athinorama_body_fix',

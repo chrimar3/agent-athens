@@ -14,6 +14,8 @@ import { createHash } from 'crypto';
 import type { Event } from '../src/types';
 import { SCHEMA_TYPE_MAP } from '../src/enrichment/quality-gates';
 import type { DomDocument } from './dom-eval-types';
+import { chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
+import { guardPageRequests } from '../src/utils/outbound-url';
 
 // Browser surface for page.evaluate() callbacks — module-local on purpose;
 // see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
@@ -97,13 +99,15 @@ export async function scrapeBenaki(): Promise<ScrapedExhibition[]> {
 
   const browser = await puppeteer.launch({
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
+    args: chromeLaunchArgs()
   });
 
   const exhibitions: ScrapedExhibition[] = [];
 
   try {
     const page = await browser.newPage();
+    await guardPageRequests(page); // page scripts: no local/private targets
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
 
     // Try the exhibitions page

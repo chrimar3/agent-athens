@@ -7,6 +7,10 @@
  *
  * Returns null when there are zero events — caller falls through to the existing
  * empty-page handling (renderHubPage's MIN_EVENTS_THRESHOLD branch).
+ *
+ * Returns PLAIN TEXT built from scraped event titles and venue names. The
+ * caller must escape it at emission (hub-page.ts escapes both the capsule
+ * paragraph and the meta-description fallback).
  */
 
 import type { Event, EventType } from '../types';

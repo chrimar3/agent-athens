@@ -38,6 +38,7 @@ import {
 import { mergeEvents } from '../src/quality/field-merger';
 import { scoreRichness } from '../src/quality/richness-scorer';
 import type { VenueEntry } from '../src/utils/text-normalize';
+import { prepareEventsWrite } from './lib/url-columns';
 
 // ============================================================================
 // CLI + Config
@@ -268,7 +269,7 @@ function main() {
         setClauses.push("updated_at = datetime('now')");
         const params: Record<string, any> = { $id: plan.survivor.id };
         for (const [f, v] of Object.entries(allUpdates)) params[`$${f}`] = v;
-        db.prepare(`UPDATE events SET ${setClauses.join(', ')} WHERE id = $id`).run(params);
+        prepareEventsWrite(db, `UPDATE events SET ${setClauses.join(', ')} WHERE id = $id`).run(params);
       }
 
       for (const lp of plan.loserPlans) {

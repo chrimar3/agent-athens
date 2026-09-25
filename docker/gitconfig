@@ -1,0 +1,14 @@
+# System git config for the Agent Athens container (/etc/gitconfig).
+[safe]
+	# The repo's entries (.git included) are bind-mounted from the Mac; their
+	# owner uid differs from the container user, which git otherwise refuses
+	# to operate on.
+	directory = /workspace
+[credential "https://github.com"]
+	# GH_TOKEN (fine-grained, this repo only) from the env file. No SSH keys
+	# exist in the container.
+	helper =
+	helper = !gh auth git-credential
+[url "https://github.com/"]
+	insteadOf = git@github.com:
+	insteadOf = ssh://git@github.com/

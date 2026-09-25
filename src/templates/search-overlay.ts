@@ -195,6 +195,17 @@ export function renderSearchScript(locale: Locale = 'el'): string {
     return el;
   }
 
+  // Index values reach src/href only when they are an http(s) URL or a
+  // site-relative path, and category slugs only when they are a plain slug.
+  function safeSrc(value) {
+    if (typeof value !== 'string' || /[\\u0000-\\u0020"'<>\`\\\\]/.test(value)) return '';
+    if (/^https?:\\/\\/[^\\/]/i.test(value)) return value;
+    return value.charAt(0) === '/' && value.charAt(1) !== '/' ? value : '';
+  }
+  function isPlainSlug(value) {
+    return typeof value === 'string' && /^[a-z0-9-]{1,160}$/.test(value);
+  }
+
   function announce(text) {
     if (liveRegion) liveRegion.textContent = text;
   }
@@ -431,9 +442,10 @@ export function renderSearchScript(locale: Locale = 'el'): string {
     el.id = 'sr-' + (++resultIdCounter);
     el.setAttribute('role', 'option');
     el.setAttribute('aria-selected', 'false');
-    if (e.thumb) {
+    var thumb = safeSrc(e.thumb);
+    if (thumb) {
       var img = makeEl('img', 'search-result-thumb');
-      img.src = e.thumb;
+      img.src = thumb;
       img.alt = '';
       img.loading = 'lazy';
       img.referrerPolicy = 'no-referrer';
@@ -473,7 +485,7 @@ export function renderSearchScript(locale: Locale = 'el'): string {
 
   function renderCategoryResult(c) {
     var el = makeEl('a', 'search-result-item');
-    el.href = '/' + c.slug + '/';
+    el.href = isPlainSlug(c.slug) ? '/' + c.slug + '/' : '#';
     el.id = 'sr-' + (++resultIdCounter);
     el.setAttribute('role', 'option');
     el.setAttribute('aria-selected', 'false');

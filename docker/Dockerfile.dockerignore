@@ -1,0 +1,13 @@
+# Build context allowlist: the image needs only the dependency manifests and
+# the docker/ helpers. Never ship .env, data/, .git or node_modules into it.
+*
+!package.json
+!bun.lock
+!bunfig.toml
+!docker/stat-bsd-compat.sh
+!docker/gitconfig
+!docker/entrypoint.sh
+!docker/doctor.sh
+!docker/egress/start.sh
+!docker/cli/package.json
+!docker/cli/package-lock.json

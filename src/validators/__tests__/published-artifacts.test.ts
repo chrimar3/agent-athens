@@ -3,6 +3,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { scanHtmlForArtifacts, validatePublishedArtifacts } from '../published-artifacts';
+import { renderHeadersFile } from '../../generators/security-headers';
 
 // Round-0 judges found these live: an escaped enrichment marker on 343–686
 // event pages, "[PLACEHOLDER]" copy on 6 hubs, raw markdown tables on 44
@@ -44,7 +45,9 @@ describe('scanHtmlForArtifacts', () => {
   test('no false positives that would block a legitimate daily build', () => {
     expect(scanHtmlForArtifacts(page('<h1>Rock | --- | Night</h1>'))).toEqual([]);          // title with pipes
     expect(scanHtmlForArtifacts(page('<p>A |----| B | C</p>'))).toEqual([]);                 // prose, no table header row
-    expect(scanHtmlForArtifacts(page('<p>x</p><script>var s = "[PLACEHOLDER]";</script>'))).toEqual([]); // script text
+    // script text: the placeholder rule ignores it (the inline-script allowlist rule, tested in
+    // tests/security/published-output-gate.test.ts, separately refuses an unlisted script body).
+    expect(scanHtmlForArtifacts(page('<p>x</p><script>var s = "[PLACEHOLDER]";</script>')).filter(i => !/template allowlist/.test(i))).toEqual([]);
   });
 
   test('catches the misses: entity in a JSON-LD description, LD script with extra attributes', () => {
@@ -64,6 +67,7 @@ describe('validatePublishedArtifacts', () => {
     try {
       mkdirSync(join(dir, 'events', 'a'), { recursive: true });
       writeFileSync(join(dir, 'index.html'), page('<p>ok</p>'));
+      writeFileSync(join(dir, '_headers'), renderHeadersFile()); // required by the gate
       writeFileSync(join(dir, 'events', 'a', 'index.html'), page('<p>&lt;!-- timeliness-expires: x --&gt;</p>'));
       writeFileSync(join(dir, 'concerts.html'), page('<aside>[PLACEHOLDER] quote</aside>'));
       const report = validatePublishedArtifacts(dir);

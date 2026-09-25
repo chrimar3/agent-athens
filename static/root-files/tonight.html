@@ -335,13 +335,24 @@
       // Avoids innerHTML on dynamic data (defense-in-depth even though everything
       // is escaped). Only static SVG icon strings touch innerHTML, and those
       // are hardcoded constants from TYPE_ICON.
+      // URLs from the JSON feed reach href/src only when they are http(s) or a
+      // site-relative path; any other scheme or a protocol-relative //host is dropped.
+      function safeUrl(value) {
+        if (typeof value !== 'string') return '';
+        var v = value.trim();
+        if (/[\u0000-\u0020"'<>`\\]/.test(v)) return '';
+        if (/^https?:\/\/[^\/]/i.test(v)) return v;
+        if (v.charAt(0) === '/' && v.charAt(1) !== '/') return v;
+        return '';
+      }
+
       function renderCard(event, index) {
         var type = String(event.type || 'other').toLowerCase();
         var label = TYPE_LABEL[type] || 'EVENT';
         var bg = typeColorVar(type);
-        var img = event.imageLocal || event.imageUrl || '';
+        var img = safeUrl(event.imageLocal) || safeUrl(event.imageUrl);
         var icon = TYPE_ICON[type] || TYPE_ICON.other;
-        var url = event.url || '#';
+        var url = safeUrl(event.url) || '#';
         var title = event.title || '';
         var venue = (event.venue && event.venue.name) ? event.venue.name : '';
         var price = priceLabel(event.price);
@@ -364,7 +375,10 @@
           image.loading = 'lazy';
           image.decoding = 'async';
           image.referrerPolicy = 'no-referrer';
-          image.setAttribute('onerror', "this.style.display='none';this.nextElementSibling.style.display='flex'");
+          image.addEventListener('error', function () {
+            this.style.display = 'none';
+            if (this.nextElementSibling) this.nextElementSibling.style.display = 'flex';
+          });
           wrap.appendChild(image);
         }
 
