@@ -1,4 +1,5 @@
 import { describe, test, expect } from "bun:test";
+import he from "he";
 import {
   renderHubPage,
   renderComparisonRow,
@@ -91,7 +92,8 @@ describe("English hub page — HTML lang", () => {
 describe("English hub page — answer capsule", () => {
   test("English hub uses answerCapsuleEn", () => {
     const html = renderHubPage(bilingualHub, testEvents, testEvents, undefined, "en");
-    expect(html!).toContain("Today in Athens you'll find concerts");
+    // The capsule is escaped at emission (apostrophe → &#39;); compare the text a reader sees.
+    expect(he.decode(html!)).toContain("Today in Athens you'll find concerts");
   });
 
   test("Greek hub uses answerCapsuleEl", () => {

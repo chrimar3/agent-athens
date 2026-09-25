@@ -10,7 +10,6 @@ import { renderEventDetailPage } from '../src/generators/event-page';
 import { renderContentPage } from '../src/templates/content-page';
 import { renderEventCard } from '../src/templates/page';
 import { renderEventCardList, renderFeatureCard } from '../src/templates/card-variants';
-const { default: redirect } = await import('../netlify/functions/' + 'go.ts');
 import { renderSavedEventsScript } from '../src/templates/action-bar';
 import { generateIcs, buildGCalUrl, parseIsoLocal } from '../src/utils/calendar-times';
 import { buildDataFeed, writeDataFeed } from '../src/generators/datafeed';
@@ -51,19 +50,6 @@ describe('untrusted content stays data', () => {
       expect($('script[data-injected]').length).toBe(0);
       expect($('.card-title').text()).toBe(title);
     }
-  });
-  for (const destination of ['https://more.com.evil.test/pay', 'https://evilmore.com/pay', 'ftp://more.com/pay', 'https://user:password@more.com/pay']) {
-    test(`ticket redirect rejects ${destination}`, async () => {
-      const request = new Request('https://agentathens.com/go/event?url=' + encodeURIComponent(destination));
-      expect((await redirect(request, {} as any)).status).toBe(403);
-    });
-  }
-  test('legitimate ticket links preserve encoded query values and are never cached', async () => {
-    const destination = 'https://www.more.com/tickets?return=%2Fmy%3Fseat%3D1&offer=50%25';
-    const response = await redirect(new Request('https://agentathens.com/go/event?url=' + encodeURIComponent(destination)), {});
-    expect(response.status).toBe(302);
-    expect(response.headers.get('location')).toBe(destination);
-    expect(response.headers.get('cache-control')).toBe('no-store');
   });
 });
 

@@ -19,8 +19,11 @@ import { join } from 'path';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
 import { normalizeDateField } from '../src/utils/date-format';
-import { normalizePriceType } from '../src/db/database';
+import { normalizePriceType, stripMarkupChars } from '../src/db/database';
 import type { DomDocument, DomAnchor } from './dom-eval-types';
+import { chromePath, chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
+import { prepareUrlWrite } from './lib/url-columns';
+import { guardPageRequests, sameOriginUrl } from '../src/utils/outbound-url';
 
 // Browser surface for page.evaluate() callbacks — module-local on purpose;
 // see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
@@ -28,7 +31,7 @@ declare const document: DomDocument;
 type HTMLAnchorElement = DomAnchor;
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
-const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_PATH = chromePath();
 
 // ============================================================================
 // TYPES
@@ -220,10 +223,12 @@ async function scrapeSNFCC(): Promise<ScrapedExhibition[]> {
     browser = await puppeteer.launch({
       headless: true,
       executablePath: CHROME_PATH,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
+      args: chromeLaunchArgs()
     });
 
     const page = await browser.newPage();
+    await guardPageRequests(page); // navigations and page scripts: no local/private targets
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
     // PHASE 1: Scrape category pages first — they give us correct event types
@@ -378,10 +383,12 @@ async function scrapeSNFCC(): Promise<ScrapedExhibition[]> {
         }
 
         // Check for pagination (WordPress uses /page/2/, /page/3/, etc.)
-        const hasNextPage = await page.evaluate(() => {
+        const nextHref = await page.evaluate(() => {
           const nextLink = document.querySelector('a.next, .nav-next a, a[rel="next"], .pagination .next');
           return nextLink ? (nextLink as HTMLAnchorElement).href : null;
         });
+        // The pagination href comes from the page: follow it only on snfcc.org.
+        const hasNextPage = sameOriginUrl(nextHref, 'https://www.snfcc.org');
 
         if (hasNextPage) {
           console.log(`   Checking page 2 for ${category.label}...`);
@@ -569,7 +576,7 @@ function saveEvents(events: ScrapedExhibition[], dryRun: boolean): number {
   const db = new Database(DB_PATH);
   let saved = 0;
 
-  const stmt = db.prepare(`
+  const stmt = prepareUrlWrite(db, `
     INSERT INTO events (
       id, title, description, start_date, end_date, type, genres,
       venue_name, url, price_type, price_amount, price_range, source,
@@ -602,17 +609,17 @@ function saveEvents(events: ScrapedExhibition[], dryRun: boolean): number {
     try {
       stmt.run({
         $id: e.id,
-        $title: e.title,
+        $title: stripMarkupChars(e.title),
         $description: e.description,
         $start_date: normalizeDateField(e.start_date),
         $end_date: e.end_date ? normalizeDateField(e.end_date) : null,
         $type: e.type,
         $genres: e.genres,
-        $venue_name: e.venue_name,
+        $venue_name: stripMarkupChars(e.venue_name),
         $url: e.url,
         $price_type: normalizePriceType(e.price_type),
         $price_amount: e.price_amount,
-        $price_range: e.price_range,
+        $price_range: stripMarkupChars(e.price_range),
         $source: e.source,
         $location_status: e.location_status,
         $image_url: e.image_url,

@@ -3,6 +3,8 @@
  * Maps source domains to Referer headers to avoid hotlink blocking.
  */
 
+import { safeFetch, OutboundUrlError, type OutboundOptions } from '../utils/outbound-url';
+
 const REFERER_MAP: Record<string, string> = {
   'athinorama': 'https://www.athinorama.gr/',
   'more.com': 'https://www.more.com/',
@@ -20,6 +22,9 @@ const REFERER_MAP: Record<string, string> = {
   'snfcc': 'https://www.snfcc.org/',
   'this-is-athens': 'https://www.thisisathens.org/',
 };
+
+/** Largest image body accepted from a remote host. */
+export const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
 
 const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
@@ -69,14 +74,22 @@ export function sniffImageType(buf: Uint8Array): SniffedImageType | null {
   return null;
 }
 
+/** Test seams for the outbound guard (injected resolver / fetch). */
+export type DownloadDeps = Pick<OutboundOptions, 'resolver' | 'fetchImpl'>;
+
 /**
  * Download an image from a URL with appropriate headers.
  * Returns the image buffer on success, null on failure.
+ *
+ * The URL comes from scraped data, so it goes through the outbound guard:
+ * public http(s) hosts only, every redirect re-validated, MAX_IMAGE_BYTES cap,
+ * 10 s total timeout. `deps` is for tests (injected resolver / fetch).
  */
-export async function downloadImage(imageUrl: string, source: string): Promise<Buffer | null> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10_000);
-
+export async function downloadImage(
+  imageUrl: string,
+  source: string,
+  deps: DownloadDeps = {}
+): Promise<Buffer | null> {
   try {
     const headers: Record<string, string> = {
       'User-Agent': USER_AGENT,
@@ -88,10 +101,11 @@ export async function downloadImage(imageUrl: string, source: string): Promise<B
       headers['Referer'] = referer;
     }
 
-    const response = await fetch(imageUrl, {
+    const response = await safeFetch(imageUrl, {
       headers,
-      signal: controller.signal,
-      redirect: 'follow',
+      timeoutMs: 10_000,
+      maxBytes: MAX_IMAGE_BYTES,
+      ...deps,
     });
 
     if (!response.ok) {
@@ -109,20 +123,20 @@ export async function downloadImage(imageUrl: string, source: string): Promise<B
       return null;
     }
 
-    const buffer = Buffer.from(await response.arrayBuffer());
+    const buffer = Buffer.from(response.body);
     if (!declaredImage && !sniffImageType(buffer)) {
       console.log(`  ⚠ Not an image (${contentType || 'no content-type'}, bytes are not JPEG/PNG/WebP/GIF/AVIF) for ${imageUrl}`);
       return null;
     }
     return buffer;
   } catch (error: any) {
-    if (error.name === 'AbortError') {
+    if (error instanceof OutboundUrlError && error.code === 'timeout') {
       console.log(`  ⚠ Timeout downloading ${imageUrl}`);
+    } else if (error instanceof OutboundUrlError) {
+      console.log(`  ⚠ Refused ${imageUrl} (${error.code})`);
     } else {
       console.log(`  ⚠ Error downloading ${imageUrl}: ${error.message}`);
     }
     return null;
-  } finally {
-    clearTimeout(timeout);
   }
 }

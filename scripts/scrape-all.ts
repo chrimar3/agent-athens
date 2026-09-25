@@ -24,7 +24,7 @@
 
 import { Database } from 'bun:sqlite';
 import { normalizeDateField } from '../src/utils/date-format';
-import { normalizePriceType, normalizeGenres } from '../src/db/database';
+import { normalizePriceType, normalizeGenres, stripMarkupChars } from '../src/db/database';
 import { join } from 'path';
 import { loadQuarantine, filterQuarantined } from '../src/utils/quarantine';
 import { scrapeCometogether } from './scrape-cometogether';
@@ -45,6 +45,9 @@ import type { DomDocument, DomElement } from './dom-eval-types';
 import { ACTIVE_SOURCE_IDS } from '../src/config/active-source-ids';
 import { checkImportDuplicate } from '../src/quality/import-gate';
 import type { Event } from '../src/types';
+import { chromePath, chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
+import { prepareUrlWrite } from './lib/url-columns';
+import { safeFetch, safeFetchResponse, safeCurlText, isRefusedTarget, sameOriginUrl, guardPageRequests, OutboundUrlError } from '../src/utils/outbound-url';
 
 // Browser surface for page.evaluate() callbacks — module-local on purpose;
 // see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
@@ -58,7 +61,7 @@ function fail(what: string, tryNext: string): never {
   console.error(`scrape-all: FAILED — ${what} — try: ${tryNext}`);
   process.exit(1);
 }
-const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_PATH = chromePath();
 
 // ============================================================================
 // TYPES
@@ -136,11 +139,18 @@ function parseICalDate(dateStr: string): { date: string; time: string } {
 // HTTP/1.1 FALLBACK UTILITY
 // ============================================================================
 
+/** Body cap for scraper page fetches (listing pages run to a few MB). */
+const SCRAPE_MAX_BYTES = 20 * 1024 * 1024;
+
+/** fetch()-shaped GET through the outbound guard, for injectable fetchFn defaults. */
+const guardedFetch = ((input: string | URL | Request, init?: RequestInit) =>
+  safeFetchResponse(String(input), { headers: init?.headers as Record<string, string>, maxBytes: SCRAPE_MAX_BYTES })) as typeof fetch;
+
 /**
  * Fetch with HTTP/1.1 fallback for sites with HTTP/2 stream issues (like More.com)
  * Tries standard fetch first, falls back to curl with --http1.1 on failure
  */
-async function fetchWithHttp1Fallback(url: string, options: {
+export async function fetchWithHttp1Fallback(url: string, options: {
   headers?: Record<string, string>;
   maxRetries?: number;
   timeoutMs?: number;
@@ -156,45 +166,29 @@ async function fetchWithHttp1Fallback(url: string, options: {
   // Try standard fetch first
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      // Add timeout using AbortController
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-      const response = await fetch(url, {
-        headers: defaultHeaders,
-        signal: controller.signal
-      });
-      clearTimeout(timeoutId);
+      // Outbound guard: http(s) to public addresses only, every redirect re-checked, bounded size/time.
+      const response = await safeFetch(url, { headers: defaultHeaders, timeoutMs, maxBytes: SCRAPE_MAX_BYTES });
 
       return {
         ok: response.ok,
-        text: () => response.text(),
+        text: async () => response.text(),
         status: response.status
       };
     } catch (error: unknown) {
+      if (isRefusedTarget(error)) return { ok: false, text: async () => '', status: 0 };
       const errorMsg = error instanceof Error ? error.message : String(error);
       const isHttp2Error = errorMsg.includes('HTTP/2') ||
                            errorMsg.includes('stream') ||
                            errorMsg.includes('INTERNAL_ERROR');
-      const isTimeout = errorMsg.includes('abort') || errorMsg.includes('timeout');
+      const isTimeout = errorMsg.includes('abort') || errorMsg.includes('timeout') || (error instanceof OutboundUrlError && error.code === 'timeout');
 
       // If HTTP/2 error or timeout on last attempt, try curl with --http1.1
       if ((isHttp2Error || isTimeout) && attempt === maxRetries) {
         console.log(`   ⚠️ HTTP/2 error, falling back to HTTP/1.1 for: ${url.substring(0, 60)}...`);
         try {
-          const curlHeaders = Object.entries(defaultHeaders)
-            .map(([k, v]) => `-H "${k}: ${v}"`)
-            .join(' ');
+          const text = await safeCurlText(url, { headers: { 'User-Agent': defaultHeaders['User-Agent'] }, timeoutMs: 30_000, maxBytes: SCRAPE_MAX_BYTES });
 
-          const proc = Bun.spawn(['curl', '-s', '--http1.1', '--max-time', '30', '-H', `User-Agent: ${defaultHeaders['User-Agent']}`, url], {
-            stdout: 'pipe',
-            stderr: 'pipe'
-          });
-
-          const text = await new Response(proc.stdout).text();
-          const exitCode = await proc.exited;
-
-          if (exitCode === 0 && text.length > 0) {
+          if (text.length > 0) {
             return {
               ok: true,
               text: async () => text,
@@ -221,21 +215,15 @@ async function fetchWithHttp1Fallback(url: string, options: {
  * Fetch using curl directly (for sites where HTTP/2 is completely broken)
  * Faster than fetchWithHttp1Fallback since it skips the failing fetch attempts
  */
-async function fetchWithCurl(url: string): Promise<{ ok: boolean; text: () => Promise<string>; status: number }> {
+export async function fetchWithCurl(url: string): Promise<{ ok: boolean; text: () => Promise<string>; status: number }> {
   try {
-    const proc = Bun.spawn([
-      'curl', '-s', '--http1.1', '--max-time', '15',
-      '-H', 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-      url
-    ], {
-      stdout: 'pipe',
-      stderr: 'pipe'
+    // Outbound guard: validated, address-pinned curl (http/https only, no redirects, bounded).
+    const text = await safeCurlText(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+      timeoutMs: 15_000, maxBytes: SCRAPE_MAX_BYTES,
     });
 
-    const text = await new Response(proc.stdout).text();
-    const exitCode = await proc.exited;
-
-    if (exitCode === 0 && text.length > 0) {
+    if (text.length > 0) {
       return {
         ok: true,
         text: async () => text,
@@ -382,23 +370,21 @@ async function scrapeMore(): Promise<ScrapedEvent[]> {
  * Fetch with retry and exponential backoff for Athinorama
  * Returns null on complete failure (graceful degradation)
  */
-async function fetchWithRetryAthinorama(url: string, maxRetries = 3): Promise<string | null> {
+export async function fetchWithRetryAthinorama(url: string, maxRetries = 3): Promise<string | null> {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15_000);
-
-      const response = await fetch(url, {
-        signal: controller.signal,
+      const response = await safeFetch(url, {
+        timeoutMs: 15_000,
+        maxBytes: SCRAPE_MAX_BYTES,
         headers: {
           'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
         }
       });
-      clearTimeout(timeoutId);
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return await response.text();
+      return response.text();
     } catch (err: any) {
+      if (isRefusedTarget(err)) { console.warn(`   ⛔ Refused ${url.slice(0, 80)}: ${err.message}`); return null; }
       const delay = Math.pow(2, attempt) * 1000;  // 2s, 4s, 8s
       console.warn(`   ⚠️ Attempt ${attempt}/${maxRetries} failed: ${err.message}`);
       if (attempt < maxRetries) {
@@ -644,6 +630,8 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
         const titleMatch = card.match(/<h2 class="item-title[^"]*">\s*<a href="([^"]+)">([^<]+)<\/a>/i);
         if (!titleMatch) continue;
         const eventUrl = titleMatch[1];
+        // Detail pages are fetched later: only a same-origin path is accepted ("@host/x" or "//host" would change host).
+        if (!eventUrl.startsWith('/') || !sameOriginUrl(eventUrl, 'https://www.athinorama.gr')) continue;
         const title = titleMatch[2].trim();
 
         // Extract venue from nested h4 > a with /halls/ in href
@@ -831,7 +819,7 @@ export function assertClubberFeedIsICal(body: string, contentType: string | null
 // bodies and zero live network calls. Errors PROPAGATE (no internal swallow):
 // the main loop records success=0 + error_message in scrape_stats, so a broken
 // feed can no longer masquerade as a quiet week.
-export async function scrapeClubber(fetchFn: typeof fetch = fetch): Promise<ScrapedEvent[]> {
+export async function scrapeClubber(fetchFn: typeof fetch = guardedFetch): Promise<ScrapedEvent[]> {
   console.log('   Fetching clubber.gr iCal feed...');
   const events: ScrapedEvent[] = [];
   const today = new Date().toISOString().split('T')[0];
@@ -905,8 +893,8 @@ async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
   const today = new Date().toISOString().split('T')[0];
 
   try {
-    const response = await fetch('https://www.ticketservices.gr/en/LiveConcerts/', {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' }
+    const response = await safeFetchResponse('https://www.ticketservices.gr/en/LiveConcerts/', {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' }, maxBytes: SCRAPE_MAX_BYTES,
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
@@ -967,10 +955,12 @@ async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
       browser = await puppeteer.launch({
         headless: true,
         executablePath: CHROME_PATH,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
+        args: chromeLaunchArgs()
       });
 
       const page = await browser.newPage();
+      await guardPageRequests(page); // page scripts and redirects: no local/private targets
       await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
 
       // Process all unique events (prices are per event, not per date)
@@ -1083,8 +1073,8 @@ async function scrapeHalfNote(): Promise<ScrapedEvent[]> {
   const today = new Date().toISOString().split('T')[0];
 
   try {
-    const response = await fetch('https://www.halfnote.gr/events/?ical=1', {
-      headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'text/calendar, */*' }
+    const response = await safeFetchResponse('https://www.halfnote.gr/events/?ical=1', {
+      headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'text/calendar, */*' }, maxBytes: SCRAPE_MAX_BYTES,
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
@@ -1187,6 +1177,7 @@ async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
   try {
     const response = await fetch('https://ra.co/graphql', {
       method: 'POST',
+      redirect: 'error', // fixed first-party API: a redirect is never followed
       headers: {
         'Content-Type': 'application/json',
         'User-Agent': 'Mozilla/5.0'
@@ -1203,6 +1194,8 @@ async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
     console.log(`   Found ${raEvents.length} events (${result.data.eventListings.totalResults} total)`);
 
     for (const e of raEvents) {
+      // contentUrl becomes a fetched URL below: same-origin path only ("@host/x" would change host).
+      if (typeof e.contentUrl !== 'string' || !e.contentUrl.startsWith('/') || !sameOriginUrl(e.contentUrl, 'https://ra.co')) continue;
       const date = e.date.split('T')[0];
       const time = e.startTime?.match(/T(\d{2}:\d{2})/)?.[1] || '';
 
@@ -1260,12 +1253,12 @@ async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
       for (let i = 0; i < Math.min(tbaEvents.length, 20); i++) {
         const event = tbaEvents[i];
         try {
-          const pageResponse = await fetch(event.url, {
-            headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' }
+          const pageResponse = await safeFetch(event.url, {
+            headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' }, maxBytes: SCRAPE_MAX_BYTES,
           });
           if (!pageResponse.ok) continue;
 
-          const pageHtml = await pageResponse.text();
+          const pageHtml = pageResponse.text();
 
           // Look for price patterns on RA event pages
           // Pattern 1: "€15" or "€15 - €20"
@@ -1458,7 +1451,7 @@ export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Data
   // silently drop a genuinely new event.
   const existsStmt = db.prepare('SELECT 1 FROM events WHERE id = ?');
 
-  const stmt = db.prepare(`
+  const stmt = prepareUrlWrite(db, `
     INSERT INTO events (
       id, title, description, start_date, end_date, time_doors, time_source, type, genres,
       venue_name, url, price_type, price_amount, price_range, source,
@@ -1555,7 +1548,7 @@ export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Data
 
       stmt.run({
         $id: e.id,
-        $title: e.title,
+        $title: stripMarkupChars(e.title),
         // G5 (S-F2a): never persist empty-string descriptions — NULL instead.
         $description: e.description || null,
         $start_date: normalizeDateField(startDateTime),
@@ -1564,11 +1557,11 @@ export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Data
         $time_source: timeSource,
         $type: eventType,
         $genres: normalizeGenres(e.genres),
-        $venue_name: e.venue_name,
+        $venue_name: stripMarkupChars(e.venue_name),
         $url: e.url,
         $price_type: normalizePriceType(e.price_type),
         $price_amount: e.price_amount,
-        $price_range: e.price_range,
+        $price_range: stripMarkupChars(e.price_range),
         $source: e.source,
         $location_status: e.location_status || 'unverified',
         $image_url: e.image_url || null,

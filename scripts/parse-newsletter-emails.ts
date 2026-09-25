@@ -13,6 +13,7 @@
 import { readdir, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
+import { isAuthenticatedEmailRecord } from '../src/ingest/allowed-senders';
 
 const EMAILS_DIR = join(import.meta.dir, '../data/emails-to-parse');
 const OUTPUT_FILE = join(import.meta.dir, '../data/parsed/newsletter-events.json');
@@ -321,6 +322,7 @@ async function processEmails(): Promise<void> {
 
     const allEvents: RawEvent[] = [];
     let emailsProcessed = 0;
+    let emailsUnauthenticated = 0;
 
     for (const filename of jsonFiles) {
       try {
@@ -330,6 +332,14 @@ async function processEmails(): Promise<void> {
         const filepath = join(EMAILS_DIR, filename);
         const content = await readFile(filepath, 'utf-8');
         const email: EmailData = JSON.parse(content);
+
+        // Only files written by the gated ingest path (allowlisted sender,
+        // aligned DKIM pass) are parsed. See src/ingest/allowed-senders.ts.
+        if (!isAuthenticatedEmailRecord(email)) {
+          emailsUnauthenticated++;
+          console.log('   ⏭️  Skipped: not marked as from an authenticated allowlisted sender');
+          continue;
+        }
 
         emailsProcessed++;
 
@@ -374,6 +384,7 @@ async function processEmails(): Promise<void> {
     console.log('\n' + '='.repeat(60));
     console.log('📊 NEWSLETTER PARSING RESULTS:');
     console.log(`   📧 ${emailsProcessed} emails processed`);
+    console.log(`   🚫 ${emailsUnauthenticated} email files skipped (no authenticated allowlisted sender)`);
     console.log(`   📅 ${allEvents.length} total events found`);
     console.log(`   ✅ ${uniqueEvents.length} unique events saved`);
     console.log(`   💾 Output: ${OUTPUT_FILE}`);

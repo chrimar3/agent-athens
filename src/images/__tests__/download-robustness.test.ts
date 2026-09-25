@@ -105,6 +105,15 @@ describe('downloadImage content-type handling', () => {
   afterAll(() => server?.stop(true));
 
   const url = (p: string) => `http://127.0.0.1:${server.port}${p}`;
+  // downloadImage goes through the outbound guard, which refuses 127.0.0.1 by
+  // design: address the server by a public-looking name, resolve it to a
+  // public IP for the guard, and let the injected fetch reach the local server.
+  const gurl = (p: string) => `http://img.test:${server.port}${p}`;
+  const deps = {
+    resolver: async () => ['93.184.216.34'],
+    fetchImpl: ((u: string | URL | Request, init?: RequestInit) =>
+      fetch(String(u).replace('http://img.test:', 'http://127.0.0.1:'), init)) as typeof fetch,
+  };
 
   test('precondition: untyped routes send no content-type, typed ones do', async () => {
     expect((await fetch(url('/untyped.gif'))).headers.get('content-type')).toBeNull();
@@ -113,7 +122,7 @@ describe('downloadImage content-type handling', () => {
 
   test('octet-stream / missing type is accepted when the bytes are an image', async () => {
     for (const p of ['/octet.jpg', '/octet.png', '/binary.webp', '/untyped.gif', '/octet.avif']) {
-      const buf = await downloadImage(url(p), 'cometogether');
+      const buf = await downloadImage(gurl(p), 'cometogether', deps);
       expect(buf).not.toBeNull();
       expect(buf!.length).toBe(routes[p].body.length);
     }
@@ -121,12 +130,12 @@ describe('downloadImage content-type handling', () => {
 
   test('HTML is rejected whatever the declared type', async () => {
     for (const p of ['/octet-html', '/untyped-html', '/html', '/html-with-jpeg-bytes']) {
-      expect(await downloadImage(url(p), 'clubber.gr')).toBeNull();
+      expect(await downloadImage(gurl(p), 'clubber.gr', deps)).toBeNull();
     }
   });
 
   test('a declared image/* response is still accepted', async () => {
-    expect(await downloadImage(url('/image.jpg'), 'athinorama')).not.toBeNull();
+    expect(await downloadImage(gurl('/image.jpg'), 'athinorama', deps)).not.toBeNull();
   });
 });
 
@@ -188,7 +197,7 @@ describe('processEventImage skips quarantined sources', () => {
       expect(result).toBeNull();
       expect(calls).toBe(0);
       // Control: the same call for a live source does reach fetch.
-      await processEventImage('q1', 'https://images.cometogether.live/y.jpg', 'cometogether', db, { quarantine: registry });
+      await processEventImage('q1', 'https://images.cometogether.live/y.jpg', 'cometogether', db, { quarantine: registry, deps: { resolver: async () => ['93.184.216.34'] } });
       expect(calls).toBe(1);
     } finally {
       globalThis.fetch = originalFetch;

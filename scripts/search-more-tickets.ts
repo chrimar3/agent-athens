@@ -11,6 +11,7 @@
 
 import { Database } from 'bun:sqlite';
 import { join } from 'path';
+import { prepareUrlWrite } from './lib/url-columns';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 
@@ -228,11 +229,11 @@ async function main() {
       }
 
       if (!dryRun) {
-        db.run(`
+        prepareUrlWrite(db, `
           UPDATE events
           SET ticket_url = ?
           WHERE id = ?
-        `, [ticketUrl, event.id]);
+        `).run(ticketUrl, event.id);
       }
 
       found++;

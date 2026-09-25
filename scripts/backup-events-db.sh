@@ -14,6 +14,11 @@
 #   - gzip compression (~36MB → ~6MB observed for this DB).
 #   - Date-suffixed filenames (events-YYYY-MM-DD.db.gz), sortable + greppable.
 #   - Pruning by mtime: anything older than RETENTION_DAYS is deleted.
+#   - Everything this script reads, compares or prunes matches its OWN name
+#     pattern exactly (LEGACY_GLOB). docker/aa-run.sh keeps its tiered
+#     backups in the same folder as events-YYYY-MM-DD-HHMM.db[-wal|-shm].gz
+#     (weekly and monthly generations far older than 7 days); a looser
+#     `events-*.db.gz` prune here would delete them on one manual run.
 #
 # Backup location:
 #   Default: $HOME/agent-athens-backups/
@@ -57,6 +62,8 @@ file_size() { stat -f%z "$1" 2>/dev/null || stat -c%s "$1" 2>/dev/null || echo 0
 
 TODAY=$(date +%Y-%m-%d)
 BACKUP_FILE="$BACKUP_DIR/events-$TODAY.db"
+# This script's names and nothing else (never the wrapper's events-DATE-HHMM.*).
+LEGACY_GLOB='events-[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].db.gz'
 
 # ----------------------------------------------------------------------------
 # Pre-flight checks
@@ -120,7 +127,11 @@ fi
 # Size floor: refuse if the new backup is anomalously smaller than the most recent
 # prior good backup (truncation that still passes integrity_check). Ratio 0 = off.
 NEW_SIZE=$(file_size "$TMP_DB.gz")
-PRIOR_GZ=$(ls -t "$BACKUP_DIR"/events-*.db.gz 2>/dev/null | grep -v "/events-$TODAY\.db\.gz$" | head -1)
+# Newest of this script's own earlier backups (names sort by date).
+PRIOR_GZ=""
+for f in "$BACKUP_DIR"/$LEGACY_GLOB; do
+    [[ -f "$f" && "$f" != "$BACKUP_FILE.gz" ]] && PRIOR_GZ="$f"
+done
 if [[ "$BACKUP_MIN_SIZE_RATIO" != "0" && -n "$PRIOR_GZ" && -f "$PRIOR_GZ" ]]; then
     PRIOR_SIZE=$(file_size "$PRIOR_GZ")
     if [[ "$PRIOR_SIZE" -gt 0 ]] && awk "BEGIN{exit !($NEW_SIZE < $PRIOR_SIZE * $BACKUP_MIN_SIZE_RATIO)}"; then
@@ -147,7 +158,7 @@ echo "[backup-events-db] Created $BACKUP_FILE.gz ($SIZE, ${ROW_COUNT} rows, inte
 # of an empty DB). Deleted regardless of age so a dud never counts as a retained
 # day or masks the loss. This is the half of the 06-30 fix the integrity floor
 # can't cover: cleaning up duds that already exist on disk.
-DUD_FILES=$(find "$BACKUP_DIR" -name 'events-*.db.gz' -size -"${BACKUP_MIN_VALID_BYTES}"c 2>/dev/null)
+DUD_FILES=$(find "$BACKUP_DIR" -maxdepth 1 -type f -name "$LEGACY_GLOB" -size -"${BACKUP_MIN_VALID_BYTES}"c 2>/dev/null)
 if [[ -n "$DUD_FILES" ]]; then
     DUD_COUNT=$(echo "$DUD_FILES" | wc -l | tr -d ' ')
     echo "$DUD_FILES" | xargs rm -f
@@ -156,7 +167,7 @@ fi
 
 # (2) Then prune GOOD backups older than retention by mtime (matches MORE THAN
 # N*24h ago). Duds are already gone, so they can't displace a good backup.
-DELETED_FILES=$(find "$BACKUP_DIR" -name 'events-*.db.gz' -mtime +"$RETENTION_DAYS" 2>/dev/null)
+DELETED_FILES=$(find "$BACKUP_DIR" -maxdepth 1 -type f -name "$LEGACY_GLOB" -mtime +"$RETENTION_DAYS" 2>/dev/null)
 if [[ -n "$DELETED_FILES" ]]; then
     DELETED_COUNT=$(echo "$DELETED_FILES" | wc -l | tr -d ' ')
     echo "$DELETED_FILES" | xargs rm -f
@@ -167,6 +178,6 @@ fi
 # Report current backup state
 # ----------------------------------------------------------------------------
 
-CURRENT_COUNT=$(find "$BACKUP_DIR" -name 'events-*.db.gz' 2>/dev/null | wc -l | tr -d ' ')
+CURRENT_COUNT=$(find "$BACKUP_DIR" -maxdepth 1 -type f -name "$LEGACY_GLOB" 2>/dev/null | wc -l | tr -d ' ')
 TOTAL_SIZE=$(du -sh "$BACKUP_DIR" 2>/dev/null | awk '{print $1}')
 echo "[backup-events-db] $CURRENT_COUNT backup(s) in $BACKUP_DIR (total: $TOTAL_SIZE)"

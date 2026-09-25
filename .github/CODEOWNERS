@@ -1,0 +1,44 @@
+# Every path needs the owner's review (branch protection: "Require review from
+# Code Owners"). GitHub applies the LAST matching rule, so each explicit rule
+# below must keep @chrimar3 — tests/workflow-security.test.ts checks that.
+#
+# The explicit rules name the paths where an unreviewed change does the most
+# harm: the guard layer that keeps agents off production data, the agent
+# instructions, and the publishing path. Adding a co-owner to `*` must not
+# weaken these.
+*                               @chrimar3
+
+# CI, path-guard, Dependabot, secret-scan config, this file
+/.github/                       @chrimar3
+
+# Agent instructions and harness settings
+/.claude/                       @chrimar3
+/CLAUDE.md                      @chrimar3
+
+# Local-safety enforcement layer
+/scripts/hooks/                 @chrimar3
+/bunfig.toml                    @chrimar3
+/tests/preload/                 @chrimar3
+/tests/db-guard-hook.test.ts    @chrimar3
+/tests/settings-security-pins.test.ts @chrimar3
+/tests/path-guard.test.ts       @chrimar3
+/tests/netlify-headers.test.ts  @chrimar3
+/tests/workflow-security.test.ts @chrimar3
+/scripts/__tests__/deploy-gate.test.ts @chrimar3
+
+# Production publishing path
+/netlify.toml                   @chrimar3
+/netlify/                       @chrimar3
+/package.json                   @chrimar3
+/bun.lock                       @chrimar3
+/tsconfig.json                  @chrimar3
+/scripts/daily-automated.sh     @chrimar3
+/scripts/deploy-gate.sh         @chrimar3
+/scripts/redeploy.sh            @chrimar3
+/scripts/auto-enrich.sh         @chrimar3
+/scripts/phase3-weekly.sh       @chrimar3
+/com.agentathens.*.plist        @chrimar3
+/config/                        @chrimar3
+
+# Disclosure policy
+/SECURITY.md                    @chrimar3

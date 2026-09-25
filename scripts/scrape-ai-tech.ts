@@ -23,9 +23,12 @@ import { join } from 'path';
 import { createHash } from 'crypto';
 import puppeteer from 'puppeteer-core';
 import { normalizeDateField } from '../src/utils/date-format';
-import { normalizePriceType } from '../src/db/database';
+import { normalizePriceType, stripMarkupChars } from '../src/db/database';
+import { chromePath, chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
+import { prepareUrlWrite } from './lib/url-columns';
+import { safeCurlTextFollow, guardPageRequests } from '../src/utils/outbound-url';
 
-const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_PATH = chromePath();
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const today = new Date().toISOString().split('T')[0];
@@ -91,15 +94,14 @@ function isAITechEvent(title: string, description?: string): boolean {
 
 async function fetchWithTimeout(url: string, timeoutMs = 15000): Promise<string | null> {
   try {
-    const proc = Bun.spawn([
-      'curl', '-s', '-L', '--max-time', String(Math.floor(timeoutMs / 1000)),
-      '-H', 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-      url
-    ], { stdout: 'pipe', stderr: 'pipe' });
-
-    const text = await new Response(proc.stdout).text();
-    const exitCode = await proc.exited;
-    return (exitCode === 0 && text.length > 0) ? text : null;
+    // Outbound guard (was `curl -L`): feed links are data, so every hop is
+    // validated (http/https, public address, pinned) and size/time are bounded.
+    const text = await safeCurlTextFollow(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+      timeoutMs,
+      maxBytes: 20 * 1024 * 1024,
+    });
+    return text.length > 0 ? text : null;
   } catch {
     return null;
   }
@@ -566,10 +568,12 @@ async function scrapeEventbrite(): Promise<DiscoveredEvent[]> {
     browser = await puppeteer.launch({
       headless: true,
       executablePath: CHROME_PATH,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
+      args: chromeLaunchArgs()
     });
 
     const page = await browser.newPage();
+    await guardPageRequests(page); // page scripts: no local/private targets
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36');
 
     for (const url of urls) {
@@ -688,10 +692,12 @@ async function scrapeMeetup(): Promise<DiscoveredEvent[]> {
     browser = await puppeteer.launch({
       headless: true,
       executablePath: CHROME_PATH,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
+      args: chromeLaunchArgs()
     });
 
     const page = await browser.newPage();
+    await guardPageRequests(page); // page scripts: no local/private targets
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
 
     for (const url of groupUrls) {
@@ -799,10 +805,12 @@ async function scrapeLuma(): Promise<DiscoveredEvent[]> {
     browser = await puppeteer.launch({
       headless: true,
       executablePath: CHROME_PATH,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
+      args: chromeLaunchArgs()
     });
 
     const page = await browser.newPage();
+    await guardPageRequests(page); // page scripts: no local/private targets
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
 
     for (const url of searchUrls) {
@@ -1024,7 +1032,7 @@ async function main() {
     const db = new Database(DB_PATH);
     let saved = 0;
 
-    const stmt = db.prepare(`
+    const stmt = prepareUrlWrite(db, `
       INSERT INTO events (
         id, title, description, start_date, end_date, time_doors, type, genres,
         venue_name, url, price_type, price_amount, source,
@@ -1047,14 +1055,14 @@ async function main() {
       try {
         stmt.run({
           $id: generateEventId(e.title, e.start_date, e.venue_name),
-          $title: e.title,
+          $title: stripMarkupChars(e.title),
           $description: e.description || '',
           $start_date: normalizeDateField(e.time ? `${e.start_date}T${e.time}:00` : e.start_date),
           $end_date: e.end_date ? normalizeDateField(e.end_date) : null,
           $time_doors: e.time || null,
           $type: e.event_type,
           $genres: JSON.stringify(['AI', 'Tech']),
-          $venue_name: e.venue_name,
+          $venue_name: stripMarkupChars(e.venue_name),
           $url: e.url,
           $price_type: normalizePriceType(e.price_type),
           $price_amount: e.price_amount,

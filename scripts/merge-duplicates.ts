@@ -30,6 +30,7 @@ import { findDuplicates, type DuplicatePair, type MatchLayer } from '../src/qual
 import { mergeEvents, type MergeResult } from '../src/quality/field-merger';
 import { scoreRichness } from '../src/quality/richness-scorer';
 import type { VenueEntry } from '../src/utils/text-normalize';
+import { prepareEventsWrite } from './lib/url-columns';
 
 // ============================================================================
 // CLI Arguments
@@ -347,7 +348,7 @@ function main() {
         setClauses.push("updated_at = datetime('now')");
 
         const sql = `UPDATE events SET ${setClauses.join(', ')} WHERE id = $id`;
-        db.prepare(sql).run(params);
+        prepareEventsWrite(db, sql).run(params);
       }
 
       // Insert audit log

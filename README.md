@@ -346,6 +346,17 @@ In the reputation economy where AI trust = revenue, the goal is simple:
 
 ---
 
+## Contributing and security
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before you open a pull request. It
+covers how pull requests are reviewed, why a change to a protected path starts
+as an issue, and how the automation reads issue text (as untrusted evidence).
+
+Report vulnerabilities privately as described in [SECURITY.md](SECURITY.md).
+Do not use a public issue.
+
+---
+
 ## License
 
 [MIT](LICENSE)

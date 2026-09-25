@@ -6,40 +6,78 @@
 # fails CLOSED: an API error, a truncated file list or an unreadable glob list
 # exits 1 and never prints PASS.
 #
-# It reads the protected globs from the BASE branch's .github/path-guard.json
+# It reads the protected globs from the DEFAULT branch's .github/path-guard.json
 # (never the PR's copy — a PR editing the list must not be judged by its own
-# edit) and the changed files from the PR API. Any match on either the new or
-# the previous filename → red check + a comment naming each path + `needs-input`.
+# edit — and not the PR base either: a PR opened against an older side branch
+# with a shorter list must still be judged by main's list) and the changed
+# files from the PR API. Any match on either the new or the previous filename →
+# red check + a comment naming each path + `needs-input`.
+#
+# `edited` is in the trigger types because retargeting a PR's base fires it:
+# without it, a green result computed against an old base would carry over to
+# the same head SHA after the PR is pointed at main.
 #
 # Trigger is `pull_request_target`, so the workflow DEFINITION and the checked-out
 # tree both come from the base branch: a PR cannot neuter the guard by editing
 # this file or the script. That is only safe because the job never checks out PR
-# code — the checkout below takes the default ref (base) and the script makes API
+# code — the checkout below takes the default branch and the script makes API
 # calls only. Keep it so.
+#
+# Security loop round 8:
+# - A protected-path PR PASSES once a code owner (from the default branch's
+#   .github/CODEOWNERS) has approved its CURRENT head commit; see the script.
+#   New commits need a new approval (the old one names an older commit).
+# - `pull_request_review` (submitted, dismissed) re-runs the check when the
+#   owner approves or an approval is dismissed. Unlike pull_request_target,
+#   GitHub reads a pull_request_review workflow from the PR's merge ref, so on
+#   that event the checkout must name the default branch explicitly (it does,
+#   below, for every event) and the job runs only for PRs into the default
+#   branch. On a fork PR the review run's token is read-only: the check result
+#   still counts, the comment is skipped. Limit: a PR that edits this file
+#   changes what its OWN review-triggered run does, so on that event this
+#   check is only as strong as the ruleset's code-owner review — which every
+#   PR needs anyway (CODEOWNERS `*`), and which is exactly what a green
+#   path-guard requires.
+# - `branches: [main]` on pull_request_target: a PR against a stale branch
+#   would otherwise run that branch's old copy of this workflow with a write
+#   token (tests/workflow-security.test.ts pins this for every workflow).
 name: path-guard
 
 on:
   pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+    branches: [main]
+  pull_request_review:
+    types: [submitted, dismissed]
 
+# Read-only by default; the write scopes the guard needs to comment and label
+# are granted to the path-guard job alone, so a job added later does not
+# inherit them. Actions are pinned to full commit SHAs (see ci.yml).
 permissions:
   contents: read
-  pull-requests: write
-  issues: write
 
 jobs:
   path-guard:
+    if: github.event.pull_request.base.ref == github.event.repository.default_branch
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
     steps:
-      # Default ref under pull_request_target is the BASE branch, NOT the PR head.
-      # Never add `ref:` here.
-      - uses: actions/checkout@v4
+      # The default branch, never the PR head or merge ref. Under
+      # pull_request_review the implicit ref would be the PR's merge commit.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
+          ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
 
-      - name: Refuse PRs that touch protected paths
+      - name: Refuse PRs that touch protected paths without a code owner's approval
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
           BASE: ${{ github.event.pull_request.base.ref }}
+          GLOBS_REF: ${{ github.event.repository.default_branch }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: bash .github/scripts/path-guard.sh

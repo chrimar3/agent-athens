@@ -25,6 +25,26 @@ unset CLAUDECODE 2>/dev/null || true
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+
+# host-guard:begin (pinned by tests/host-run-guard.test.ts)
+# Unattended claude sessions over scraped text run inside the hardened
+# container (docker/aa-run.sh enrichment sets AA_CONTAINER=1); a direct run on
+# the Mac needs an explicit, temporary override.
+# Round 6: the override is for a person at a terminal. launchd sets
+# XPC_SERVICE_NAME to the job label, so a com.agentathens.* job (an edited
+# legacy plist) cannot use AA_ALLOW_HOST_RUN=1 to skip the container.
+if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" == "1" && "${XPC_SERVICE_NAME:-}" == com.agentathens* ]]; then
+    echo "auto-enrich: REFUSED — AA_ALLOW_HOST_RUN=1 is for one-off manual runs only and is ignored in a launchd job (XPC_SERVICE_NAME=${XPC_SERVICE_NAME})." >&2
+    echo "auto-enrich: next: schedule this job through docker/aa-run.sh (docker/README.md) and unload the legacy plist; for a one-off host run, start it from a terminal." >&2
+    exit 9
+fi
+if [[ "${AA_CONTAINER:-}" != "1" && "${AA_ALLOW_HOST_RUN:-}" != "1" ]]; then
+    echo "auto-enrich: REFUSED — enrichment runs inside the container, not directly on this Mac." >&2
+    echo "auto-enrich: next: install it (docker/README.md) and run 'docker/aa-run.sh enrichment'; for a one-off host run set AA_ALLOW_HOST_RUN=1." >&2
+    exit 9
+fi
+# host-guard:end
+
 DB_PATH="$PROJECT_DIR/data/events.db"
 BRIEFS_DIR="$PROJECT_DIR/temp-briefs"
 # LOG_DIR_OVERRIDE (2026-08-11): test seam. Without it, the auth-precheck
@@ -63,10 +83,40 @@ CLAUDE_BIN="${CLAUDE_BIN_OVERRIDE:-$CLAUDE_BIN}"
 # granted it yet"): four production runs, 0 successful writes, so concerns.jsonl
 # and batch-N-review.md silently stopped (logs/auto-enrich-2026-09-1{6,7}.log).
 # The write scope lives in scripts/hooks/db-guard.ts instead: with
-# AA_ENRICHMENT_SESSION set (exported below, batch sessions only) the hook
+# AA_ENRICHMENT_SESSION set (exported below, unconditionally) the hook
 # refuses any file-tool write outside temp-descriptions/. Both facts are pinned
 # by tests/settings-security-pins.test.ts.
-ALLOWED_TOOLS="Read,Glob,Grep,WebSearch,WebFetch,Write,Bash(sqlite3 -readonly *),Bash(bun run scripts/write-description.ts *),Bash(bun run scripts/auto-gate-check.ts *),Bash(bun run scripts/write-tags.ts *),Bash(bun run scripts/save-batch.ts *)"
+# Security loop round 1 (2026-09-23): Bash(sqlite3 -readonly *) is GONE. The
+# sqlite3 shell's file functions and abbreviated dot-commands are not
+# restrained by -readonly, so that grant was a file-write/command-execution
+# primitive for any injection in scraped text. DB reads now go through
+# scripts/db-read.ts (one read-only SELECT, fixed DB path, capped JSON output),
+# which keeps the verification reads canary-1 showed the session needs. Under
+# AA_ENRICHMENT_SESSION the hook also scopes Read/Glob/Grep to the repo minus
+# secrets, limits Bash to these five scripts, and refuses unknown tools.
+# WebSearch/WebFetch stay: research needs them, and with secrets unreadable an
+# injected fetch has nothing sensitive to carry out.
+ALLOWED_TOOLS="Read,Glob,Grep,WebSearch,WebFetch,Write,Bash(bun run scripts/db-read.ts *),Bash(bun run scripts/write-description.ts *),Bash(bun run scripts/auto-gate-check.ts *),Bash(bun run scripts/write-tags.ts *),Bash(bun run scripts/save-batch.ts *)"
+# disallowed-tools:begin (security loop round 7; extracted by tests/security/unattended-disallowed-tools.test.ts — keep both markers)
+# The unattended session refuses risky tools regardless of project settings:
+# .claude/settings.json allows Bash(cat *)/grep/head/tail for interactive use,
+# and --allowedTools only ADDS to that; a deny rule is the one rule class an
+# allow cannot out-vote (see tests/settings-security-pins.test.ts). None of
+# these is needed: the brief's reads go through the Read/Grep tools and
+# scripts/db-read.ts. COMMA-separated like ALLOWED_TOOLS, so the spaced
+# Bash(...) patterns survive the single-string pass-through. WebFetch and
+# WebSearch are NOT here: research needs them (see ALLOWED_TOOLS above).
+# Read(/proc/**) is project-relative in Claude Code's rule syntax (a single
+# leading slash is relative to the project), so the absolute /proc is spelled
+# Read(//proc/**); both are listed. Read(~/**) is added only when the project
+# is not under $HOME: on the Mac the repo lives in the owner's home folder and
+# denying ~/** would deny the repo itself (the db-guard hook scopes Read to the
+# repo there); the named secret folders under ~ are denied either way.
+DISALLOWED_TOOLS="Bash(cat *),Bash(grep *),Bash(head *),Bash(tail *),Bash(sqlite3 *),Bash(curl *),Bash(wget *),Bash(nc *),Bash(env),Bash(env *),Bash(printenv),Bash(printenv *),Read(/proc/**),Read(//proc/**),Read(.env*),Read(**/.env*),Read(~/.ssh/**),Read(~/.claude/**),Read(~/.claude.json),Read(~/.config/**),Read(~/.netrc)"
+if [[ -n "${HOME:-}" && "$HOME" != "/" && "$PROJECT_DIR/" != "${HOME%/}/"* ]]; then
+    DISALLOWED_TOOLS="$DISALLOWED_TOOLS,Read(~/**)"
+fi
+# disallowed-tools:end
 MAX_BATCHES=2
 EVENTS_PER_BATCH=3  # 4→3 on 2026-08-11 canary iteration: the ~30 remaining upcoming stubs are the research-heavy tail (easy events enriched Jul 28-Aug 5); canary batches of 4 were still in research at the 1200s kill with zero writes. 3 fits the observed per-hard-event cost. Revisit upward after 7 consecutive clean days. History: raised 4→5 on 2026-04-09 (S81); architectural target 10 events × 6 slots = 60/day; S89 (2026-04-20): overnight slots unloaded with laptop lid closed — effective 40/day until always-on hardware.
 MIN_QUEUE=3
@@ -88,6 +138,16 @@ STDOUT_IDLE_CAP=${STDOUT_IDLE_CAP:-600}  # S110g (2026-05-07): raised from 120 �
 # EnvironmentVariables override these defaults.
 export CLAUDE_STREAM_IDLE_TIMEOUT_MS=${CLAUDE_STREAM_IDLE_TIMEOUT_MS:-300000}
 export CLAUDE_ENABLE_BYTE_WATCHDOG=${CLAUDE_ENABLE_BYTE_WATCHDOG:-1}
+
+# Layer 2 seam: scripts/hooks/db-guard.ts reads AA_ENRICHMENT_SESSION from the
+# claude process env and, when it is set, applies the enrichment profile:
+# writes only under temp-descriptions/, reads only inside the repo and never of
+# secrets (.env*, .git, .netlify, keys), Bash only for the sanctioned scripts,
+# unknown tools refused. Security loop round 1: exported UNCONDITIONALLY and
+# first — it used to be exported just before the batch loop, which left the
+# warm-up and auth pre-check sessions (and any future claude call placed above
+# the loop) unscoped. Nothing in this wrapper's own bun/sqlite3 steps reads it.
+export AA_ENRICHMENT_SESSION=1
 
 # Ensure we're in project directory
 cd "$PROJECT_DIR"
@@ -147,11 +207,77 @@ run_auth_precheck() {
     return 0
 }
 
+# ============================================================================
+# Guard self-test (security loop round 1)
+# ----------------------------------------------------------------------------
+# The whole enrichment boundary rests on the db-guard PreToolUse hook. Before
+# any unattended session starts, run the hook DIRECTLY (not through claude) on
+# two known-bad calls and one known-good call, under the same
+# AA_ENRICHMENT_SESSION env the sessions get. Claude Code only blocks on exit
+# 2; any other non-zero exit is a NON-blocking hook error and the tool runs.
+# So bad calls must exit 2 exactly and the good call 0 (proving the hook ran
+# rather than crashed). Any mismatch aborts the run — enrichment skipped is
+# recoverable, an unguarded session over scraped text is not.
+# DB_GUARD_HOOK_OVERRIDE is a test seam (tests/auto-enrich-guard-selftest.test.ts).
+# ============================================================================
+run_guard_selftest() {
+    # hook-override-guard:begin (security loop round 6; pinned by tests/security/hook-override-seam.test.ts)
+    # The seam points the self-test at ANOTHER hook file, so a scheduled run
+    # that inherits it would "pass" against a stub while the sessions still use
+    # the real (possibly broken) hook. Test and interactive use only: refused
+    # inside the container (AA_CONTAINER=1) and in a launchd job
+    # (XPC_SERVICE_NAME=com.agentathens.*).
+    if [[ -n "${DB_GUARD_HOOK_OVERRIDE:-}" ]] && [[ "${AA_CONTAINER:-}" == "1" || "${XPC_SERVICE_NAME:-}" == com.agentathens* ]]; then
+        log_error "Guard self-test REFUSED — DB_GUARD_HOOK_OVERRIDE is a test seam and is not honoured in a container or launchd run. Enrichment aborted before any claude session. Next: remove DB_GUARD_HOOK_OVERRIDE from the job's environment (plist, docker/aa-run.sh env) and re-run."
+        return 1
+    fi
+    # hook-override-guard:end
+    local hook="${DB_GUARD_HOOK_OVERRIDE:-$PROJECT_DIR/scripts/hooks/db-guard.ts}"
+    local failures=()
+    local rc
+    # name|expected-exit|hook-json
+    local probes=(
+        "sqlite3 writefile|2|{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"sqlite3 -readonly data/events.db \\\"SELECT writefile('src/x.ts','x')\\\"\"}}"
+        "Read .env|2|{\"tool_name\":\"Read\",\"tool_input\":{\"file_path\":\".env\"}}"
+        "db-read SELECT (must be allowed)|0|{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"bun run scripts/db-read.ts \\\"SELECT 1\\\"\"}}"
+    )
+    local probe name expected json
+    for probe in "${probes[@]}"; do
+        name="${probe%%|*}"
+        expected="${probe#*|}"; expected="${expected%%|*}"
+        json="${probe#*|*|}"
+        rc=0
+        printf '%s' "$json" | AA_ENRICHMENT_SESSION=1 bun "$hook" >/dev/null 2>&1 || rc=$?
+        if [[ "$rc" != "$expected" ]]; then
+            failures+=("$name: expected exit $expected, got $rc")
+        fi
+    done
+    if [[ ! -f "$PROJECT_DIR/.claude/settings.json" ]] || ! grep -q 'db-guard.ts' "$PROJECT_DIR/.claude/settings.json"; then
+        failures+=("settings wiring: .claude/settings.json does not wire scripts/hooks/db-guard.ts as a PreToolUse hook")
+    fi
+    if [[ ${#failures[@]} -gt 0 ]]; then
+        local f
+        for f in "${failures[@]}"; do
+            log_error "Guard self-test FAILED — $f"
+        done
+        log_error "Guard self-test FAILED: the db-guard hook ($hook) does not enforce the enrichment boundary. Enrichment aborted before any claude session. Next: run 'bun test tests/db-guard-hook.test.ts' and check that bun is on PATH for launchd."
+        return 1
+    fi
+    log "Guard self-test passed (writefile and .env read refused with exit 2; sanctioned read allowed)"
+    return 0
+}
+
 # --auth-check-only: run ONLY the auth pre-check and exit with its status.
 # Used by tests and by Phase-2 responder runbooks. Placed before lock/orphan
 # handling: this mode must never contend with or disturb a live enrichment run.
 if [[ "${1:-}" == "--auth-check-only" ]]; then
     run_auth_precheck
+    exit $?
+fi
+
+# --guard-selftest-only: run ONLY the guard self-test (same placement rationale).
+if [[ "${1:-}" == "--guard-selftest-only" ]]; then
+    run_guard_selftest
     exit $?
 fi
 
@@ -297,6 +423,9 @@ if [[ ! -f "$DB_PATH" ]]; then
     log_error "Database not found at $DB_PATH"
     exit 1
 fi
+
+# 1b. Guard self-test — see run_guard_selftest() above. Before any claude call.
+run_guard_selftest || exit 1
 
 # Fix #3: Network pre-check — fail fast with clear message
 # exit 0 (not 1) because "network down" is expected when machine just woke up
@@ -459,19 +588,14 @@ for brief in "${BATCH_FILES[@]}"; do
     # BATCH_OUT consumers are format-agnostic: stdout-mtime watchdog only
     # checks file mtime; server-stream-idle grep matches in stream-json too;
     # save accounting reads enrichment_log.saved_to_events from DB, not output.
-    # Layer 2 seam: scripts/hooks/db-guard.ts reads AA_ENRICHMENT_SESSION from
-    # the claude process env and, when it is set, allows file tools ONLY under
-    # temp-descriptions/. Without it the hook cannot tell an enrichment session
-    # from an interactive one and falls back to its denylist, which protects the
-    # four sanctioned scripts but not the modules they import. Exported here,
-    # after the warm-up and auth pre-check calls, so only the batch sessions are
-    # scoped.
-    export AA_ENRICHMENT_SESSION=1
+    # Layer 2 seam: AA_ENRICHMENT_SESSION is exported at the top of this script
+    # (unconditionally, security loop round 1); this session inherits it.
     "$CLAUDE_BIN" -p "$BRIEF_CONTENT" \
         --output-format stream-json \
         --verbose \
         --include-partial-messages \
         --allowedTools "$ALLOWED_TOOLS" \
+        --disallowedTools "$DISALLOWED_TOOLS" \
         < /dev/null > "$BATCH_OUT" 2>&1 &
     CLAUDE_PID=$!
 

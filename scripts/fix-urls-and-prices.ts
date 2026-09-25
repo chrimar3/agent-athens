@@ -18,9 +18,11 @@
 import { Database } from 'bun:sqlite';
 import { join } from 'path';
 import puppeteer from 'puppeteer-core';
+import { chromePath, chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
+import { prepareUrlWrite } from './lib/url-columns';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
-const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_PATH = chromePath();
 const DELAY_MS = 2500;
 
 interface JsonLdData {
@@ -332,14 +334,15 @@ async function main() {
   const browser = await puppeteer.launch({
     executablePath: CHROME_PATH,
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    ignoreDefaultArgs: [...CHROME_IGNORE_DEFAULT_ARGS],
+    args: chromeLaunchArgs()
   });
 
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 800 });
   await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
 
-  const updateStmt = db.prepare(`
+  const updateStmt = prepareUrlWrite(db, `
     UPDATE events
     SET url = $url, price_amount = $price, price_range = $range, updated_at = $updated
     WHERE id = $id
@@ -386,7 +389,7 @@ async function main() {
         }
 
         if (!dryRun) {
-          db.prepare(`UPDATE events SET url = $url, price_range = $range, updated_at = $updated WHERE id = $id`).run({
+          prepareUrlWrite(db, `UPDATE events SET url = $url, price_range = $range, updated_at = $updated WHERE id = $id`).run({
             $id: event.id,
             $url: result.finalUrl,
             $range: 'TBA',
@@ -451,7 +454,7 @@ async function main() {
 
         // Still update the URL even if no price
         if (!dryRun && result.finalUrl !== event.url) {
-          db.prepare(`UPDATE events SET url = $url, updated_at = $updated WHERE id = $id`).run({
+          prepareUrlWrite(db, `UPDATE events SET url = $url, updated_at = $updated WHERE id = $id`).run({
             $id: event.id,
             $url: result.finalUrl,
             $updated: new Date().toISOString()

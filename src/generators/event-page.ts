@@ -1,4 +1,7 @@
 import { escapeHtml } from '../utils/html-escape';
+import { safeHttpUrl, firstSafeImageSrc } from '../utils/safe-url';
+import { IMG_FALLBACK_ATTR, renderImageFallbackScript } from '../templates/image-fallback';
+import { isSafeSlug, parseSlugHistory, SLUG_PATTERN } from '../validators/persisted-state';
 import { displayTitle } from '../utils/display-title';
 import { escapeJsonForHtml, decodeJsonLdEntities } from '../utils/html-json';
 /**
@@ -182,7 +185,7 @@ export function eventOgImagePath(event: Event): string {
 
 /** og:image / JSON-LD image: own photo → venue photo → generated per-event card. */
 export function resolveEventOgImage(event: Event): string {
-  return event.imageLocal || event.imageUrl || event.venueImage || eventOgImagePath(event);
+  return firstSafeImageSrc(event.imageLocal, event.imageUrl, event.venueImage) || eventOgImagePath(event);
 }
 
 /** Pair selected prose with its known language; a page locale is not a translation. */
@@ -205,14 +208,7 @@ function schemaDescription(event: Event, locale: Locale): { description: string;
 
 /** Source attribution accepts HTTP(S) URLs without credentials or control characters. */
 function sourceListingUrl(value?: string): string | undefined {
-  if (!value || /[\u0000-\u0020\u007f]/.test(value)) return undefined;
-  try {
-    const url = new URL(value);
-    if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) return undefined;
-    return url.href;
-  } catch {
-    return undefined;
-  }
+  return safeHttpUrl(value) ?? undefined;
 }
 
 /**
@@ -321,9 +317,10 @@ function buildEventSchemaObject(event: Event, locale: Locale = 'el'): Record<str
 
   const offerDecision = buildOfferOrOmit({
     price: event.price,
-    ticketUrl: event.ticketUrl,
+    ticketUrl: safeHttpUrl(event.ticketUrl) ?? undefined,
     ticketUrlResolved: event.ticketUrlResolved,
-    venue: { name: event.venue.name, website: event.venue.website },
+    source: event.source,
+    venue: { name: event.venue.name, website: safeHttpUrl(event.venue.website) ?? undefined },
     eventStatus: schema.eventStatus,
     selfCanonicalUrl: schema.url,
   });
@@ -778,16 +775,18 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
 
   // CTA — resolved via tiered cascade (see src/ticketing/cta.ts)
   const cta = resolveCtaForEvent(event, t);
-  const ctaLinkable = !isPast && cta.kind !== 'none' && cta.href;
+  // CTA hrefs are scraped/AI data: canonical http(s) only, then attribute-escaped.
+  const ctaHref = safeHttpUrl(cta.href);
+  const ctaLinkable = !isPast && cta.kind !== 'none' && ctaHref;
   const ctaHtml = ctaLinkable
-    ? `<a href="${cta.href}" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">${cta.label}</a>`
+    ? `<a href="${escapeAttr(ctaHref)}" class="edp-cta edp-cta-hero" rel="noopener" target="_blank">${cta.label}</a>`
     : '';
 
   // Inline CTA for body content (GEO source order: after description, before venue)
   const inlineCtaHtml = isPast
     ? ''
     : ctaLinkable
-      ? `<div class="edp-inline-cta"><a href="${cta.href}" class="edp-cta" rel="noopener" target="_blank">${cta.label}</a></div>`
+      ? `<div class="edp-inline-cta"><a href="${escapeAttr(ctaHref)}" class="edp-cta" rel="noopener" target="_blank">${cta.label}</a></div>`
       : cta.kind === 'door'
         ? `<div class="edp-inline-cta"><span class="edp-door-only">${cta.label}</span></div>`
         : event.price.type === 'open'
@@ -795,8 +794,10 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
           : '';
 
   // Venue section — Google Maps link
-  const mapsUrl = event.venue.coordinates
-    ? `https://www.google.com/maps?q=${event.venue.coordinates.lat},${event.venue.coordinates.lon}`
+  const mapLat = Number(event.venue.coordinates?.lat);
+  const mapLon = Number(event.venue.coordinates?.lon);
+  const mapsUrl = event.venue.coordinates && Number.isFinite(mapLat) && Number.isFinite(mapLon)
+    ? `https://www.google.com/maps?q=${mapLat},${mapLon}`
     : `https://www.google.com/maps/search/${encodeURIComponent(event.venue.name + ' Athens')}`;
 
   // Source attribution — when a URL exists, label with its actual host so the
@@ -827,9 +828,9 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
     <div class="edp-mobile-bar-inner">
       <div class="edp-mobile-bar-info">
         <div class="edp-mobile-bar-title">${escapeHtml(displayTitle(event.title, event.venue?.name))}</div>
-        <div class="edp-mobile-bar-price">${priceDisplay}</div>
+        <div class="edp-mobile-bar-price">${escapeHtml(priceDisplay)}</div>
       </div>
-      <a href="${cta.href}" class="edp-cta" rel="noopener" target="_blank">${mobileLabel}</a>
+      <a href="${escapeAttr(ctaHref)}" class="edp-cta" rel="noopener" target="_blank">${mobileLabel}</a>
     </div>
   </div>`
     : '';
@@ -888,7 +889,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   <meta property="og:description" content="${metaDescription}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:type" content="event">
-  <meta property="og:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
+  <meta property="og:image" content="${escapeAttr(ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`)}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="${t.ogLocale}">
@@ -898,7 +899,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${safeMetaTitle}">
   <meta name="twitter:description" content="${metaDescription}">
-  <meta name="twitter:image" content="${ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`}">
+  <meta name="twitter:image" content="${escapeAttr(ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage}`)}">
 
   <!-- GEO: Location metadata -->
   <meta name="geo.region" content="GR-I">
@@ -912,6 +913,7 @@ export function renderEventDetailPage(event: Event, relatedEvents: Event[], loca
   ${escapeJsonForHtml(decodeJsonLdEntities(schemaJson))}
   </script>
 ${renderAnalytics()}
+${renderImageFallbackScript()}
 </head>
 <body>
   ${renderSiteNav(locale)}
@@ -921,7 +923,7 @@ ${renderAnalytics()}
   <main>
   <article id="main-content" tabindex="-1"${isPast ? ' data-past="true"' : ''}>
     <section class="edp-hero" style="--edp-type-color: ${typeColorVar}">
-      <div class="edp-hero-bg" style="background-image: url('${ogImage.startsWith('http') ? ogImage : ogImage}')"></div>
+      <div class="edp-hero-bg" style="background-image: url('${escapeAttr(ogImage)}')"></div>
       <div class="edp-hero-inner">
         <nav class="edp-breadcrumb">
           <a href="${homeHref}">agent-athens</a>
@@ -935,7 +937,7 @@ ${renderAnalytics()}
           <div class="edp-meta">
             <span class="edp-meta-date"><time datetime="${event.startDate}">${dateDisplay}</time></span>
             <span class="edp-meta-item">${venueLinkable ? `<a href="/venues/${venueSlug}/">${escapeHtml(venueDisplayName)}</a>` : escapeHtml(venueDisplayName)}</span>
-            <span class="edp-meta-item">${priceDisplay}</span>
+            <span class="edp-meta-item">${escapeHtml(priceDisplay)}</span>
           </div>
           ${ctaHtml}
           ${(() => {
@@ -955,7 +957,7 @@ ${renderAnalytics()}
               <a class="cal-disclosure__option" href="${escapeAttr(outlookUrl)}" target="_blank" rel="noopener">${t.calendarOutlook}</a>
             </div>
           </details>`;
-            return actionBar.replace('</div>', `${calendarDisclosure}</div>`);
+            return actionBar.replace('</div>', () => `${calendarDisclosure}</div>`);
           })()}
         </header>
       </div>
@@ -983,7 +985,7 @@ ${renderAnalytics()}
           ? `<div class="edp-venue-address">${escapeHtml(event.venue.address)}</div>`
           : ''}
         ${event.venue.neighborhood ? `<div class="edp-venue-neighborhood">${escapeHtml(displayNeighborhood(event.venue.neighborhood))}</div>` : ''}
-        ${isPlaceholderVenue ? '' : `<a href="${mapsUrl}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>`}
+        ${isPlaceholderVenue ? '' : `<a href="${escapeAttr(mapsUrl)}" class="edp-venue-maps" rel="noopener" target="_blank">${t.openMap}</a>`}
       </section>
 
       ${sourceHtml}
@@ -1069,13 +1071,13 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
   const venueName = localizedVenueName(event, locale);
   const venueText = neighborhood ? `${venueName} · ${neighborhood}` : venueName;
 
-  const imgSrc = event.imageLocal || event.imageUrl || event.venueImage;
+  const imgSrc = firstSafeImageSrc(event.imageLocal, event.imageUrl, event.venueImage);
 
   return `
   <article class="event-card">
     ${imgSrc
       ? `<div class="card-image-wrapper" data-type="${event.type}">
-      <img class="card-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+      <img class="card-image" src="${escapeAttr(imgSrc)}" alt="${escapeHtml(displayTitle(event.title, event.venue?.name))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" ${IMG_FALLBACK_ATTR}>
       <span class="card-placeholder-icon" aria-hidden="true" style="display:none">${icon}</span>
       <span class="card-badge${lightText}" style="background: ${colorVar}">${badgeLabel}</span>
       ${exhibitionIsOpen ? `<span class="card-badge-open">${t.currentlyOpenShort}</span>` : ''}
@@ -1091,7 +1093,7 @@ export function renderRelatedEventCard(event: Event, locale: Locale = 'el'): str
       <h3 class="card-title"><a href="${href}" class="card-link">${escapeHtml(displayTitle(event.title, event.venue?.name))}</a></h3>
       <span class="card-date"><time datetime="${event.startDate}">${dateStr}</time></span>
       <span class="card-venue">${escapeHtml(venueText)}</span>
-      <span class="card-price">${priceText}</span>
+      <span class="card-price">${escapeHtml(priceText)}</span>
     </div>
   </article>`;
 }
@@ -1255,9 +1257,15 @@ export function loadSlugHistory(): Map<string, string[]> {
   }
 
   try {
-    const data = JSON.parse(readFileSync(historyPath, 'utf-8'));
-    return new Map(Object.entries(data));
+    // Read-back state feeds _redirects: keep only ids with slugs matching
+    // SLUG_PATTERN (src/validators/persisted-state.ts); report what was dropped.
+    const { value, dropped } = parseSlugHistory(JSON.parse(readFileSync(historyPath, 'utf-8')));
+    if (dropped > 0) {
+      console.warn(`  ⚠️  .slug-history.json: dropped ${dropped} malformed entr${dropped === 1 ? 'y' : 'ies'} (slugs must match ${SLUG_PATTERN})`);
+    }
+    return value;
   } catch {
+    console.warn('  ⚠️  .slug-history.json does not parse; starting a fresh slug history');
     return new Map();
   }
 }
@@ -1293,11 +1301,19 @@ export function generateRedirects(
   previousHistory: Map<string, string[]>
 ): string[] {
   const redirects: string[] = [];
+  let invalid = 0;
 
   for (const [eventId, currentSlug] of currentSlugs) {
     const previousSlugs = previousHistory.get(eventId) || [];
     for (const oldSlug of previousSlugs) {
       if (oldSlug !== currentSlug) {
+        // Emission check: each slug becomes a path token in _redirects, so a
+        // value outside SLUG_PATTERN (whitespace, newline, '*', ':') could
+        // add a rule. Drop it; loadSlugHistory already filters on load.
+        if (!isSafeSlug(oldSlug) || !isSafeSlug(currentSlug)) {
+          invalid++;
+          continue;
+        }
         // Force (301!) so a lingering un-swept dist/events/{oldSlug}/ directory
         // cannot shadow the rule — Netlify serves a matching static file before a
         // NON-forced redirect (the shadowing trap generateArchiveGoneRules defeats
@@ -1308,6 +1324,7 @@ export function generateRedirects(
     }
   }
 
+  if (invalid > 0) console.warn(`  ⚠️  generateRedirects: dropped ${invalid} redirect${invalid === 1 ? '' : 's'} with a slug outside ${SLUG_PATTERN}`);
   return redirects;
 }
 
@@ -1348,6 +1365,7 @@ export function generateArchiveGoneRules(
   const preserved = opts.preservedUrls ?? new Set<string>();
   const todayMs = new Date(getAthensTodayStr() + 'T00:00:00Z').getTime();
   const rules: string[] = [];
+  let invalid = 0;
 
   for (const event of events) {
     // Lower bound: only past-expired (>45d) events — same classifier the page
@@ -1360,12 +1378,18 @@ export function generateArchiveGoneRules(
     const daysPast = Math.floor((todayMs - effEndMs) / 86_400_000);
     if (daysPast > ARCHIVE_410_WINDOW_DAYS) continue;
 
-    const url = `/events/${generateEventSlug(event)}/`;
+    const slug = generateEventSlug(event);
+    if (!isSafeSlug(slug)) {
+      invalid++;
+      continue;
+    }
+    const url = `/events/${slug}/`;
     if (preserved.has(url)) continue;
 
     rules.push(`${url} /410.html 410!`);
   }
 
+  if (invalid > 0) console.warn(`  ⚠️  generateArchiveGoneRules: dropped ${invalid} rule${invalid === 1 ? '' : 's'} with a slug outside ${SLUG_PATTERN}`);
   return rules;
 }
 

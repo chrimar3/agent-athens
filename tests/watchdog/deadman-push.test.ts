@@ -1,21 +1,25 @@
 /**
  * Outcome 3 — an alert must reach the operator off-machine.
  *
- * Layer 4: ntfy.sh push (no auth, no stored secret — the unguessable topic
- * name is the only access control). Pins:
+ * Layer 4: ntfy.sh push (no auth — the unguessable topic name is the only
+ * access control, so the topic is a secret and lives outside the repo). Pins:
  *   (a) the { ok, skipped, detail } contract shared with sendEmail,
  *   (b) fault isolation — sendPush NEVER throws/rejects, so a push failure
  *       cannot crash or silence the other delivery layers,
  *   (c) DEADMAN_DRY_RUN=1 skips the send entirely,
- *   (d) config comes from config/monitoring.json's `push` block,
- *   (e) the topic is unguessable and no config secrets leak into the request.
+ *   (d) enabled/server come from config/monitoring.json's `push` block; the
+ *       TOPIC comes from $AGENTATHENS_NTFY_TOPIC or an untracked file
+ *       (~/.config/agentathens/ntfy-topic), never from the tracked config,
+ *   (e) no config secrets leak into the request, and the tracked config holds
+ *       no topic.
  *
  * All network is a captured stub — no live calls to ntfy.sh.
  */
-import { describe, test, expect, afterEach } from "bun:test";
-import { readFileSync } from "node:fs";
+import { describe, test, expect, beforeEach, afterEach, afterAll } from "bun:test";
+import { readFileSync, writeFileSync, mkdtempSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { sendPush, type MonitoringConfig } from "../../scripts/deadman-watchdog";
+import { tmpdir } from "node:os";
+import { sendPush, resolvePushTopic, type MonitoringConfig } from "../../scripts/deadman-watchdog";
 
 const ROOT = join(import.meta.dir, "..", "..");
 
@@ -28,7 +32,7 @@ function cfg(pushOver: Record<string, unknown> | null = {}): MonitoringConfig {
     email: { enabled: false, recipient: "operator-secret@example.com", msmtp_account: "gmail" },
     ...(pushOver === null
       ? {}
-      : { push: { enabled: true, server: "https://ntfy.example", topic: "agentathens-deadman-feedfacefeedfacefeedfacefeedface", ...pushOver } }),
+      : { push: { enabled: true, server: "https://ntfy.example", ...pushOver } }),
   } as MonitoringConfig;
 }
 
@@ -42,11 +46,25 @@ function capture(status = 200) {
   return { fn, calls };
 }
 
-const savedDry = process.env.DEADMAN_DRY_RUN;
-afterEach(() => {
-  if (savedDry === undefined) delete process.env.DEADMAN_DRY_RUN;
-  else process.env.DEADMAN_DRY_RUN = savedDry;
+const TOPIC = "agentathens-deadman-feedfacefeedfacefeedfacefeedface";
+const ENV_KEYS = ["DEADMAN_DRY_RUN", "AGENTATHENS_NTFY_TOPIC", "AGENTATHENS_NTFY_TOPIC_FILE"] as const;
+const saved = Object.fromEntries(ENV_KEYS.map((k) => [k, process.env[k]]));
+const work = mkdtempSync(join(tmpdir(), "aa-deadman-push-"));
+// Never read the operator's real ~/.config file from a test: every test points
+// the topic file at a path inside the temp dir (absent unless a test writes it).
+const topicFile = join(work, "ntfy-topic");
+beforeEach(() => {
+  process.env.AGENTATHENS_NTFY_TOPIC = TOPIC;
+  process.env.AGENTATHENS_NTFY_TOPIC_FILE = topicFile;
+  rmSync(topicFile, { force: true });
 });
+afterEach(() => {
+  for (const k of ENV_KEYS) {
+    if (saved[k] === undefined) delete process.env[k];
+    else process.env[k] = saved[k];
+  }
+});
+afterAll(() => rmSync(work, { recursive: true, force: true }));
 
 describe("sendPush — { ok, skipped, detail } contract", () => {
   test("successful 2xx post → { ok: true, skipped: false, detail: 'sent' }", async () => {
@@ -118,8 +136,9 @@ describe("sendPush — skip conditions", () => {
   });
 
   test("blank topic → skipped, fetch never called", async () => {
+    process.env.AGENTATHENS_NTFY_TOPIC = "  ";
     const { fn, calls } = capture(200);
-    const r = await sendPush(cfg({ topic: "  " }), "t", "b", fn);
+    const r = await sendPush(cfg(), "t", "b", fn);
     expect(r.skipped).toBe(true);
     expect(calls.length).toBe(0);
   });
@@ -135,8 +154,62 @@ describe("sendPush — skip conditions", () => {
   });
 });
 
+describe("push topic — read from env or an untracked file, never the tracked config", () => {
+  test("topic from $AGENTATHENS_NTFY_TOPIC is the whole address", async () => {
+    const { fn, calls } = capture(200);
+    const r = await sendPush(cfg(), "t", "b", fn);
+    expect(r.ok).toBe(true);
+    expect(calls[0].url).toBe(`https://ntfy.example/${TOPIC}`);
+  });
+
+  test("env unset → topic read (trimmed) from the topic file", async () => {
+    delete process.env.AGENTATHENS_NTFY_TOPIC;
+    writeFileSync(topicFile, "agentathens-deadman-0123456789abcdef0123456789abcdef\n");
+    const { fn, calls } = capture(200);
+    const r = await sendPush(cfg(), "t", "b", fn);
+    expect(r.ok).toBe(true);
+    expect(calls[0].url).toBe("https://ntfy.example/agentathens-deadman-0123456789abcdef0123456789abcdef");
+  });
+
+  test("env wins over the file", () => {
+    writeFileSync(topicFile, "agentathens-deadman-from-file\n");
+    expect(resolvePushTopic()).toEqual({ topic: TOPIC });
+  });
+
+  test("neither env nor file → skipped, fetch never called, detail says where to put the topic", async () => {
+    delete process.env.AGENTATHENS_NTFY_TOPIC;
+    const { fn, calls } = capture(200);
+    const r = await sendPush(cfg(), "t", "b", fn);
+    expect(r.ok).toBe(false);
+    expect(r.skipped).toBe(true);
+    expect(r.detail).toContain("AGENTATHENS_NTFY_TOPIC");
+    expect(r.detail).toContain(topicFile);
+    expect(calls.length).toBe(0);
+  });
+
+  test("a topic left in the tracked config is ignored (not a fallback)", async () => {
+    delete process.env.AGENTATHENS_NTFY_TOPIC;
+    const { fn, calls } = capture(200);
+    const r = await sendPush(cfg({ topic: "agentathens-deadman-legacy" }), "t", "b", fn);
+    expect(r.skipped).toBe(true);
+    expect(calls.length).toBe(0);
+  });
+
+  test("a topic that is not a bare ntfy name (path, query, spaces) → skipped, never sent", async () => {
+    for (const bad of ["../x", "a/b", "a?b=c", "two words", "x".repeat(65)]) {
+      process.env.AGENTATHENS_NTFY_TOPIC = bad;
+      const { fn, calls } = capture(200);
+      const r = await sendPush(cfg(), "t", "b", fn);
+      expect(r.skipped).toBe(true);
+      expect(r.detail).not.toContain(bad);
+      expect(calls.length).toBe(0);
+    }
+  });
+});
+
 describe("config/monitoring.json push block", () => {
-  const raw = JSON.parse(readFileSync(join(ROOT, "config", "monitoring.json"), "utf-8"));
+  const text = readFileSync(join(ROOT, "config", "monitoring.json"), "utf-8");
+  const raw = JSON.parse(text);
 
   test("push block exists, enabled, pointing at ntfy.sh", () => {
     expect(raw.push).toBeDefined();
@@ -144,8 +217,9 @@ describe("config/monitoring.json push block", () => {
     expect(raw.push.server).toBe("https://ntfy.sh");
   });
 
-  test("topic is unguessable: prefixed + 32 hex chars of entropy (128 bits)", () => {
-    expect(raw.push.topic).toMatch(/^agentathens-deadman-[0-9a-f]{32}$/);
+  test("the tracked config carries no topic (it is the channel's only access control)", () => {
+    expect(raw.push.topic).toBeUndefined();
+    expect(text).not.toMatch(/agentathens-deadman-[0-9a-f]{8,}/);
   });
 
   test("email block is untouched: enabled, gmail account, confirmed-correct recipient", () => {

@@ -17,7 +17,7 @@
 
 import { readFileSync, writeFileSync, existsSync, appendFileSync, renameSync } from 'fs';
 import { join } from 'path';
-import { Database } from 'bun:sqlite';
+import { queryUntrustedDb } from '../src/watchdog/untrusted-db';
 import { DateTime } from 'luxon';
 import { collectGscMetrics, gscMetricsRow, type GscOptions, type GscMetricsRow } from './fetch-gsc-metrics';
 
@@ -113,24 +113,28 @@ export function lastRowBefore(today: string, csvPath: string = CSV_PATH): string
   }
 }
 
-export function getEnrichmentStats(
+export async function getEnrichmentStats(
   today: string,
   dbPath: string = DB_PATH,
   csvPath: string = CSV_PATH,
-): EnrichmentStats {
+): Promise<EnrichmentStats> {
   try {
-    // Production DB is WAL mode; readonly:true forbids creating the WAL/SHM
-    // helper files SQLite needs to READ a WAL DB, so opening fails with
-    // SQLITE_CANTOPEN. This is SELECT-only; correctness is preserved without
-    // the flag, and the connection closes immediately.
-    const db = new Database(dbPath);
-    const row = db
-      .query<{ c: number }, []>(
-        "SELECT COUNT(*) as c FROM events WHERE enriched_at > datetime('now','-1 day')",
-      )
-      .get();
-    db.close();
-    const count = row?.c ?? 0;
+    // Security loop round 8: this host job never opens the container-written
+    // events.db itself (it used to open it read-write). queryUntrustedDb reads
+    // a private copy, refuses views and foreign triggers, and kills the read
+    // at its wall clock (src/watchdog/untrusted-db.ts). WAL copies read fine.
+    const r = await queryUntrustedDb({
+      dbPath,
+      requireTables: ['events'],
+      queries: { c: { sql: "SELECT COUNT(*) as c FROM events WHERE enriched_at > datetime('now','-1 day')", tables: ['events'] } },
+    });
+    if (!r.ok) {
+      if (r.kind !== 'missing') console.error(`[monitor] events.db not read (${r.kind}): ${r.detail}`);
+      return { enrichedLast24h: '' };
+    }
+    const v = r.rows.c?.[0]?.c;
+    if (typeof v !== 'number' || !Number.isSafeInteger(v) || v < 0) return { enrichedLast24h: '' };
+    const count = v;
 
     const priorRow = lastRowBefore(today, csvPath);
     const priorEnrich = priorRow?.[ENRICHED_COL_INDEX];
@@ -451,7 +455,7 @@ async function main() {
   migrateCsvIfNeeded();
 
   const today = athensDate();
-  const enrichment = getEnrichmentStats(today);
+  const enrichment = await getEnrichmentStats(today);
   console.log(`Enrichment: last_24h=${enrichment.enrichedLast24h}`);
 
   const wrapperStats = getWrapperDiscrepancyStats(today);

@@ -8,6 +8,17 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 
 # Mistakes
 
+## 2026-09-24 — Security loop: host, container and review boundaries (security loop, rounds 0–9)
+
+| What | Why | Fix |
+|---|---|---|
+| Pipeline code that loads hostile web pages, emails and AI sessions ran directly on the owner's Mac | No execution boundary; every job ran as the owner with all logins and keys in reach | Container per run (docker/aa-run.sh): read-only mounts by exact name, per-run tokens, offline sealed build, egress proxy, host integrity check; pipeline scripts refuse host runs (exit 9) |
+| Read-only overlays per exact name were bypassable on the Mac's case-insensitive disk | A repo-root bind mount let `/workspace/BUNFIG.TOML` or `.ENV` resolve to the real file | No repo-root mount: /workspace is a tmpfs, each top-level entry is mounted by name, `.env` is not mounted at all where not needed |
+| The integrity check trusted parts of .git and the working tree it did not look at | Replace refs, stash reflog, ORIG_HEAD/FETCH_HEAD, object files, tracked files and planted instruction/test files were each missed in turn | Snapshot/verify over .git metadata, refs, reflogs, object store (only-grows), tracked non-data files, instruction files, code/test/config files in writable folders |
+| CI could be forced green; required checks conflicted | A test calling process.exit(0) ended `bun test` with 0; path-guard always failed on protected paths while the ruleset forbade bypass | JUnit report + test-report-check.sh with a committed floor; path-guard passes on a code owner's approval of the current head |
+| Host jobs read container-written state as if trusted | The deadman and digest opened data/events.db directly (a recursive view hung them) and parsed logs/ files a container can forge | src/watchdog/untrusted-db.ts (no-follow copy, schema check, child with timeout); deploy freshness from the host-only deploys.log |
+| Two PRs from one loop repeatedly conflicted at merge | Regular and protected branches edited the same lines (published-artifacts.ts, .gitignore, weekly-digest.ts, go.ts) | Before judging, trial-merge both branches; resolve at the source so either merge order is clean (byte-identical shared modules, one branch owns each file) |
+
 ## 2026-09-20 — Discovery and evidence boundaries (S228)
 
 | What | Why | Fix |
@@ -1336,6 +1347,10 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 ---
 
 # Patterns
+
+## 2026-09-24 — Three-judge security loop (security loop, rounds 0–9)
+
+Fixed rubric (12 aspects, 0–10, per-aspect median, mean of medians), three judges with different lenses (outside attacker, hostile data source vs the Mac, defender/operator), judging a trial merge of both PR branches with the owner-only patch scored as absent. Each round: tally, pick the ten highest-leverage moves, split them across builders that own disjoint files (git worktrees for the regular branch), merge, run tsc + ShellCheck + the full suite (merged tree also with the owner patch applied), push, re-judge. Keep judge reports private until their findings are fixed. Never route around a permission or hook refusal: surface it and hand the owner a patch that applies cleanly. Scores moved 4.67 → 5.83 → 6.92 → 7.00 → 7.17 → 7.08 → 7.33 → 7.50 → 7.50; each round's judges found new chained paths, so expect diminishing returns once owner-only items dominate.
 
 ## 2026-09-20 — Test calendar and evidence boundaries (S228)
 
@@ -7110,6 +7125,10 @@ First manual deploy exited 0 through a pipe while the platform recorded state=er
 ---
 
 # Decisions
+
+## 2026-09-24 — Container-only pipeline and owner-applied guards (security loop)
+
+The user asked for a security baseline scored out of ten and a judged improvement loop to 8/10. Unattended jobs run only in the docker/ container (host runs refused unless AA_ALLOW_HOST_RUN=1; the user chose "enforce, with override"). Protected-path changes ship in a separate PR the owner merges (`claude/security-protected-r1`); the rest on `claude/agent-athens-continue-ni8xic`. Changes to scripts/hooks/db-guard.ts, .claude/settings.json, bunfig.toml and tests/preload/ were refused to the agent by the project's own guards and are delivered as owner-applied patches. The AI-agent-safety aspect cannot reach 8 until those patches are applied, and host isolation depends on the owner installing the container setup and logging the Mac's own Netlify/GitHub CLIs out.
 
 ## 2026-09-20 — Ten bounded improvements on existing surfaces (S228)
 

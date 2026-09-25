@@ -25,8 +25,9 @@ import { validateQualityGates, validateEnglishDescription } from '../src/enrichm
 import { countWords } from '../src/enrichment/word-counter';
 import type { EventForEnrichment } from '../src/enrichment/description-generator';
 import { classifyEvent, getWordTarget, structureToTier } from '../src/enrichment/enrichment-matrix';
-import { isTicketDomain, isVenueWebsiteHost } from '../src/ticketing/validator';
-import { getVenueByName } from '../src/ticketing/venue-registry';
+import { isTrustedTicketUrl, ticketDropKey } from '../src/ticketing/ticket-trust';
+import { safeHttpUrl } from '../src/utils/safe-url';
+import { prepareUrlWrite } from './lib/url-columns';
 
 const DB_PATH = 'data/events.db';
 const REPO_ROOT = resolve(import.meta.dir, '..');
@@ -182,6 +183,21 @@ export function loadEventContext(db: Database, eventId: string): EventForEnrichm
   };
 }
 
+const TICKET_URL_RE = /^[ \t>]*ticket_url_discovered:\s*(\S+?)\s*$/im;
+
+/**
+ * Tier-4 ticket URL discovery: split a `ticket_url_discovered: <url>` line out
+ * of an enrichment description. The line is always stripped; the candidate is
+ * returned only as a canonical http(s) URL (quotes, angle brackets, controls
+ * and credentials rejected). The host allowlist is applied by the caller.
+ */
+export function parseTicketUrlDiscovered(raw: string): { candidate: string | null; description: string } {
+  const match = raw.match(TICKET_URL_RE);
+  const description = raw.replace(TICKET_URL_RE, '').trimEnd();
+  if (!match) return { candidate: null, description };
+  return { candidate: safeHttpUrl(match[1].replace(/[.,;]+$/, '')), description };
+}
+
 export function ensureV4Columns(db: Database): void {
   const columns = db.prepare("PRAGMA table_info(enrichment_log)").all() as { name: string }[];
   const existingCols = new Set(columns.map(c => c.name));
@@ -243,12 +259,10 @@ export function saveBatch(
     const descriptionRaw = readFileSync(descPath, 'utf-8');
 
     // Tier-4 ticket URL discovery: parse `ticket_url_discovered: https://…` if Claude
-    // surfaced one in the response, strip it from the description, and stage a candidate.
-    // Host-allowlist is applied below (after event context loads so venue-host matching works).
-    const TICKET_URL_RE = /^[ \t>]*ticket_url_discovered:\s*(https?:\/\/\S+?)\s*$/im;
-    const ticketMatch = descriptionRaw.match(TICKET_URL_RE);
-    const ticketCandidate = ticketMatch ? ticketMatch[1].replace(/[.,;]+$/, '') : null;
-    const description = descriptionRaw.replace(TICKET_URL_RE, '').trimEnd();
+    // surfaced one in the response, strip it from the description, and stage a
+    // canonical candidate. Host-allowlist is applied below (after event context
+    // loads so venue-host matching works).
+    const { candidate: ticketCandidate, description } = parseTicketUrlDiscovered(descriptionRaw);
     const wordResult = countWords(description);
 
     // Load optional tags
@@ -321,14 +335,17 @@ export function saveBatch(
         // savedToEvents stays 0; the INSERT below will log the attempt.
       }
 
-      // Tier-4 ticket URL persist: only if candidate is on the ticket-host allowlist
-      // OR matches the registered venue's website host. Rejects Claude-hallucinated URLs.
+      // Tier-4 ticket URL persist: only if the candidate passes the ticket-trust
+      // rule (src/ticketing/ticket-trust.ts) — https, no credentials or port, on
+      // a known ticketing platform or the venue's registered domain. Tier 4
+      // keeps its narrower scope: the source-domain clause is not offered here
+      // (source = null), since an AI-discovered link on an aggregator's own
+      // site is a listing, not a checkout. Rejects Claude-hallucinated and
+      // look-alike URLs.
       if (ticketCandidate) {
-        const venueRecord = getVenueByName(event.venue ?? null);
-        const accept = isTicketDomain(ticketCandidate) || isVenueWebsiteHost(ticketCandidate, venueRecord);
-        if (accept) {
+        if (isTrustedTicketUrl(ticketCandidate, null, event.venue ?? null)) {
           try {
-            db.prepare(`
+            prepareUrlWrite(db, `
               UPDATE events SET
                 ticket_url = ?,
                 ticket_url_status = 'ai_discovered',
@@ -341,7 +358,8 @@ export function saveBatch(
             console.log(`  !  ${eventId} — ticket_url_discovered save failed: ${err instanceof Error ? err.message : err}`);
           }
         } else {
-          console.log(`  !  ${eventId} — ticket_url_discovered ${ticketCandidate} rejected (not on ticket-host allowlist)`);
+          const sourceRow = db.prepare('SELECT source FROM events WHERE id = ?').get(eventId) as { source: string | null } | null;
+          console.log(`  !  ${eventId} — ticket_url_discovered rejected by ticket trust — source/host: ${ticketDropKey(sourceRow?.source, ticketCandidate).replace(' ', ' / ')}`);
         }
       }
 

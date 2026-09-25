@@ -6,5 +6,17 @@
 # merged_into marks (S200 mark-flip incident). Do not remove — the guard
 # test (tests/prod-db-guard.test.ts) fails the suite if this preload is
 # disarmed.
+#
+# Security loop round 9: the container writes data/, logs/, dist/, tmp/,
+# tmp*/ and temp*/, and a plain `bun test` discovers any *.test.ts /
+# *_spec.ts there and runs it on the Mac. Two layers:
+#   - pathIgnorePatterns keeps those folders out of discovery AND out of
+#     explicit ./paths (bun 1.3.11; bun 1.3.0 silently ignores the key);
+#   - tests/preload/planted-tests.preload.ts, loaded FIRST, exits the run
+#     before any test file loads when a test-named file is there, whatever
+#     the bun version.
+# The documented command is `bun run test` (scripts/run-tests.sh: explicit
+# list). tests/security/test-discovery.test.ts covers all three.
 [test]
-preload = ["./tests/preload/prod-db-guard.preload.ts"]
+preload = ["./tests/preload/planted-tests.preload.ts", "./tests/preload/prod-db-guard.preload.ts"]
+pathIgnorePatterns = ["data/**", "logs/**", "dist/**", "tmp/**", "tmp*/**", "temp*/**"]

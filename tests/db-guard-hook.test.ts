@@ -244,9 +244,12 @@ describe('db-guard: enrichment-session write scope', () => {
     expect(verdict(file('Write', 'temp-briefs/batch-1.manifest.json'))).toContain('db-guard');
   });
 
-  test('an mcp__filesystem__write_file outside temp-descriptions/ is refused in an enrichment session', () => {
+  // Updated deliberately (security loop round 1): an enrichment session now
+  // refuses every tool outside its allowlist, MCP file tools included — even
+  // a write the path scope alone would have allowed.
+  test('an mcp__filesystem__write_file is refused in an enrichment session, inside temp-descriptions/ too (fail closed)', () => {
     expect(verdict({ tool_name: 'mcp__filesystem__write_file', tool_input: { path: 'src/utils/tag-filter.ts' } })).toContain('db-guard');
-    expect(verdict({ tool_name: 'mcp__filesystem__write_file', tool_input: { path: 'temp-descriptions/batch-1/ev.md' } })).toBeNull();
+    expect(verdict({ tool_name: 'mcp__filesystem__write_file', tool_input: { path: 'temp-descriptions/batch-1/ev.md' } })).toContain('db-guard');
   });
 
   test("the session's own auto-memory directory is refused on purpose (learned memory is an instruction channel — Codex 2026-09-16 default #12 / astra #13; observed live 2026-09-17: 14 refusals, batches unaffected)", () => {
@@ -283,8 +286,12 @@ describe('db-guard: enrichment-session write scope', () => {
     expect(verdict({ tool_name: 'NotebookEdit', tool_input: { notebook_path: 'src/x.ipynb' } })).toContain('db-guard');
   });
 
-  test('Bash and non-file tools are unaffected by the scope', () => {
-    expect(verdict(bash('sqlite3 -readonly data/events.db "SELECT 1"'))).toBeNull();
+  // Updated deliberately (security loop round 1): the enrichment session no
+  // longer holds the sqlite3 shell at all — its DB reads go through
+  // scripts/db-read.ts — so a raw sqlite3 call is now refused inside it.
+  test('sanctioned Bash and research tools pass; the sqlite3 shell does not (reads go through db-read.ts)', () => {
+    expect(verdict(bash('sqlite3 -readonly data/events.db "SELECT 1"'))).toContain('db-guard');
+    expect(verdict(bash('bun run scripts/db-read.ts "SELECT 1"'))).toBeNull();
     expect(
       verdict(bash('bun run scripts/save-batch.ts --manifest=temp-briefs/batch-1.manifest.json --session=batch-1 --batch=1 --clean')),
     ).toBeNull();
@@ -310,5 +317,282 @@ describe('db-guard: scope applies only inside an enrichment session', () => {
     });
     expect(r.exitCode).toBe(2);
     expect(new TextDecoder().decode(r.stderr)).toContain('enrichment session may only write under');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Security loop round 1 — sqlite3 shell escapes (every session).
+// The stock sqlite3 CLI compiles in SQL functions that read, write and edit
+// host files, and it accepts ANY unambiguous prefix of a dot-command; -readonly
+// restrains neither. The earlier word-anchored denylist let both classes
+// through, so the rule is now: no file functions, no dot-commands at all, and
+// no stdin/substitution route that could smuggle either past the text check.
+// ---------------------------------------------------------------------------
+describe('db-guard: sqlite3 shell escapes are refused in every session', () => {
+  beforeEach(() => {
+    delete process.env.AA_ENRICHMENT_SESSION;
+    delete process.env.AA_UNATTENDED_SESSION;
+  });
+
+  const refused = [
+    ['writefile()', `sqlite3 -readonly :memory: "select writefile('src/x.ts','x')"`],
+    ['writefile() against the real DB path', `sqlite3 -readonly data/events.db "SELECT writefile('scripts/daily-automated.sh', 'x')"`],
+    ['WRITEFILE upper-case', `sqlite3 -readonly data/events.db "SELECT WRITEFILE('a','b')"`],
+    ['quoted function name', `sqlite3 -readonly data/events.db 'select "writefile"(1,2)'`],
+    ['readfile()', `sqlite3 -readonly data/events.db "select readfile('.env')"`],
+    ['edit() runs an editor command', `sqlite3 -readonly data/events.db "select edit('x','sh -c id')"`],
+    ['edit () with a space', `sqlite3 -readonly data/events.db "select edit ('x','vi')"`],
+    ['load_extension()', `sqlite3 -readonly data/events.db "select load_extension('/tmp/x.dylib')"`],
+    ['fts3_tokenizer()', `sqlite3 -readonly data/events.db "select fts3_tokenizer('simple')"`],
+    ['fsdir() lists host directories', `sqlite3 -readonly data/events.db "select name from fsdir('/Users')"`],
+    ['abbreviated .sh (prefix of .shell)', `sqlite3 -readonly data/events.db ".sh id"`],
+    ['abbreviated .syst (prefix of .system)', `sqlite3 -readonly data/events.db ".syst id"`],
+    ['abbreviated .ope (prefix of .open)', `sqlite3 -readonly data/events.db ".ope data/events.db"`],
+    ['any dot-command, even a harmless-looking one', `sqlite3 -readonly data/events.db ".schema events"`],
+    ['dot-command after a newline inside the argument', 'sqlite3 -readonly data/events.db "select 1;\n.sh id"'],
+    ['dot-command piped on stdin', `echo '.sh id' | sqlite3 -readonly data/events.db`],
+    ['stdin redirected from a file', `sqlite3 -readonly data/events.db < temp-descriptions/batch-1/x.sql`],
+    ['printf-escaped dot hidden from the text', `printf '\\x2esh id' | sqlite3 -readonly data/events.db`],
+    ['command substitution building the argument', `sqlite3 -readonly data/events.db "$(printf '\\x2esh id')"`],
+    ['ANSI-C quoting', `sqlite3 -readonly data/events.db $'\\x2esh id'`],
+    ['backtick substitution', 'sqlite3 -readonly data/events.db "`cat x.sql`"'],
+    ['variable expansion', 'X=.sh; sqlite3 -readonly data/events.db "$X id"'],
+    ['VACUUM INTO writes a copy even on a read-only connection', `sqlite3 -readonly data/events.db "VACUUM INTO '/tmp/copy.db'"`],
+  ] as const;
+  for (const [name, cmd] of refused) {
+    test(`refused: ${name}`, () => {
+      expect(verdict(bash(cmd))).toContain('db-guard');
+    });
+  }
+
+  test('an ordinary read-only SELECT (with table-qualified columns) is still allowed interactively', () => {
+    expect(verdict(bash('sqlite3 -readonly data/events.db "SELECT e.title, e.start_date FROM events e LIMIT 3"'))).toBeNull();
+    expect(verdict(bash("sqlite3 -readonly data/events.db \"SELECT COUNT(*) FROM events WHERE notes LIKE '%edited%'\""))).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Security loop round 1 — unattended sessions read scraped text, so reading is
+// a boundary too: Read/Glob/Grep may not leave the repo or touch secrets even
+// inside it, Bash is limited to the sanctioned commands, and tools the hook
+// does not know are refused (fail closed).
+// ---------------------------------------------------------------------------
+describe('db-guard: enrichment-session read scope and fail-closed tools', () => {
+  beforeEach(() => {
+    process.env.AA_ENRICHMENT_SESSION = '1';
+  });
+  afterEach(() => {
+    delete process.env.AA_ENRICHMENT_SESSION;
+  });
+
+  const read = (file_path: string) => ({ tool_name: 'Read', tool_input: { file_path } });
+  const HOME = process.env.HOME ?? '/root';
+
+  const secretReads = [
+    '.env',
+    './.env',
+    '.env.local',
+    '.env.production',
+    join(ROOT, '.env'),
+    'config/../.env',
+    '.netlify/state.json',
+    '.git/config',
+    'certs/server.pem',
+    'config/deploy.key',
+    'config/gcp-credentials.json',
+    'docs/client_secret.json',
+    '~/.config/agentathens/gcp-kpi-reader.json',
+    '~/.ssh/id_ed25519',
+    `${HOME}/.ssh/id_rsa`,
+    `${HOME}/.config/netlify/config.json`,
+    '/etc/passwd',
+    '/Users/chrism/Library/Preferences/netlify/config.json',
+    '../agent-athens-phase3/.env',
+    '$HOME/.ssh/id_rsa',
+  ];
+  for (const p of secretReads) {
+    test(`Read refused: ${p}`, () => {
+      expect(verdict(read(p))).toContain('db-guard');
+    });
+  }
+
+  test('Glob refused outside the repo, into secret dirs, or with an absolute pattern that escapes', () => {
+    expect(verdict({ tool_name: 'Glob', tool_input: { pattern: '*', path: `${HOME}/.ssh` } })).toContain('db-guard');
+    expect(verdict({ tool_name: 'Glob', tool_input: { pattern: '**/*', path: '~/.config' } })).toContain('db-guard');
+    expect(verdict({ tool_name: 'Glob', tool_input: { pattern: '/Users/chrism/.ssh/*' } })).toContain('db-guard');
+    expect(verdict({ tool_name: 'Glob', tool_input: { pattern: '../**/.env' } })).toContain('db-guard');
+    expect(verdict({ tool_name: 'Glob', tool_input: { pattern: '**', path: '.netlify' } })).toContain('db-guard');
+  });
+
+  test('Grep refused outside the repo, on a secret file, and over the repo root (which holds .env/.git)', () => {
+    expect(verdict({ tool_name: 'Grep', tool_input: { pattern: 'KEY', path: `${HOME}/.config/agentathens` } })).toContain('db-guard');
+    expect(verdict({ tool_name: 'Grep', tool_input: { pattern: 'PASS', path: '.env' } })).toContain('db-guard');
+    expect(verdict({ tool_name: 'Grep', tool_input: { pattern: 'PASS' } })).toContain('db-guard');
+    expect(verdict({ tool_name: 'Grep', tool_input: { pattern: 'PASS', path: '.' } })).toContain('db-guard');
+  });
+
+  test('a Grep over a subdirectory that holds a secret-named file is refused (ripgrep would descend into it)', () => {
+    const dir = join(ROOT, 'temp-descriptions', `__secret-scan-${process.pid}`);
+    try {
+      mkdirSync(join(dir, 'nested'), { recursive: true });
+      writeFileSync(join(dir, 'nested', '.env'), 'X=1');
+      expect(verdict({ tool_name: 'Grep', tool_input: { pattern: 'X', path: `temp-descriptions/__secret-scan-${process.pid}` } })).toContain('db-guard');
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  test('a symlink inside the repo that points at a file outside is refused', () => {
+    const outside = mkdtempSync(join(tmpdir(), 'aa-guard-read-'));
+    const link = join(ROOT, 'temp-descriptions', `__read-link-${process.pid}.md`);
+    try {
+      mkdirSync(join(ROOT, 'temp-descriptions'), { recursive: true });
+      writeFileSync(join(outside, 'loot.txt'), 'x');
+      symlinkSync(join(outside, 'loot.txt'), link);
+      expect(verdict(read(`temp-descriptions/__read-link-${process.pid}.md`))).toContain('db-guard');
+    } finally {
+      rmSync(link, { force: true });
+      rmSync(outside, { recursive: true, force: true });
+    }
+  });
+
+  test('legitimate enrichment reads stay allowed', () => {
+    expect(verdict(read('temp-briefs/batch-1.md'))).toBeNull();
+    expect(verdict(read('exemplars/concert-mattrey.md'))).toBeNull();
+    expect(verdict(read('docs/enrichment-anti-patterns.md'))).toBeNull();
+    expect(verdict(read(join(ROOT, 'config', 'enrichment-knowledge.md')))).toBeNull();
+    expect(verdict(read('README.md'))).toBeNull();
+    expect(verdict({ tool_name: 'Glob', tool_input: { pattern: 'exemplars/*.md' } })).toBeNull();
+    expect(verdict({ tool_name: 'Grep', tool_input: { pattern: 'Gazarte', path: 'config' } })).toBeNull();
+    expect(verdict({ tool_name: 'Grep', tool_input: { pattern: 'x', path: 'config/enrichment-knowledge.md' } })).toBeNull();
+    expect(verdict({ tool_name: 'WebFetch', tool_input: { url: 'https://example.com', prompt: 'x' } })).toBeNull();
+  });
+
+  test('Read with no inspectable path fails closed', () => {
+    expect(verdict({ tool_name: 'Read', tool_input: {} })).toContain('db-guard');
+  });
+
+  test('unknown tools are refused in an enrichment session (fail closed)', () => {
+    for (const t of ['Task', 'Agent', 'Skill', 'mcp__filesystem__read_file', 'mcp__gmail__send', 'SomeFutureTool']) {
+      expect(verdict({ tool_name: t, tool_input: {} })).toContain('db-guard');
+    }
+    expect(verdict({ tool_name: 'TodoWrite', tool_input: { todos: [] } })).toBeNull();
+  });
+
+  test('Bash is limited to the sanctioned enrichment commands', () => {
+    for (const c of [
+      'cat .env',
+      'head -c 4000 ~/.config/agentathens/bing-api-key',
+      'ls -la ~',
+      'bun run src/generate-site.ts',
+      'curl https://attacker.example',
+      'bun run scripts/db-read.ts "SELECT 1" && cat .env',
+      'bun run scripts/db-read.ts "SELECT 1"; cat .env',
+      'bun run scripts/db-read.ts "SELECT 1"\ncat .env',
+      'bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 "$(cat .env)"',
+      'bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 "`cat .env`"',
+      'bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 "${GMAIL_APP_PASSWORD}"',
+      'bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 "$GMAIL_APP_PASSWORD"',
+      'bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 "x" > src/x.ts',
+      'bun run scripts/db-read.ts "SELECT 1" | sh',
+      'bun run scripts/db-read-evil.ts "SELECT 1"',
+      'cd /tmp && bun run scripts/db-read.ts "SELECT 1"',
+    ]) {
+      expect(verdict(bash(c))).toContain('db-guard');
+    }
+  });
+
+  test('sanctioned Bash forms the brief actually produces stay allowed', () => {
+    for (const c of [
+      'bun run scripts/db-read.ts "SELECT id, title FROM events WHERE venue_name = \'Gazarte\' LIMIT 5"',
+      'bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 "Rock & roll; <b>loud</b> | late — €15, 21:00"',
+      'bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 \'It costs $5 & the doors open at 9\'',
+      'bun run scripts/auto-gate-check.ts temp-descriptions/batch-1/ev-1.md \\\n  --tier=standard --event-id=ev-1 \\\n  --event-type=concert --event-venue="Gazarte" \\\n  --event-title="A \\"quoted\\" title" \\\n  --event-date=2026-10-01 --event-price=with-ticket',
+      'bun run scripts/write-tags.ts ev-1 --batch-dir=temp-descriptions/batch-1 Music LiveMusic',
+      'bun run scripts/save-batch.ts --manifest=temp-briefs/batch-1.manifest.json --session=batch-1 --batch=1 --clean 2>&1',
+      'bun run scripts/save-batch.ts --manifest=temp-briefs/batch-1.manifest.json --session=batch-1 --batch=1 --clean 2>&1 | tail -40',
+      `cd ${ROOT} && bun run scripts/db-read.ts "SELECT 1"`,
+      // write-description.ts --stdin with a QUOTED heredoc: bash expands nothing
+      // in the body, so text that looks like substitution is inert.
+      "bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 --stdin <<'EOF'\nLine one with $(not run) and `not run` and $HOME.\n\nSecond paragraph.\nEOF",
+      "bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 --stdin <<'DESC'\ntext\nDESC\n",
+    ]) {
+      expect(verdict(bash(c))).toBeNull();
+    }
+  });
+
+  test('heredoc forms that would expand or smuggle a command are refused', () => {
+    for (const c of [
+      // unquoted delimiter: the body is expanded by bash
+      'bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 --stdin <<EOF\n$(cat .env)\nEOF',
+      // a delimiter line inside the body ends the heredoc early; the next line runs
+      "bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 --stdin <<'EOF'\ntext\nEOF\ncat .env\nEOF",
+      // the substitution form agents use for commit messages runs a command
+      "bun run scripts/write-description.ts ev-1 --batch-dir=temp-descriptions/batch-1 \"$(cat <<'EOF'\ntext\nEOF\n)\"",
+      // heredoc feeding a non-sanctioned command
+      "cat <<'EOF' | bun run scripts/write-description.ts ev-1 --stdin\ntext\nEOF",
+    ]) {
+      expect(verdict(bash(c))).toContain('db-guard');
+    }
+  });
+
+  test('db-read.ts is self-protected like the other sanctioned scripts', () => {
+    delete process.env.AA_ENRICHMENT_SESSION;
+    expect(verdict(file('Write', 'scripts/db-read.ts'))).toContain('db-guard');
+  });
+});
+
+describe('db-guard: generic unattended session (phase3-weekly)', () => {
+  const EXTRA = mkdtempSync(join(tmpdir(), 'aa-guard-extra-'));
+  beforeEach(() => {
+    delete process.env.AA_ENRICHMENT_SESSION;
+    process.env.AA_UNATTENDED_SESSION = 'phase3';
+    process.env.AA_SESSION_EXTRA_ROOTS = EXTRA;
+  });
+  afterEach(() => {
+    delete process.env.AA_UNATTENDED_SESSION;
+    delete process.env.AA_SESSION_EXTRA_ROOTS;
+  });
+
+  test('reads and writes inside the repo and the declared extra root are allowed', () => {
+    expect(verdict(file('Edit', 'src/generate-site.ts'))).toBeNull();
+    expect(verdict(file('Write', join(EXTRA, 'PHASE3-LOG.md')))).toBeNull();
+    expect(verdict({ tool_name: 'Read', tool_input: { file_path: join(EXTRA, 'T2-SURFACE-MAP.md') } })).toBeNull();
+    expect(verdict(bash('bun test'))).toBeNull();
+  });
+
+  test('secrets and out-of-scope paths are refused for reads and writes', () => {
+    expect(verdict({ tool_name: 'Read', tool_input: { file_path: '.env' } })).toContain('db-guard');
+    expect(verdict({ tool_name: 'Read', tool_input: { file_path: '~/.config/agentathens/perplexity-api-key' } })).toContain('db-guard');
+    expect(verdict(file('Write', '/Users/chrism/.zshrc'))).toContain('db-guard');
+    expect(verdict(file('Write', '.git/hooks/pre-commit'))).toContain('db-guard');
+    expect(verdict(file('Edit', 'scripts/hooks/db-guard.ts'))).toContain('db-guard');
+  });
+
+  test('unknown tools are refused (fail closed); web tools are not part of this profile', () => {
+    for (const t of ['WebFetch', 'WebSearch', 'mcp__slack__post', 'Skill']) {
+      expect(verdict({ tool_name: t, tool_input: {} })).toContain('db-guard');
+    }
+  });
+});
+
+describe('db-guard: interactive sessions keep their read behaviour', () => {
+  test('Read/Glob/Grep and unknown tools are not scoped when no unattended profile is set', () => {
+    delete process.env.AA_ENRICHMENT_SESSION;
+    delete process.env.AA_UNATTENDED_SESSION;
+    expect(verdict({ tool_name: 'Read', tool_input: { file_path: '.env' } })).toBeNull();
+    expect(verdict({ tool_name: 'Grep', tool_input: { pattern: 'x' } })).toBeNull();
+    expect(verdict({ tool_name: 'SomeFutureTool', tool_input: {} })).toBeNull();
+  });
+});
+
+describe('db-guard: process contract for the new read scope', () => {
+  test('a spawned hook refuses Read of .env with exit 2 under AA_ENRICHMENT_SESSION', () => {
+    const r = Bun.spawnSync(['bun', 'run', HOOK], {
+      stdin: new TextEncoder().encode(JSON.stringify({ tool_name: 'Read', tool_input: { file_path: '.env' } })),
+      env: { ...process.env, AA_ENRICHMENT_SESSION: '1' },
+    });
+    expect(r.exitCode).toBe(2);
+    expect(new TextDecoder().decode(r.stderr)).toContain('db-guard');
   });
 });

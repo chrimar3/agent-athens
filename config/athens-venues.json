@@ -81,7 +81,6 @@
     {
       "canonical_name": "Ωδείο Αθηνών",
       "variations": [
-        "Ωδείο",
         "Odeio Athinon",
         "Athens Conservatory",
         "Ωδείο Αθηνών - Αίθουσα Δεσποτόπουλος",
@@ -658,13 +657,6 @@
       "neighborhood": "Central Athens"
     },
     {
-      "canonical_name": "Circus Entertainment Hub",
-      "variations": [
-        "Circus"
-      ],
-      "neighborhood": "Gazi"
-    },
-    {
       "canonical_name": "Κάππα",
       "variations": [
         "Kappa"
@@ -700,10 +692,44 @@
       "address": "Konstantinoupoleos, Rouf Station, Athens 118 54"
     },
     {
+      "canonical_name": "Άλσος Νέας Σμύρνης",
+      "variations": [
+        "ΑΛΣΟΣ ΝΕΑΣ ΣΜΥΡΝΗΣ",
+        "Αλσος Νεας Σμυρνης",
+        "Θέατρο Άλσους Νέας Σμύρνης",
+        "Θεατρο Αλσους Νεας Σμυρνης",
+        "Alsos Neas Smyrnis",
+        "Alsos Nea Smyrni"
+      ],
+      "neighborhood": "Nea Smyrni",
+      "address": "Λεωφ. Ελευθερίου Βενιζέλου & Εφέσου, Νέα Σμύρνη"
+    },
+    {
+      "canonical_name": "Cine Άλσος Νέας Φιλαδέλφειας",
+      "variations": [
+        "Άλσος Dolby Digital",
+        "ΑΛΣΟΣ DOLBY DIGITAL",
+        "Αλσος Dolby Digital",
+        "Δημοτικός Κινηματογράφος Άλσος",
+        "Δημοτικος Κινηματογραφος Αλσος",
+        "ΔΗΜΟΤΙΚΟΣ ΚΙΝΗΜΑΤΟΓΡΑΦΟΣ ΑΛΣΟΣ",
+        "Cine Alsos Nea Filadelfeia",
+        "Θερινός Κινηματογράφος Cine Alsos",
+        "Σινέ Άλσος Νέας Φιλαδέλφειας"
+      ],
+      "neighborhood": "Nea Filadelfeia",
+      "address": "Λεωφ. Δεκελείας 152, Νέα Φιλαδέλφεια 143 42"
+    },
+    {
       "canonical_name": "Άλσος",
       "variations": [
         "Alsos",
-        "Alsos Pedion Areos"
+        "Alsos Pedion Areos",
+        "Θέατρο ΑΛΣΟΣ",
+        "ΘΕΑΤΡΟ ΑΛΣΟΣ",
+        "Θεατρο Αλσος",
+        "Θέατρο Άλσος ΔΕΗ",
+        "Theatro Alsos"
       ],
       "neighborhood": "Pedion Areos",
       "address": "Evelpidon 4, Athens 114 74"
@@ -1597,9 +1623,12 @@
       "canonical_name": "Θέατρο Μετς",
       "variations": [
         "Theatro Mets",
-        "Mets Theatre"
+        "Mets Theatre",
+        "ΘΕΑΤΡΟ ΜΕΤΣ",
+        "Θεατρο Μετς"
       ],
-      "neighborhood": "Mets"
+      "neighborhood": "Mets",
+      "address": "Αιδεσίου 19-23, Αθήνα 116 36"
     },
     {
       "canonical_name": "Death Disco",
@@ -2791,6 +2820,123 @@
       ],
       "neighborhood": "Kallithea",
       "address": "Γρηγορίου Λαμπράκη 28-30 & Καλυψούς, Καλλιθέα 176 71"
+    },
+    {
+      "canonical_name": "Θέατρο «Δόρα Στράτου»",
+      "variations": [
+        "Θέατρο &#171;Δόρα Στράτου&#187;",
+        "Θέατρο Δόρας Στράτου",
+        "Θέατρο Ελληνικών Χορών &#171;Δόρα Στράτου&#187;",
+        "Θέατρο Ελληνικών Χορών «Δόρα Στράτου»",
+        "Δόρα Στράτου",
+        "ΔΟΡΑ ΣΤΡΑΤΟΥ",
+        "Dora Stratou Theatre"
+      ],
+      "neighborhood": "Petralona",
+      "address": "Αρακύνθου 33 (έναντι), Λόφος Φιλοπάππου, Αθήνα 117 41"
+    },
+    {
+      "canonical_name": "Βεάκειο Δημοτικό Θέατρο",
+      "variations": [
+        "Βεάκειο",
+        "ΒΕΑΚΕΙΟ",
+        "Βεακειο",
+        "Βεάκειο Θέατρο, Πειραιάς",
+        "VEAKEIO THEATER - PIRAEUS",
+        "Veakeio Theatre"
+      ],
+      "neighborhood": "Piraeus",
+      "address": "Λόφος Προφήτη Ηλία, Καστέλλα, Πειραιάς 185 33"
+    },
+    {
+      "canonical_name": "Κατράκειο Θέατρο Νίκαιας",
+      "variations": [
+        "Κατράκειο",
+        "ΚΑΤΡΑΚΕΙΟ",
+        "Κατρακειο",
+        "Κατράκειο Θέατρο",
+        "ΚΑΤΡΑΚΕΙΟ ΘΕΑΤΡΟ ΝΙΚΑΙΑΣ",
+        "Katrakeio Theatre"
+      ],
+      "neighborhood": "Nikaia",
+      "address": "Ακροπόλεως & Νέστορος (Άλσος Αγ. Φιλίππου), Νίκαια"
+    },
+    {
+      "canonical_name": "Ανοιχτό Θέατρο Κολωνού",
+      "variations": [
+        "ΑΝΟΙΧΤΟ ΘΕΑΤΡΟ ΚΟΛΩΝΟΥ",
+        "Ανοιχτο Θεατρο Κολωνου"
+      ],
+      "neighborhood": "Kolonos",
+      "address": "Ιωαννίνων & Καπανέως, Κολωνός"
+    },
+    {
+      "canonical_name": "Πειραιώς 260",
+      "variations": [
+        "Πειραιώς 260 - Χώρος Δ΄",
+        "ΠΕΙΡΑΙΩΣ 260",
+        "Peiraios 260"
+      ],
+      "neighborhood": "Tavros",
+      "address": "Πειραιώς 260, Ταύρος"
+    },
+    {
+      "canonical_name": "Στοά Culture - Αίθριο",
+      "variations": [
+        "Αίθριο Στοά Culture",
+        "Stoa Culture"
+      ],
+      "neighborhood": "Syntagma",
+      "address": "Στοά Αρσακείου, Πεσμαζόγλου 5, Αθήνα"
+    },
+    {
+      "canonical_name": "Ιωνικό Κέντρο",
+      "variations": [
+        "ΙΩΝΙΚΟ ΚΕΝΤΡΟ - Πλάκα",
+        "ΙΩΝΙΚΟ ΚΕΝΤΡΟ",
+        "Ionic Centre"
+      ],
+      "neighborhood": "Plaka",
+      "address": "Λυσίου 11, Πλάκα, Αθήνα 105 56"
+    },
+    {
+      "canonical_name": "Αίθριο Θέατρο Αμαρουσίου",
+      "variations": [
+        "ΑΙΘΡΙΟ ΘΕΑΤΡΟ ΑΜΑΡΟΥΣΙΟΥ",
+        "Αιθριο Θεατρο Αμαρουσιου",
+        "Aithrio Theatro Amarousiou"
+      ],
+      "neighborhood": "Marousi",
+      "address": "Λεωφ. Κηφισίας 219, Μαρούσι"
+    },
+    {
+      "canonical_name": "Θέατρο Βεάκη",
+      "variations": [
+        "Βεάκη",
+        "ΒΕΑΚΗ",
+        "Βεακη",
+        "ΘΕΑΤΡΟ ΒΕΑΚΗ",
+        "Θεατρο Βεακη",
+        "Theatro Veaki",
+        "Veaki Theatre"
+      ],
+      "neighborhood": "Exarchia",
+      "address": "Στουρνάρη 32, Εξάρχεια, Αθήνα"
+    },
+    {
+      "canonical_name": "Θέατρο Βράχων «Μελίνα Μερκούρη»",
+      "variations": [
+        "Θέατρο Βράχων &#171;Μελίνα Μερκούρη&#187;",
+        "Βράχων &#171;Μελίνα Μερκούρη&#187;",
+        "Βράχων «Μελίνα Μερκούρη»",
+        "Θέατρο Βράχων Μελίνα Μερκούρη",
+        "ΘΕΑΤΡΟ ΒΡΑΧΩΝ ΜΕΛΙΝΑ ΜΕΡΚΟΥΡΗ",
+        "Θεατρο Βραχων Μελινα Μερκουρη",
+        "VRACHON THEATRE - MELINA MERKOURI",
+        "Vrachon Theater"
+      ],
+      "neighborhood": "Vyronas",
+      "address": "Είσοδος από Πλατεία Αναγνωσταρά, Βύρωνας"
     }
   ],
   "neighborhoods": [
@@ -2883,7 +3029,13 @@
     "Ελληνικό",
     "Ellinikon",
     "Ampelokipoi",
-    "Athens Riviera"
+    "Athens Riviera",
+    "Βύρωνας",
+    "Vyronas",
+    "Νέα Φιλαδέλφεια",
+    "Nea Filadelfeia",
+    "Νίκαια",
+    "Nikaia"
   ],
   "neighborhood_aliases": {
     "Psyri": [

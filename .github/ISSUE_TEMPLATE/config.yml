@@ -1,0 +1,15 @@
+# Issue chooser (security loop round 3).
+#
+# Blank issues are OFF on purpose. A blank issue skips the form, and the form
+# is where a reporter sees, before typing anything, that security problems go
+# to private reporting and not to a public issue. The form (issue.yml) also
+# says that automation reads issues as untrusted text. Maintainers can still
+# open any issue they need through the form or the API.
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability (private)
+    url: https://github.com/chrimar3/agent-athens/security/advisories/new
+    about: Do not open a public issue for security problems. Report them privately; SECURITY.md explains the scope and response times.
+  - name: Contributing guide
+    url: https://github.com/chrimar3/agent-athens/blob/main/CONTRIBUTING.md
+    about: How pull requests are reviewed, why protected paths need an issue first, and how automation reads issues.

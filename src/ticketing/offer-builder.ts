@@ -25,6 +25,7 @@ import {
   type OfferSellerOrganization,
 } from '../utils/ticket-source-classifier';
 import { availabilityForEventStatus, getCurrencyCode } from '../utils/schema-geo';
+import { isTrustedTicketUrl } from './ticket-trust';
 
 export interface OfferObject {
   '@type': 'Offer';
@@ -45,6 +46,12 @@ export interface OfferBuilderEvent {
   };
   ticketUrl?: string | null;
   ticketUrlResolved?: string | null;
+  /**
+   * Scrape source. No source (src/ticketing/ticket-trust.ts) emits an
+   * offers.url off a known ticketing platform, its own domain or the venue's
+   * registered domain.
+   */
+  source?: string | null;
   venue: {
     name: string;
     website?: string;
@@ -102,7 +109,15 @@ function omissionKeyForUrl(url: string | null | undefined): string {
   return host ?? 'unparseable-url';
 }
 
-export function buildOfferOrOmit(event: OfferBuilderEvent): OfferDecision {
+export function buildOfferOrOmit(input: OfferBuilderEvent): OfferDecision {
+  // Anti-phishing (ticket-trust.ts): an untrusted ticket URL is treated as
+  // absent (the classifier then omits the Offer).
+  const event: OfferBuilderEvent = {
+    ...input,
+    ticketUrl: isTrustedTicketUrl(input.ticketUrl, input.source, input.venue?.name) ? input.ticketUrl : null,
+    ticketUrlResolved: isTrustedTicketUrl(input.ticketUrlResolved, input.source, input.venue?.name) ? input.ticketUrlResolved : null,
+  };
+  const droppedUntrusted = (!!input.ticketUrl && !event.ticketUrl) || (!!input.ticketUrlResolved && !event.ticketUrlResolved);
   // Past-event precedent: EventCompleted → omit entire Offer block.
   if (event.eventStatus) {
     const availability = availabilityForEventStatus(event.eventStatus);
@@ -140,7 +155,7 @@ export function buildOfferOrOmit(event: OfferBuilderEvent): OfferDecision {
   // with-ticket — classifier-gated dispatch.
   const decision = classifyTicketSource(event);
   if ('omit_offer' in decision) {
-    incrementOmission(omissionKeyForUrl(event.ticketUrlResolved ?? event.ticketUrl));
+    incrementOmission(droppedUntrusted ? 'untrusted-open-listing-ticket-host' : omissionKeyForUrl(event.ticketUrlResolved ?? event.ticketUrl));
     return { omit: true };
   }
 

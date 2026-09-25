@@ -10,6 +10,7 @@
 import type { Event } from '../types';
 import type { UIStrings } from '../i18n/strings';
 import { hostOf } from './validator';
+import { isOpenListingSource, isOnSourceDomain, isTrustedTicketUrl } from './ticket-trust';
 
 export type CtaKind = 'tickets' | 'venue' | 'door' | 'none';
 
@@ -69,6 +70,10 @@ const FIND_TICKETS_STATUSES = [
  *   2. status ∈ {direct, detail_page, venue_registry_direct, crossref, ai_discovered} + url → "Buy tickets"
  *   3. status ∈ {venue_registry_search, platform_search} + url → "Find tickets" (+ D8 secondary link)
  *   4. status = door_only → "At the door" (href=null)
+ *   4.4 ticket URL off a known ticketing platform, the source's own domain and
+ *       the venue's registered domain (src/ticketing/ticket-trust.ts, every
+ *       source): the ticket link is dropped and the source listing URL is the
+ *       "Find tickets" target
  *   5. else if venue.website (covers venue_fallback / unresolved / expired / legacy undefined) → "Check venue website"
  *   6. else → none
  */
@@ -79,8 +84,13 @@ export function resolveCtaForEvent(event: Event, t: UIStrings): CtaResult {
   }
 
   const venueWebsite = event.venue.website;
-  const url = event.ticketUrl;
   const status = event.ticketUrlStatus;
+  // Anti-phishing (ticket-trust.ts): for every source only a known ticketing
+  // platform, the source's own domain or the venue's registered domain may be
+  // linked; on open-listing sources the listing URL itself must be on the
+  // source's domain.
+  const url = isTrustedTicketUrl(event.ticketUrl, event.source, event.venue?.name) ? event.ticketUrl : undefined;
+  const listingUrl = !isOpenListingSource(event.source) || isOnSourceDomain(event.url, event.source) ? event.url : undefined;
 
   // D7 rule 2: high-confidence tiers get "Buy tickets".
   if (url && status && (BUY_TICKETS_STATUSES as readonly string[]).includes(status)) {
@@ -107,12 +117,18 @@ export function resolveCtaForEvent(event: Event, t: UIStrings): CtaResult {
     return { kind: 'door', label: t.doorOnly, href: null };
   }
 
+  // Rule 4.4: an untrusted ticket link was dropped — send the visitor to the
+  // source listing instead.
+  if (event.ticketUrl && !url && listingUrl) {
+    return { kind: 'tickets', label: t.findTicketsArrow, href: listingUrl };
+  }
+
   // D7 rule 4.5 (redesign loop 20260707): ticketed event with no trusted ticket
   // URL — the scrape-source event page is the only real booking route the site
   // knows. Emit it as a "Find tickets" CTA instead of dead-ending on the venue
   // homepage or none; every trusted tier above still wins when present.
-  if (event.price?.type === 'with-ticket' && event.url) {
-    return { kind: 'tickets', label: t.findTicketsArrow, href: event.url };
+  if (event.price?.type === 'with-ticket' && listingUrl) {
+    return { kind: 'tickets', label: t.findTicketsArrow, href: listingUrl };
   }
 
   // D7 rule 5: venue website fallback (covers venue_fallback, unresolved, expired,

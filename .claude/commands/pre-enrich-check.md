@@ -20,8 +20,8 @@ Note the "Enrichment Gaps" section — how many need enrichment, descriptions, a
 
 ## 3. Check Enrichment Queue
 ```bash
-sqlite3 data/events.db "SELECT status, COUNT(*) FROM enrichment_queue GROUP BY status;"
-sqlite3 data/events.db "SELECT tier, COUNT(*) FROM enrichment_queue GROUP BY tier;"
+bun run scripts/db-read.ts "SELECT status, COUNT(*) AS n FROM enrichment_queue GROUP BY status"
+bun run scripts/db-read.ts "SELECT tier, COUNT(*) AS n FROM enrichment_queue GROUP BY tier"
 ```
 
 ## 4. Decide Enrichment Scope

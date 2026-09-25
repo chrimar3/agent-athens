@@ -1,4 +1,5 @@
 import { escapeJsonForHtml, decodeJsonLdEntities } from '../utils/html-json';
+import { escapeHtml } from '../utils/html-escape';
 /**
  * Editor's Picks template partial — S101a infrastructure.
  *
@@ -69,8 +70,8 @@ export function renderEditorPicks(props: EditorPicksProps): string {
     .slice()
     .sort((a, b) => a.rank - b.rank)
     .map(pick => `      <li class="pick">
-        <!-- event-card slot: ${pick.eventId} -->
-        <p class="pick-rationale">${pick.vignette}</p>
+        <!-- event-card slot: ${escapeHtml(pick.eventId)} -->
+        <p class="pick-rationale">${escapeHtml(pick.vignette)}</p>
       </li>`)
     .join('\n');
 

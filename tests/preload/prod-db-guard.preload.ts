@@ -17,6 +17,13 @@
  * so deleting the preload (or dropping it from bunfig.toml) fails the suite.
  */
 import { mock } from 'bun:test';
+
+// The pipeline scripts refuse to run outside the container unless
+// AA_ALLOW_HOST_RUN=1 (host-guard in daily-automated.sh / auto-enrich.sh).
+// Tests exercise those scripts with stubs on the host, so the suite opts in
+// here once; tests/host-run-guard.test.ts checks the refusal itself with a
+// clean environment.
+process.env.AA_ALLOW_HOST_RUN ??= '1';
 import * as realSqlite from 'bun:sqlite';
 import { resolve, join } from 'path';
 

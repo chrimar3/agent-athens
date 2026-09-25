@@ -12,6 +12,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { VenueRecord } from './venue-registry';
+import { safeFetch, OutboundUrlError, type Resolver } from '../utils/outbound-url';
 
 export type ValidationOutcome =
   | 'valid'             // 2xx, path meaningful, not a homepage redirect
@@ -163,6 +164,10 @@ export interface ValidateOptions {
   timeoutMs?: number;
   /** User-Agent header; defaults to AgentAthens identifier. */
   userAgent?: string;
+  /** Injected host resolver (tests). */
+  resolver?: Resolver;
+  /** Injected fetch (tests). */
+  fetchImpl?: typeof fetch;
 }
 
 /**
@@ -173,20 +178,18 @@ export async function validateUrl(
   url: string,
   opts: ValidateOptions = {}
 ): Promise<ValidationResult> {
-  const controller = new AbortController();
-  const timeoutMs = opts.timeoutMs ?? 10_000;
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-
   try {
-    const response = await fetch(url, {
+    // Candidate URLs come from scraped data: the outbound guard allows public
+    // http(s) hosts only and re-validates every redirect hop.
+    const response = await safeFetch(url, {
       method: 'HEAD',
-      redirect: 'follow',
-      signal: controller.signal,
+      timeoutMs: opts.timeoutMs ?? 10_000,
       headers: {
         'User-Agent': opts.userAgent ?? 'Mozilla/5.0 (compatible; AgentAthens/1.0)',
       },
+      resolver: opts.resolver,
+      fetchImpl: opts.fetchImpl,
     });
-    clearTimeout(timer);
 
     const finalUrl = response.url || url;
     const finalHost = hostOf(finalUrl);
@@ -216,11 +219,10 @@ export async function validateUrl(
 
     return { outcome: 'valid', finalUrl, finalHost };
   } catch (error) {
-    clearTimeout(timer);
-    const msg = error instanceof Error ? error.message : String(error);
-    if (msg.includes('abort') || msg.includes('timeout')) {
+    if (error instanceof OutboundUrlError && error.code === 'timeout') {
       return { outcome: 'unverified', finalUrl: null, finalHost: null, error: 'Timeout' };
     }
+    const msg = error instanceof Error ? error.message : String(error);
     return { outcome: 'expired', finalUrl: null, finalHost: null, error: msg };
   }
 }

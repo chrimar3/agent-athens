@@ -15,6 +15,7 @@
 
 export type DeadmanStatus =
   | "OK"
+  | "DB_REFUSED"
   | "DB_MISSING"
   | "STALE_DEPLOY"
   | "STALE_ENRICH"
@@ -30,6 +31,10 @@ export interface DeadmanThresholds {
 export interface DeadmanInputs {
   /** epoch-ms of last deploy-success; null = signal missing (treated as stale). */
   lastDeployMs: number | null;
+  /** Where lastDeployMs came from (security loop round 7): the host record, or
+   *  a label saying "from container-writable logs". Quoted in the deploy
+   *  reason. Default: the legacy logs/deploy-cadence.log wording. */
+  deploySource?: string;
   /** epoch-ms of MAX(enriched_at); null = signal missing (treated as stale). */
   lastEnrichMs: number | null;
   /** launchd (or future routine) health: false = a pipeline job last-exited non-zero. */
@@ -42,6 +47,12 @@ export interface DeadmanInputs {
    *  Suppresses DB_MISSING — WAL contention during enrichment is normal, not a
    *  catastrophe (the 2026-07-05 double false-alarm). Default false. */
   dbBusy?: boolean;
+  /** Security loop round 8: why the untrusted-DB reader (src/watchdog/
+   *  untrusted-db.ts) refused events.db or stopped reading it at its wall
+   *  clock — a symlink or FIFO, a view, a foreign trigger, a runaway query.
+   *  Non-null → DB_REFUSED, which outranks everything and replaces the
+   *  DB_MISSING reason (the file is there; it is not trusted). Default null. */
+  dbRefused?: string | null;
   /** active source ids with ≥3 consecutive zero/failed scrape runs (adapter-computed).
    *  Silent source death — each shrinks the product invisibly. Default []. */
   deadSources?: string[];
@@ -74,9 +85,19 @@ function isStale(tsMs: number | null, nowMs: number, thresholdHours: number): bo
 export function classifyDeadman(inputs: DeadmanInputs): DeadmanResult {
   const {
     lastDeployMs, lastEnrichMs, pipelineHealthy, authPrecheckOk, dbRowCount, nowMs, thresholds,
-    dbBusy = false, deadSources = [], addresslessVenues = [], buildFailureCause = null,
+    dbBusy = false, deadSources = [], addresslessVenues = [], buildFailureCause = null, deploySource,
+    dbRefused = null,
   } = inputs;
   const reasons: string[] = [];
+
+  // Round 8: a refused or runaway events.db is reported as such — never as
+  // "missing", and before anything else (every DB signal below is unknown).
+  if (dbRefused !== null) {
+    reasons.push(
+      `db: events.db REFUSED by the host's untrusted-DB reader — ${dbRefused}. ` +
+      `A container run may have tampered with it: inspect it (sqlite3 -readonly data/events.db .schema) before restoring from backup`,
+    );
+  }
 
   // DB presence/row floor — the catastrophe that precedes every other signal: if
   // events.db is gone or empty, the deploy is serving a frozen/stale site and
@@ -84,7 +105,7 @@ export function classifyDeadman(inputs: DeadmanInputs): DeadmanResult {
   // of being masked under STALE_DEPLOY (the 2026-06-30 incident).
   // dbBusy exception: an unreadable-but-present DB under an active writer is WAL
   // contention, not loss — no reason pushed (the adapter already retried once).
-  const dbDegenerate = (dbRowCount === null && !dbBusy) || (dbRowCount !== null && dbRowCount <= 0);
+  const dbDegenerate = dbRefused === null && ((dbRowCount === null && !dbBusy) || (dbRowCount !== null && dbRowCount <= 0));
   if (dbDegenerate) {
     reasons.push(
       dbRowCount === null
@@ -98,8 +119,9 @@ export function classifyDeadman(inputs: DeadmanInputs): DeadmanResult {
   if (deployStale) {
     reasons.push(
       lastDeployMs === null
-        ? "deploy: no deploy-success signal found (logs/deploy-cadence.log missing/empty)"
-        : `deploy: stale by ${ageHours(lastDeployMs, nowMs).toFixed(1)}h (threshold ${thresholds.deployStaleHours}h)`,
+        ? `deploy: no deploy-success signal found (${deploySource ?? "logs/deploy-cadence.log missing/empty"})`
+        : `deploy: stale by ${ageHours(lastDeployMs, nowMs).toFixed(1)}h (threshold ${thresholds.deployStaleHours}h)` +
+          (deploySource ? ` [source: ${deploySource}]` : ""),
     );
   }
 
@@ -150,7 +172,8 @@ export function classifyDeadman(inputs: DeadmanInputs): DeadmanResult {
   // ADDRESSLESS_VENUES outranks SOURCE_DEAD: it blocks the NEXT build, a dead
   // source only thins future content.
   let status: DeadmanStatus = "OK";
-  if (dbDegenerate) status = "DB_MISSING";
+  if (dbRefused !== null) status = "DB_REFUSED";
+  else if (dbDegenerate) status = "DB_MISSING";
   else if (deployStale) status = "STALE_DEPLOY";
   else if (enrichStale) status = "STALE_ENRICH";
   else if (!pipelineHealthy) status = "PIPELINE_FAIL";

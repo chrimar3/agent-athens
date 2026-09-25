@@ -19,14 +19,14 @@
 	<array>
 		<string>/bin/bash</string>
 		<string>-c</string>
-		<string>/Users/chrism/.bun/bin/bun run "/Users/chrism/Project with Claude/AgentAthens/agent-athens/scripts/check-deploy-cadence.ts"</string>
+		<string>d="${AA_STATE_DIR:-$HOME/.config/agentathens-docker}/logs"; mkdir -p "$d" &amp;&amp; exec &gt;&gt;"$d/check-cadence.log" 2&gt;&amp;1 &amp;&amp; cd "/Users/chrism/Project with Claude/AgentAthens/agent-athens" &amp;&amp; exec /Users/chrism/.bun/bin/bun run scripts/check-deploy-cadence.ts</string>
 	</array>
 	<key>RunAtLoad</key>
 	<false/>
-	<key>StandardErrorPath</key>
-	<string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/check-cadence-stderr.log</string>
-	<key>StandardOutPath</key>
-	<string>/Users/chrism/Project with Claude/AgentAthens/agent-athens/logs/check-cadence-stdout.log</string>
+	<!-- No StandardOutPath/StandardErrorPath (security loop round 5): output goes
+	     to the host-only state folder via the redirect above. Containers can
+	     write the repo logs/ folder, so a symlink planted there would make
+	     launchd write into any file the owner can write. -->
 	<key>StartCalendarInterval</key>
 	<dict>
 		<key>Hour</key>

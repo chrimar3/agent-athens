@@ -22,6 +22,7 @@ import { Database } from 'bun:sqlite';
 import { join } from 'path';
 import { upgradeAthinoramaImage } from '../src/utils/athinorama-image';
 import { processEventImage } from '../src/images/image-pipeline';
+import { prepareUrlWrite } from './lib/url-columns';
 
 const DB_PATH = join(import.meta.dir, '../data/events.db');
 const apply = process.argv.includes('--apply');
@@ -47,7 +48,7 @@ async function main() {
     .all();
   console.log(`📊 Phase 1 (image_url): ${phase1.length} athinorama sub-floor rows`);
 
-  const update = db.query('UPDATE events SET image_url = $url WHERE id = $id');
+  const update = prepareUrlWrite(db, 'UPDATE events SET image_url = $url WHERE id = $id');
   let rewritten = 0;
   for (const row of phase1) {
     const upgraded = upgradeAthinoramaImage(row.image_url);
