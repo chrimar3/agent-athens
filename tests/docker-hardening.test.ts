@@ -94,10 +94,13 @@ describe('docker/compose.yaml hardening', () => {
       for (const v of PROXY_VARS) expect(s.environment[v]).toBe(PROXY_URL);
       expect(s.environment.NO_PROXY).toBe('');
       expect(s.environment.no_proxy).toBe('');
+      // Node's default agent ignores the proxy variables without this; the
+      // Netlify CLI's config loader relies on it (publish failed without it).
+      expect(s.environment.NODE_USE_ENV_PROXY).toBe('1');
       expect(s.environment.TZ).toBe('Europe/Athens');
       expect(s.depends_on.egress.condition).toBe('service_healthy');
     }
-    for (const v of [...PROXY_VARS, 'NO_PROXY', 'no_proxy']) expect(offline.environment[v]).toBeUndefined();
+    for (const v of [...PROXY_VARS, 'NO_PROXY', 'no_proxy', 'NODE_USE_ENV_PROXY']) expect(offline.environment[v]).toBeUndefined();
   });
 
   test('the offline service is the pipeline service, minus build, network, proxy and egress, plus network_mode none', () => {
