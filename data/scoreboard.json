@@ -1,0 +1,131 @@
+{
+  "generated_at": "2026-09-27T12:56:26.453Z",
+  "total_events": 5718,
+  "upcoming_events": 1081,
+  "listed_events": 376,
+  "per_source": {
+    "athinorama.gr": 2003,
+    "benaki": 5,
+    "clubber.gr": 197,
+    "cometogether": 234,
+    "devoxx.gr": 1,
+    "eventbrite": 4,
+    "greeksin.ai": 1,
+    "hackathongreece.ai": 1,
+    "halfnote": 83,
+    "manual": 2,
+    "meetup": 12,
+    "megaron.gr": 202,
+    "more.com": 1225,
+    "onassis": 34,
+    "residentadvisor": 1017,
+    "snfcc": 320,
+    "ticketservices": 377
+  },
+  "health_report": {
+    "report_date": "2026-09-27",
+    "report_file": "2026-09-27.txt",
+    "report_age_days": 0,
+    "stale": false,
+    "scraping": {
+      "athinorama": {
+        "status": "ok",
+        "events": 0,
+        "delta": 0
+      },
+      "benaki": {
+        "status": "ok",
+        "events": 4,
+        "delta": 4
+      },
+      "cometogether": {
+        "status": "ok",
+        "events": 201,
+        "delta": 201
+      },
+      "halfnote": {
+        "status": "ok",
+        "events": 0,
+        "delta": 0
+      },
+      "megaron": {
+        "status": "ok",
+        "events": 118,
+        "delta": 118
+      },
+      "more": {
+        "status": "ok",
+        "events": 0,
+        "delta": 0
+      },
+      "onassis": {
+        "status": "ok",
+        "events": 0,
+        "delta": 0
+      },
+      "ra": {
+        "status": "ok",
+        "events": 72,
+        "delta": 72
+      },
+      "snfcc": {
+        "status": "ok",
+        "events": 0,
+        "delta": 0
+      },
+      "ticketservices": {
+        "status": "ok",
+        "events": 0,
+        "delta": 0
+      }
+    },
+    "database": {
+      "total": 19662,
+      "visible": 812,
+      "hidden": 18850,
+      "new_unverified_venues": 2
+    },
+    "build": {
+      "duration_s": 23.2,
+      "pages": 2546,
+      "schema_valid": 812,
+      "schema_total": 812
+    },
+    "enrichment": {
+      "enriched": 494,
+      "total": 812,
+      "pct": 60.8
+    },
+    "alerts": [
+      {
+        "level": "CRITICAL",
+        "message": "athinorama returned 0 events"
+      },
+      {
+        "level": "CRITICAL",
+        "message": "halfnote returned 0 events"
+      },
+      {
+        "level": "CRITICAL",
+        "message": "more returned 0 events"
+      },
+      {
+        "level": "CRITICAL",
+        "message": "onassis returned 0 events"
+      },
+      {
+        "level": "CRITICAL",
+        "message": "snfcc returned 0 events"
+      },
+      {
+        "level": "CRITICAL",
+        "message": "ticketservices returned 0 events"
+      }
+    ]
+  },
+  "sensor_status": {
+    "health_report": "fresh"
+  },
+  "citations": null,
+  "crawlers": null
+}
