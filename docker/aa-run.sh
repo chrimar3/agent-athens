@@ -120,7 +120,7 @@ job_policy() {
         visibility) TOKENS=""; SECRETS=files; SECRET_FILES="bing-api-key gcp-kpi-reader.json"; DOTENV=no; GITRW=no; LIMIT=30 ;;
         site)       TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; DIST=rw; NET=no; LIMIT=45 ;;
         test|shell) TOKENS=""; SECRETS=no; DOTENV=no; GITRW=no; LIMIT=120 ;;
-        doctor)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN CLAUDE_CODE_OAUTH_TOKEN $GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=no; LIMIT=10 ;;
+        doctor)     TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID CLAUDE_CODE_OAUTH_TOKEN $GIT_ID"; SECRETS=yes; DOTENV=yes; GITRW=no; LIMIT=10 ;;
         *) return 1 ;;
     esac
     [ -n "${AA_JOB_TIMEOUT_MIN:-}" ] && LIMIT="$AA_JOB_TIMEOUT_MIN"
@@ -230,8 +230,15 @@ fi
 # --force-under-quarantine checks the backup in a `shell` run (no token, no
 # .env, dist/ and .git read-only) — the owner asked for exactly that one run
 # while the quarantine stays in place.
-if [ -f "$STATE_DIR/QUARANTINE" ]; then
-    cat "$STATE_DIR/QUARANTINE" >&2
+# Anything named QUARANTINE pauses, not only a regular file: on the Mac's
+# case-insensitive disk an older wrapper's evidence folder quarantine/ is that
+# same name, and a marker that is a folder or a link must still stop the jobs.
+if [ -e "$STATE_DIR/QUARANTINE" ] || [ -L "$STATE_DIR/QUARANTINE" ]; then
+    if [ -f "$STATE_DIR/QUARANTINE" ] && [ ! -L "$STATE_DIR/QUARANTINE" ]; then
+        cat "$STATE_DIR/QUARANTINE" >&2
+    else
+        echo "aa-run: $STATE_DIR/QUARANTINE is not a regular file. If it is the evidence folder of an earlier quarantine (older wrappers wrote evidence to quarantine/, the same name on a Mac disk), review it and move it: mv \"$STATE_DIR/quarantine\" \"$STATE_DIR/evidence-old\"" >&2
+    fi
     if [ "$JOB" != "shell" ] || [ "${AA_RESTORE_UNDER_QUARANTINE:-}" != "1" ]; then
         fail "jobs are paused by a quarantine" "review the evidence, see docs/security/incident-response.md, then delete $STATE_DIR/QUARANTINE" 5
     fi

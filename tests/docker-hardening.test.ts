@@ -462,6 +462,16 @@ describe('docker/aa-run.sh least privilege', () => {
     expect(read('docker/check-live.sh')).toContain('is not one the pipeline recorded');
   });
 
+  test('doctor checks that the Netlify token reaches NETLIFY_SITE_ID, the site .netlify/state.json names, without the token on a command line', () => {
+    expect(wrapper).toMatch(/doctor\)\s+TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID CLAUDE_CODE_OAUTH_TOKEN \$GIT_ID"/);
+    const doctor = read('docker/doctor.sh');
+    expect(doctor).toContain(`printf 'header = "Authorization: Bearer %s"\\n' "\${NETLIFY_AUTH_TOKEN:-}"`);
+    expect(doctor).toMatch(/\| curl -sS -m 30 -K - -o \/dev\/null -w '%\{http_code\}' "https:\/\/api\.netlify\.com\/api\/v1\/sites\/\$NETLIFY_SITE_ID"/);
+    expect(doctor).not.toMatch(/-H "Authorization/);
+    expect(doctor).toContain('"$state_site" != "$NETLIFY_SITE_ID"');
+    expect(doctor).toContain('[[ ! "$NETLIFY_SITE_ID" =~ ^[A-Za-z0-9-]+$ ]]');
+  });
+
   test('stale images are refused except for checks and restores', () => {
     expect(wrapper).toContain('case "$JOB" in doctor|shell|verify-live|restore) stale_ok=yes');
     // Both clocks are checked only for the runs that load outside content.

@@ -74,6 +74,29 @@ fi
 
 if login="$(timeout 30 gh api user --jq .login 2>/dev/null)" && [[ -n "$login" ]]; then ok "GitHub token valid ($login)"; else bad "GitHub token rejected or GitHub unreachable" "check GH_TOKEN is valid and not expired"; fi
 
+# The publish run deploys to NETLIFY_SITE_ID (the CLI prefers it to
+# .netlify/state.json), and the deploy-id recovery and state polls use the
+# state.json id: both must name the same site, and the token must reach it.
+# The token goes to curl on stdin (-K -), never on its command line.
+state_site="$(jq -r '.siteId // empty' .netlify/state.json 2>/dev/null || true)"
+if [[ -z "${NETLIFY_SITE_ID:-}" ]]; then
+    bad "NETLIFY_SITE_ID not set" "add it to the env file: Netlify → your site → Site configuration → Site details → Site ID"
+elif [[ ! "$NETLIFY_SITE_ID" =~ ^[A-Za-z0-9-]+$ ]]; then
+    bad "NETLIFY_SITE_ID has unexpected characters" "use the Site ID (a UUID) from Netlify → Site configuration → Site details, not the site name or URL"
+else
+    if [[ -n "$state_site" && "$state_site" != "$NETLIFY_SITE_ID" ]]; then
+        bad "NETLIFY_SITE_ID differs from .netlify/state.json's siteId" "put the siteId from .netlify/state.json (the site this repo is linked to) after NETLIFY_SITE_ID= in the env file"
+    fi
+    code="$(printf 'header = "Authorization: Bearer %s"\n' "${NETLIFY_AUTH_TOKEN:-}" \
+        | curl -sS -m 30 -K - -o /dev/null -w '%{http_code}' "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID" 2>/dev/null || true)"
+    case "$code" in
+        200) ok "Netlify token reaches site $NETLIFY_SITE_ID" ;;
+        401|403) bad "Netlify rejected the token (HTTP $code)" "create a new personal access token in the Netlify account that owns the site and put it in NETLIFY_AUTH_TOKEN" ;;
+        404) bad "Netlify: site $NETLIFY_SITE_ID not found for this token (HTTP 404)" "check NETLIFY_SITE_ID against .netlify/state.json, and that the token was created in the account/team that owns the site" ;;
+        *) bad "Netlify API check failed (HTTP ${code:-no answer})" "check the egress proxy (docker logs aa-egress) and retry" ;;
+    esac
+fi
+
 if timeout 60 chromium --headless=new --no-sandbox --disable-gpu --dump-dom 'data:text/html,<p>aa-ok</p>' 2>/dev/null | grep -q aa-ok; then
     ok "Chromium renders a page"
 else

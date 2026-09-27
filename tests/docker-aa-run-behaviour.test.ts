@@ -8,7 +8,7 @@
 // order of the runs.
 import { beforeEach, describe, expect, setDefaultTimeout, test } from 'bun:test';
 import { createHash } from 'crypto';
-import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, symlinkSync, writeFileSync } from 'fs';
+import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, symlinkSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
@@ -983,6 +983,33 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh dist/ access and
     expect(r.out).toContain(`removing the stale dist/ lock of aa-run.sh process ${dead}`);
     expect(runs().map((x) => x.job)).toEqual(['site']);
     expect(existsSync(lockPath())).toBe(false);
+  });
+
+  test('a QUARANTINE that is a folder (an older evidence folder on the Mac\'s case-insensitive disk) or a link still pauses every job', () => {
+    mkdirSync(join(state, 'QUARANTINE'));
+    const r = run(['enrichment']);
+    expect(r.code).toBe(5);
+    expect(r.out).toContain('is not a regular file');
+    expect(r.out).toContain('evidence-old');
+    rmSync(join(state, 'QUARANTINE'), { recursive: true });
+    symlinkSync(join(state, 'nowhere'), join(state, 'QUARANTINE'));
+    expect(run(['site']).code).toBe(5);
+    expect(runs()).toEqual([]);
+  });
+
+  test('after a quarantine the marker is a regular file and no other state entry shares its name in any letter case', () => {
+    const pre = join(state, 'state/agent-athens-enrichment.pre');
+    const snap = Bun.spawnSync(['bash', join(repo, 'docker/integrity-check.sh'), 'snapshot', pre], {
+      cwd: repo,
+      env: { PATH: process.env.PATH ?? '', HOME: home, AA_STATE_DIR: state },
+    });
+    expect(snap.exitCode).toBe(0);
+    writeFileSync(join(repo, 'CLAUDE.md'), 'planted\n');
+    expect(run(['enrichment']).code).toBe(6);
+    expect(statSync(join(state, 'QUARANTINE')).isFile()).toBe(true);
+    const clash = readdirSync(state).filter((n) => n.toLowerCase() === 'quarantine');
+    expect(clash).toEqual(['QUARANTINE']);
+    expect(existsSync(join(state, 'evidence'))).toBe(true);
   });
 
   test('under a quarantine only the restore check shell may run (AA_RESTORE_UNDER_QUARANTINE=1), nothing else', () => {

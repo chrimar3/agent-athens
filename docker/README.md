@@ -323,9 +323,13 @@ host jobs exactly as they were.
   only, so a run can't rewrite the record of what it did) plus the pipeline's
   usual logs in `logs/`.
 - **Quarantine:** if a run trips the integrity check, every job stops and you
-  get a notification. The evidence is in `~/.config/agentathens-docker/quarantine/`;
+  get a notification. The evidence is in `~/.config/agentathens-docker/evidence/`;
   follow `docs/security/incident-response.md`, then remove
-  `~/.config/agentathens-docker/QUARANTINE` to resume. Creating a new file at
+  `~/.config/agentathens-docker/QUARANTINE` to resume. (Older wrappers wrote
+  the evidence to `quarantine/`, which on the Mac's case-insensitive disk is
+  the marker's own name: the marker could not be written, and a leftover
+  `quarantine/` folder now pauses every job as a marker would. Review it and
+  move it: `mv ~/.config/agentathens-docker/quarantine ~/.config/agentathens-docker/evidence-old`.) Creating a new file at
   the top of the repo while a job runs also trips it (it can't tell you apart
   from a planted file); move yours back from the evidence folder. Running
   `git gc` or `git maintenance` on the Mac while a job runs trips it too.
