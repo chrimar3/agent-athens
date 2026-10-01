@@ -382,7 +382,7 @@ describe('integrity-check.sh object store', () => {
 // committed there — are quarantined; the Mac's disk is case-insensitive, so
 // any letter case counts.
 describe('integrity-check.sh planted instruction files', () => {
-  const planted = (rel: string) => join(state, 'quarantine', readdirSync(join(state, 'quarantine'))[0], 'planted', rel);
+  const planted = (rel: string) => join(state, 'evidence', readdirSync(join(state, 'evidence'))[0], 'planted', rel);
 
   for (const [label, rel, isDir] of [
     ['a nested CLAUDE.md', 'data/x/y/CLAUDE.md', false],
@@ -504,7 +504,7 @@ describe('integrity-check.sh planted instruction files', () => {
 // .ts/.sh is one command away. dist/ holds the site's own .js/.mjs, so there
 // only tests and package/tool config count.
 describe('integrity-check.sh planted code', () => {
-  const planted = (rel: string) => join(state, 'quarantine', readdirSync(join(state, 'quarantine'))[0], 'planted', rel);
+  const planted = (rel: string) => join(state, 'evidence', readdirSync(join(state, 'evidence'))[0], 'planted', rel);
   const put = (rel: string, body = 'x\n') => {
     mkdirSync(join(repo, rel, '..'), { recursive: true });
     writeFileSync(join(repo, rel), body);
@@ -915,7 +915,10 @@ describe('docker/aa-run.sh wiring', () => {
     expect(wrapper).toMatch(/integrity-check\.sh" snapshot/);
     expect(wrapper).toMatch(/integrity-check\.sh" verify[^\n]*\|\| exit 6/);
   });
-  test('a quarantine pauses every job', () => {
-    expect(wrapper).toMatch(/QUARANTINE[\s\S]{0,200}exit|QUARANTINE" \]; then[\s\S]{0,300}5/);
+  test('a quarantine pauses every job, whatever kind of entry the marker is', () => {
+    // -e/-L, not -f: on the Mac's case-insensitive disk a folder named
+    // quarantine/ is the marker's name (see the behaviour test).
+    expect(wrapper).toMatch(/if \[ -e "\$STATE_DIR\/QUARANTINE" \] \|\| \[ -L "\$STATE_DIR\/QUARANTINE" \]; then[\s\S]{0,900}jobs are paused by a quarantine"[^\n]*5\n/);
+    expect(wrapper).not.toMatch(/-f "\$STATE_DIR\/QUARANTINE" \]; then\n\s+cat/);
   });
 });

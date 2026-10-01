@@ -48,9 +48,14 @@ src="${1:-}"
 
 # A quarantine means a run was caught changing what it must not: restoring
 # the database (and later building from it) is the owner's call, not a default.
-if [ -f "$STATE_DIR/QUARANTINE" ]; then
+# Any entry by that name counts (a folder or link too: see aa-run.sh).
+if [ -e "$STATE_DIR/QUARANTINE" ] || [ -L "$STATE_DIR/QUARANTINE" ]; then
     echo "restore: the pipeline is quarantined:" >&2
-    sed 's/^/restore:   /' "$STATE_DIR/QUARANTINE" >&2
+    if [ -f "$STATE_DIR/QUARANTINE" ] && [ ! -L "$STATE_DIR/QUARANTINE" ]; then
+        sed 's/^/restore:   /' "$STATE_DIR/QUARANTINE" >&2
+    else
+        echo "restore:   $STATE_DIR/QUARANTINE is not a regular file (an older evidence folder quarantine/ is the same name on a Mac disk)" >&2
+    fi
     [ "$FORCE_QUARANTINE" = "yes" ] \
         || fail "refusing to restore while $STATE_DIR/QUARANTINE exists" \
                 "follow docs/security/incident-response.md first; if restoring this database is part of that, rerun with --force-under-quarantine"

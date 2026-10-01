@@ -51,11 +51,13 @@
 #   docker/integrity-check.sh snapshot STATE_FILE
 #   docker/integrity-check.sh verify   STATE_FILE JOB
 #
-# On failure: evidence goes to $AA_STATE_DIR/quarantine/<time>/, bad commits
+# On failure: evidence goes to $AA_STATE_DIR/evidence/<time>/, bad commits
 # are moved to a quarantine/<time> branch and HEAD is reset (--mixed: your
 # uncommitted edits stay), planted root files are moved into the evidence
 # folder, $AA_STATE_DIR/QUARANTINE is written (aa-run.sh then refuses every
-# job until you review and delete it), and an alert is sent.
+# job until you review and delete it), and an alert is sent. The evidence
+# folder is not called quarantine/: on the Mac's case-insensitive disk that
+# is the same name as the QUARANTINE marker, which then cannot be written.
 set -u
 # Replacement refs (refs/replace/*) make git show substituted content for any
 # object; every git command here must see the real objects.
@@ -135,7 +137,7 @@ send_email_alert() {  # $1 message
 
 quarantine() {  # $1 reason, $2 pre-run HEAD ("" = do not run git), $3 planted paths (relative, one per line) to move out
     ts="$(date +%Y%m%d-%H%M%S)"
-    qdir="$STATE_DIR/quarantine/$ts"
+    qdir="$STATE_DIR/evidence/$ts"
     mkdir -p "$qdir"
     printf '%s\njob=%s\npre_head=%s\n' "$1" "$JOB" "${2:-not-run}" > "$qdir/REASON"
     if [ -n "${3:-}" ]; then
@@ -157,8 +159,11 @@ quarantine() {  # $1 reason, $2 pre-run HEAD ("" = do not run git), $3 planted p
              git reset --mixed -q "$2" >/dev/null 2>&1
          fi)
     fi
+    # aa-run.sh, restore-backup.sh and redeploy.sh pause on any QUARANTINE
+    # entry, whatever its type; if it cannot be written as a file, say so.
     printf 'Quarantined at %s after job "%s": %s\nEvidence: %s\nReview it, then delete this file to resume.\n' \
-        "$ts" "$JOB" "$1" "$qdir" > "$STATE_DIR/QUARANTINE"
+        "$ts" "$JOB" "$1" "$qdir" > "$STATE_DIR/QUARANTINE" \
+        || echo "integrity-check: could not write $STATE_DIR/QUARANTINE (jobs stay paused while anything by that name exists)" >&2
     echo "integrity-check: FAILED — $1" >&2
     echo "integrity-check: evidence in $qdir; every job is paused until you delete $STATE_DIR/QUARANTINE" >&2
     notify "Job $JOB: $1. All jobs paused. Evidence: $qdir"
@@ -406,7 +411,8 @@ check_reflogs() {  # $1 state file, $2 pre-run HEAD, $3 pre-run pipeline-data
         line="$(awk -v f="$f" '$3 == f {print $1, $2}' "$tmp/pre")"
         if [ -n "$line" ]; then
             pre_size="${line%% *}"; pre_sum="${line#* }"
-            if [ "$size" -lt "$pre_size" ] || [ "$(head -c "$pre_size" "$REPO/.git/$f" | shasum -a 256 | awk '{print $1}')" != "$pre_sum" ]; then
+            # BSD head refuses -c 0; an empty prefix is the empty file.
+            if [ "$size" -lt "$pre_size" ] || { [ "$pre_size" -gt 0 ] && [ "$(head -c "$pre_size" "$REPO/.git/$f" | shasum -a 256 | awk '{print $1}')" != "$pre_sum" ]; }; then
                 bad="$bad$f(rewritten) "; continue
             fi
             [ "$size" -gt "$pre_size" ] || continue

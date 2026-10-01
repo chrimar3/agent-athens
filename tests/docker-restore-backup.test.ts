@@ -186,6 +186,15 @@ describe('restore-backup.sh refuses planted paths and quarantines', () => {
     expect(existsSync(join(state, 'QUARANTINE'))).toBe(true); // stays in place
   });
 
+  test('a QUARANTINE that is a folder (an older evidence folder on a Mac disk) still refuses the restore', () => {
+    goodBackup();
+    mkdirSync(join(state, 'QUARANTINE'), { recursive: true });
+    const refused = run();
+    expect(refused.code).toBe(2);
+    expect(refused.out).toContain('is not a regular file');
+    expect(readFileSync(join(repo, 'data/events.db'), 'utf8')).toBe('live-db-bytes');
+  });
+
   test('without a check command, a forced restore asks aa-run.sh for its one shell under the quarantine', () => {
     const script = readFileSync(SCRIPT, 'utf8');
     expect(script).toMatch(/\[ "\$FORCE_QUARANTINE" = "yes" \] && qenv=1\n\s+out="\$\(AA_RESTORE_UNDER_QUARANTINE="\$qenv" bash "\$HERE\/aa-run\.sh" shell -c/);

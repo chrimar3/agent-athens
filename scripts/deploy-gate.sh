@@ -195,18 +195,33 @@ og_fail() {
     echo "deploy-gate: nothing was deployed. Get the code reviewed and merged to origin/$PRODUCTION_BRANCH, reset the checkout to it (git fetch origin && git reset --hard origin/$PRODUCTION_BRANCH), rebuild, retry." >&2
     exit 1
 }
-og_ref="refs/remotes/origin/$PRODUCTION_BRANCH"
+# The remote tip is read with ls-remote and its objects are fetched with no
+# ref written: no remote-tracking ref moves and no FETCH_HEAD is written
+# (--refmap= and --no-write-fetch-head). Inside a container run either is
+# what docker/integrity-check.sh quarantines — origin/main moved past the
+# Mac's main after any merge on GitHub, or a FETCH_HEAD a later
+# 'git merge FETCH_HEAD' on the Mac would apply.
+og_cred=(-c credential.helper='!gh auth git-credential')
 og_rc=0
+og_out="$(mktemp)" || og_fail "mktemp failed"
 run_awake_bounded "${FETCH_TIMEOUT:-120}" env GIT_TERMINAL_PROMPT=0 \
-    git -C "$ROOT" -c credential.helper='!gh auth git-credential' fetch --quiet --no-tags \
-    origin "+refs/heads/$PRODUCTION_BRANCH:$og_ref" >&2 || og_rc=$?
+    git -C "$ROOT" "${og_cred[@]}" ls-remote --exit-code origin "refs/heads/$PRODUCTION_BRANCH" >"$og_out" || og_rc=$?
+if [[ "$og_rc" -eq 0 ]]; then
+    run_awake_bounded "${FETCH_TIMEOUT:-120}" env GIT_TERMINAL_PROMPT=0 \
+        git -C "$ROOT" "${og_cred[@]}" fetch --quiet --no-tags --no-write-fetch-head --refmap= \
+        origin "refs/heads/$PRODUCTION_BRANCH" >&2 || og_rc=$?
+fi
+og_tip="$(awk -v r="refs/heads/$PRODUCTION_BRANCH" '$2 == r {print $1}' "$og_out")"
+rm -f "$og_out"
 if [[ "$og_rc" -ne 0 ]]; then
     og_what="failed (exit $og_rc)"
     [[ "$og_rc" -eq 124 ]] && og_what="timed out after ${FETCH_TIMEOUT:-120}s of awake time"
-    og_fail "fetching origin/$PRODUCTION_BRANCH $og_what; cannot prove HEAD is reviewed code. Check network/credentials (git fetch origin $PRODUCTION_BRANCH)"
+    og_fail "fetching origin/$PRODUCTION_BRANCH $og_what; cannot prove HEAD is reviewed code. Check network/credentials (git ls-remote origin $PRODUCTION_BRANCH)"
 fi
-og_tip="$(git -C "$ROOT" rev-parse --verify -q "$og_ref^{commit}")" \
-    || og_fail "cannot resolve $og_ref after the fetch"
+[[ "$og_tip" =~ ^[0-9a-f]{40}([0-9a-f]{24})?$ ]] \
+    || og_fail "origin did not report a commit id for $PRODUCTION_BRANCH"
+git -C "$ROOT" cat-file -e "$og_tip^{commit}" 2>/dev/null \
+    || og_fail "origin/$PRODUCTION_BRANCH's tip ${og_tip:0:12} is not in this repository after the fetch (did it move while fetching?); retry"
 if ! git -C "$ROOT" merge-base --is-ancestor "$HEAD_SHA" "$og_tip"; then
     og_local="$(git -C "$ROOT" rev-list --max-count=10 "$og_tip..$HEAD_SHA" | cut -c1-12 | tr '\n' ' ')"
     og_fail "HEAD ${HEAD_SHA:0:12} is not on origin/$PRODUCTION_BRANCH (${og_tip:0:12}); local commit(s) not reviewed: ${og_local:-unknown}"

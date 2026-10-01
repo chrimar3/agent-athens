@@ -77,6 +77,11 @@ x-pipeline: &pipeline
 # Every HTTP client the pipeline uses (bun fetch, curl, git, gh, netlify,
 # claude, Google clients) reads these; Chromium gets --proxy-server from
 # scripts/lib/chrome-path.ts. Anything that ignores them has no route out.
+# NODE_USE_ENV_PROXY=1 makes Node's default http/https agent use them too:
+# without it, code that brings no agent of its own ignores them — the Netlify
+# CLI's config loader (@netlify/config → @netlify/api → node-fetch) then
+# cannot reach the API, falls back offline, and `netlify deploy` fails with
+# "Project not found" (first container publish, 2026-09-27).
 x-proxy-env: &proxy-env
     <<: *pipeline-env
     HTTP_PROXY: http://egress:3128
@@ -85,6 +90,7 @@ x-proxy-env: &proxy-env
     https_proxy: http://egress:3128
     NO_PROXY: ""
     no_proxy: ""
+    NODE_USE_ENV_PROXY: "1"
 
 services:
   pipeline:

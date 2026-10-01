@@ -94,10 +94,13 @@ describe('docker/compose.yaml hardening', () => {
       for (const v of PROXY_VARS) expect(s.environment[v]).toBe(PROXY_URL);
       expect(s.environment.NO_PROXY).toBe('');
       expect(s.environment.no_proxy).toBe('');
+      // Node's default agent ignores the proxy variables without this; the
+      // Netlify CLI's config loader relies on it (publish failed without it).
+      expect(s.environment.NODE_USE_ENV_PROXY).toBe('1');
       expect(s.environment.TZ).toBe('Europe/Athens');
       expect(s.depends_on.egress.condition).toBe('service_healthy');
     }
-    for (const v of [...PROXY_VARS, 'NO_PROXY', 'no_proxy']) expect(offline.environment[v]).toBeUndefined();
+    for (const v of [...PROXY_VARS, 'NO_PROXY', 'no_proxy', 'NODE_USE_ENV_PROXY']) expect(offline.environment[v]).toBeUndefined();
   });
 
   test('the offline service is the pipeline service, minus build, network, proxy and egress, plus network_mode none', () => {
@@ -460,6 +463,16 @@ describe('docker/aa-run.sh least privilege', () => {
     // tests/docker-verify-live.test.ts) and alerts + exits 8 on any finding.
     expect(wrapper).toMatch(/check_live\(\) \{[\s\S]{0,200}check-live\.sh" "\$1" "\$DEPLOYS_LOG" "\$STATE_DIR\/live-baseline"[\s\S]{0,400}integrity-check\.sh" notify[\s\S]{0,120}exit 8/);
     expect(read('docker/check-live.sh')).toContain('is not one the pipeline recorded');
+  });
+
+  test('doctor checks that the Netlify token reaches NETLIFY_SITE_ID, the site .netlify/state.json names, without the token on a command line', () => {
+    expect(wrapper).toMatch(/doctor\)\s+TOKENS="GH_TOKEN NETLIFY_AUTH_TOKEN NETLIFY_SITE_ID CLAUDE_CODE_OAUTH_TOKEN \$GIT_ID"/);
+    const doctor = read('docker/doctor.sh');
+    expect(doctor).toContain(`printf 'header = "Authorization: Bearer %s"\\n' "\${NETLIFY_AUTH_TOKEN:-}"`);
+    expect(doctor).toMatch(/\| curl -sS -m 30 -K - -o \/dev\/null -w '%\{http_code\}' "https:\/\/api\.netlify\.com\/api\/v1\/sites\/\$NETLIFY_SITE_ID"/);
+    expect(doctor).not.toMatch(/-H "Authorization/);
+    expect(doctor).toContain('"$state_site" != "$NETLIFY_SITE_ID"');
+    expect(doctor).toContain('[[ ! "$NETLIFY_SITE_ID" =~ ^[A-Za-z0-9-]+$ ]]');
   });
 
   test('stale images are refused except for checks and restores', () => {

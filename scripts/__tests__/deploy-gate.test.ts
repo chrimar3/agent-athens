@@ -303,6 +303,33 @@ exec "${REAL_GIT}" "$@"
     expect(res.out).toContain('origin/main');
   });
 
+  test('the origin fetch writes no FETCH_HEAD (a container run that changes it is quarantined)', () => {
+    const r = fixture();
+    stamp(r, headSha(r));
+    rmSync(join(r, '.git/FETCH_HEAD'), { force: true });
+    const res = gateWith(r, fakeBin(r));
+    expect(res.code).toBe(0);
+    expect(existsSync(join(r, '.git/FETCH_HEAD'))).toBe(false);
+  });
+
+  test('origin ahead of the checkout (a PR merged on GitHub, not pulled yet) → PASS without moving refs/remotes/origin/main', () => {
+    // In a container run, a tracking ref moving past the Mac's main is what
+    // docker/integrity-check.sh quarantines.
+    const r = fixture();
+    const before = headSha(r);
+    writeFileSync(join(r, 'src/app.ts'), 'export const x = 7;\n');
+    sh(r, ['git', 'commit', '-qam', 'feat: merged upstream later']);
+    mergeUpstream(r);
+    sh(r, ['git', 'reset', '-q', '--hard', before]);
+    sh(r, ['git', 'update-ref', 'refs/remotes/origin/main', before]);
+    rmSync(join(r, '.git/FETCH_HEAD'), { force: true });
+    stamp(r, before);
+    const res = gateWith(r, fakeBin(r));
+    expect(res.code).toBe(0);
+    expect(sh(r, ['git', 'rev-parse', 'refs/remotes/origin/main']).out.trim()).toBe(before);
+    expect(existsSync(join(r, '.git/FETCH_HEAD'))).toBe(false);
+  });
+
   test('HEAD is an older reviewed commit (ancestor of origin/main) → PASS', () => {
     const r = fixture();
     writeFileSync(join(r, 'src/app.ts'), 'export const x = 5;\n');
