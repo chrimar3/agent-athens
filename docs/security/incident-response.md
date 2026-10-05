@@ -86,7 +86,8 @@ run changed git's config or hooks, committed non-data files, or planted a file
 at the repo root.
 
 1. Read `~/.config/agentathens-docker/QUARANTINE` and the evidence folder it
-   names (`REASON`, `new-commits.txt`, `planted/`). Bad commits are kept on a
+   names (`REASON`, `new-commits.txt`, `planted/`, and `snapshot.pre`, the
+   pre-run state the run was checked against). Bad commits are kept on a
    `quarantine/<time>` branch; HEAD was reset to the pre-run commit.
 2. If `.git/config` or `.git/hooks` changed, do **not** run git in the repo
    until you have compared them by hand with a fresh clone.
