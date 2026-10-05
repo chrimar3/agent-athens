@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-09-27T12:56:26.453Z",
-  "total_events": 5718,
-  "upcoming_events": 1081,
-  "listed_events": 376,
+  "generated_at": "2026-10-05T20:55:14.536Z",
+  "total_events": 5782,
+  "upcoming_events": 997,
+  "listed_events": 342,
   "per_source": {
     "athinorama.gr": 2003,
     "benaki": 5,
     "clubber.gr": 197,
-    "cometogether": 234,
+    "cometogether": 267,
     "devoxx.gr": 1,
     "eventbrite": 4,
     "greeksin.ai": 1,
@@ -15,16 +15,16 @@
     "halfnote": 83,
     "manual": 2,
     "meetup": 12,
-    "megaron.gr": 202,
+    "megaron.gr": 203,
     "more.com": 1225,
     "onassis": 34,
-    "residentadvisor": 1017,
+    "residentadvisor": 1047,
     "snfcc": 320,
     "ticketservices": 377
   },
   "health_report": {
-    "report_date": "2026-09-27",
-    "report_file": "2026-09-27.txt",
+    "report_date": "2026-10-05",
+    "report_file": "2026-10-05.txt",
     "report_age_days": 0,
     "stale": false,
     "scraping": {
@@ -40,8 +40,8 @@
       },
       "cometogether": {
         "status": "ok",
-        "events": 201,
-        "delta": 201
+        "events": 221,
+        "delta": 221
       },
       "halfnote": {
         "status": "ok",
@@ -50,8 +50,8 @@
       },
       "megaron": {
         "status": "ok",
-        "events": 118,
-        "delta": 118
+        "events": 113,
+        "delta": 113
       },
       "more": {
         "status": "ok",
@@ -65,8 +65,8 @@
       },
       "ra": {
         "status": "ok",
-        "events": 72,
-        "delta": 72
+        "events": 81,
+        "delta": 81
       },
       "snfcc": {
         "status": "ok",
@@ -80,21 +80,21 @@
       }
     },
     "database": {
-      "total": 19662,
-      "visible": 812,
-      "hidden": 18850,
-      "new_unverified_venues": 2
+      "total": 19726,
+      "visible": 747,
+      "hidden": 18979,
+      "new_unverified_venues": 17
     },
     "build": {
-      "duration_s": 23.2,
-      "pages": 2546,
-      "schema_valid": 812,
-      "schema_total": 812
+      "duration_s": 21.8,
+      "pages": 2537,
+      "schema_valid": 747,
+      "schema_total": 747
     },
     "enrichment": {
-      "enriched": 494,
-      "total": 812,
-      "pct": 60.8
+      "enriched": 420,
+      "total": 747,
+      "pct": 56.2
     },
     "alerts": [
       {
@@ -120,6 +120,10 @@
       {
         "level": "CRITICAL",
         "message": "ticketservices returned 0 events"
+      },
+      {
+        "level": "WARNING",
+        "message": "17 new unverified venues - run venue review"
       }
     ]
   },
