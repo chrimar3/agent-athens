@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-10-05T20:55:14.536Z",
+  "generated_at": "2026-10-05T21:46:42.240Z",
   "total_events": 5782,
-  "upcoming_events": 997,
-  "listed_events": 342,
+  "upcoming_events": 980,
+  "listed_events": 336,
   "per_source": {
     "athinorama.gr": 2003,
     "benaki": 5,
@@ -23,8 +23,8 @@
     "ticketservices": 377
   },
   "health_report": {
-    "report_date": "2026-10-05",
-    "report_file": "2026-10-05.txt",
+    "report_date": "2026-10-06",
+    "report_file": "2026-10-06.txt",
     "report_age_days": 0,
     "stale": false,
     "scraping": {
@@ -50,8 +50,8 @@
       },
       "megaron": {
         "status": "ok",
-        "events": 113,
-        "delta": 113
+        "events": 0,
+        "delta": 0
       },
       "more": {
         "status": "ok",
@@ -81,19 +81,19 @@
     },
     "database": {
       "total": 19726,
-      "visible": 747,
-      "hidden": 18979,
+      "visible": 740,
+      "hidden": 18986,
       "new_unverified_venues": 17
     },
     "build": {
-      "duration_s": 21.8,
-      "pages": 2537,
-      "schema_valid": 747,
-      "schema_total": 747
+      "duration_s": 21.4,
+      "pages": 2531,
+      "schema_valid": 740,
+      "schema_total": 740
     },
     "enrichment": {
-      "enriched": 420,
-      "total": 747,
+      "enriched": 416,
+      "total": 740,
       "pct": 56.2
     },
     "alerts": [
@@ -104,6 +104,10 @@
       {
         "level": "CRITICAL",
         "message": "halfnote returned 0 events"
+      },
+      {
+        "level": "CRITICAL",
+        "message": "megaron returned 0 events"
       },
       {
         "level": "CRITICAL",

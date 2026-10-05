@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdate": "2026-10-05T20:55:11.154Z"
+    "lastUpdate": "2026-10-05T21:46:39.050Z"
   },
   "layers": {
     "event_level": "measured",
@@ -13,17 +13,17 @@
     "byType": [
       {
         "type": "concert",
-        "total": 366,
-        "pass": 346,
+        "total": 365,
+        "pass": 345,
         "warn": 20,
         "fail": 0,
-        "info": 269,
+        "info": 265,
         "passRate": 95
       },
       {
         "type": "dj_set",
-        "total": 245,
-        "pass": 245,
+        "total": 242,
+        "pass": 242,
         "warn": 0,
         "fail": 0,
         "info": 134,
@@ -40,8 +40,8 @@
       },
       {
         "type": "cinema",
-        "total": 19,
-        "pass": 19,
+        "total": 17,
+        "pass": 17,
         "warn": 0,
         "fail": 0,
         "info": 4,
@@ -50,10 +50,10 @@
       {
         "type": "theater",
         "total": 326,
-        "pass": 312,
-        "warn": 14,
+        "pass": 313,
+        "warn": 13,
         "fail": 0,
-        "info": 246,
+        "info": 244,
         "passRate": 96
       },
       {
@@ -112,11 +112,11 @@
       }
     ],
     "totals": {
-      "total": 1299,
-      "pass": 1264,
-      "warn": 35,
+      "total": 1293,
+      "pass": 1259,
+      "warn": 34,
       "fail": 0,
-      "info": 746,
+      "info": 740,
       "passRate": 97
     },
     "orphanSlugs": [
@@ -124,9 +124,9 @@
     ]
   },
   "hubs": {
-    "total": 27,
-    "pass": 8,
-    "warn": 19,
+    "total": 26,
+    "pass": 6,
+    "warn": 20,
     "fail": 0,
     "info": 0
   },
@@ -172,11 +172,11 @@
       "info": 30
     },
     "event_template": {
-      "total": 1299,
-      "pass": 1264,
-      "warn": 35,
+      "total": 1293,
+      "pass": 1259,
+      "warn": 34,
       "fail": 0,
-      "info": 746
+      "info": 740
     },
     "byVenue": [
       {
@@ -261,8 +261,8 @@
       },
       {
         "venue": "b side athens",
-        "total": 7,
-        "pass": 7,
+        "total": 6,
+        "pass": 6,
         "warn": 0,
         "fail": 0,
         "info": 0,
@@ -281,8 +281,8 @@
       },
       {
         "venue": "bolivar",
-        "total": 13,
-        "pass": 13,
+        "total": 10,
+        "pass": 10,
         "warn": 0,
         "fail": 0,
         "info": 0,
@@ -702,11 +702,11 @@
       {
         "venue": "ανοιχτο θεατρο κολωνου",
         "total": 16,
-        "pass": 9,
-        "warn": 7,
+        "pass": 10,
+        "warn": 6,
         "fail": 0,
-        "info": 7,
-        "passRate": 56,
+        "info": 6,
+        "passRate": 63,
         "sameAsState": "missing"
       },
       {
@@ -795,7 +795,7 @@
         "pass": 12,
         "warn": 0,
         "fail": 0,
-        "info": 8,
+        "info": 6,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1105,7 +1105,7 @@
         "pass": 20,
         "warn": 0,
         "fail": 0,
-        "info": 14,
+        "info": 12,
         "passRate": 100,
         "sameAsState": "missing"
       },
@@ -1131,8 +1131,8 @@
       },
       {
         "venue": "κπισν",
-        "total": 265,
-        "pass": 265,
+        "total": 263,
+        "pass": 263,
         "warn": 0,
         "fail": 0,
         "info": 53,
@@ -1215,7 +1215,7 @@
         "pass": 32,
         "warn": 0,
         "fail": 0,
-        "info": 32,
+        "info": 31,
         "passRate": 100,
         "sameAsState": "missing"
       },
