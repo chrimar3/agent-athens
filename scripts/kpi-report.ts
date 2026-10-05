@@ -37,11 +37,11 @@ export const LAYERS: LayerSpec[] = [
   { table: 'tracked_prompts', label: 'Tracked prompts', emptyMsg: 'no prompts seeded yet' },
 ];
 
-function tableExists(db: Database, name: string): boolean {
+export function tableExists(db: Database, name: string): boolean {
   return !!db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?").get(name);
 }
 
-function rowCount(db: Database, table: string): number {
+export function rowCount(db: Database, table: string): number {
   return (db.prepare(`SELECT COUNT(*) AS n FROM ${table}`).get() as { n: number }).n;
 }
 

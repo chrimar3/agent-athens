@@ -204,7 +204,8 @@ describe('assembleScoreboard — output shape', () => {
   let parsed: any;
 
   beforeAll(() => {
-    assembleScoreboard({ dbPath, reportsDir, outPath });
+    // An absent kpi.db path: the shape tests must not read the operator's real data/kpi.db.
+    assembleScoreboard({ dbPath, reportsDir, outPath, kpiDbPath: join(work, 'no-such-kpi.db') });
     parsed = JSON.parse(readFileSync(outPath, 'utf-8'));
   });
 
@@ -236,11 +237,14 @@ describe('assembleScoreboard — output shape', () => {
     expect(parsed.per_source).toEqual(EXPECTED_PER_SOURCE);
   });
 
-  test('citations and crawlers are literal null placeholders', () => {
-    expect('citations' in parsed).toBe(true);
-    expect('crawlers' in parsed).toBe(true);
-    expect(parsed.citations).toBeNull();
-    expect(parsed.crawlers).toBeNull();
+  test('citations and crawlers are non-null blocks even with no kpi.db (a known "missing", not an unknown null)', () => {
+    expect(parsed.citations).toEqual({
+      manual_citation_log: { rows: null, latest: null },
+      bwt_ai_citations: { rows: null, latest: null },
+      bwt_grounding_queries: { rows: null, latest: null },
+    });
+    expect(parsed.crawlers).toEqual({ server_log_ai_bots: { rows: null, latest: null } });
+    expect(parsed.sensor_status).toEqual({ health_report: 'stale', citations: 'missing', crawlers: 'missing' });
   });
 
   test('health_report comes from the NEWEST dated report, not the stray file or the older one', () => {
@@ -342,7 +346,7 @@ function assembleWith(fileName: string, content: string, today: string) {
   try {
     writeFileSync(join(dir, fileName), content);
     const out = join(dir, 'scoreboard.json');
-    const returned: any = assembleScoreboard({ dbPath, reportsDir: dir, outPath: out, today });
+    const returned: any = assembleScoreboard({ dbPath, reportsDir: dir, outPath: out, today, kpiDbPath: join(dir, 'no-such-kpi.db') });
     const written = JSON.parse(readFileSync(out, 'utf-8'));
     return { returned, written, raw: readFileSync(out, 'utf-8') };
   } finally {
@@ -482,10 +486,11 @@ describe('health_report freshness sensor — stale evidence cannot pass as fresh
     expect(written.sensor_status.health_report).toBe('fresh');
   });
 
-  test('sensor_status is a top-level block with a health_report verdict', () => {
+  test('sensor_status is a top-level block with a health_report verdict (plus the kpi.db sensors, issue #21)', () => {
     const { written } = assembleWith('2026-09-02.txt', reportDatedHeader('2026-09-02'), '2026-09-02');
-    expect(Object.keys(written.sensor_status)).toEqual(['health_report']);
+    expect(Object.keys(written.sensor_status)).toEqual(['health_report', 'citations', 'crawlers']);
     expect(['fresh', 'stale', 'malformed']).toContain(written.sensor_status.health_report);
+    for (const k of ['citations', 'crawlers']) expect(['fresh', 'stale', 'empty', 'missing', 'malformed']).toContain(written.sensor_status[k]);
   });
 
   test('every pre-existing health_report field survives the new ones', () => {
@@ -654,5 +659,161 @@ describe('producer/consumer seam guards — the sensor is only as good as what r
     const src = readFileSync(join(ROOT, 'scripts', 'health-check.ts'), 'utf-8');
     expect((src.match(/const today = getAthensTodayStr\(\);/g) ?? []).length).toBe(2);
     expect(src).not.toMatch(/const today = new Date\(\)\.toISOString/);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Citation and crawler sensors (issue #21): a READ-ONLY look at data/kpi.db.
+// Table and column names mirror scripts/kpi-init.ts (which runs main() on
+// import, so its DDL cannot be reused here). `today` is injected so the
+// 8-day staleness pins do not rot with the wall clock.
+// ---------------------------------------------------------------------------
+type KpiSeed = Partial<Record<'manual_citation_log' | 'bwt_ai_citations' | 'bwt_grounding_queries' | 'server_log_ai_bots', string[]>>;
+const KPI_DDL: Record<keyof KpiSeed, string> = {
+  manual_citation_log: 'CREATE TABLE manual_citation_log (id INTEGER PRIMARY KEY AUTOINCREMENT, prompt_id TEXT NOT NULL, engine TEXT NOT NULL, observed_at TEXT NOT NULL, cited INTEGER NOT NULL)',
+  bwt_ai_citations: 'CREATE TABLE bwt_ai_citations (id INTEGER PRIMARY KEY AUTOINCREMENT, page_url TEXT NOT NULL, citations INTEGER NOT NULL DEFAULT 0, imported_at TEXT NOT NULL, export_window_start TEXT NOT NULL, export_window_end TEXT NOT NULL)',
+  bwt_grounding_queries: 'CREATE TABLE bwt_grounding_queries (id INTEGER PRIMARY KEY AUTOINCREMENT, query TEXT NOT NULL, citations INTEGER NOT NULL DEFAULT 0, cited_pages INTEGER NOT NULL DEFAULT 0, imported_at TEXT NOT NULL, export_window_start TEXT NOT NULL, export_window_end TEXT NOT NULL)',
+  server_log_ai_bots: 'CREATE TABLE server_log_ai_bots (id INTEGER PRIMARY KEY AUTOINCREMENT, bot_name TEXT NOT NULL, path TEXT NOT NULL, status_code INTEGER NOT NULL, ts TEXT NOT NULL, imported_at TEXT NOT NULL)',
+};
+const ALL_KPI_TABLES = Object.keys(KPI_DDL) as Array<keyof KpiSeed>;
+
+/** Seeds a kpi.db with the named tables; each date is one row's data-date column. */
+function seedKpiDb(path: string, seed: KpiSeed, tables: Array<keyof KpiSeed> = ALL_KPI_TABLES): void {
+  const db = new Database(path);
+  db.exec('PRAGMA journal_mode = WAL');
+  for (const t of tables) db.exec(KPI_DDL[t]);
+  // imported_at is deliberately far in the future: `latest` must come from the
+  // data-date column, never from when the row was imported.
+  for (const d of seed.manual_citation_log ?? []) db.run("INSERT INTO manual_citation_log (prompt_id, engine, observed_at, cited) VALUES ('p1', 'chatgpt', ?, 1)", [d]);
+  for (const d of seed.bwt_ai_citations ?? []) db.run("INSERT INTO bwt_ai_citations (page_url, citations, imported_at, export_window_start, export_window_end) VALUES ('https://agentathens.com/', 1, '2099-01-01', '2026-01-01', ?)", [d]);
+  for (const d of seed.bwt_grounding_queries ?? []) db.run("INSERT INTO bwt_grounding_queries (query, imported_at, export_window_start, export_window_end) VALUES ('q', '2099-01-01', '2026-01-01', ?)", [d]);
+  for (const d of seed.server_log_ai_bots ?? []) db.run("INSERT INTO server_log_ai_bots (bot_name, path, status_code, ts, imported_at) VALUES ('GPTBot', '/', 200, ?, '2099-01-01')", [d]);
+  db.close(true);
+}
+
+/** Assembles against the shared events fixture with a throwaway kpi.db. */
+function assembleWithKpi(today: string, prepare: (kpiPath: string) => void, opts: { cli?: boolean } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), 'aa-scoreboard-kpi-'));
+  try {
+    const kpiPath = join(dir, 'kpi.db');
+    prepare(kpiPath);
+    const out = join(dir, 'scoreboard.json');
+    assembleScoreboard({ dbPath, reportsDir, outPath: out, today, kpiDbPath: kpiPath });
+    return { sb: JSON.parse(readFileSync(out, 'utf-8')), kpiExists: existsSync(kpiPath) };
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+describe('citations / crawlers sensors — surface what data/kpi.db holds, never throw', () => {
+  const TODAY = '2026-10-05';
+
+  test("missing kpi.db → 'missing' for both, rows null, and NO stub database is created", () => {
+    const { sb, kpiExists } = assembleWithKpi(TODAY, () => {});
+    expect(kpiExists).toBe(false);
+    expect(sb.sensor_status.citations).toBe('missing');
+    expect(sb.sensor_status.crawlers).toBe('missing');
+    expect(sb.citations.manual_citation_log).toEqual({ rows: null, latest: null });
+    expect(sb.crawlers.server_log_ai_bots).toEqual({ rows: null, latest: null });
+  });
+
+  test("initialized but empty → 'empty' for both, rows 0, latest null", () => {
+    const { sb } = assembleWithKpi(TODAY, (p) => seedKpiDb(p, {}));
+    expect(sb.sensor_status).toEqual({ health_report: 'stale', citations: 'empty', crawlers: 'empty' });
+    expect(sb.citations).toEqual({
+      manual_citation_log: { rows: 0, latest: null },
+      bwt_ai_citations: { rows: 0, latest: null },
+      bwt_grounding_queries: { rows: 0, latest: null },
+    });
+    expect(sb.crawlers).toEqual({ server_log_ai_bots: { rows: 0, latest: null } });
+  });
+
+  test("recent rows → 'fresh'; latest is the newest data date (YYYY-MM-DD), not imported_at", () => {
+    const { sb } = assembleWithKpi(TODAY, (p) =>
+      seedKpiDb(p, {
+        manual_citation_log: ['2026-09-20T10:00:00Z', '2026-10-01T09:30:00Z'],
+        bwt_ai_citations: ['2026-09-28'],
+        server_log_ai_bots: ['2026-10-04T23:59:00Z', '2026-10-03T01:00:00Z'],
+      }),
+    );
+    expect(sb.citations).toEqual({
+      manual_citation_log: { rows: 2, latest: '2026-10-01' },
+      bwt_ai_citations: { rows: 1, latest: '2026-09-28' },
+      bwt_grounding_queries: { rows: 0, latest: null },
+    });
+    expect(sb.crawlers).toEqual({ server_log_ai_bots: { rows: 2, latest: '2026-10-04' } });
+    expect(sb.sensor_status.citations).toBe('fresh');
+    expect(sb.sensor_status.crawlers).toBe('fresh');
+  });
+
+  test("newest row exactly 8 days old → 'fresh'; 9 days → 'stale' (the weekly-import boundary)", () => {
+    const { sb } = assembleWithKpi(TODAY, (p) =>
+      seedKpiDb(p, { manual_citation_log: ['2026-09-27'], server_log_ai_bots: ['2026-09-26T12:00:00Z'] }),
+    );
+    expect(sb.sensor_status.citations).toBe('fresh');
+    expect(sb.sensor_status.crawlers).toBe('stale');
+  });
+
+  test("old rows only → 'stale', and the block still reports the rows it has", () => {
+    const { sb } = assembleWithKpi(TODAY, (p) => seedKpiDb(p, { bwt_grounding_queries: ['2026-08-01'] }));
+    expect(sb.sensor_status.citations).toBe('stale');
+    expect(sb.citations.bwt_grounding_queries).toEqual({ rows: 1, latest: '2026-08-01' });
+    expect(sb.sensor_status.crawlers).toBe('empty');
+  });
+
+  test("a future-dated newest row → 'stale' (two-sided, like the health report)", () => {
+    const { sb } = assembleWithKpi(TODAY, (p) => seedKpiDb(p, { manual_citation_log: ['2026-10-09'] }));
+    expect(sb.sensor_status.citations).toBe('stale');
+  });
+
+  test("a table that was never initialized → 'missing' for its block only", () => {
+    const { sb } = assembleWithKpi(TODAY, (p) =>
+      seedKpiDb(p, { manual_citation_log: ['2026-10-01'] }, ['manual_citation_log', 'bwt_ai_citations', 'bwt_grounding_queries']),
+    );
+    expect(sb.sensor_status.citations).toBe('fresh');
+    expect(sb.sensor_status.crawlers).toBe('missing');
+    expect(sb.crawlers.server_log_ai_bots).toEqual({ rows: null, latest: null });
+  });
+
+  test("a kpi.db that is not a sqlite file → 'malformed', and the scoreboard is still written", () => {
+    const { sb } = assembleWithKpi(TODAY, (p) => writeFileSync(p, 'this is not a database'));
+    expect(sb.sensor_status.citations).toBe('malformed');
+    expect(sb.sensor_status.crawlers).toBe('malformed');
+    expect(sb.total_events).toBe(EXPECTED_TOTAL);
+  });
+
+  test('kpi.db is opened read-only (row counts are unchanged afterwards)', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'aa-scoreboard-kpi-ro-'));
+    try {
+      const kpiPath = join(dir, 'kpi.db');
+      seedKpiDb(kpiPath, { manual_citation_log: ['2026-10-01'] });
+      const before = readFileSync(kpiPath);
+      assembleScoreboard({ dbPath, reportsDir, outPath: join(dir, 'sb.json'), today: TODAY, kpiDbPath: kpiPath });
+      expect(readFileSync(kpiPath).equals(before)).toBe(true);
+      const db = new Database(kpiPath);
+      const n = (db.prepare('SELECT COUNT(*) AS n FROM manual_citation_log').get() as { n: number }).n;
+      const tables = (db.prepare("SELECT COUNT(*) AS n FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'").get() as { n: number }).n;
+      db.close();
+      expect(n).toBe(1);
+      expect(tables).toBe(ALL_KPI_TABLES.length);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  test('CLI --kpi-db=PATH is honoured', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'aa-scoreboard-kpi-cli-'));
+    try {
+      const kpiPath = join(dir, 'kpi.db');
+      seedKpiDb(kpiPath, {});
+      const out = join(dir, 'sb.json');
+      const r = runCli([`--db=${dbPath}`, `--reports-dir=${reportsDir}`, `--out=${out}`, `--kpi-db=${kpiPath}`]);
+      expect(r.code).toBe(0);
+      const p = JSON.parse(readFileSync(out, 'utf-8'));
+      expect(p.sensor_status.citations).toBe('empty');
+      expect(p.sensor_status.crawlers).toBe('empty');
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

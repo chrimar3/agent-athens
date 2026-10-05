@@ -5,7 +5,7 @@
  * losers with merged_into set are excluded from every count).
  *
  * Usage:
- *   bun run scripts/assemble-scoreboard.ts [--db=PATH] [--reports-dir=PATH] [--out=PATH]
+ *   bun run scripts/assemble-scoreboard.ts [--db=PATH] [--reports-dir=PATH] [--out=PATH] [--kpi-db=PATH]
  *
  * The health report is plain text (scripts/health-check.ts generateDailyReport);
  * field names below mirror its section labels. Unknown lines are ignored so a
@@ -17,12 +17,14 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { isCurrentSql, athensTodaySql } from '../src/db/effective-end-sql';
 import { countListedEventsInDb } from '../src/utils/listed-count';
+import { openReportDb, rowCount, tableExists } from './kpi-report';
 
 const ROOT = resolve(import.meta.dir, '..');
 const DEFAULTS = {
   dbPath: join(ROOT, 'data', 'events.db'),
   reportsDir: join(ROOT, 'data', 'health-reports'),
   outPath: join(ROOT, 'data', 'scoreboard.json'),
+  kpiDbPath: join(ROOT, 'data', 'kpi.db'),
 };
 
 export class ScoreboardError extends Error {
@@ -42,6 +44,26 @@ export type SensorVerdict = 'fresh' | 'stale' | 'malformed';
  */
 const MAX_REPORT_AGE_DAYS = 0;
 const GLYPH_STATUS: Record<string, ScrapeStatus> = { v: 'ok', '!': 'warning', x: 'failed', '?': 'unknown' };
+
+/**
+ * Citation/crawler sensor verdicts (issue #21): 'missing' = no kpi.db or a
+ * table not initialized (run scripts/kpi-init.ts), 'empty' = initialized but
+ * 0 rows, 'stale' = newest data date older than KPI_MAX_AGE_DAYS (or in the
+ * future), 'malformed' = the file exists but could not be read.
+ */
+export type KpiVerdict = 'fresh' | 'stale' | 'empty' | 'missing' | 'malformed';
+/** The collectors are weekly (manual log, BWT export): one week plus a day of slack. */
+const KPI_MAX_AGE_DAYS = 8;
+/** rows/latest are null when the table could not be read (missing or malformed). */
+export interface KpiTableReading { rows: number | null; latest: string | null }
+/**
+ * Each table's data-date column (scripts/kpi-init.ts): when the observation
+ * was made, never imported_at — a late import of old data is not fresh.
+ */
+const CITATION_TABLES = { manual_citation_log: 'observed_at', bwt_ai_citations: 'export_window_end', bwt_grounding_queries: 'export_window_end' } as const;
+const CRAWLER_TABLES = { server_log_ai_bots: 'ts' } as const;
+export type CitationsBlock = Record<keyof typeof CITATION_TABLES, KpiTableReading>;
+export type CrawlersBlock = Record<keyof typeof CRAWLER_TABLES, KpiTableReading>;
 
 export interface HealthReportBlock {
   report_date: string | null;
@@ -80,11 +102,11 @@ export interface Scoreboard {
   // the report parsed to none of its expected sections (a crashed or truncated
   // health-check), 'stale' means the report is not dated the run's own Athens
   // day (or its date is in the future or not a real calendar day).
-  sensor_status: { health_report: SensorVerdict };
-  // Filled by the citation-panel and crawler-telemetry sensors (queued as
-  // separate issues) — this script only reserves the keys.
-  citations: null;
-  crawlers: null;
+  // citations/crawlers: what data/kpi.db holds, read-only; the collectors that
+  // fill kpi.db are separate scripts.
+  sensor_status: { health_report: SensorVerdict; citations: KpiVerdict; crawlers: KpiVerdict };
+  citations: CitationsBlock;
+  crawlers: CrawlersBlock;
 }
 
 const REPORT_FILE = /^\d{4}-\d{2}-\d{2}\.txt$/;
@@ -207,6 +229,71 @@ export function openEventsDbReadOnly(dbPath: string): Database {
   }
 }
 
+function readKpiBlock<T extends Record<string, string>>(
+  db: Database | null,
+  tables: T,
+  today: string,
+): { block: Record<keyof T, KpiTableReading>; verdict: KpiVerdict } {
+  const block = {} as Record<keyof T, KpiTableReading>;
+  for (const t of Object.keys(tables) as Array<keyof T>) block[t] = { rows: null, latest: null };
+  if (db === null) return { block, verdict: 'missing' };
+  try {
+    let missing = false;
+    for (const [table, col] of Object.entries(tables)) {
+      if (!tableExists(db, table)) {
+        missing = true;
+        continue;
+      }
+      const latest = (db.prepare(`SELECT substr(MAX(${col}), 1, 10) AS d FROM ${table}`).get() as { d: string | null }).d;
+      block[table as keyof T] = { rows: rowCount(db, table), latest };
+    }
+    if (missing) return { block, verdict: 'missing' };
+    const readings = Object.values(block) as KpiTableReading[];
+    if (readings.every((r) => r.rows === 0)) return { block, verdict: 'empty' };
+    const dates = readings.map((r) => r.latest).filter((d): d is string => d !== null && isCalendarDate(d)).sort();
+    if (dates.length === 0) return { block, verdict: 'malformed' };
+    const age = dayDiff(dates[dates.length - 1], today);
+    return { block, verdict: age < 0 || age > KPI_MAX_AGE_DAYS ? 'stale' : 'fresh' };
+  } catch {
+    for (const t of Object.keys(block) as Array<keyof T>) block[t] = { rows: null, latest: null };
+    return { block, verdict: 'malformed' };
+  }
+}
+
+/**
+ * Deliberately never throws: kpi.db is optional evidence, and a scoreboard
+ * without it is still worth publishing. An absent file is never created.
+ */
+export function readKpiSensors(kpiDbPath: string, today: string): {
+  citations: CitationsBlock;
+  crawlers: CrawlersBlock;
+  status: { citations: KpiVerdict; crawlers: KpiVerdict };
+} {
+  let db: Database | null = null;
+  let unreadable = false;
+  if (existsSync(kpiDbPath)) {
+    try {
+      db = openReportDb(kpiDbPath);
+      db.prepare('SELECT COUNT(*) FROM sqlite_master').get();
+    } catch {
+      db?.close();
+      db = null;
+      unreadable = true;
+    }
+  }
+  try {
+    const c = readKpiBlock(db, CITATION_TABLES, today);
+    const k = readKpiBlock(db, CRAWLER_TABLES, today);
+    return {
+      citations: c.block,
+      crawlers: k.block,
+      status: { citations: unreadable ? 'malformed' : c.verdict, crawlers: unreadable ? 'malformed' : k.verdict },
+    };
+  } finally {
+    db?.close();
+  }
+}
+
 // Dedup losers keep their row with merged_into = survivor id (never deleted);
 // every count here is over live rows only, or the same event counts N times.
 const LIVE = 'merged_into IS NULL';
@@ -231,10 +318,11 @@ function readDbCounts(dbPath: string): Pick<Scoreboard, 'total_events' | 'upcomi
   }
 }
 
-export function assembleScoreboard(opts: { dbPath?: string; reportsDir?: string; outPath?: string; today?: string } = {}): Scoreboard {
+export function assembleScoreboard(opts: { dbPath?: string; reportsDir?: string; outPath?: string; kpiDbPath?: string; today?: string } = {}): Scoreboard {
   const dbPath = opts.dbPath ?? DEFAULTS.dbPath;
   const reportsDir = opts.reportsDir ?? DEFAULTS.reportsDir;
   const outPath = opts.outPath ?? DEFAULTS.outPath;
+  const kpiDbPath = opts.kpiDbPath ?? DEFAULTS.kpiDbPath;
   // Injectable so the freshness pins are deterministic; athensTodaySql() is the
   // project's Athens-local today (never the host zone, never SQLite's UTC now).
   const today = opts.today ?? athensTodaySql();
@@ -246,14 +334,15 @@ export function assembleScoreboard(opts: { dbPath?: string; reportsDir?: string;
   // the sensor broke.
   const health_status = gradeHealthReport(health_report, today);
   const counts = readDbCounts(dbPath);
+  const kpi = readKpiSensors(kpiDbPath, today);
 
   const scoreboard: Scoreboard = {
     generated_at: new Date().toISOString(),
     ...counts,
     health_report,
-    sensor_status: { health_report: health_status },
-    citations: null,
-    crawlers: null,
+    sensor_status: { health_report: health_status, ...kpi.status },
+    citations: kpi.citations,
+    crawlers: kpi.crawlers,
   };
 
   try {
@@ -264,13 +353,14 @@ export function assembleScoreboard(opts: { dbPath?: string; reportsDir?: string;
   return scoreboard;
 }
 
-function parseArgs(argv: string[]): { dbPath?: string; reportsDir?: string; outPath?: string } {
-  const opts: { dbPath?: string; reportsDir?: string; outPath?: string } = {};
+function parseArgs(argv: string[]): { dbPath?: string; reportsDir?: string; outPath?: string; kpiDbPath?: string } {
+  const opts: { dbPath?: string; reportsDir?: string; outPath?: string; kpiDbPath?: string } = {};
   for (const arg of argv) {
     if (arg.startsWith('--db=')) opts.dbPath = resolve(arg.slice('--db='.length));
     else if (arg.startsWith('--reports-dir=')) opts.reportsDir = resolve(arg.slice('--reports-dir='.length));
     else if (arg.startsWith('--out=')) opts.outPath = resolve(arg.slice('--out='.length));
-    else throw new ScoreboardError(`unknown argument ${arg}`, 'use --db=PATH --reports-dir=PATH --out=PATH');
+    else if (arg.startsWith('--kpi-db=')) opts.kpiDbPath = resolve(arg.slice('--kpi-db='.length));
+    else throw new ScoreboardError(`unknown argument ${arg}`, 'use --db=PATH --reports-dir=PATH --out=PATH --kpi-db=PATH');
   }
   return opts;
 }
@@ -280,7 +370,8 @@ if (import.meta.main) {
     const sb = assembleScoreboard(parseArgs(process.argv.slice(2)));
     console.log(
       `assemble-scoreboard: wrote scoreboard (listed=${sb.listed_events}, total_rows=${sb.total_events}, current_rows=${sb.upcoming_events}, ` +
-        `report=${sb.health_report.report_file}, health_report=${sb.sensor_status.health_report}, age_days=${sb.health_report.report_age_days})`,
+        `report=${sb.health_report.report_file}, health_report=${sb.sensor_status.health_report}, age_days=${sb.health_report.report_age_days}, ` +
+        `citations=${sb.sensor_status.citations}, crawlers=${sb.sensor_status.crawlers})`,
     );
   } catch (e) {
     const msg = e instanceof ScoreboardError ? e.message : `assemble-scoreboard: FAILED — ${(e as Error).message} — try: rerun with --db/--reports-dir/--out to isolate the failing input`;
