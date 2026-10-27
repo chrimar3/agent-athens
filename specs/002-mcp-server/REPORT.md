@@ -155,6 +155,72 @@ What these numbers mean for the product (open items, not fixed here):
   presents Autechre" are two listings at the same venue on the same evening.
   This is a pipeline matter; the server shows what the feed says.
 
+### M1.3 Feed contract — done
+
+`mcp/scripts/feed-contract.ts` exports `checkFeedContract(doc)`. These are
+**violations**, and the CLI exits 1 on any of them:
+
+- an element for which `toRecord()` returns null;
+- a duplicate id, which would break `get_event` lookups;
+- a `url` that is not on agentathens.com, which would break attribution (§2.6).
+
+For every field path `toRecord()` reads, it also **counts** how many events
+lack it, and flags any field missing on more than 5% of events.
+`test/contract.test.ts` pins this on the fixture. The test asserts its own
+precondition: 2 of 8 fixture events have no Offer, so there is something to
+count. Mutation runs, with the restored file confirmed byte-identical:
+
+```
+## mutant: off-site url check removed
+(fail) feed contract > duplicate ids and off-site urls are violations
+ 3 pass
+ 1 fail
+## mutant: duplicate-id check removed
+(fail) feed contract > duplicate ids and off-site urls are violations
+ 3 pass
+ 1 fail
+## restored, byte-identical
+```
+
+Live run (full output in `evidence/m1.3-contract.txt`):
+
+```
+$ bun run scripts/feed-contract.ts
+https://agentathens.com/api/events.json
+  elements 569, dateModified 2026-10-06T06:02:14.618Z, violations 0
+  * endDate                              123  21.6%
+  * location.geo                          33  5.8%
+  * offers                               397  69.8%
+  * offers.price                         397  69.8%
+  * offers.url                           414  72.8%
+  * performer                            567  99.6%
+https://agentathens.com/api/en/events.json
+  elements 171, dateModified 2026-10-06T06:02:14.684Z, violations 0
+  * endDate                               48  28.1%
+  * offers                               119  69.6%
+  * offers.price                         119  69.6%
+  * offers.url                           119  69.6%
+  * performer                            169  98.8%
+feed-contract: OK
+exit 0
+```
+
+All other fields read by `toRecord()` are missing on 0 events, apart from
+`location.geo` in en (1 event, 0.6%). Every element gives a non-null record.
+No site change is needed.
+
+What the gaps mean for the tools. These are facts to state in directory
+copy, not bugs in the server:
+
+- **`max_price` drops events with no listed price**, which is about 70% of them.
+  The schema description already says so.
+- **The `neighborhood` filter reaches few events.** In the el feed,
+  `location.containedInPlace.name` is "Municipality of Athens" for 490 of 569
+  events. Only 79 name an area, such as Kerameikos 24, Mets 19 and Exarchia 17.
+- **`endDate` is missing on 21.6% of events.** For theatre, exhibition and
+  festival, M0 treats a missing end as ongoing. Other categories end on their
+  start day.
+
 ## M2: Exact artist matching
 
 ## M3: Event cards (MCP Apps)
