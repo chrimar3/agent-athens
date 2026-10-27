@@ -28,12 +28,21 @@ Agent Athens `url`, and the server instructions tell the model to link it.
 
 ```bash
 cd mcp
-bun test test/                  # 25 tests on a synthetic fixture feed
+bun install                     # dev tools only: the MCP SDK client (tests) and wrangler
+bun test test/                  # synthetic fixture feed, plus the SDK client over real HTTP
 bun run typecheck
+bun run bundle-check            # wrangler --dry-run; prints the Worker bundle size
 FEED_FILE=test/fixtures/events.en.json bun run dev   # http://localhost:8787/mcp
 bun run dev                     # same, against the live site's feed
 bun run fixture                 # rebuild fixtures with the real DataFeed builder
+bun run scripts/smoke.ts        # all four tools against the live feed: counts and samples
+bun run scripts/feed-contract.ts   # does the live feed still have the shape toRecord() reads?
 ```
+
+`lang: "en"` is the Greek feed with each English record laid over it, because
+`/api/en/events.json` only lists events that have an English description.
+Greek-only events therefore still appear in English results, under their Greek
+name.
 
 The fixtures are synthetic events run through `src/generators/datafeed.ts`, so
 the tests break if the feed's shape changes. The repo's CI does not run these
@@ -58,7 +67,21 @@ That needs the domain's DNS on Cloudflare, or a CNAME to the Worker.
 - **Gemini CLI**: in `~/.gemini/settings.json`, add `{"mcpServers": {"agent-athens": {"httpUrl": "https://mcp.agentathens.com/mcp"}}}`.
 - **Quick check**: `npx @modelcontextprotocol/inspector`, using Streamable HTTP and the `/mcp` URL.
 
-## Before going public
+## Limits
 
-Add a Cloudflare rate-limiting rule on `/mcp`. Bodies over 64 KB, batches over
-20 requests and lists over 200 artists are already refused.
+The server itself refuses:
+
+| Input | Response |
+|---|---|
+| Body over 64 KB (counted in bytes, with or without a `content-length`) | HTTP 413 |
+| JSON-RPC batch of more than 20 messages | HTTP 400 |
+| `match_artists` with more than 200 artists | tool error (`isError: true`) |
+
+**Rate limiting is not built into the Worker.** It is a Cloudflare rule, set in
+the dashboard before the endpoint goes public: Security → WAF → Rate limiting
+rules → Create rule. Match `http.host eq "mcp.agentathens.com" and
+http.request.uri.path eq "/mcp"`, count by IP, and block for a short period
+when a client goes over the limit. Pick the numbers from real traffic; a
+conversation makes a handful of tool calls, so a limit far above that only
+stops scripts. The Worker keeps no per-user state, so this rule is the only
+place a limit per client can live.

@@ -182,6 +182,31 @@ const CORS = {
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store', ...CORS } });
 
+/**
+ * The body as text, or null once it passes MAX_BODY_BYTES. Counts bytes, not
+ * characters, and stops reading there: a chunked body has no content-length.
+ */
+async function readCapped(req: Request): Promise<string | null> {
+  if (!req.body) return '';
+  const reader = req.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > MAX_BODY_BYTES) {
+      await reader.cancel();
+      return null;
+    }
+    chunks.push(value);
+  }
+  const bytes = new Uint8Array(size);
+  let at = 0;
+  for (const c of chunks) { bytes.set(c, at); at += c.byteLength; }
+  return new TextDecoder().decode(bytes);
+}
+
 /** HTTP entry: POST /mcp carries JSON-RPC; everything else is small and static. */
 export async function handleHttp(req: Request, deps: ServerDeps): Promise<Response> {
   const url = new URL(req.url);
@@ -195,10 +220,10 @@ export async function handleHttp(req: Request, deps: ServerDeps): Promise<Respon
 
   const length = Number(req.headers.get('content-length') ?? 0);
   if (length > MAX_BODY_BYTES) return json(rpcError(null, -32600, 'Request too large'), 413);
+  const text = await readCapped(req);
+  if (text === null) return json(rpcError(null, -32600, 'Request too large'), 413);
   let body: any;
   try {
-    const text = await req.text();
-    if (text.length > MAX_BODY_BYTES) return json(rpcError(null, -32600, 'Request too large'), 413);
     body = JSON.parse(text);
   } catch {
     return json(rpcError(null, -32700, 'Parse error'), 400);

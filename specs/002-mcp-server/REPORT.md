@@ -272,6 +272,38 @@ exit 0 — isError=false window={"from":"2026-10-31","to":"2026-11-01","timezone
 The inspector printed `EBADENGINE` warnings: it asks for Node ≥ 22.19, and this
 Mac has 22.16. Both calls still exited 0.
 
+### M1.5 Abuse limits — done, with one real bug fixed
+
+`test/limits.test.ts` has one test per case and pins each limit from both
+sides: exactly 64 KB is accepted and 64 KB + 1 is refused; a batch of 20 is
+answered and 21 is refused; 200 artists are matched and 201 are refused. The
+helper asserts that each body is exactly the intended size in UTF-8.
+
+**Bug found and fixed.** M0 compared `text.length`, which counts UTF-16
+characters, with the 64 KB limit, and it buffered the whole body first. A
+chunked request has no `content-length`, so the header check is skipped. That
+lets about 80,000 bytes of Greek text, which is about 40,000 characters, through.
+
+```
+Expected: 413
+Received: 200
+(fail) body size > a streamed body over 64 KB in bytes but not in characters is 413
+ 7 pass
+ 1 fail
+```
+
+`readCapped()` in `src/mcp.ts` now reads the stream, counts bytes, and cancels
+the read as soon as the count passes 64 KB. Result: 8 pass, 0 fail.
+
+The 413, 400 and 200-artist limits already existed in M0, so their tests passed
+on the first run. Mutation runs are their RED (`evidence/m1.5-red.txt`): with
+the body limit raised to 65 KB, 2 tests fail; with the batch limit at 21, 1
+fails; with the artist limit at 201, 1 fails. Both files were restored
+byte-identical.
+
+Rate limiting is documented in `mcp/README.md` § Limits as a Cloudflare
+dashboard rule. Nothing was built for it.
+
 ## M2: Exact artist matching
 
 ## M3: Event cards (MCP Apps)
