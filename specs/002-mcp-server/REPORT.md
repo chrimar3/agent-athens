@@ -103,6 +103,58 @@ $ bun run typecheck
 $ tsc --noEmit -p .        (exit 0)
 ```
 
+### M1.2 Live-feed smoke test — done
+
+`mcp/scripts/smoke.ts` sends real JSON-RPC `tools/call` requests through
+`handleHttp` to the live feed (`httpFeedSource('https://agentathens.com')`), so
+the overlay, the protocol layer and all four tools run as they will in the
+Worker. Full output: `evidence/m1.2-smoke.txt`. Excerpt:
+
+```
+$ bun run scripts/smoke.ts
+today (Athens)   2026-10-27
+feed updated     el 2026-10-06T06:02:14.618Z  en 2026-10-06T06:02:14.684Z  (21 days before today)
+events           el 569  en-only feed 171  with an en record 171
+not ended today  308
+per category     {"music":314,"theatre":193,"exhibition":6,"cinema":2,"comedy":4,"dance":0,"festival":10,"performing_arts":2,"education":11,"other":27}
+performer total  2  with performer.wikidata 2
+search_events    lang en, next 30 days: total 207, returned 3
+search_events    lang en, this_weekend 2026-10-31..2026-11-01: total 124
+get_event        c6faed28-gagarin-205-… → found, description 56 chars
+list_venues      next 30 days: 83 venues; top 5: 26 Μέγαρο Μουσικής Αθηνών, 20 ΚΠΙΣΝ, 5 Olvio, 5 Onassis Stegi, 5 Temple
+match_artists    input (from the live feed): ["The Gathering",{"wikidata":"Q687651"},"Autechre",{"wikidata":"Q247237"}]
+  any date:     5 matches, unmatched []
+    wikidata      Q687651 → 2026-09-24T20:00:00+03:00 The Gathering (NL) live in Greece
+    wikidata      Q247237 → 2026-10-03T20:00:00+03:00 AUTECHRE
+    name          The Gathering → 2026-09-24T20:00:00+03:00 The Gathering (NL) live in Greece
+    name          Autechre → 2026-10-03T20:00:00+03:00 AUTECHRE
+    title_mention Autechre → 2026-10-03T20:00:00+03:00 PLISSKËN presents Autechre
+  default window 2026-10-27..2027-04-24: 0 matches
+smoke: OK — all four tools answered
+exit 0
+```
+
+The figures the spec asks for:
+
+- **Total events:** 569 in the el feed. 171 of them have an English record.
+- **Per category (el):** music 314, theatre 193, other 27, education 11, festival 10, exhibition 6, comedy 4, cinema 2, performing_arts 2, dance 0.
+- **Events with `performer.wikidata`:** 2 (The Gathering, Q687651; Autechre, Q247237).
+- **`match_artists` with names from the live feed:** see above. The input is the two performer names and QIDs that the feed itself carries. Nothing was invented.
+
+What these numbers mean for the product (open items, not fixed here):
+
+- **The feed is 21 days old.** It was last written on 2026-10-06, which fits the
+  container outage noted in the input-pipeline audit. The server reports this in
+  `feed_updated` on every result. It cannot make the data fresher.
+- **Artist matching has almost nothing to match against.** Only 2 of 569 events
+  carry a `performer`, and both shows are already in the past, so
+  `match_artists` returns 0 matches in its default (future) window today. The
+  title-mention path is the only one that reaches most events. Better coverage
+  needs performer data in the pipeline, which is out of scope here (§5).
+- **The live data contains duplicate listings.** "AUTECHRE" and "PLISSKËN
+  presents Autechre" are two listings at the same venue on the same evening.
+  This is a pipeline matter; the server shows what the feed says.
+
 ## M2: Exact artist matching
 
 ## M3: Event cards (MCP Apps)
