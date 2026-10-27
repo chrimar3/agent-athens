@@ -6,14 +6,15 @@
  * runtime that speaks Web Request/Response (Cloudflare Workers, Bun, Deno).
  */
 import { CATEGORIES, overlayEnglish, type FeedSnapshot, type FeedSource, type Lang } from './feed';
-import { getEvent, listVenues, matchArtists, searchEvents, ToolInputError, WHEN, athensToday } from './tools';
+import { getEvent, listVenues, matchArtists, searchEvents, spotifyIndex, ToolInputError, WHEN, athensToday, type SpotifyIndex } from './tools';
+import performerIds from '../data/performer-ids.json';
 
 export const SERVER_INFO = { name: 'agent-athens', title: 'Agent Athens', version: '0.1.0' };
 const PROTOCOL_VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26'];
 const MAX_BODY_BYTES = 64 * 1024;
 
 export const INSTRUCTIONS = `Agent Athens lists cultural events in Athens, Greece (concerts, theatre, exhibitions, cinema, comedy, dance, festivals), updated daily. Dates are Europe/Athens.
-Personalise with what you already know about the user: turn their tastes into search_events filters, and if you can see their favourite artists (e.g. a connected music app, or names they mention) pass them to match_artists.
+Personalise with what you already know about the user: turn their tastes into search_events filters, and if you can see their favourite artists (e.g. a connected music app, or names they mention) pass them to match_artists. If you have an artist's Spotify ID, send it together with the name ({name, spotify_id}): the ID matches exactly, and the name is the fallback.
 Always give each event's \`url\` (its Agent Athens page) and, when present, \`ticket_url\`. Never invent prices, times or line-ups: if a field is missing, say it is not listed.
 A match with confidence "title_mention" only means the name appears in the title; it may be a tribute or support act, so say so.`;
 
@@ -78,7 +79,7 @@ export const TOOLS = [
   {
     name: 'match_artists',
     title: 'Match artists to events',
-    description: "Given artists the user likes (e.g. their top artists from a music app, or names they mention), return upcoming Athens events by those artists. Matches by Wikidata ID, then by name across Greek and Latin spellings, then by mention in the title.",
+    description: "Given artists the user likes (e.g. their top artists from a music app, or names they mention), return upcoming Athens events by those artists. Matches by Spotify artist ID (through Wikidata), then Wikidata ID, then by name across Greek and Latin spellings, then by mention in the title.",
     inputSchema: {
       type: 'object',
       properties: {
@@ -87,7 +88,15 @@ export const TOOLS = [
           items: {
             oneOf: [
               { type: 'string' },
-              { type: 'object', properties: { name: { type: 'string' }, wikidata: { type: 'string', pattern: '^Q\\d+$' } }, additionalProperties: false },
+              {
+                type: 'object',
+                properties: {
+                  name: { type: 'string' },
+                  wikidata: { type: 'string', pattern: '^Q\\d+$' },
+                  spotify_id: { type: 'string', pattern: '^[0-9A-Za-z]{22}$', description: 'Spotify artist ID, the part after open.spotify.com/artist/.' },
+                },
+                additionalProperties: false,
+              },
             ],
           },
         },
@@ -109,7 +118,9 @@ interface JsonRpcRequest { jsonrpc: '2.0'; id?: JsonRpcId; method: string; param
 const rpcError = (id: JsonRpcId, code: number, message: string) => ({ jsonrpc: '2.0' as const, id, error: { code, message } });
 const rpcResult = (id: JsonRpcId, result: unknown) => ({ jsonrpc: '2.0' as const, id, result });
 
-export interface ServerDeps { feed: FeedSource; now?: () => Date }
+export interface ServerDeps { feed: FeedSource; now?: () => Date; spotify?: SpotifyIndex }
+
+const DEFAULT_SPOTIFY = spotifyIndex(performerIds);
 
 // Keyed on the cached en snapshot, so the overlay is rebuilt only when a feed refreshes.
 const englishViews = new WeakMap<FeedSnapshot, { el: FeedSnapshot; view: FeedSnapshot }>();
@@ -134,7 +145,7 @@ async function callTool(name: string, args: any, deps: ServerDeps) {
     case 'search_events': return searchEvents(snap, rest, today);
     case 'get_event': return getEvent(snap, rest);
     case 'list_venues': return listVenues(snap, rest, today);
-    case 'match_artists': return matchArtists(snap, rest, today);
+    case 'match_artists': return matchArtists(snap, rest, today, deps.spotify ?? DEFAULT_SPOTIFY);
   }
   return undefined;
 }

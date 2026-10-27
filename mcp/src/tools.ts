@@ -174,14 +174,33 @@ export function listVenues(snap: FeedSnapshot, args: { neighborhood?: string; ca
 
 // ── match_artists ───────────────────────────────────────────────────────────
 
-export interface ArtistInput { name?: string; wikidata?: string }
+export interface ArtistInput { name?: string; wikidata?: string; spotify_id?: string }
 
-export type MatchConfidence = 'wikidata' | 'name' | 'title_mention';
+export type MatchConfidence = 'spotify_id' | 'wikidata' | 'name' | 'title_mention';
+
+/** Spotify artist ID → Wikidata QIDs, from mcp/data/performer-ids.json (Wikidata P1902). */
+export type SpotifyIndex = Map<string, Set<string>>;
+
+export function spotifyIndex(file: { byQid: Record<string, { spotify: string[] }> }): SpotifyIndex {
+  const idx: SpotifyIndex = new Map();
+  for (const [qid, v] of Object.entries(file.byQid)) {
+    for (const id of v.spotify) {
+      const qids = idx.get(id) ?? new Set<string>();
+      qids.add(qid);
+      idx.set(id, qids);
+    }
+  }
+  return idx;
+}
+
+const SPOTIFY_ID = /^[0-9A-Za-z]{22}$/;
 
 /**
  * Matches a list of artists (e.g. a user's top artists from Spotify, or names
  * the user mentioned) to upcoming events.
  *
+ *  spotify_id     the artist's Spotify ID resolves, through Wikidata, to the
+ *                 event performer's QID
  *  wikidata       the artist's QID equals the event performer's QID
  *  name           the name equals the performer's name or English Wikipedia
  *                 title, across Greek/Latin spellings
@@ -189,8 +208,8 @@ export type MatchConfidence = 'wikidata' | 'name' | 'title_mention';
  *                 in the event title; may be a tribute or support act, so the
  *                 assistant should say so
  */
-export function matchArtists(snap: FeedSnapshot, args: { artists?: unknown; date_from?: string; date_to?: string; include_title_mentions?: boolean }, today: string) {
-  if (!Array.isArray(args.artists) || args.artists.length === 0) throw new ToolInputError('artists must be a non-empty array of names or {name, wikidata} objects');
+export function matchArtists(snap: FeedSnapshot, args: { artists?: unknown; date_from?: string; date_to?: string; include_title_mentions?: boolean }, today: string, spotify: SpotifyIndex = new Map()) {
+  if (!Array.isArray(args.artists) || args.artists.length === 0) throw new ToolInputError('artists must be a non-empty array of names or {name, wikidata, spotify_id} objects');
   if (args.artists.length > 200) throw new ToolInputError('artists: at most 200 per call');
   const inputs: ArtistInput[] = args.artists.map((a, i) => {
     if (typeof a === 'string') return { name: str(a, `artists[${i}]`) };
@@ -198,7 +217,9 @@ export function matchArtists(snap: FeedSnapshot, args: { artists?: unknown; date
       const o = a as Record<string, unknown>;
       const wikidata = str(o.wikidata, `artists[${i}].wikidata`, 20);
       if (wikidata && !/^Q\d+$/.test(wikidata)) throw new ToolInputError(`artists[${i}].wikidata must look like Q12345`);
-      return { name: str(o.name, `artists[${i}].name`), wikidata };
+      const spotify_id = str(o.spotify_id, `artists[${i}].spotify_id`, 40);
+      if (spotify_id && !SPOTIFY_ID.test(spotify_id)) throw new ToolInputError(`artists[${i}].spotify_id must be the 22-character artist ID (the part after open.spotify.com/artist/)`);
+      return { name: str(o.name, `artists[${i}].name`), wikidata, spotify_id };
     }
     throw new ToolInputError(`artists[${i}] must be a string or an object`);
   });
@@ -214,12 +235,14 @@ export function matchArtists(snap: FeedSnapshot, args: { artists?: unknown; date
   const unmatched: string[] = [];
 
   for (const a of inputs) {
-    const label = a.name ?? a.wikidata ?? '';
+    const label = a.name ?? a.spotify_id ?? a.wikidata ?? '';
     const key = a.name ? looseKey(a.name) : '';
+    const viaSpotify = a.spotify_id ? spotify.get(a.spotify_id) : undefined;
     let found = false;
     for (const e of pool) {
       let conf: MatchConfidence | null = null;
-      if (a.wikidata && e._qid === a.wikidata) conf = 'wikidata';
+      if (viaSpotify && e._qid && viaSpotify.has(e._qid)) conf = 'spotify_id';
+      else if (a.wikidata && e._qid === a.wikidata) conf = 'wikidata';
       else if (key && e._performerKeys.includes(key)) conf = 'name';
       // Title mentions only for names long enough not to collide with words.
       else if (allowTitle && key.length >= 4 && !e._qid && e.category !== 'exhibition' && containsPhrase(e._titleKey, key)) conf = 'title_mention';
@@ -231,7 +254,7 @@ export function matchArtists(snap: FeedSnapshot, args: { artists?: unknown; date
     if (!found) unmatched.push(label);
   }
 
-  const rank: Record<MatchConfidence, number> = { wikidata: 0, name: 1, title_mention: 2 };
+  const rank: Record<MatchConfidence, number> = { spotify_id: 0, wikidata: 1, name: 2, title_mention: 3 };
   matches.sort((x, y) => rank[x.confidence] - rank[y.confidence] || (x.event.start < y.event.start ? -1 : 1));
   return { window: { from, to, timezone: 'Europe/Athens' }, matches, unmatched, attribution: ATTRIBUTION };
 }
