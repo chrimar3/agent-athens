@@ -304,6 +304,39 @@ byte-identical.
 Rate limiting is documented in `mcp/README.md` § Limits as a Cloudflare
 dashboard rule. Nothing was built for it.
 
+### M1 gate
+
+`mcp/` gate, run on an export of committed HEAD `bdbf03abf` (after M1.5), so
+uncommitted files could not affect it:
+
+```
+$ bun test test/
+ 45 pass
+ 0 fail
+Ran 45 tests across 4 files.
+$ tsc --noEmit -p .
+typecheck exit 0
+$ wrangler deploy --dry-run
+Total Upload: 26.77 KiB / gzip: 8.80 KiB        (limit 100 KiB)
+$ bun audit
+No vulnerabilities found
+```
+
+Root gate on `bdbf03abf`:
+
+```
+$ bun run typecheck   → typecheck exit 0
+$ bun run test
+ 5379 pass
+ 212 skip
+ 1 fail
+Ran 5592 tests across 299 files. [531.57s]
+(fail) deadman-watchdog.ts — the database is read through the untrusted-DB reader > a normal database → the same signals as a direct read (enrich age, row count), no refusal
+```
+
+The failing set is a subset of the baseline. The baseline's push-gate
+failure passed on this run, so it looks flaky.
+
 ### M1.6 Runs with no stated end — fix added during M4.1 testing
 
 This is not one of the spec's task ids. It is an M1 defect ("correct on the
@@ -437,6 +470,60 @@ The M2 done-when checks:
 - **Data file committed:** `392fecbb1`.
 
 ## M3: Event cards (MCP Apps)
+
+### M3.0 Spec strings — done
+
+**Source.** `modelcontextprotocol/ext-apps`, `specification/2026-01-26/apps.mdx`,
+whose line 9 reads `**Status:** Stable (2026-01-26)`. It is pinned to tag
+`v1.0.0`, commit `298e884ec3f02daba085acdb02042d73bd00b355` ("chore: stable
+spec release 2026-01-26 and SDK v1.0.0 (#362)"), and the file has had no
+commits since:
+<https://raw.githubusercontent.com/modelcontextprotocol/ext-apps/298e884ec3f02daba085acdb02042d73bd00b355/specification/2026-01-26/apps.mdx>
+(sha256 `ee452a7d1b9b7fb9…`).
+
+**How it was read.** A research subagent found and downloaded the file. I then
+grepped and read the cited lines in that local copy myself. Every string below
+was checked against it. The `specification/draft/apps.mdx` file
+(`Status: Draft`) was **not** used.
+
+| Item | Exact string | Spec line |
+|---|---|---|
+| Resource scheme | `ui://` ("URI MUST start with `ui://` scheme") | 267 |
+| MIME type | `text/html;profile=mcp-app` ("MUST be") | 240, 268 |
+| Tool link | `_meta.ui.resourceUri` (flat `_meta["ui/resourceUri"]` is deprecated) | 326, 347 |
+| Capability key | `io.modelcontextprotocol/ui`, sent by the **client** in `capabilities.extensions`, with `mimeTypes` | 40, 1498–1522 |
+| CSP fields | `_meta.ui.csp.{connectDomains, resourceDomains, frameDomains, baseUriDomains}` on each `resources/read` content item; also `_meta.ui.prefersBorder`, `domain`, `permissions` | 243–259 |
+| Default CSP (no `csp`) | `default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; connect-src 'none';` | 275–284 |
+| Bridge transport | JSON-RPC 2.0 over `window.postMessage` | 413 |
+| Handshake | `ui/initialize` (View→Host, params `appCapabilities`, …) then `ui/notifications/initialized` | 485, 507, 512 |
+| Tool result | `ui/notifications/tool-result`, params `CallToolResult` | 1145–1153 |
+| Tool input | `ui/notifications/tool-input`, params `{ arguments }` | 1106–1118 |
+| Open link | `ui/open-link`, params `{ url }`, result `{}`, error code `-32000` | 965–996 |
+| Size | `ui/notifications/size-changed`, params `{ width, height }` | 1204–1217 |
+| Teardown | `ui/resource-teardown` (Host→View request, answered with `{}`) | 1171 |
+| Context | `ui/notifications/host-context-changed`, `Partial<HostContext>` | 1219 |
+
+**Where the spec is loose or inconsistent, and what this server does.** None
+of these contradicts spec 002, so the stop condition does not fire.
+
+- **Name of the handshake request.** Line 461's example sends `"initialize"`;
+  lines 485, 507, 512 and 756 use `ui/initialize`. The view sends
+  `ui/initialize`, as the normative text and the v1.0.0 SDK (`src/app.ts:1126`)
+  do. It sends `protocolVersion: "2026-01-26"` and `appInfo`, as the SDK does.
+- **Capability check.** "Servers SHOULD check client capabilities before
+  registering UI-enabled tools" (line 1556). This server is stateless (§2.1),
+  so `tools/list` cannot know what an earlier `initialize` said. It always
+  includes `_meta.ui.resourceUri` and always returns the full `content` text
+  and `structuredContent`. That follows "Tools MUST return meaningful content
+  array even when UI is available" (line 1559) and "host does not support MCP
+  Apps → … text-only fallback" (line 389). Hosts without Apps support ignore
+  `_meta`.
+- **`resources/list`.** Servers MAY omit UI resources from it (line 393), but
+  the lifecycle diagram includes them. This server lists its one resource.
+- **No server-side extension advertisement** is defined in the spec. The server
+  declares only the core `resources` capability.
+- **Deprecated flat key** `_meta["ui/resourceUri"]`: not sent, following the
+  deprecation notice at line 347.
 
 ## M4: Ready for the directories
 
