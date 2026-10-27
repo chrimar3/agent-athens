@@ -80,3 +80,24 @@ describe('artist list size', () => {
     expect(r.content[0].text).toContain('at most 200');
   });
 });
+
+describe('malformed JSON-RPC (review finding 1)', () => {
+  for (const body of ['null', '[null]', '[1]', '"x"']) {
+    test(`${body} is answered with Invalid Request, not a crash or a 202`, async () => {
+      const res = await post(body);
+      expect(res.status).toBe(200);
+      const out = await res.json();
+      const first = Array.isArray(out) ? out[0] : out;
+      expect(first.error.code).toBe(-32600);
+    });
+  }
+});
+
+describe('impossible dates (review finding 2)', () => {
+  test('2026-99-99 is an input error, not a feed outage', async () => {
+    const res = await post(JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'search_events', arguments: { date_from: '2026-99-99' } } }));
+    const r = (await res.json()).result;
+    expect(r.isError).toBe(true);
+    expect(r.content[0].text).toStartWith('Invalid arguments:');
+  });
+});

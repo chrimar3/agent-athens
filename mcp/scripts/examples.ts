@@ -26,9 +26,9 @@ async function call(tool: string, args: object): Promise<any> {
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ jsonrpc: '2.0', id: ++id, method: 'tools/call', params: { name: tool, arguments: args } }),
   }), { feed });
-  const body: any = await res.json();
-  if (body.error || body.result?.isError) {
-    console.error(`examples: FAILED — ${tool} ${JSON.stringify(args)} → ${JSON.stringify(body.error ?? body.result.content)}\n  next: check the feed loads (bun run scripts/smoke.ts)`);
+  const body: any = await res.json().catch(() => null);
+  if (!body || body.error || body.result?.isError) {
+    console.error(`examples: FAILED — ${tool} ${JSON.stringify(args)} → ${JSON.stringify(body?.error ?? body?.result?.content ?? `HTTP ${res.status}, no JSON body`)}\n  next: check the feed loads (bun run scripts/smoke.ts)`);
     process.exit(1);
   }
   return body.result.structuredContent;

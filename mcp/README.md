@@ -17,7 +17,7 @@ database access.
 | `search_events` | Filters by `when` (today, tomorrow, this_weekend, next_7_days, next_30_days) or `date_from`/`date_to`, `category`, `neighborhood`, `venue`, `open_only`, `max_price`, free-text `query`. Results are paged. |
 | `get_event` | One event with its full description, looked up by `id` or by its agentathens.com URL. |
 | `list_venues` | Venues with events in the next 30 days, busiest first. |
-| `match_artists` | Takes artists the user likes (names or `{name, wikidata}`) and returns upcoming events. It matches by Wikidata QID first, then by name across Greek and Latin spellings, then by a mention in the title, which is flagged. |
+| `match_artists` | Takes artists the user likes (names, or `{name, wikidata, spotify_id}`) and returns upcoming events. It matches by Spotify artist ID first (resolved to a Wikidata QID through `data/performer-ids.json`), then by Wikidata QID, then by name across Greek and Latin spellings, then by a mention in the title, which is flagged. |
 
 In hosts that support [MCP Apps](https://github.com/modelcontextprotocol/ext-apps)
 (stable spec 2026-01-26), `search_events` and `match_artists` results show as

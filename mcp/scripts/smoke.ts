@@ -29,7 +29,8 @@ async function call(name: string, args: object): Promise<any> {
   });
   const res = await handleHttp(req, { feed });
   if (res.status !== 200) fail(`${name} → HTTP ${res.status}`, 'run `bun test test/` to see whether the handler itself is broken');
-  const body: any = await res.json();
+  const body: any = await res.json().catch(() => null);
+  if (!body) fail(`${name} → HTTP 200 without a JSON body`, 'run `bun test test/` to see whether the handler itself is broken');
   if (body.error) fail(`${name} → RPC error ${body.error.code} ${body.error.message}`, 'check the tool name and arguments in this script');
   if (body.result.isError) fail(`${name} → tool error: ${body.result.content[0].text}`, `check that ${origin}/api/events.json loads`);
   return body.result.structuredContent;
@@ -75,7 +76,8 @@ const performers = [...new Map(el.events.filter((e) => e.performer).map((e) => [
 if (performers.length === 0) {
   console.log('\nmatch_artists    skipped: the live feed has no performer entries to match against');
 } else {
-  const artists = performers.flatMap((p) => [p.name, ...(p.wikidata ? [{ wikidata: p.wikidata }] : [])]);
+  // match_artists takes at most 200 artists per call.
+  const artists = performers.flatMap((p) => [p.name, ...(p.wikidata ? [{ wikidata: p.wikidata }] : [])]).slice(0, 200);
   const m = await call('match_artists', { artists, date_from: '2000-01-01', date_to: '2099-12-31', lang: 'en' });
   const upcoming = await call('match_artists', { artists, lang: 'en' });
   console.log(`\nmatch_artists    input (from the live feed): ${JSON.stringify(artists)}`);

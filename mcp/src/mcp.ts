@@ -166,6 +166,8 @@ async function callTool(name: string, args: any, deps: ServerDeps) {
 }
 
 export async function handleRpc(msg: JsonRpcRequest, deps: ServerDeps): Promise<object | null> {
+  // null, numbers, strings and arrays are not requests, and not notifications either.
+  if (!msg || typeof msg !== 'object' || Array.isArray(msg)) return rpcError(null, -32600, 'Invalid Request');
   const id = msg.id ?? null;
   const isNotification = msg.id === undefined;
   if (msg?.jsonrpc !== '2.0' || typeof msg.method !== 'string') return isNotification ? null : rpcError(id, -32600, 'Invalid Request');

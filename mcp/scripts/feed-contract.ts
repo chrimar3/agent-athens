@@ -30,6 +30,7 @@ export const FIELDS: [string, (e: any) => unknown][] = [
 ];
 
 export const FLAG_SHARE = 0.05;
+const TRACKING = /[?&](utm_[a-z]+|gclid|fbclid|mc_eid|_ga)=/i;
 
 export interface ContractReport {
   elements: number;
@@ -53,6 +54,13 @@ export function checkFeedContract(doc: any): ContractReport {
       return;
     }
     if (!/^https:\/\/agentathens\.com\//.test(rec.url)) violations.push(`element ${i}: ${rec.url} is not an agentathens.com url`);
+    // toRecord() would otherwise answer "with-ticket" and an empty venue name for these.
+    if (typeof raw.isAccessibleForFree !== 'boolean') violations.push(`element ${i}: isAccessibleForFree is not a boolean`);
+    if (typeof raw.location?.name !== 'string' || raw.location.name === '') violations.push(`element ${i}: location.name is missing`);
+    // The privacy text promises links without tracking parameters.
+    for (const link of [rec.url, rec.ticket_url]) {
+      if (link && TRACKING.test(link)) violations.push(`element ${i}: ${link} carries a tracking parameter`);
+    }
     const prev = seen.get(rec.id);
     if (prev !== undefined) violations.push(`element ${i}: duplicate id ${rec.id} (also element ${prev})`);
     else seen.set(rec.id, i);

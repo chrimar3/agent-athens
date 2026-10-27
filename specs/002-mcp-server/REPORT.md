@@ -742,4 +742,42 @@ Neither change was applied.
 
 ## Independent review (§7.4)
 
+A fresh general-purpose subagent, given none of this session's context,
+reviewed `git diff 3c8130d5b..876ef0623` against §2, §4 and
+`.github/path-guard.json`. It was told to refute each finding before reporting
+it, and to back every finding with evidence. It changed no files.
+
+**Verdict: no blockers. 4 should-fix and 9 nits.**
+
+It confirmed as compliant:
+
+- **Protected paths:** 0 of 56 changed files match.
+- **Scope:** every file is under `mcp/`, `specs/002-mcp-server/` or `docs/`.
+- **Dependencies:** the root `package.json` and `bun.lock` are unchanged. The
+  Worker bundle has 8 modules and none comes from `node_modules`.
+- **Wikidata data:** it re-ran the SPARQL query for all 34 QIDs, with 0
+  mismatches.
+- **No storage, logging or tracking** in the code.
+- **Tools and links:** all tools are read-only, and every event links to
+  agentathens.com.
+- **Limits** are unchanged from M0 (the body cap is stricter).
+- **Tests:** no test was weakened. Fixtures are labelled. The kit's example
+  output matches the evidence file.
+
+| # | Finding | Resolution |
+|---|---|---|
+| 1 | should-fix: a `null` or `[null]` body crashes the handler; `[1]` and `"x"` get 202 (from M0) | **Fixed.** Tests first (4 RED), then `handleRpc` answers `-32600 Invalid Request` for anything that is not an object |
+| 2 | should-fix: `date_from: "2026-99-99"` is reported as "feed unavailable, try again" | **Fixed.** Test first (RED: `Received: "Agent Athens feed unavailable…(Invalid Date)"`). `isDay()` requires a real calendar day; the error is now "Invalid arguments: … must be a real date as YYYY-MM-DD" |
+| 3 | should-fix: unguarded `res.json()` in `fetch-spotify-ids.ts`, `examples.ts` and `smoke.ts`; smoke could go over 200 artists | **Fixed.** Each now fails with what failed and what to try next. Smoke caps the artist list at 200. `make-fixture.ts` (M0, dev-only) is left as it is |
+| 4 | should-fix, uncertain: M1.6 bundles `config/lifecycle-presumption.json`. Is that against §2.3, "the feed is the only data source"? | **Owner decision, recorded.** It is a rule, not event data, and no output field is invented (`end` stays absent). But it does change which feed events are returned. Drift: editing `config/` does not redeploy the Worker, so **redeploy the Worker after any change to `lifecycle-presumption.json`**. If the owner reads §2.3 strictly, revert `3dca96edc`. The stale-feed problem then comes back until the feed is fresh |
+| 5 | nit: `toRecord()` would answer `with-ticket` or venue `''` if the feed omitted those fields | **Guarded.** The feed contract now counts a non-boolean `isAccessibleForFree` or an empty `location.name` as a violation. Live: 0 |
+| 6 | nit: the "no tracking parameters" claim is not enforced | **Guarded.** The feed contract counts `utm_*`, `gclid`, `fbclid`, `mc_eid` or `_ga` in `url` or `ticket_url` as a violation. Live: 0 |
+| 7 | nit: commit hygiene (M3.1–M3.2 in one commit; `6d160bba9` also adds M4.1 evidence; "M1.6" is not a spec id) | Acknowledged; each commit message says why |
+| 8 | nit, uncertain: `postMessage(msg, "*")` | Kept. Hosts serve the view from a sandbox origin the view cannot know in advance. Incoming messages are checked by `ev.source === window.parent`. Outgoing messages carry only public URLs and sizes |
+| 9 | nit: the README tool table predates `spotify_id`; ledger entries missing | **Fixed** (README); ledger written in the hand-back commit |
+| 10 | nit: untracked probe files | **Owner:** delete `mcp/src/probe-worker.ts` and `mcp/src/ui/probe.html`. This session's permissions refused `rm` and `mv` |
+| 11 | nit: `deploy` script is `bunx wrangler@4` (from M0) | **Owner:** consider `wrangler deploy` (the pinned 4.149.0) |
+| 12 | nit: a cold isolate can start up to 40 feed fetches for one 20-message batch | Open item: memoise the in-flight fetch per language. The Cloudflare rate-limit rule also bounds it |
+| 13 | nit: `axe-core` comes from the root's `pa11y`, not from `mcp/package.json` | Documented in M3.3; acceptable for a dev-only test |
+
 ## Blockers and owner actions

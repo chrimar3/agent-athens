@@ -55,6 +55,13 @@ function overlaps(e: IndexedEvent, from: string, to: string): boolean {
 
 const DAY = /^\d{4}-\d{2}-\d{2}$/;
 
+/** YYYY-MM-DD that names a real calendar day: 2026-02-30 and 2026-99-99 fail. */
+function isDay(v: unknown): v is string {
+  if (typeof v !== 'string' || !DAY.test(v)) return false;
+  const d = new Date(`${v}T12:00:00Z`);
+  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v;
+}
+
 // ── public shapes ───────────────────────────────────────────────────────────
 
 function publicRecord(e: IndexedEvent, full = false): EventRecord {
@@ -91,7 +98,7 @@ export function searchEvents(snap: FeedSnapshot, args: SearchArgs, today: string
   const neighborhood = str(args.neighborhood, 'neighborhood');
   const venue = str(args.venue, 'venue');
   for (const k of ['date_from', 'date_to'] as const) {
-    if (args[k] != null && (typeof args[k] !== 'string' || !DAY.test(args[k]!))) throw new ToolInputError(`${k} must be YYYY-MM-DD`);
+    if (args[k] != null && !isDay(args[k])) throw new ToolInputError(`${k} must be a real date as YYYY-MM-DD`);
   }
   if (args.when != null && !WHEN.includes(args.when)) throw new ToolInputError(`when must be one of ${WHEN.join(', ')}`);
   const cats = args.category == null ? null : new Set(Array.isArray(args.category) ? args.category : [args.category]);
@@ -224,7 +231,7 @@ export function matchArtists(snap: FeedSnapshot, args: { artists?: unknown; date
     throw new ToolInputError(`artists[${i}] must be a string or an object`);
   });
   for (const k of ['date_from', 'date_to'] as const) {
-    if (args[k] != null && (typeof args[k] !== 'string' || !DAY.test(args[k]!))) throw new ToolInputError(`${k} must be YYYY-MM-DD`);
+    if (args[k] != null && !isDay(args[k])) throw new ToolInputError(`${k} must be a real date as YYYY-MM-DD`);
   }
   const from = args.date_from ?? today;
   const to = args.date_to ?? addDays(from, 179);

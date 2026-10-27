@@ -87,7 +87,10 @@ if (import.meta.main) {
     if (!res.ok) {
       fail(`batch ${i + 1}: HTTP ${res.status} from ${ENDPOINT}`, res.status === 429 ? `wait ${res.headers.get('retry-after') ?? 'a minute'} seconds and run again` : 'run again later; the query service may be overloaded');
     }
-    const json: any = await res.json();
+    const json: any = await res.json().catch(() => null);
+    if (!Array.isArray(json?.results?.bindings)) {
+      fail(`batch ${i + 1}: ${ENDPOINT} answered without SPARQL JSON results`, 'run again later; if it persists, run the query by hand at https://query.wikidata.org');
+    }
     bindings.push(...json.results.bindings);
   }
 

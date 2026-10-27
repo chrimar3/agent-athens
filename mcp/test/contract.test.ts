@@ -28,6 +28,19 @@ describe('feed contract', () => {
     expect(v.some((x) => x.includes('duplicate id'))).toBe(true);
     expect(v.some((x) => x.includes('not an agentathens.com url'))).toBe(true);
   });
+  test('fields toRecord() would otherwise fill in are violations when absent (review finding 5)', () => {
+    const d = doc();
+    delete d.dataFeedElement[0].isAccessibleForFree;
+    delete d.dataFeedElement[1].location.name;
+    const v = checkFeedContract(d).violations;
+    expect(v.some((x) => x.startsWith('element 0:') && x.includes('isAccessibleForFree'))).toBe(true);
+    expect(v.some((x) => x.startsWith('element 1:') && x.includes('location.name'))).toBe(true);
+  });
+  test('tracking parameters on links are violations (review finding 6)', () => {
+    const d = doc();
+    d.dataFeedElement[0].offers.url += '?utm_source=x';
+    expect(checkFeedContract(d).violations.some((x) => x.includes('tracking parameter'))).toBe(true);
+  });
   test('missing optional fields are counted, and flagged over 5%', () => {
     const r = checkFeedContract(doc());
     // Fixture precondition: two of the eight events carry no Offer, so the check has something to count.
