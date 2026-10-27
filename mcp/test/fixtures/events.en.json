@@ -1,0 +1,575 @@
+{
+  "_fixture": "SYNTHETIC TEST DATA built by mcp/scripts/make-fixture.ts — not real events",
+  "@context": "https://schema.org",
+  "@type": "DataFeed",
+  "name": "Agent Athens — Cultural Events",
+  "description": "Cultural events in Athens, Greece. Updated daily.",
+  "dateModified": "2026-10-27T10:24:52.432Z",
+  "dataFeedElement": [
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "name": "Rotting Christ",
+      "description": "Rotting Christ — English fixture description.",
+      "inLanguage": "en",
+      "startDate": "2026-11-07T21:00:00+02:00",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "@id": "https://agentathens.com/en/events/fx-rotti-fuzz-club-rotting-christ/#event",
+      "url": "https://agentathens.com/en/events/fx-rotti-fuzz-club-rotting-christ/",
+      "location": {
+        "@type": "MusicVenue",
+        "name": "Fuzz Club",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Πειραιώς 209",
+          "addressLocality": "Athens",
+          "addressRegion": "Attica",
+          "addressCountry": "GR"
+        },
+        "containedInPlace": {
+          "@type": "Place",
+          "name": "Municipality of Athens",
+          "sameAs": "https://www.wikidata.org/wiki/Q1524",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 37.9838,
+            "longitude": 23.7275
+          },
+          "containedInPlace": {
+            "@type": "Place",
+            "name": "Attica",
+            "sameAs": "https://www.wikidata.org/wiki/Q758056",
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 37.9908,
+              "longitude": 23.7033
+            },
+            "containedInPlace": {
+              "@type": "Place",
+              "name": "Greece",
+              "sameAs": "https://www.wikidata.org/wiki/Q41",
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 39.0742,
+                "longitude": 21.8243
+              }
+            }
+          }
+        }
+      },
+      "eventStatus": "https://schema.org/EventScheduled",
+      "endDate": "2026-11-07T21:00:00+02:00",
+      "isAccessibleForFree": false,
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "More.com",
+          "url": "https://more.com/"
+        },
+        "url": "https://www.more.com/gr-el/tickets/music/rotting-christ-fixture/",
+        "price": "25"
+      },
+      "image": "https://agentathens.com/images/og/events/fx-rotti-fuzz-club-rotting-christ.png",
+      "performer": {
+        "@type": "MusicGroup",
+        "name": "Rotting Christ",
+        "sameAs": [
+          "https://www.wikidata.org/wiki/Q938889",
+          "https://en.wikipedia.org/wiki/Rotting_Christ",
+          "https://musicbrainz.org/artist/82032aac-1edd-41ff-a38c-1f63a2af5a85"
+        ]
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "name": "Αλκίνοος Ιωαννίδης",
+      "description": "Αλκίνοος Ιωαννίδης — English fixture description.",
+      "inLanguage": "en",
+      "startDate": "2026-11-08T21:30:00+02:00",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "@id": "https://agentathens.com/en/events/fx-alkin-gazarte-alkinoos-ioannidis/#event",
+      "url": "https://agentathens.com/en/events/fx-alkin-gazarte-alkinoos-ioannidis/",
+      "location": {
+        "@type": "MusicVenue",
+        "name": "Gazarte",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Voutadon 32-34, Athens 118 54",
+          "addressLocality": "Athens",
+          "addressRegion": "Attica",
+          "addressCountry": "GR"
+        },
+        "containedInPlace": {
+          "@type": "Place",
+          "name": "Gazi",
+          "sameAs": "https://www.wikidata.org/wiki/Q1496656",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 37.9785,
+            "longitude": 23.7145
+          },
+          "containedInPlace": {
+            "@type": "Place",
+            "name": "Municipality of Athens",
+            "sameAs": "https://www.wikidata.org/wiki/Q1524",
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 37.9838,
+              "longitude": 23.7275
+            },
+            "containedInPlace": {
+              "@type": "Place",
+              "name": "Attica",
+              "sameAs": "https://www.wikidata.org/wiki/Q758056",
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 37.9908,
+                "longitude": 23.7033
+              },
+              "containedInPlace": {
+                "@type": "Place",
+                "name": "Greece",
+                "sameAs": "https://www.wikidata.org/wiki/Q41",
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 39.0742,
+                  "longitude": 21.8243
+                }
+              }
+            }
+          }
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 37.978,
+          "longitude": 23.714
+        }
+      },
+      "eventStatus": "https://schema.org/EventScheduled",
+      "endDate": "2026-11-08T21:30:00+02:00",
+      "isAccessibleForFree": false,
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "Viva.gr",
+          "url": "https://viva.gr/"
+        },
+        "url": "https://www.viva.gr/tickets/music/alkinoos-fixture/",
+        "price": "18"
+      },
+      "image": "https://agentathens.com/images/og/events/fx-alkin-gazarte-alkinoos-ioannidis.png",
+      "performer": {
+        "@type": "Person",
+        "name": "Αλκίνοος Ιωαννίδης",
+        "sameAs": [
+          "https://www.wikidata.org/wiki/Q1380313",
+          "https://en.wikipedia.org/wiki/Alkinoos_Ioannidis"
+        ]
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "name": "Tinariwen",
+      "description": "Tinariwen — English fixture description.",
+      "inLanguage": "en",
+      "startDate": "2026-11-03T21:00:00+02:00",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "@id": "https://agentathens.com/en/events/fx-tinar-stegi-idrymatos-onasi-tinariwen/#event",
+      "url": "https://agentathens.com/en/events/fx-tinar-stegi-idrymatos-onasi-tinariwen/",
+      "location": {
+        "@type": "MusicVenue",
+        "name": "Στέγη Ιδρύματος Ωνάση",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Λεωφ. Συγγρού 107-109, Αθήνα 117 45",
+          "addressLocality": "Athens",
+          "addressRegion": "Attica",
+          "addressCountry": "GR"
+        },
+        "containedInPlace": {
+          "@type": "Place",
+          "name": "Neos Kosmos",
+          "sameAs": "https://www.wikidata.org/wiki/Q2569363",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 37.959,
+            "longitude": 23.727
+          },
+          "containedInPlace": {
+            "@type": "Place",
+            "name": "Municipality of Athens",
+            "sameAs": "https://www.wikidata.org/wiki/Q1524",
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 37.9838,
+              "longitude": 23.7275
+            },
+            "containedInPlace": {
+              "@type": "Place",
+              "name": "Attica",
+              "sameAs": "https://www.wikidata.org/wiki/Q758056",
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 37.9908,
+                "longitude": 23.7033
+              },
+              "containedInPlace": {
+                "@type": "Place",
+                "name": "Greece",
+                "sameAs": "https://www.wikidata.org/wiki/Q41",
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 39.0742,
+                  "longitude": 21.8243
+                }
+              }
+            }
+          }
+        }
+      },
+      "eventStatus": "https://schema.org/EventScheduled",
+      "endDate": "2026-11-03T21:00:00+02:00",
+      "isAccessibleForFree": false,
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "More.com",
+          "url": "https://more.com/"
+        },
+        "url": "https://www.more.com/gr-el/tickets/music/tinariwen-fixture/",
+        "price": "30"
+      },
+      "image": "https://agentathens.com/images/og/events/fx-tinar-stegi-idrymatos-onasi-tinariwen.png",
+      "performer": {
+        "@type": "MusicGroup",
+        "name": "Tinariwen",
+        "sameAs": [
+          "https://www.wikidata.org/wiki/Q262317",
+          "https://en.wikipedia.org/wiki/Tinariwen",
+          "https://musicbrainz.org/artist/d0b6b82b-34de-4be4-82a2-23de9ac80c55"
+        ]
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "name": "A Night of Dire Straits Songs with Local Band",
+      "description": "A Night of Dire Straits Songs with Local Band — English fixture description.",
+      "inLanguage": "en",
+      "startDate": "2026-11-04T22:00:00+02:00",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "@id": "https://agentathens.com/en/events/fx-tribu-gazarte-a-night-of-dire-straits-songs-with-local-band/#event",
+      "url": "https://agentathens.com/en/events/fx-tribu-gazarte-a-night-of-dire-straits-songs-with-local-band/",
+      "location": {
+        "@type": "MusicVenue",
+        "name": "Gazarte",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Voutadon 32-34, Athens 118 54",
+          "addressLocality": "Athens",
+          "addressRegion": "Attica",
+          "addressCountry": "GR"
+        },
+        "containedInPlace": {
+          "@type": "Place",
+          "name": "Gazi",
+          "sameAs": "https://www.wikidata.org/wiki/Q1496656",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 37.9785,
+            "longitude": 23.7145
+          },
+          "containedInPlace": {
+            "@type": "Place",
+            "name": "Municipality of Athens",
+            "sameAs": "https://www.wikidata.org/wiki/Q1524",
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 37.9838,
+              "longitude": 23.7275
+            },
+            "containedInPlace": {
+              "@type": "Place",
+              "name": "Attica",
+              "sameAs": "https://www.wikidata.org/wiki/Q758056",
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 37.9908,
+                "longitude": 23.7033
+              },
+              "containedInPlace": {
+                "@type": "Place",
+                "name": "Greece",
+                "sameAs": "https://www.wikidata.org/wiki/Q41",
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 39.0742,
+                  "longitude": 21.8243
+                }
+              }
+            }
+          }
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 37.978,
+          "longitude": 23.714
+        }
+      },
+      "eventStatus": "https://schema.org/EventScheduled",
+      "endDate": "2026-11-04T22:00:00+02:00",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "Gazarte"
+        },
+        "url": "https://agentathens.com/en/events/fx-tribu-gazarte-a-night-of-dire-straits-songs-with-local-band/"
+      },
+      "image": "https://agentathens.com/images/og/events/fx-tribu-gazarte-a-night-of-dire-straits-songs-with-local-band.png"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ExhibitionEvent",
+      "name": "Φωτογραφία της Αθήνας 1960-1980",
+      "description": "Φωτογραφία της Αθήνας 1960-1980 — English fixture description.",
+      "inLanguage": "en",
+      "startDate": "2026-10-01",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "@id": "https://agentathens.com/en/events/fx-expo-mouseio-mpenaki-1960-1980/#event",
+      "url": "https://agentathens.com/en/events/fx-expo-mouseio-mpenaki-1960-1980/",
+      "location": {
+        "@type": "EventVenue",
+        "name": "Μουσείο Μπενάκη",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Πειραιώς 138",
+          "addressLocality": "Athens",
+          "addressRegion": "Attica",
+          "addressCountry": "GR"
+        },
+        "containedInPlace": {
+          "@type": "Place",
+          "name": "Gazi",
+          "sameAs": "https://www.wikidata.org/wiki/Q1496656",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 37.9785,
+            "longitude": 23.7145
+          },
+          "containedInPlace": {
+            "@type": "Place",
+            "name": "Municipality of Athens",
+            "sameAs": "https://www.wikidata.org/wiki/Q1524",
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 37.9838,
+              "longitude": 23.7275
+            },
+            "containedInPlace": {
+              "@type": "Place",
+              "name": "Attica",
+              "sameAs": "https://www.wikidata.org/wiki/Q758056",
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 37.9908,
+                "longitude": 23.7033
+              },
+              "containedInPlace": {
+                "@type": "Place",
+                "name": "Greece",
+                "sameAs": "https://www.wikidata.org/wiki/Q41",
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 39.0742,
+                  "longitude": 21.8243
+                }
+              }
+            }
+          }
+        }
+      },
+      "eventStatus": "https://schema.org/EventScheduled",
+      "endDate": "2026-12-31",
+      "isAccessibleForFree": false,
+      "image": "https://agentathens.com/images/og/events/fx-expo-mouseio-mpenaki-1960-1980.png"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TheaterEvent",
+      "name": "Ρωμαίος και Ιουλιέτα",
+      "description": "Ρωμαίος και Ιουλιέτα — English fixture description.",
+      "inLanguage": "en",
+      "startDate": "2026-11-20T20:30:00+02:00",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "@id": "https://agentathens.com/en/events/fx-theat-stegi-idrymatos-onasi-romaios-kai-ioulieta/#event",
+      "url": "https://agentathens.com/en/events/fx-theat-stegi-idrymatos-onasi-romaios-kai-ioulieta/",
+      "location": {
+        "@type": "PerformingArtsTheater",
+        "name": "Στέγη Ιδρύματος Ωνάση",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Λεωφ. Συγγρού 107-109, Αθήνα 117 45",
+          "addressLocality": "Athens",
+          "addressRegion": "Attica",
+          "addressCountry": "GR"
+        },
+        "containedInPlace": {
+          "@type": "Place",
+          "name": "Neos Kosmos",
+          "sameAs": "https://www.wikidata.org/wiki/Q2569363",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 37.959,
+            "longitude": 23.727
+          },
+          "containedInPlace": {
+            "@type": "Place",
+            "name": "Municipality of Athens",
+            "sameAs": "https://www.wikidata.org/wiki/Q1524",
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 37.9838,
+              "longitude": 23.7275
+            },
+            "containedInPlace": {
+              "@type": "Place",
+              "name": "Attica",
+              "sameAs": "https://www.wikidata.org/wiki/Q758056",
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 37.9908,
+                "longitude": 23.7033
+              },
+              "containedInPlace": {
+                "@type": "Place",
+                "name": "Greece",
+                "sameAs": "https://www.wikidata.org/wiki/Q41",
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 39.0742,
+                  "longitude": 21.8243
+                }
+              }
+            }
+          }
+        }
+      },
+      "eventStatus": "https://schema.org/EventScheduled",
+      "isAccessibleForFree": false,
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "More.com",
+          "url": "https://more.com/"
+        },
+        "url": "https://www.more.com/gr-el/tickets/theater/romeo-fixture/",
+        "price": "15"
+      },
+      "image": "https://agentathens.com/images/og/events/fx-theat-stegi-idrymatos-onasi-romaios-kai-ioulieta.png"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "name": "Open Jazz Jam",
+      "description": "Open Jazz Jam — English fixture description.",
+      "inLanguage": "en",
+      "startDate": "2026-11-02T20:00:00+02:00",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "@id": "https://agentathens.com/en/events/fx-free-gazarte-open-jazz-jam/#event",
+      "url": "https://agentathens.com/en/events/fx-free-gazarte-open-jazz-jam/",
+      "location": {
+        "@type": "MusicVenue",
+        "name": "Gazarte",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Voutadon 32-34, Athens 118 54",
+          "addressLocality": "Athens",
+          "addressRegion": "Attica",
+          "addressCountry": "GR"
+        },
+        "containedInPlace": {
+          "@type": "Place",
+          "name": "Gazi",
+          "sameAs": "https://www.wikidata.org/wiki/Q1496656",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 37.9785,
+            "longitude": 23.7145
+          },
+          "containedInPlace": {
+            "@type": "Place",
+            "name": "Municipality of Athens",
+            "sameAs": "https://www.wikidata.org/wiki/Q1524",
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 37.9838,
+              "longitude": 23.7275
+            },
+            "containedInPlace": {
+              "@type": "Place",
+              "name": "Attica",
+              "sameAs": "https://www.wikidata.org/wiki/Q758056",
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 37.9908,
+                "longitude": 23.7033
+              },
+              "containedInPlace": {
+                "@type": "Place",
+                "name": "Greece",
+                "sameAs": "https://www.wikidata.org/wiki/Q41",
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 39.0742,
+                  "longitude": 21.8243
+                }
+              }
+            }
+          }
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 37.978,
+          "longitude": 23.714
+        }
+      },
+      "eventStatus": "https://schema.org/EventScheduled",
+      "endDate": "2026-11-02T20:00:00+02:00",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "Gazarte"
+        },
+        "url": "https://agentathens.com/en/events/fx-free-gazarte-open-jazz-jam/"
+      },
+      "image": "https://agentathens.com/images/og/events/fx-free-gazarte-open-jazz-jam.png"
+    }
+  ],
+  "meta": {
+    "lastUpdate": "2026-10-27T10:24:52.432Z"
+  }
+}

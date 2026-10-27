@@ -1,0 +1,12 @@
+# Cloudflare Worker for mcp.agentathens.com — deployed separately from the
+# static site, which stays function-free (tests/security/no-click-redirect.test.ts).
+name = "agent-athens-mcp"
+main = "src/worker.ts"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[vars]
+FEED_ORIGIN = "https://agentathens.com"
+
+# After adding the agentathens.com zone to Cloudflare (or a CNAME there):
+# routes = [{ pattern = "mcp.agentathens.com", custom_domain = true }]

@@ -7528,3 +7528,15 @@ constant feeding both surfaces.
 **Learnings:** Judge a trial merge of both PRs every round and resolve overlaps at the source. Expect each round's judges to find new chained paths through whatever the last round changed; once owner-only items dominate, the score plateaus. See ledger 2026-09-24 entries.
 
 **Open items:** Owner: apply `guard-hook-and-settings-r2.patch` and `round9-bunfig-preload.patch`; merge the protected PR, then the regular PR; install the container (docker/README.md) and log the Mac's own Netlify/GitHub CLIs out; create the `repo-settings` environment (main only) holding a read-only `RULESET_READ_TOKEN`; enable private vulnerability reporting, secret scanning and push protection; create the `maintainer-approved` label; set `AA_ANALYST_BOT_LOGIN`; add Docker Desktop file sharing for `~/.config/agentathens-docker/diff-gate`; delete the stray untracked `tests/tmp-r8/` in the protected checkout. Code: the watchdog AUTH_CHECK responder still runs auto-enrich on the Mac (refused, exit 9); phase3-weekly layer 1 still copies the DB without the untrusted-DB reader; the Netlify token is account-wide; egress proxy logs are not kept.
+
+### Session 233 — Read-only MCP server over the events feed — 2026-10-27
+
+(Numbered after S232; renumber if local entries land in between.)
+
+**Plan:** Add a single MCP server that Claude, ChatGPT and Gemini can all connect to, with search_events, get_event, list_venues and match_artists over `/api/events.json`. Keep the static site free of functions and leave protected paths untouched.
+
+**What happened:** Added a new top-level `mcp/` package: a stateless Streamable HTTP JSON-RPC handler with no SDK dependency, Cloudflare Worker and Bun entry points, and four tools. match_artists matches on the performer's Wikidata QID, then on the name or English Wikipedia title across Greek and Latin spellings (looseKey transliteration), then on a phrase in the title, which is flagged. The server holds no user data; personalisation is left to the assistant.
+
+**Verified:** `cd mcp && bun test test/` gave 25 pass and 0 fail on synthetic fixtures built with the real DataFeed builder. `tsc -p mcp` is clean. The official MCP SDK client connected and called tools against the local server. `wrangler deploy --dry-run` bundles to 25 KiB. Root tests/security plus the build-deps, dependency-audit and path-guard tests gave 890 pass. Not deployed, and not run against the live feed (no network to agentathens.com from the session).
+
+**Open items:** Owner: deploy the Worker and route mcp.agentathens.com. Add `mcp/` tests to CI through an issue, since that change touches `.github/**`. Add a Cloudflare rate limit. Next steps: Wikidata P1902 (Spotify artist ID) lookup for exact Spotify matching, then MCP Apps event cards, then directory listings.
