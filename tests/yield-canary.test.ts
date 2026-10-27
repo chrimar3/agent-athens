@@ -594,6 +594,26 @@ describe('runCanary — one issue per tripped source, deduped against open issue
     expect(JSON.stringify(sink.created)).not.toContain('newbie');
   });
 
+  test('a sink that fails on every call does not abort the run: both trips are returned with one delivery error each', async () => {
+    const failing: IssueSink = {
+      async listOpenTitles() { throw new Error('gh: HTTP 401'); },
+      async create() { throw new Error('unreachable'); },
+    };
+    const r = await runCanary({ dbPath, activeSources: ['alpha', 'beta', 'kappa'], threshold: 0.6, windowDays: 30, dryRun: false, sink: failing });
+    expect(r.tripped.map((t) => t.source).sort()).toEqual(['alpha', 'beta']);
+    expect(r.deliveryErrors.map((d) => d.source).sort()).toEqual(['alpha', 'beta']);
+    expect(r.deliveryErrors[0].error).toContain('401');
+    expect(r.created).toEqual([]);
+  });
+
+  test('no sink (no GitHub credentials) → evaluation still runs, delivery is marked skipped, nothing filed', async () => {
+    const r = await runCanary({ dbPath, activeSources: ['alpha', 'beta', 'kappa'], threshold: 0.6, windowDays: 30, dryRun: false, sink: null });
+    expect(r.tripped.map((t) => t.source).sort()).toEqual(['alpha', 'beta']);
+    expect(r.deliverySkipped).toBe(true);
+    expect(r.created).toEqual([]);
+    expect(r.deliveryErrors).toEqual([]);
+  });
+
   test('--dry-run creates nothing and does not even consult the sink', async () => {
     const sink = new FakeSink([]);
     let listCalls = 0;
@@ -670,12 +690,15 @@ describe('staleness — a stalled pipeline is the failure a yield canary most ne
  * LATEST forever, so without the pin every CLI run would be stale. Tests that
  * exercise staleness override it (or drop it, for the real-clock path).
  */
+let verdictSeq = 0;
 function runCli(args: string[], env: Record<string, string> = {}, opts: { realQuarantine?: boolean } = {}) {
   // Unless a test asks for the real config, point --quarantine at an EMPTY
   // registry: otherwise every CLI expectation here would silently depend on
   // whatever prod has quarantined today.
   const full =
     opts.realQuarantine || args.some((a) => a.startsWith('--quarantine=')) ? args : [...args, `--quarantine=${emptyQuarantine}`];
+  // Never let a test write the real data/yield-canary-latest.json.
+  if (!full.some((a) => a.startsWith('--verdict='))) full.push(`--verdict=${join(work, `verdict-${++verdictSeq}.json`)}`);
   const r = Bun.spawnSync(['bun', 'run', SCRIPT, ...full], {
     cwd: ROOT, stdout: 'pipe', stderr: 'pipe', env: { ...process.env, YIELD_CANARY_TODAY: LATEST, ...env },
   });
@@ -755,13 +778,14 @@ describe('CLI — exit codes and rule-5 stderr', () => {
     expect(existsSync(log)).toBe(false); // dry-run never shells out to gh
   });
 
-  test('healthy DB → exit 0 and one stdout summary line, gh never called', () => {
+  test('healthy DB → exit 0, one stdout summary line then one ok verdict per source, gh never called', () => {
     const { gh, log } = writeFakeGh(join(work), '[]');
     const r = runCli([`--db=${healthyDb}`], { YIELD_CANARY_GH: gh });
     expect(r.err).toBe('');
     expect(r.code).toBe(0);
     const outLines = r.out.trim().split('\n');
-    expect(outLines).toHaveLength(1);
+    expect(outLines).toHaveLength(1 + active.length);
+    for (const l of outLines.slice(1)) expect(l).toMatch(/^yield-canary: \S+ ok latest=100 /);
     expect(outLines[0]).toContain(`${active.length} of ${active.length} active sources evaluated`);
     expect(outLines[0]).toMatch(/0 tripped/);
     expect(existsSync(log)).toBe(false);
@@ -781,7 +805,7 @@ describe('CLI — exit codes and rule-5 stderr', () => {
     expect(r.err).toContain('YIELD_CANARY_TODAY');
   });
 
-  test('a hanging gh is bounded: the call times out, exit 1, the trip is still named', () => {
+  test('a hanging gh is bounded: the call times out, exit 2 (the verdict stands), the trip is still named', () => {
     const dir = mkdtempSync(join(work, 'gh-slow-'));
     const gh = join(dir, 'slow-gh');
     // Ignores TERM: Bun's spawnSync timeout sends SIGTERM by default, which
@@ -792,7 +816,7 @@ describe('CLI — exit codes and rule-5 stderr', () => {
     const t0 = Date.now();
     const r = runCli([`--db=${trippedDb}`], { YIELD_CANARY_GH: gh, YIELD_CANARY_GH_TIMEOUT_MS: '500' });
     expect(Date.now() - t0).toBeLessThan(4000);
-    expect(r.code).toBe(1);
+    expect(r.code).toBe(2);
     expect(r.err).toContain('timed out');
     expect(r.err).toContain('megaron');
   });
@@ -942,16 +966,83 @@ describe('CLI — exit codes and rule-5 stderr', () => {
     expect(r2.out).toContain('already open');
   });
 
-  test('gh itself failing → exit 1 with FAILED/try:, the trip is still named', () => {
+  test('gh itself failing → exit 2 (the verdict, not "could not run"), ONE rule-5 line naming the trip and the delivery failure', () => {
     const dir = mkdtempSync(join(work, 'gh-broken-'));
     const gh = join(dir, 'broken-gh');
     writeFileSync(gh, '#!/bin/bash\necho "gh: HTTP 401 not logged in" >&2\nexit 4\n');
     chmodSync(gh, 0o755);
     const r = runCli([`--db=${trippedDb}`], { YIELD_CANARY_GH: gh });
-    expect(r.code).toBe(1);
-    expect(r.err).toContain('yield-canary: FAILED');
+    expect(r.code).toBe(2);
+    const errLines = r.err.trim().split('\n');
+    expect(errLines).toHaveLength(1);
+    expect(errLines[0]).toContain('yield-canary: FAILED');
+    expect(errLines[0]).toContain('megaron');
+    expect(errLines[0]).toContain('delivery');
+    expect(errLines[0]).toContain('401');
+    expect(errLines[0]).toMatch(/try:/);
+  });
+
+  test('a delivery failure on the first source does not hide the second: every failing source is still named', () => {
+    const dir = mkdtempSync(join(work, 'gh-broken2-'));
+    const gh = join(dir, 'broken-gh');
+    writeFileSync(gh, '#!/bin/bash\necho "gh: HTTP 401" >&2\nexit 4\n');
+    chmodSync(gh, 0o755);
+    const r = runCli([`--db=${darkAndTrippedDb}`], { YIELD_CANARY_GH: gh });
+    expect(r.code).toBe(2);
     expect(r.err).toContain('megaron');
-    expect(r.err).toMatch(/try:/);
+    expect(r.err).toContain('more latest=30');
+  });
+
+  test('in the container with no GH_TOKEN/GITHUB_TOKEN → gh is never run, delivery is reported skipped, exit 2', () => {
+    const dir = mkdtempSync(join(work, 'gh-path-'));
+    const log = join(dir, 'calls.log');
+    writeFileSync(join(dir, 'gh'), `#!/bin/bash\necho "$*" >> "${log}"\nexit 0\n`);
+    chmodSync(join(dir, 'gh'), 0o755);
+    const r = runCli([`--db=${trippedDb}`], { AA_CONTAINER: '1', GH_TOKEN: '', GITHUB_TOKEN: '', YIELD_CANARY_GH: '', PATH: `${dir}:${process.env.PATH}` });
+    expect(existsSync(log)).toBe(false);
+    expect(r.code).toBe(2);
+    expect(r.out).toMatch(/delivery skipped/i);
+    expect(r.err).toContain('megaron');
+  });
+
+  test('on a host with no env token, gh is still used (it may authenticate from its own keyring)', () => {
+    const dir = mkdtempSync(join(work, 'gh-host-'));
+    const log = join(dir, 'calls.log');
+    writeFileSync(join(dir, 'gh'), `#!/bin/bash\necho "$*" >> "${log}"\nif [ "$2" = "list" ]; then echo '[]'; fi\nexit 0\n`);
+    chmodSync(join(dir, 'gh'), 0o755);
+    const r = runCli([`--db=${trippedDb}`], { AA_CONTAINER: '', GH_TOKEN: '', GITHUB_TOKEN: '', YIELD_CANARY_GH: '', PATH: `${dir}:${process.env.PATH}` });
+    expect(r.code).toBe(2);
+    expect(readFileSync(log, 'utf-8')).toContain('issue create');
+  });
+
+  test('the per-source verdict lines print even when the verdict file cannot be written', () => {
+    const r = runCli([`--db=${trippedDb}`, '--dry-run', `--verdict=/dev/null/not-a-dir/v.json`]);
+    expect(r.out).toMatch(/^yield-canary: megaron tripped latest=53/m);
+    expect(r.code).toBe(2);
+    expect(r.err).toMatch(/verdict file/);
+  });
+
+  test('every evaluated source gets one verdict line on stdout', () => {
+    const r = runCli([`--db=${trippedDb}`, '--dry-run']);
+    for (const s of active) expect(r.out).toMatch(new RegExp(`^yield-canary: ${s} (ok|tripped|dark|insufficient)\\b`, 'm'));
+    expect(r.out).toMatch(/^yield-canary: megaron tripped latest=53 mean=100\b/m);
+  });
+
+  test('the verdict file is written on every run (dry-run and healthy too), with one entry per evaluated source', () => {
+    const v1 = join(work, 'v-tripped.json');
+    runCli([`--db=${trippedDb}`, '--dry-run', `--verdict=${v1}`]);
+    const j1 = JSON.parse(readFileSync(v1, 'utf-8'));
+    expect(j1.sources.map((s: { source: string }) => s.source).sort()).toEqual([...active].sort());
+    expect(j1.sources.find((s: { source: string }) => s.source === 'megaron')).toMatchObject({ status: 'tripped', latest: 53, mean: 100 });
+    expect(j1.failing).toBe(true);
+    expect(j1.delivery.mode).toBe('dry-run');
+
+    const v2 = join(work, 'v-healthy.json');
+    const r2 = runCli([`--db=${healthyDb}`, `--verdict=${v2}`], { YIELD_CANARY_GH: writeFakeGh(mkdtempSync(join(work, 'gh-h-')), '[]').gh });
+    expect(r2.code).toBe(0);
+    const j2 = JSON.parse(readFileSync(v2, 'utf-8'));
+    expect(j2.failing).toBe(false);
+    expect(j2.sources.every((s: { status: string }) => s.status === 'ok')).toBe(true);
   });
 
   test('--threshold=0.5 makes the 47% drop healthy (documents why 0.6 is the default)', () => {

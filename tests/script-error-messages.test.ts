@@ -413,7 +413,7 @@ describe('scrape-all.ts — the Rule 5 exit gate is wired (source seam: main() c
     expect(block).toContain('fail(');
   });
   test('persistFailed is fed from saveEvents() inside the save block, not left at 0', () => {
-    const save = src.indexOf('saveEvents(allEvents, dryRun);');
+    const save = src.indexOf('saveEvents(allEvents, dryRun'); // S235: a 4th arg (per-row outcome tally) feeds events_new/updated
     expect(save).toBeGreaterThan(-1);
     const wired = src.indexOf('persistFailed = failed;', save);
     expect(wired).toBeGreaterThan(-1);

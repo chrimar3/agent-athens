@@ -59,6 +59,7 @@ data/DECISIONS-QUEUE.md
 data/content-hash-snapshots/
 temp-briefs/
 data/health-reports/
+data/yield-canary-latest.json
 data/search-visibility-log.csv
 data/banned-phrase-matches.csv
 

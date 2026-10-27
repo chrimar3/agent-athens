@@ -25,6 +25,7 @@ import type { Event, EventType } from '../src/types';
 import { SCHEMA_TYPE_MAP } from '../src/enrichment/quality-gates';
 import { chromePath, chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
 import { guardPageRequests } from '../src/utils/outbound-url';
+import { ListingLoads, loadListing } from '../src/utils/listing-loads';
 
 const SOURCE_ID = 'onassis';
 const BASE_URL = 'https://www.onassis.org';
@@ -243,10 +244,14 @@ export async function scrapeOnassis(): Promise<ScrapedExhibition[]> {
       `${BASE_URL}/onassis-stegi`,
     ];
 
+    const loads = new ListingLoads(SOURCE_ID);
     for (const url of urls) {
+      log('INFO', SOURCE_ID, `Trying URL: ${url}`);
+      if (!(await loadListing(page, url, loads, { waitUntil: 'networkidle2', timeout: 45000 }))) {
+        log('WARN', SOURCE_ID, `Failed to load ${url}: ${loads.failures[loads.failures.length - 1]}`);
+        continue;
+      }
       try {
-        log('INFO', SOURCE_ID, `Trying URL: ${url}`);
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 45000 });
         await page.waitForSelector('body', { timeout: 10000 });
 
         const html = await page.content();
@@ -254,16 +259,19 @@ export async function scrapeOnassis(): Promise<ScrapedExhibition[]> {
 
         if (events.length > 0) break; // found real events, stop trying URLs
       } catch (err) {
-        log('WARN', SOURCE_ID, `Failed to load ${url}: ${err}`);
+        log('WARN', SOURCE_ID, `Failed to read ${url}: ${err}`);
       }
     }
+    loads.assertAnyLoaded();
 
     if (events.length === 0) {
       // Never fabricate. An empty scrape is a valid (logged) outcome.
       log('WARN', SOURCE_ID, 'Scrape returned 0 events');
     }
   } catch (error) {
+    // Errors propagate: scrape-all records success=0 + the cause.
     log('ERROR', SOURCE_ID, `Scrape failed: ${error}`);
+    throw error;
   } finally {
     await browser.close();
   }

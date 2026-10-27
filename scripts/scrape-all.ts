@@ -34,6 +34,7 @@ import { scrapeSNFCC, ScrapedExhibition } from './scrape-snfcc';
 import { scrapeOnassis, ScrapedExhibition as OnassisExhibition } from './scrape-onassis';
 import { scrapeBenaki, ScrapedExhibition as BenakiExhibition } from './scrape-benaki';
 import { scrapeMegaron } from './scrape-megaron';
+import { ListingLoads } from '../src/utils/listing-loads';
 import { log, logSummary, type SourceStats } from '../src/utils/logger';
 import { shouldExcludeEvent } from '../src/validators/scope-filter';
 import { validateSeasonalEvent } from '../src/validators/seasonal-filter';
@@ -215,7 +216,7 @@ export async function fetchWithHttp1Fallback(url: string, options: {
  * Fetch using curl directly (for sites where HTTP/2 is completely broken)
  * Faster than fetchWithHttp1Fallback since it skips the failing fetch attempts
  */
-export async function fetchWithCurl(url: string): Promise<{ ok: boolean; text: () => Promise<string>; status: number }> {
+export async function fetchWithCurl(url: string): Promise<{ ok: boolean; text: () => Promise<string>; status: number; error?: string }> {
   try {
     // Outbound guard: validated, address-pinned curl (http/https only, no redirects, bounded).
     const text = await safeCurlText(url, {
@@ -230,29 +231,34 @@ export async function fetchWithCurl(url: string): Promise<{ ok: boolean; text: (
         status: 200
       };
     }
+    return { ok: false, text: async () => '', status: 0, error: 'empty response' };
   } catch (error) {
-    // Curl failed
+    return { ok: false, text: async () => '', status: 0, error: error instanceof Error ? error.message : String(error) };
   }
-
-  return { ok: false, text: async () => '', status: 0 };
 }
 
 // ============================================================================
 // MORE.COM SCRAPER
 // ============================================================================
 
-async function scrapeMore(): Promise<ScrapedEvent[]> {
+export async function scrapeMore(): Promise<ScrapedEvent[]> {
   console.log('   Fetching more.com categories...');
   const events: ScrapedEvent[] = [];
   const categories = ['music', 'theatre'];
   const today = new Date().toISOString().split('T')[0];
+  const loads = new ListingLoads('more');
 
   for (const category of categories) {
     const url = `https://www.more.com/gr-el/tickets/${category}/`;
     try {
       // Use curl directly for More.com (HTTP/2 is consistently broken)
       const response = await fetchWithCurl(url);
-      if (!response.ok) continue;
+      if (!response.ok) {
+        console.log(`   ⚠️ ${category} listing failed: ${response.error}`);
+        loads.failed(url, response.error);
+        continue;
+      }
+      loads.ok();
 
       const html = await response.text();
 
@@ -358,6 +364,7 @@ async function scrapeMore(): Promise<ScrapedEvent[]> {
       console.log(`   ⚠️ Error fetching ${category}: ${e}`);
     }
   }
+  loads.assertAnyLoaded();
 
   return events;
 }
@@ -370,7 +377,11 @@ async function scrapeMore(): Promise<ScrapedEvent[]> {
  * Fetch with retry and exponential backoff for Athinorama
  * Returns null on complete failure (graceful degradation)
  */
-export async function fetchWithRetryAthinorama(url: string, maxRetries = 3): Promise<string | null> {
+export async function fetchWithRetryAthinorama(
+  url: string,
+  maxRetries = 3,
+  opts: { onError?: (message: string) => void } = {},
+): Promise<string | null> {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const response = await safeFetch(url, {
@@ -384,6 +395,7 @@ export async function fetchWithRetryAthinorama(url: string, maxRetries = 3): Pro
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.text();
     } catch (err: any) {
+      opts.onError?.(err.message);
       if (isRefusedTarget(err)) { console.warn(`   ⛔ Refused ${url.slice(0, 80)}: ${err.message}`); return null; }
       const delay = Math.pow(2, attempt) * 1000;  // 2s, 4s, 8s
       console.warn(`   ⚠️ Attempt ${attempt}/${maxRetries} failed: ${err.message}`);
@@ -582,7 +594,7 @@ export function parseTheaterDateRange(card: string, refDate: Date): TheaterDateR
   return { startDate, endDate, startIsRangeArtifact };
 }
 
-async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
+export async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
   console.log('   Fetching athinorama.gr guides...');
 
   // Load mixed venues so we don't hardcode type for venues that host multiple event types
@@ -591,11 +603,15 @@ async function scrapeAthinorama(): Promise<ScrapedEvent[]> {
   const mixedVenues: string[] = JSON.parse(fs.readFileSync(venueConfigPath, 'utf-8')).mixed_venues || [];
   const mixedVenuesLower = mixedVenues.map((v: string) => v.toLowerCase().trim());
 
-  // Early connectivity test before processing
-  const testPage = await fetchWithRetryAthinorama('https://www.athinorama.gr/music/guide');
+  // Early connectivity test before processing. Unreachable is a failed scrape
+  // (main() records success=0 + the cause), never an empty success.
+  const guideUrl = 'https://www.athinorama.gr/music/guide';
+  let lastError = 'empty response';
+  const testPage = await fetchWithRetryAthinorama(guideUrl, 3, { onError: (m) => { lastError = m; } });
   if (!testPage) {
-    console.warn('   ⚠️ Athinorama unreachable — skipping source');
-    return [];  // Exit clean, don't crash pipeline
+    const loads = new ListingLoads('athinorama');
+    loads.failed(guideUrl, lastError);
+    loads.assertAnyLoaded();
   }
   const events: ScrapedEvent[] = [];
   // Now includes theater with date range support
@@ -887,7 +903,7 @@ export async function scrapeClubber(fetchFn: typeof fetch = guardedFetch): Promi
 // TICKETSERVICES.GR SCRAPER
 // ============================================================================
 
-async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
+export async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
   console.log('   Fetching ticketservices.gr listing...');
   const events: ScrapedEvent[] = [];
   const today = new Date().toISOString().split('T')[0];
@@ -1057,7 +1073,9 @@ async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
 
     console.log(`   ✓ Found prices for ${pricesFound}/${eventList.length} unique events`);
   } catch (e) {
+    // Errors propagate (clubber contract): main() records success=0 + the cause.
     console.log(`   ⚠️ Error: ${e}`);
+    throw e;
   }
 
   return events;
@@ -1067,7 +1085,7 @@ async function scrapeTicketServices(): Promise<ScrapedEvent[]> {
 // HALF NOTE JAZZ CLUB SCRAPER (iCal)
 // ============================================================================
 
-async function scrapeHalfNote(): Promise<ScrapedEvent[]> {
+export async function scrapeHalfNote(): Promise<ScrapedEvent[]> {
   console.log('   Fetching halfnote.gr iCal feed...');
   const events: ScrapedEvent[] = [];
   const today = new Date().toISOString().split('T')[0];
@@ -1137,7 +1155,9 @@ async function scrapeHalfNote(): Promise<ScrapedEvent[]> {
 
     console.log(`   Found ${events.length} events`);
   } catch (e) {
+    // Errors propagate (clubber contract): main() records success=0 + the cause.
     console.log(`   ⚠️ Error: ${e}`);
+    throw e;
   }
 
   return events;
@@ -1147,7 +1167,7 @@ async function scrapeHalfNote(): Promise<ScrapedEvent[]> {
 // RESIDENT ADVISOR SCRAPER (GraphQL)
 // ============================================================================
 
-async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
+export async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
   console.log('   Fetching ra.co GraphQL API...');
   const events: ScrapedEvent[] = [];
   const today = new Date().toISOString().split('T')[0];
@@ -1193,9 +1213,12 @@ async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
     const raEvents = result.data.eventListings.data.map((item: any) => item.event);
     console.log(`   Found ${raEvents.length} events (${result.data.eventListings.totalResults} total)`);
 
+    let malformed = 0;
     for (const e of raEvents) {
       // contentUrl becomes a fetched URL below: same-origin path only ("@host/x" would change host).
       if (typeof e.contentUrl !== 'string' || !e.contentUrl.startsWith('/') || !sameOriginUrl(e.contentUrl, 'https://ra.co')) continue;
+      // One listing without a date or venue (TBA / secret location) costs that event, not the source.
+      if (typeof e.date !== 'string' || typeof e.venue?.name !== 'string' || typeof e.title !== 'string') { malformed++; continue; }
       const date = e.date.split('T')[0];
       const time = e.startTime?.match(/T(\d{2}:\d{2})/)?.[1] || '';
 
@@ -1243,6 +1266,7 @@ async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
         image_url: e.images?.find((img: any) => img.type === 'FLYERFRONT')?.filename || null
       });
     }
+    if (malformed > 0) console.log(`   ⚠️ Skipped ${malformed} listing(s) without a date, venue or title`);
 
     // Fetch prices from event pages for TBA events (up to 20)
     const tbaEvents = events.filter(e => e.price_type === 'tba');
@@ -1291,7 +1315,9 @@ async function scrapeResidentAdvisor(): Promise<ScrapedEvent[]> {
       console.log(`   Found ${pricesFound} additional prices from event pages`);
     }
   } catch (e) {
+    // Errors propagate (clubber contract): main() records success=0 + the cause.
     console.log(`   ⚠️ Error: ${e}`);
+    throw e;
   }
 
   return events;
@@ -1396,7 +1422,8 @@ async function crossReferenceClubberPrices(clubberEvents: ScrapedEvent[], raEven
 // ============================================================================
 
 /**
- * Record scrape statistics to the database for monitoring
+ * Record scrape statistics to the database for monitoring. Returns the row id
+ * (for recordSaveCounts after the save), or null when the write failed.
  */
 function recordScrapeStats(
   source: string,
@@ -1406,10 +1433,10 @@ function recordScrapeStats(
   durationMs: number,
   success: boolean,
   errorMessage: string | null
-): void {
+): number | null {
   try {
     const db = new Database(DB_PATH);
-    db.prepare(`
+    const r = db.prepare(`
       INSERT INTO scrape_stats (source, scraped_at, events_found, events_new, events_updated, duration_ms, success, error_message)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
@@ -1423,15 +1450,42 @@ function recordScrapeStats(
       errorMessage
     );
     db.close();
+    return Number(r.lastInsertRowid);
   } catch (err) {
     // Log but don't fail the scrape
     console.log(`   ⚠️ Failed to record scrape stats: ${err}`);
+    return null;
+  }
+}
+
+/** Fill events_new / events_updated on this run's scrape_stats rows once the save has run. */
+export function recordSaveCounts(
+  statIds: ReadonlyMap<string, number>,
+  counts: ReadonlyMap<string, { new: number; updated: number }>,
+  dbArg?: Database,
+): void {
+  const db = dbArg ?? new Database(DB_PATH);
+  try {
+    const stmt = db.prepare(`UPDATE scrape_stats SET events_new = ?, events_updated = ? WHERE id = ?`);
+    for (const [source, id] of statIds) {
+      const c = counts.get(source) ?? { new: 0, updated: 0 };
+      stmt.run(c.new, c.updated, id);
+    }
+  } catch (err) {
+    console.log(`   ⚠️ Failed to record save counts in scrape_stats: ${err}`);
+  } finally {
+    if (!dbArg) db.close();
   }
 }
 
 // `dbArg` lets tests inject an in-memory DB; in production it defaults to the prod file
 // and is owned/closed here. A caller-injected DB is left open for the caller to manage.
-export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Database): { saved: number; outOfScope: number; failed: number; dupSkipped: number } {
+export function saveEvents(
+  events: ScrapedEvent[],
+  dryRun: boolean,
+  dbArg?: Database,
+  onOutcome?: (event: ScrapedEvent, outcome: 'new' | 'updated') => void,
+): { saved: number; outOfScope: number; failed: number; dupSkipped: number } {
   if (dryRun || events.length === 0) return { saved: 0, outOfScope: 0, failed: 0, dupSkipped: 0 };
 
   const db = dbArg ?? new Database(DB_PATH);
@@ -1523,7 +1577,8 @@ export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Data
       const timeSource = e.time ? 'scraped_listing' : null;
 
       // Duplicate gate — NEW ids only; see seam comment above the prepare().
-      if (!existsStmt.get(e.id)) {
+      const isNew = !existsStmt.get(e.id);
+      if (isNew) {
         const match = checkImportDuplicate(
           {
             id: e.id,
@@ -1569,6 +1624,7 @@ export function saveEvents(events: ScrapedEvent[], dryRun: boolean, dbArg?: Data
         $ticket_url_status: e.ticket_url_status || null
       });
       saved++;
+      onOutcome?.(e, isNew ? 'new' : 'updated');
     } catch (err) {
       // NOT a duplicate path: the only unique index is `id`, handled by ON CONFLICT(id)
       // DO UPDATE above — so a throw here is a real persistence failure (e.g. a CHECK or
@@ -1783,6 +1839,8 @@ async function main() {
   const allEvents: ScrapedEvent[] = [];
   let clubberEvents: ScrapedEvent[] = [];
   let raEvents: ScrapedEvent[] = [];
+  const statIds = new Map<string, number>();
+  const sourceOf = new Map<ScrapedEvent, string>();
 
   for (const sourceId of selectedSources) {
     const source = SOURCES[sourceId];
@@ -1802,13 +1860,15 @@ async function main() {
 
       results.push({ source: sourceId, events, success: true, duration });
       allEvents.push(...events);
+      for (const e of events) sourceOf.set(e, sourceId);
 
       if (sourceId === 'clubber') clubberEvents = events;
       if (sourceId === 'ra') raEvents = events;
 
-      // Record stats to database (events_new/updated will be calculated after save)
+      // events_new/updated are filled in after the save (recordSaveCounts)
       if (!dryRun) {
-        recordScrapeStats(sourceId, events.length, 0, 0, duration, true, null);
+        const statId = recordScrapeStats(sourceId, events.length, 0, 0, duration, true, null);
+        if (statId !== null) statIds.set(sourceId, statId);
       }
 
       log('INFO', sourceId, `Completed: ${events.length} events in ${(duration / 1000).toFixed(1)}s`);
@@ -1857,8 +1917,17 @@ async function main() {
   let persistFailed = 0;
   if (!dryRun && allEvents.length > 0) {
     console.log('\n💾 Saving to database...');
-    const { saved, outOfScope, failed, dupSkipped } = saveEvents(allEvents, dryRun);
+    const counts = new Map<string, { new: number; updated: number }>();
+    const tally = (e: ScrapedEvent, outcome: 'new' | 'updated') => {
+      const id = sourceOf.get(e);
+      if (!id) return;
+      const c = counts.get(id) ?? { new: 0, updated: 0 };
+      if (outcome === 'new') c.new++; else c.updated++;
+      counts.set(id, c);
+    };
+    const { saved, outOfScope, failed, dupSkipped } = saveEvents(allEvents, dryRun, undefined, tally);
     persistFailed = failed;
+    recordSaveCounts(statIds, counts);
     // Measure health at row-creation, not scrape-report: surface found -> persisted divergence.
     log('INFO', 'system', `Found ${allEvents.length} -> Saved ${saved} (${failed} failed, ${outOfScope} out of scope, ${dupSkipped} import-gate dup)`);
     console.log(`   ✅ Found ${allEvents.length} → Saved ${saved} (${failed} failed, ${outOfScope} out-of-scope, ${dupSkipped} import-gate dup)`);

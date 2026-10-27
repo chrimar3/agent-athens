@@ -16,6 +16,7 @@ import { SCHEMA_TYPE_MAP } from '../src/enrichment/quality-gates';
 import type { DomDocument } from './dom-eval-types';
 import { chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
 import { guardPageRequests } from '../src/utils/outbound-url';
+import { ListingLoads, loadListing } from '../src/utils/listing-loads';
 
 // Browser surface for page.evaluate() callbacks — module-local on purpose;
 // see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
@@ -114,8 +115,8 @@ export async function scrapeBenaki(): Promise<ScrapedExhibition[]> {
     const url = `${BASE_URL}/index.php?option=com_landings&view=search&section=events&Itemid=601&lang=el`;
     log('INFO', SOURCE_ID, `Loading: ${url}`);
 
-    try {
-      await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+    const loads = new ListingLoads(SOURCE_ID);
+    if (await loadListing(page, url, loads, { waitUntil: 'networkidle2', timeout: 30000 })) try {
       await page.waitForSelector('body', { timeout: 10000 });
 
       // Extract exhibition data
@@ -181,60 +182,19 @@ export async function scrapeBenaki(): Promise<ScrapedExhibition[]> {
         }
       }
     } catch (err) {
-      log('WARN', SOURCE_ID, `Failed to load page: ${err}`);
+      log('WARN', SOURCE_ID, `Failed to read page: ${err}`);
     }
+    loads.assertAnyLoaded();
 
-    // If no exhibitions found from scraping, add known exhibitions from research
     if (exhibitions.length === 0) {
-      log('INFO', SOURCE_ID, 'Adding known exhibitions from research');
-
-      // Grand Tour - Extended
-      exhibitions.push({
-        title: 'Grand Tour',
-        description: 'A journey through the tradition of the Grand Tour, exploring how travelers documented and experienced Greece and the Mediterranean.',
-        start_date: '2025-10-01',
-        end_date: '2026-03-29',
-        url: 'https://www.benaki.org',
-        venue_key: 'greek-culture',
-        price_type: 'with-ticket'
-      });
-
-      // N.I.M.A. Exhibition
-      exhibitions.push({
-        title: 'N.I.M.A. (Mentis–Antonopoulos Threadworks)',
-        description: 'Designer Denise Eleftheriou explores the world of Mentis–Antonopoulos Threadworks, highlighting products like cords, braids, and trimmings. Traditional decorative elements are reimagined as raw matter for creating surfaces and volumes in contemporary fashion.',
-        start_date: '2026-01-22',
-        end_date: '2026-03-28',
-        url: 'https://www.benaki.org',
-        venue_key: 'pireos',
-        price_type: 'with-ticket'
-      });
-
-      // Alexis Akrithakis Retrospective
-      exhibitions.push({
-        title: 'Αλέξης Ακριθάκης: Μια γραμμή σαν κύμα',
-        description: 'Retrospective covering Akrithakis\' career from early psychedelic images of the 1960s, to the emblematic Suitcase of the 1970s, through to his final works. The exhibition traces how gesture became biography, humor, and conceptual pressure.',
-        start_date: '2026-02-11',
-        end_date: '2026-05-24',
-        url: 'https://www.benaki.org',
-        venue_key: 'pireos',
-        price_type: 'with-ticket'
-      });
-
-      // MIET Collection
-      exhibitions.push({
-        title: 'Συλλογή ΜΙΕΤ: Ελληνική τέχνη του 20ού αιώνα',
-        description: 'More than 100 works from the collection of the Cultural Foundation of the National Bank of Greece (MIET), covering most of the Greek twentieth century. Printmaking holds a prominent place, along with sculpture.',
-        start_date: '2026-02-25',
-        end_date: '2026-04-26',
-        url: 'https://www.benaki.org',
-        venue_key: 'pireos',
-        price_type: 'with-ticket'
-      });
+      // Never fabricate (Tier 1, S164): an empty parse is a logged outcome, not a cue for placeholder rows.
+      log('WARN', SOURCE_ID, 'Page loaded but 0 exhibitions parsed — the selectors may no longer match benaki.org');
     }
 
   } catch (error) {
+    // Errors propagate: scrape-all records success=0 + the cause.
     log('ERROR', SOURCE_ID, `Scrape failed: ${error}`);
+    throw error;
   } finally {
     await browser.close();
   }

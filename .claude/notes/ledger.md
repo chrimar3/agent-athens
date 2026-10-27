@@ -8,6 +8,29 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 
 # Mistakes
 
+## 2026-10-27 — Phase 2 "make failure loud": what bit while fixing it (S235)
+
+| What | Why | Fix |
+|---|---|---|
+| The audit's A3 explanation ("no server-side artifact") missed the arithmetic: the deploy-recovery lookup could never match | `scripts/daily-automated.sh` searches `listSiteDeploys` for `created_at` within the last 10 minutes, but only after the 900 s (15 min) watchdog kill — a deploy created when the CLI started is always older than the cutoff | Owner issue O2 in `specs/input-pipeline-phase1-2-owner-issues.md`: window from the CLI start time; a title-recovered deploy still prints no `PUBLISH-RESULT`, so the CLI-sourced id is the real fix |
+| The audit said "add the scraper files to the call-site test's GUARDED list" — no such list exists | `tests/security/scraper-fetch-guards.test.ts` pins only `scrape-all.ts` and REQUIRES RA's GraphQL call to stay a raw `fetch` POST; `safeFetch` supports only GET/HEAD | Routing RA through the guard is owner work (guard POST support + pin change); megaron/cometogether are agent work after A1 |
+| `scripts/__tests__/*.test.ts` never run in CI or `bun run test` | `scripts/run-tests.sh` passes only `*.test.ts` under `tests/` and `src/` plus two named `also_required` files | New tests go under `tests/` or `src/**/__tests__/`; existing `scripts/__tests__` files (e.g. scrape-megaron, save-events-import-gate) guard nothing until listed — owner decision (`.github/scripts/test-report-floor.json` is protected) |
+| Mutating `require('node:dns/promises').lookup` to fake DNS works only if done before the guard module is imported | Bun captures the named import binding at import time; in one `bun test` process an earlier file may already have loaded `outbound-url` | In-process: `mock.module('node:dns/promises', …)` (live bindings; precedent in the security suite). Fresh process (`bun --preload`): the exports mutation is enough |
+| `Bun.plugin` `build.module()` cannot override builtins; `mock.module` from `bun:test` does nothing outside the test runner | Bun refuses "module() cannot be used to override builtin module" | For a dry-run under container DNS conditions, preload a file that mutates the builtin's exports object |
+| A first constant-yield fixture let the "failures are not samples" mutant survive | The failed row was older than all 14 successful rows, so it never fell inside the window | Put the edge case where removing the guard changes the answer (the newest run failed) |
+| Adding lines above `saveEvents()` broke `tests/no-bypass.test.ts` twice | The INSERT allowlist is a line range | Shift the range with a dated note; check `no-bypass` after any edit above the INSERT |
+
+## 2026-10-26 — Input pipeline audit: the sealed network killed the guarded scrapers and nothing noticed (S234, read-only; fixes proposed, not applied)
+
+| What | Why | Fix |
+|---|---|---|
+| Six sources plus more.com returned 0 events on every container run since 2026-09-27 | `assertPublicUrl` pre-resolves every host with `node:dns` before fetching; on the `internal: true` Docker network there is no resolver (Engine ≥ 26 stopped forwarding, CVE-2024-29018), so `safeFetch`/`safeCurlText`/`guardPageRequests` throw `ESERVFAIL` before any request. The three scrapers using plain `fetch` (RA, megaron, cometogether) survive because Bun's fetch honours `HTTPS_PROXY` and squid resolves. Two defence layers each tested alone, never together | Proposed: proxy mode in `src/utils/outbound-url.ts` gated on `AA_CONTAINER=1 && HTTPS_PROXY` that skips local resolution (squid already denies private destinations after its own DNS) and keeps scheme/credential/IP-literal/local-name checks; `docker/doctor.sh` must probe the real guard, not raw curl; `docker/README.md:436-438` is inverted. Owner decision (security loop) between this and a DNS forwarder in the egress container |
+| The outage was invisible for 19 days | Scrapers catch their own fetch errors and return `[]`, so `scrape_stats.success=1`; `health-check.ts` glyph treats a 0-event success row as ok; `yield-canary.ts` detected the drop but exits 1 on the first `gh` call (no `GH_TOKEN` in the scrape container) and the pipeline logs that as non-fatal; the deadman's `SOURCE_DEAD` needs 3 consecutive runs and `STALE_DEPLOY` outranks it; ntfy topic file never created after security-loop round 1 | Proposed: apply the clubber "errors propagate" contract to every scraper; glyph `!` + non-zero exit for 0-event success rows; canary evaluate-then-deliver with a verdict file and exit 2; yield rule on the host deadman; push-unconfigured as an alertable reason; a "shown rows in next 7 days per source" ratchet |
+| Benaki has reported exactly 4 events on all 205 logged runs since 2026-02-12 and never parsed a real exhibition | `scripts/scrape-benaki.ts:187-234` injects four hard-coded, past-dated "known exhibitions" when the page yields nothing; they are written as `verified_athens` every run. A constant fabricated yield defeats every yield monitor. Ledger Decisions still carries the superseded "fall back to known events" row beside S164's ruling | Proposed: delete the fallback (return `[]` + WARN), purge the five rows in a reviewed migration, add a constant-yield rule, append a superseded note to the old Decisions row |
+| 553 of 596 upcoming ticketed rows have `ticket_url_status='generated'` and the "Buy tickets" tier is empty | The daily step is `validate-ticket-urls.ts --generate`, which copies `event.url` into `ticket_url` and skips HEAD validation; the tiered resolver (`src/ticketing/resolver.ts`, `scripts/backfill-ticket-urls.ts`) is wired into no job; `generated` is in neither CTA list so merchant checkout pages and editorial pages both render "Βρείτε εισιτήρια →". "URL coverage 97.9%" was a vanity metric | Proposed: CTA renders Buy for merchant hosts and Details for listing aggregators; capture athinorama `offers.url`/more.com anchors at scrape (52 on the live guide, discarded today); wire the backfill only after repairing the 404 templates and validating tier ≥ 2 results; host-aware validation (more.com queue-it and ra.co DataDome block every non-browser client) |
+| The container publish deployed the site but recorded a failure | `netlify deploy` uploads, then hangs through the proxy; the 900 s watchdog kills it (exit 143), `listSiteDeploys` finds nothing in the window, no `deploy-success` is written, the deadman keeps alerting STALE_DEPLOY on a fresh site | Proposed: replace the CLI's post-upload wait with the pipeline's own `getSiteDeploy` poll and record success from it; fix the deadman's deploy-truth source in the same round. Do not install the container schedule before this is understood |
+| The guard's own tests could not have caught the outage | `src/utils/__tests__/outbound-url.test.ts` injects a resolver in every test ("No network"); nothing exercises `systemResolver` under container conditions | Proposed: tests for proxy mode with an injected env; a doctor probe that runs the real guard inside the container |
+
 ## 2026-09-24 — Security loop: host, container and review boundaries (security loop, rounds 0–9)
 
 | What | Why | Fix |
@@ -18,6 +41,44 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 | CI could be forced green; required checks conflicted | A test calling process.exit(0) ended `bun test` with 0; path-guard always failed on protected paths while the ruleset forbade bypass | JUnit report + test-report-check.sh with a committed floor; path-guard passes on a code owner's approval of the current head |
 | Host jobs read container-written state as if trusted | The deadman and digest opened data/events.db directly (a recursive view hung them) and parsed logs/ files a container can forge | src/watchdog/untrusted-db.ts (no-follow copy, schema check, child with timeout); deploy freshness from the host-only deploys.log |
 | Two PRs from one loop repeatedly conflicted at merge | Regular and protected branches edited the same lines (published-artifacts.ts, .gitignore, weekly-digest.ts, go.ts) | Before judging, trial-merge both branches; resolve at the source so either merge order is clean (byte-identical shared modules, one branch owns each file) |
+## 2026-09-23 — A source going quiet is not a closing date (S232)
+
+| What | Why | Fix |
+|---|---|---|
+| First draft of the "exhibition shown open after closing" fix set `endDate` to the last per-day row | The last row a scraper wrote is how far it saw, not when the show closes: snfcc's daily Kruger rows stop 23 Jun while the show runs to 1 Nov; WATER's rows stop at today. A derived `endDate` is a stated fact downstream (EventCompleted) | Reverted before shipping; build-only `presumedEndDate` (a presumption: no EventCompleted, neutral banner), only when the source has written rows ≥2 days newer, and never when any row of the run states an end |
+| Test fixtures set `venueName`, a field `Event` does not have | A `Partial<Event>` spread carries unknown keys at runtime, so the grouping tests passed while production (field `venue.name`) would have ignored the venue | `bunx tsc --noEmit` caught it; use the real field. The type check is part of the gate for this reason |
+| The new factual summary stated a per-day row's date as the exhibition's start ("Start date: 22 September" for a show that opened 19 Sep) | Rows without a stated end can be one listed day of a run | Exhibitions without a stated end get no date clause |
+| A presumed end rendered "Αυτή η εκδήλωση έχει ολοκληρωθεί" | The passed-event banner keyed on lifecycle, which cannot tell stated from presumed ends | Banner reads `resolveEffectiveEnd(event).presumed` and says "no later dates listed" instead |
+| Greek pages with native Greek prose still got English meta descriptions (132 rows) | `generateEventMetaDescription` reads `fullDescription`, which `rowToEvent` fills with English first when both exist | Greek pages take native Greek prose, else the Greek factual summary |
+| A mutation batch reported blank results | zsh does not word-split an unquoted `$T`, so `bun test $T` received one bogus path and printed no fail line | Use `${=T}` or explicit paths; a blank mutation result means the harness did not run |
+
+## 2026-09-22 — Invented clocks, unfiltered dedup losers, raw display titles (S231)
+
+| What | Why | Fix |
+|---|---|---|
+| Every megaron.gr event published at 20:30 (113 upcoming; 4 of 8 probed were really 10:00/18:00/19:00/22:00) | `scrape-megaron.ts` hardcoded `time: '20:30'`; the listing states no times; the daily upsert never rewrites `start_date` and COALESCE-keeps `time_doors`, so the guess was permanent | Date-only at scrape; `enrich-time.ts` reads the detail page's "ΗΜΕΡΕΣ ΚΑΙ ΩΡΕΣ" time for the row's own date; one-off `fix-megaron-default-times.ts --apply` for stored rows |
+| Events already marked `merged_into` still appeared in every listing | The dedup-301 layer was stashed, never landed; nothing else read `merged_into` at build | `isListable()` drops losers from `upcomingEvents` only; loser pages still emit pending the GEO URL ruling |
+| Same show twice at one venue and minute ("1984" / "1984 - … 2ος χρόνος") | Sequel guard read the "2ος χρόνος" season marker as an instalment; 4-char titles below every layer's floor | Last-resort `same_slot` layer: identical explicit minute + word-boundary prefix or Greek-case-insensitive word equality |
+| Hub comparison row interpolated title and venue unescaped | Row renderer predates the S228 escaping pass | Escape at the renderer; display titles via `displayTitle()` |
+| JSON-LD `name` carries literal `&amp;` for entity-encoded pre-S154 titles | Schema emission uses the stored string; visible HTML decodes first | Open — shared schema generator; next round |
+
+
+## 2026-09-20 — Preserve refs, files and scheduled dependencies separately (S230)
+
+| What | Why | Fix |
+|---|---|---|
+| Older stash entries can become unreferenced in a normal clone or bundle restore | The stash list is a reflog, not one ref per entry; ordinary clone does not recreate custom archive refs | Give each stash an explicit private archive ref and test an all-ref restore before retiring branches |
+| Full suite fails in an otherwise clean isolated checkout | Existing tests assume an ignored database fixture and temporary manifest directory | Prepare an online snapshot from a read-only source connection and the temporary directory; rerun affected and full suites without touching production data |
+
+
+## 2026-09-20 — Audit: branch salvage and measurement validity (S229)
+
+| What | Why | Fix |
+|---|---|---|
+| Weekly citation wrapper reports success for an all-error artifact | Probe catches request failures, writes results and exits zero | Proposed: validate successful/failed observations, classify quota, fail visibly and retain last-good with age |
+| Merged branch mistaken for disposable worktree | Unique uncommitted source, tests and reference assets remain outside its commit tip | Inventory and privately preserve working files; port narrow useful changes before retirement |
+| Weekly reports retain obsolete sensor assumptions | Current collectors and private measurement artifacts are not integrated with the main scoreboard/digest | Proposed: explicit source/window/status contracts and idempotent evidence integration |
+
 
 ## 2026-09-20 — Discovery and evidence boundaries (S228)
 
@@ -1348,9 +1409,46 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 
 # Patterns
 
+## 2026-10-27 — Making scraper failure loud (S235)
+
+| Pattern | Where it showed | How to apply |
+|---|---|---|
+| **Fail at the source entry, degrade per item.** A source fails when it cannot load any of its own listing pages; a single detail page or price lookup failing stays best-effort | `src/utils/listing-loads.ts` (`ListingLoads`), wired into more.com, athinorama, snfcc, onassis, benaki; ticketservices/halfnote/RA rethrow from their outer catch | New scrapers: count each listing load with `ok()` / `failed(url, err)` and call `assertAnyLoaded()` before returning; keep per-event `try/catch` |
+| **Reproduce the container failure on the Mac with a DNS preload.** A file that sets `require('node:dns/promises').lookup` to throw ESERVFAIL, passed as `bun --preload <file> scripts/scrape-all.ts --dry-run --source <id>`, shows the exact container symptom with nothing leaving the machine for guarded sources | S235 RED/GREEN for halfnote, onassis, benaki, snfcc | Use for guarded sources only: RA, megaron and cometogether use plain `fetch` and would hit the real site |
+| **Evaluate first, deliver second.** A monitor whose delivery channel fails must still produce its verdict | `scripts/yield-canary.ts`: per-source verdict lines, `data/yield-canary-latest.json`, delivery errors recorded per source, `gh` skipped without a token, exit 2 whenever a verdict fails | Any alerting script: compute and persist the verdict before contacting a third party; a delivery failure joins the verdict line, never replaces it |
+
+## 2026-10-26 — Input pipeline audit (S234)
+
+| Pattern | Where it showed | How to apply |
+|---|---|---|
+| **Defence layers must be tested together, not alone.** Two controls that each pass their own tests can be mutually fatal: the outbound guard's "resolve first, then fetch" and the sealed network's "no resolver" each worked in isolation and together produced zero input for 19 days | `src/utils/outbound-url.ts` pre-check vs `docker/compose.yaml` `internal: true` | When a hardening round changes the network, run the real guard inside the real network as a gate (a `doctor` probe that calls the project's own `safeFetch`, not raw curl); every guard test that injects a resolver needs one sibling that exercises the real path under container conditions |
+| **A constant yield is a dead sensor.** Monitors keyed on "events_found dropped" cannot see a source that always returns the same number; a fabricated fallback (Benaki = 4 forever) is worse than a zero because it defeats every ratio and dark-source rule | `scripts/scrape-benaki.ts` fallback; `yield-canary.ts`, `health-check.ts` | Alarm on "identical events_found for ≥ N runs while every row of the source is past-dated" and never write placeholder rows: a failed scrape returns `[]` + WARN (S164) |
+| **Catch-and-return-empty is a lie to the orchestrator.** A scraper that swallows its fetch error and returns `[]` turns an infrastructure outage into a quiet day; `success=1` then propagates through stats, health, canary and deadman | Seven scrapers in `scripts/scrape-all.ts` and the Puppeteer trio; the clubber scraper is the correct precedent | Infrastructure-class errors (dns, network, timeout) propagate; only per-URL refusals (`isRefusedTarget`) degrade to `ok:false`. The orchestrator's catch already records `success=0 + error_message` |
+| **Coverage metrics that count the presence of a field are vanity metrics.** "Ticket URL coverage 97.9%" counted rows where the listing URL had been copied into `ticket_url`; the buy-link truth was 7 purchasable of 16 sampled | `validate-ticket-urls.ts --generate` stats block | Measure the user-facing predicate (does the CTA target sell a ticket; does the live "Σήμερα" block contain today; shown rows in the next 7 days per source) and ratchet on that |
+| **Alert truth beats alert delivery.** Eight near-identical "stale deploy" emails in eleven days, computed from a log the deferred-publish path no longer writes, trained the owner to ignore the one channel that worked | `logs/deploy-cadence.log` vs live site; `src/watchdog/classifier.ts` ranking | When a pipeline step changes how it records success, update the monitor's source of truth in the same change; a status that outranks others in the subject line must be the one most likely to be true |
+
 ## 2026-09-24 — Three-judge security loop (security loop, rounds 0–9)
 
 Fixed rubric (12 aspects, 0–10, per-aspect median, mean of medians), three judges with different lenses (outside attacker, hostile data source vs the Mac, defender/operator), judging a trial merge of both PR branches with the owner-only patch scored as absent. Each round: tally, pick the ten highest-leverage moves, split them across builders that own disjoint files (git worktrees for the regular branch), merge, run tsc + ShellCheck + the full suite (merged tree also with the owner patch applied), push, re-judge. Keep judge reports private until their findings are fixed. Never route around a permission or hook refusal: surface it and hand the owner a patch that applies cleanly. Scores moved 4.67 → 5.83 → 6.92 → 7.00 → 7.17 → 7.08 → 7.33 → 7.50 → 7.50; each round's judges found new chained paths, so expect diminishing returns once owner-only items dominate.
+## 2026-09-23 — Evidence that is not a fact becomes a presumption, never a field (S232)
+
+When the only evidence for a value is what a scraper stopped seeing, model it as a presumption with its own field (`presumedEndDate`) and route every consumer through the one resolver that already knows what a presumption may and may not claim (`resolveEffectiveEnd` → no EventCompleted, noindex, neutral wording). Before shipping a build rule, run it over the whole live population and list every group it changes; the list is where the counterexamples (Kruger, WATER) show up. Matchers that DELETE (the location filter's blacklist) must not be widened to catch a display problem; add a build-time hold-back instead, which only hides and is reversible. A pure matcher takes its list as an argument so tests use synthetic data, while one population test asserts the live config still carries the case.
+
+
+## 2026-09-22 — A shared default is a false signal; test the guard you add (S231)
+
+A value every row shares (Megaron's 20:30) looks like evidence to any rule that compares rows — fix the invented value before loosening a matcher that keys on it, then sweep the real population for what the new rule would group. Run a new matcher over live data and list every group it creates before trusting it. Negative fixtures go vacuous easily: a "must not match" case passes if an older layer already refuses it (or already accepts it), so pick fixtures only the new code can decide and mutate each guard. Real-browser tests must build their markup from the same renderer production uses; hand-copied markup silently diverges. In CSS grid rows, an item spanning a stretched cell aligns to the row, not to the image in that cell.
+
+
+## 2026-09-20 — Main consolidation without losing working material (S230)
+
+Verify branch ancestry and exact SHAs, archive every stash explicitly, snapshot staged/unstaged/untracked work, and preserve symlinks without following them. Restore the bundle independently and compare dirty-file hashes before deleting refs. Keep ignored files in retained worktree folders until their disposition is reviewed. A scheduled branch requires a tested storage/routing migration, not just detaching its worktree. Port useful hunks onto current source and keep protected proposals separate.
+
+
+## 2026-09-20 — Baselines preserve populations and provenance (S229)
+
+Record observed time, source revision, collection window, successful/attempted denominators and source hashes. Keep analyst maturity scores separate from measured outcomes. A failed primary probe is unavailable, never an observed zero; referral sessions, citation frequency and indexing samples answer different questions. For branch cleanup, inspect committed ancestry, dirty/untracked files, private evidence and scheduled folder dependencies separately.
+
 
 ## 2026-09-20 — Test calendar and evidence boundaries (S228)
 
@@ -7126,9 +7224,32 @@ First manual deploy exited 0 through a pipe while the platform recorded state=er
 
 # Decisions
 
+## 2026-10-26 — Proxy-mode outbound guard; Phases 1+2 together; schedule after the publish fix (S235)
+
+After the S234 input-pipeline audit the user chose: (1) **proxy-mode guard** for A1 — inside the container (`AA_CONTAINER=1` + proxy env) the outbound guard skips its own DNS pre-resolution and keeps scheme / credential / IP-literal / local-name checks and the size/time/redirect caps; squid is the sole post-DNS private-range enforcer. The DNS-forwarder alternative was rejected because it restores DNS as an exfiltration channel. (2) Start Phase 1 (restore input) and Phase 2 (make failure loud) together: owner PRs on protected paths in parallel with agent work on open paths. (3) Install the container schedule only after the publish hang (A3) is fixed, not before. Work split and owner issue drafts: `specs/input-pipeline-phase1-2-owner-issues.md`.
+
 ## 2026-09-24 — Container-only pipeline and owner-applied guards (security loop)
 
 The user asked for a security baseline scored out of ten and a judged improvement loop to 8/10. Unattended jobs run only in the docker/ container (host runs refused unless AA_ALLOW_HOST_RUN=1; the user chose "enforce, with override"). Protected-path changes ship in a separate PR the owner merges (`claude/security-protected-r1`); the rest on `claude/agent-athens-continue-ni8xic`. Changes to scripts/hooks/db-guard.ts, .claude/settings.json, bunfig.toml and tests/preload/ were refused to the agent by the project's own guards and are delivered as owner-applied patches. The AI-agent-safety aspect cannot reach 8 until those patches are applied, and host isolation depends on the owner installing the container setup and logging the Mac's own Netlify/GitHub CLIs out.
+## 2026-09-23 — Presumed run ends for per-day exhibitions; protected proposals filed (S232)
+
+The user approved the presumed-end version of the per-day exhibition fix, which changes presumption semantics the config note assigns to GEO: exhibitions only (multi-date theatre listing stays a pending decision), never a stated `endDate`, a stated end on any row of the run wins, and the source must have written rows at least two days newer. A presumed end reads "Η πηγή δεν αναφέρει νεότερες ημερομηνίες" rather than "ended". The user approved filing the three protected-path proposals: #23 venue config, #24 hard-stop policy, #25 CI + pipeline (the latter also carries the `/tiles/*` cache header and the pipeline summary's listed-events count). `llms.txt` keeps counting the build's own listed population; the shared `listed-count.ts` serves the scoreboard and health check. The build-time city hold-back checks titles only, nominative city names only, and does not widen the deleting blacklist. The user merged PR #22 on 2026-09-23.
+
+
+## 2026-09-22 — Listings drop dedup losers; loser URLs untouched; INTENT hold overridden (S231)
+
+`merged_into` rows leave the listing population (`upcomingEvents`: homepage, hubs, search, counts) but still emit pages, so the pending GEO URL-disposition ruling is not pre-empted. The hub comparison table moves below the card grid (still inside `<main>`) and the homepage stats capsule/category grid move below the listing; the terminal CTA duplicate is no longer rendered. The user approved all ten moves on 2026-09-22, explicitly overriding INTENT.md's "no visual/design changes this month" for moves 5, 6, 9 and 10. Display-only title cleanup (`displayTitle`) never changes stored titles, JSON-LD `name` or dedup keys.
+
+
+## 2026-09-20 — One permanent source branch; operational retirement staged (S230)
+
+GitHub now retains only main; local phase3 and private benchmark branches remain until protected migration issue #17 is implemented and verified. Main contains the reviewed genre/tag, compiler-test timeout and error-page target salvage from PR #19. English hub wording remains proposal #18. The private recovery package and 100-action roadmap stay outside public source. Main was synchronized with its pre-existing daily-data commit; GitHub accepted that final normal push via the owner exception, while source changes passed the required PR checks. No protection settings changed. Repository maturity moves from 4/10 to 6/10 on observable cleanup/recovery evidence; site outcome scores do not rise merely because code merged.
+
+
+## 2026-09-20 — Main-only recommendation retains private evidence (S229)
+
+Recommend one permanent development branch after scoped salvage and scheduled-worktree migration. Keep private measurement results outside public source history; do not merge retired design/guard-verification branches. This session produced a reviewable audit and baseline, not branch deletion or implementation. The next improvement set targets end-to-end measurement reliability under the existing citation-first policy, with first-party sources and honest failure states.
+
 
 ## 2026-09-20 — Ten bounded improvements on existing surfaces (S228)
 
@@ -7164,6 +7285,7 @@ Accumulated decisions made during Agent Athens development.
 | Use Puppeteer for protected sites | Onassis/Benaki have bot protection, need browser rendering | 2026-02 |
 | Keep scrapers per-source, not unified | Each source has unique structure; isolation prevents cascading failures | Initial |
 | Fall back to known events when scraping fails | Better to show stale data than no data | 2026-02 |
+| Superseded: the "Fall back to known events" row above. A source that cannot load or parse its page returns `[]` and fails loudly (S164 ruling; Benaki's four hard-coded exhibitions removed in S235) | The fallback produced a constant fabricated yield (Benaki = 4 on 238 runs) that no monitor could see; Tier 1 "never fabricate" | 2026-10-27 |
 | Consolidate all 10 sources in scrape-all.ts | Single master orchestrator ensures consistent pipeline; sources run independently but share same adapter pattern | 2026-02 |
 | Use more.com as primary aggregator (not viva.gr) | more.com aggregates ALL viva.gr events plus many other sources; single source reduces duplication and API calls | 2026-02 |
 

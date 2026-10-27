@@ -35,7 +35,7 @@ const CANONICAL_SEAM: Bypass = {
 const ALLOWED_BYPASSES: readonly Bypass[] = [
   {
     file: 'scripts/scrape-all.ts',
-    lines: [1420, 1470],  // shifted +~37 on 2026-08-11 (rollover window + generateAthinoramaId above it); INSERT at 1447 within saveEvents
+    lines: [1480, 1535],  // shifted +55 on 2026-10-27 (S235: ListingLoads wiring, exports, recordSaveCounts above it); INSERT at 1509 within saveEvents
     reason: 'Bulk scraper batch INSERT (athinorama/more/ticketservices/clubber/halfnote/residentadvisor). Per-row upsertEvent would be too slow; normalizes via normalizeDateField at bind time.',
   },
   {

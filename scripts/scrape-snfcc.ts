@@ -24,6 +24,7 @@ import type { DomDocument, DomAnchor } from './dom-eval-types';
 import { chromePath, chromeLaunchArgs, CHROME_IGNORE_DEFAULT_ARGS } from './lib/chrome-path';
 import { prepareUrlWrite } from './lib/url-columns';
 import { guardPageRequests, sameOriginUrl } from '../src/utils/outbound-url';
+import { ListingLoads, loadListing } from '../src/utils/listing-loads';
 
 // Browser surface for page.evaluate() callbacks — module-local on purpose;
 // see scripts/dom-eval-types.ts for why this project compiles without lib.dom.
@@ -231,13 +232,18 @@ async function scrapeSNFCC(): Promise<ScrapedExhibition[]> {
     await guardPageRequests(page); // navigations and page scripts: no local/private targets
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
+    const loads = new ListingLoads('snfcc');
+
     // PHASE 1: Scrape category pages first — they give us correct event types
     for (const category of CATEGORY_PAGES) {
       const url = `https://www.snfcc.org/event-category/${category.slug}/`;
       console.log(`   Scraping ${category.label} (${category.slug})...`);
 
+      if (!(await loadListing(page, url, loads, { waitUntil: 'networkidle2', timeout: 60000 }))) {
+        console.log(`   Could not load ${category.label}: ${loads.failures[loads.failures.length - 1]}`);
+        continue;
+      }
       try {
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
         // Wait for content to load
         await page.waitForSelector('article, .x-box, .item, [class*="event"]', { timeout: 10000 }).catch(() => {
@@ -473,8 +479,8 @@ async function scrapeSNFCC(): Promise<ScrapedExhibition[]> {
 
     // PHASE 2: Scrape main events page for any events not found in categories
     console.log('   Scraping main events page (/ekdiloseis/)...');
-    try {
-      await page.goto('https://www.snfcc.org/ekdiloseis/', { waitUntil: 'networkidle2', timeout: 60000 });
+    const mainUrl = 'https://www.snfcc.org/ekdiloseis/';
+    if (await loadListing(page, mainUrl, loads, { waitUntil: 'networkidle2', timeout: 60000 })) try {
       await page.waitForSelector('a[href*="/event/"]', { timeout: 10000 }).catch(() => {});
 
       const mainPageEvents = await page.evaluate(() => {
@@ -551,8 +557,10 @@ async function scrapeSNFCC(): Promise<ScrapedExhibition[]> {
       }
       console.log(`   Added ${mainPageAdded} new events from main page (${mainPageEvents.length} total found)`);
     } catch (err) {
-      console.log(`   Note: Could not load main events page: ${err}`);
+      console.log(`   Note: Could not read main events page: ${err}`);
     }
+    else console.log(`   Note: Could not load main events page: ${loads.failures[loads.failures.length - 1]}`);
+    loads.assertAnyLoaded();
 
     console.log(`   Total: ${allEvents.length} events extracted`);
 

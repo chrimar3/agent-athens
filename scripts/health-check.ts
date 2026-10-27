@@ -92,16 +92,20 @@ function getLatestScrapeStats(): ScrapeStats[] {
   }
 }
 
-function getYesterdayScrapeStats(): Map<string, number> {
-  const db = getDb();
+/**
+ * Per source, events_found of the last successful run before that source's
+ * latest run. Not calendar-yesterday: runs are not daily, and a missing
+ * yesterday made every drop invisible.
+ */
+export function getPreviousScrapeStats(dbIn?: Database): Map<string, number> {
+  const db = dbIn ?? getDb();
   try {
     const stats = db.prepare(`
-      SELECT source, events_found
-      FROM scrape_stats
-      WHERE date(scraped_at) = date('now', '-1 day')
-      AND success = 1
-      GROUP BY source
-      ORDER BY scraped_at DESC
+      SELECT s.source, s.events_found
+      FROM scrape_stats s
+      WHERE s.success = 1
+        AND s.scraped_at < (SELECT MAX(scraped_at) FROM scrape_stats l WHERE l.source = s.source)
+      ORDER BY s.scraped_at DESC
     `).all() as { source: string; events_found: number }[];
 
     const map = new Map<string, number>();
@@ -112,8 +116,71 @@ function getYesterdayScrapeStats(): Map<string, number> {
     }
     return map;
   } finally {
-    db.close();
+    if (!dbIn) db.close();
   }
+}
+
+/** 'x' failed, '!' zero events or a >50% drop vs the previous run, 'v' ok. */
+export function scrapeStatusGlyph(stat: ScrapeStats, previous: number): 'v' | '!' | 'x' {
+  if (!stat.success) return 'x';
+  if (stat.events_found === 0) return '!';
+  if (previous > 0 && stat.events_found < previous * 0.5) return '!';
+  return 'v';
+}
+
+export function scrapeAlerts(stats: ScrapeStats[], previous: Map<string, number>): Alert[] {
+  const alerts: Alert[] = [];
+  for (const stat of stats) {
+    const prev = previous.get(stat.source) || 0;
+    if (!stat.success) {
+      alerts.push({ level: 'CRITICAL', message: `${stat.source} scrape failed: ${stat.error_message}` });
+    } else if (stat.events_found === 0) {
+      alerts.push({ level: 'CRITICAL', message: `${stat.source} returned 0 events` });
+    } else if (prev > 0 && stat.events_found < prev * 0.5) {
+      alerts.push({ level: 'WARNING', message: `${stat.source} dropped ${Math.round((1 - stat.events_found/prev) * 100)}% - investigate` });
+    }
+  }
+  return alerts;
+}
+
+export const CONSTANT_YIELD_RUNS = 14;
+
+/**
+ * WARNING for every source whose last CONSTANT_YIELD_RUNS successful runs all
+ * reported the same non-zero count. benaki reported exactly 4 on 238 runs
+ * because it injected fixed rows; no drop-based rule can see that.
+ */
+export function constantYieldAlerts(dbIn?: Database): Alert[] {
+  const db = dbIn ?? getDb();
+  try {
+    const rows = db.prepare(`
+      SELECT source, events_found FROM (
+        SELECT source, events_found,
+               ROW_NUMBER() OVER (PARTITION BY source ORDER BY scraped_at DESC) AS rn
+        FROM scrape_stats WHERE success = 1
+      ) WHERE rn <= ?
+    `).all(CONSTANT_YIELD_RUNS) as { source: string; events_found: number }[];
+    const bySource = new Map<string, number[]>();
+    for (const r of rows) bySource.set(r.source, [...(bySource.get(r.source) ?? []), r.events_found]);
+    const alerts: Alert[] = [];
+    for (const [source, counts] of [...bySource].sort(([a], [b]) => a.localeCompare(b))) {
+      if (counts.length < CONSTANT_YIELD_RUNS || counts[0] === 0 || counts.some(c => c !== counts[0])) continue;
+      alerts.push({
+        level: 'WARNING',
+        message: `${source} reported exactly ${counts[0]} events on each of its last ${CONSTANT_YIELD_RUNS} successful runs — a constant yield usually means fixed rows, not a live source; check the scraper`,
+      });
+    }
+    return alerts;
+  } finally {
+    if (!dbIn) db.close();
+  }
+}
+
+/** Exit status of the daily report when any alert is CRITICAL (1 stays "the script crashed"). */
+export const HEALTH_EXIT_CRITICAL = 3;
+
+export function healthExitCode(alerts: Alert[]): number {
+  return alerts.some(a => a.level === 'CRITICAL') ? HEALTH_EXIT_CRITICAL : 0;
 }
 
 function getLatestGenerationStats(): GenerationStats | null {
@@ -272,7 +339,7 @@ export function getQualityStats(dbIn?: Database): Array<{
 // REPORT GENERATION
 // ============================================================================
 
-function generateDailyReport(): string {
+function generateDailyReport(): { text: string; alerts: Alert[] } {
   const today = getAthensTodayStr();
   const alerts: Alert[] = [];
   const lines: string[] = [];
@@ -286,32 +353,21 @@ function generateDailyReport(): string {
   lines.push('-'.repeat(50));
 
   const todayStats = getLatestScrapeStats();
-  const yesterdayStats = getYesterdayScrapeStats();
+  const previousStats = getPreviousScrapeStats();
 
   if (todayStats.length === 0) {
     lines.push('  No scrape data for today');
     alerts.push({ level: 'WARNING', message: 'No scrape stats recorded today' });
   } else {
     for (const stat of todayStats) {
-      const yesterday = yesterdayStats.get(stat.source) || 0;
-      const diff = stat.events_found - yesterday;
+      const previous = previousStats.get(stat.source) || 0;
+      const diff = stat.events_found - previous;
       const diffStr = diff > 0 ? `+${diff}` : diff === 0 ? 'same' : `${diff}`;
-
-      const icon = stat.success ? (diff < 0 && Math.abs(diff) > yesterday * 0.5 ? '  ' : '  ') : '  ';
-      const statusIcon = stat.success ? (diff < 0 && Math.abs(diff) > yesterday * 0.5 ? '!' : 'v') : 'x';
-
-      lines.push(`  ${statusIcon} ${stat.source.padEnd(18)} ${String(stat.events_found).padStart(4)} events (${diffStr})`);
-
-      // Check for alerts
-      if (!stat.success) {
-        alerts.push({ level: 'CRITICAL', message: `${stat.source} scrape failed: ${stat.error_message}` });
-      } else if (stat.events_found === 0) {
-        alerts.push({ level: 'CRITICAL', message: `${stat.source} returned 0 events` });
-      } else if (yesterday > 0 && stat.events_found < yesterday * 0.5) {
-        alerts.push({ level: 'WARNING', message: `${stat.source} dropped ${Math.round((1 - stat.events_found/yesterday) * 100)}% - investigate` });
-      }
+      lines.push(`  ${scrapeStatusGlyph(stat, previous)} ${stat.source.padEnd(18)} ${String(stat.events_found).padStart(4)} events (${diffStr} vs previous run)`);
     }
+    alerts.push(...scrapeAlerts(todayStats, previousStats));
   }
+  alerts.push(...constantYieldAlerts());
   lines.push('');
 
   // DATABASE SECTION
@@ -372,7 +428,7 @@ function generateDailyReport(): string {
   }
   lines.push('');
 
-  return lines.join('\n');
+  return { text: lines.join('\n'), alerts };
 }
 
 function generateWeeklyReport(): string {
@@ -505,13 +561,16 @@ async function main() {
   }
 
   let report: string;
+  let exitCode = 0;
 
   if (isWeekly) {
     report = generateWeeklyReport();
   } else if (isQuality) {
     report = generateQualityReport();
   } else {
-    report = generateDailyReport();
+    const daily = generateDailyReport();
+    report = daily.text;
+    exitCode = healthExitCode(daily.alerts);
   }
 
   // Print to console
@@ -531,6 +590,11 @@ async function main() {
     writeFileSync(reportPath, report);
     console.log(`\nReport saved to: ${reportPath}`);
   }
+
+  if (exitCode !== 0) {
+    console.error(`health-check: CRITICAL alerts present (exit ${exitCode}) — see the ALERTS section above; a source returning 0 events or failing needs investigation before the next run`);
+  }
+  process.exitCode = exitCode;
 }
 
 // import.meta.main guard (2026-08-11): without it, merely importing this
