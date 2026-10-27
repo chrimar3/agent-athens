@@ -412,6 +412,30 @@ Bundle with the data file: `Total Upload: 31.19 KiB / gzip: 10.46 KiB`.
 already past (M1.2), so no Spotify ID matches a current event yet. The
 mechanism is in place for when the pipeline links more performers.
 
+### M2.3 What the assistants' Spotify integrations expose — done
+
+The note is in `docs/mcp-spotify-integrations.md`, checked 2026-10-27, with
+links and page dates. A research subagent gathered the sources. I then
+fetched the key primary page (`claude.com/connectors/spotify`) again myself, and
+it confirms the tool list: `create_playlist`, `get_currently_playing`,
+`search`, `add_to_library`, `fetch_tracks` and `Remove_from_library`.
+
+**Plain answer: neither exposes listening data, as far as primary sources
+show.** For ChatGPT, the only claim of access to listening history is
+secondary (TechCrunch). OpenAI's own pages returned 403 to automated fetching,
+so that claim is marked unverified. The fallback is that the user names
+artists, or the assistant passes what it knows. When the assistant has a
+Spotify ID, it sends `{name, spotify_id}`.
+
+### M2 gate
+
+The M2 done-when checks:
+
+- **Fixture tests cover all four confidence levels:** yes. One test checks
+  `['spotify_id', 'wikidata', 'name', 'title_mention']` in that order.
+- **Real number of QIDs with a Spotify ID:** 34 of 50.
+- **Data file committed:** `392fecbb1`.
+
 ## M3: Event cards (MCP Apps)
 
 ## M4: Ready for the directories
