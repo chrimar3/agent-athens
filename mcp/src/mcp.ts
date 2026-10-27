@@ -8,6 +8,7 @@
 import { CATEGORIES, overlayEnglish, type FeedSnapshot, type FeedSource, type Lang } from './feed';
 import { getEvent, listVenues, matchArtists, searchEvents, spotifyIndex, ToolInputError, WHEN, athensToday, type SpotifyIndex } from './tools';
 import performerIds from '../data/performer-ids.json';
+import eventsHtml from './ui/events.html' with { type: 'text' };
 
 export const SERVER_INFO = { name: 'agent-athens', title: 'Agent Athens', version: '0.1.0' };
 const PROTOCOL_VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26'];
@@ -22,9 +23,22 @@ const langProp = { type: 'string', enum: ['en', 'el'], description: 'Language of
 const dayProp = (d: string) => ({ type: 'string', pattern: '^\\d{4}-\\d{2}-\\d{2}$', description: d });
 const READ_ONLY = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 
+// MCP Apps (ext-apps spec 2026-01-26): one view renders search_events and
+// match_artists results as cards. Hosts without Apps support ignore _meta and
+// use the same text and structuredContent.
+export const UI_URI = 'ui://agent-athens/events.html';
+const UI_MIME = 'text/html;profile=mcp-app';
+const UI_META = { ui: { resourceUri: UI_URI } };
+// Event images on other hosts would show the viewer's IP to them; those cards get a placeholder.
+const UI_CSP = { resourceDomains: ['https://agentathens.com'] };
+// bun-types declares *.html imports as HTMLBundle; with { type: 'text' } they are strings in Bun and in wrangler.
+const EVENTS_HTML = eventsHtml as unknown as string;
+const RESOURCES = [{ uri: UI_URI, name: 'events', title: 'Agent Athens event cards', description: 'Cards for search_events and match_artists results.', mimeType: UI_MIME }];
+
 export const TOOLS = [
   {
     name: 'search_events',
+    _meta: UI_META,
     title: 'Search Athens events',
     description: 'Find upcoming cultural events in Athens by date, category, neighborhood, venue, price or free text. Returns events sorted by date with venue, price, ticket link and the Agent Athens page.',
     inputSchema: {
@@ -78,6 +92,7 @@ export const TOOLS = [
   },
   {
     name: 'match_artists',
+    _meta: UI_META,
     title: 'Match artists to events',
     description: "Given artists the user likes (e.g. their top artists from a music app, or names they mention), return upcoming Athens events by those artists. Matches by Spotify artist ID (through Wikidata), then Wikidata ID, then by name across Greek and Latin spellings, then by mention in the title.",
     inputSchema: {
@@ -161,13 +176,18 @@ export async function handleRpc(msg: JsonRpcRequest, deps: ServerDeps): Promise<
       const asked = msg.params?.protocolVersion;
       return rpcResult(id, {
         protocolVersion: PROTOCOL_VERSIONS.includes(asked) ? asked : PROTOCOL_VERSIONS[0],
-        capabilities: { tools: { listChanged: false } },
+        capabilities: { tools: { listChanged: false }, resources: { listChanged: false } },
         serverInfo: SERVER_INFO,
         instructions: INSTRUCTIONS,
       });
     }
     case 'ping': return rpcResult(id, {});
     case 'tools/list': return rpcResult(id, { tools: TOOLS });
+    case 'resources/list': return rpcResult(id, { resources: RESOURCES });
+    case 'resources/read': {
+      if (msg.params?.uri !== UI_URI) return rpcError(id, -32002, `Resource not found: ${msg.params?.uri}`);
+      return rpcResult(id, { contents: [{ uri: UI_URI, mimeType: UI_MIME, text: EVENTS_HTML, _meta: { ui: { csp: UI_CSP, prefersBorder: false } } }] });
+    }
     case 'tools/call': {
       const name = msg.params?.name;
       if (!TOOLS.some((t) => t.name === name)) return rpcError(id, -32602, `Unknown tool: ${name}`);

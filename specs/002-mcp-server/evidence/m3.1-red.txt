@@ -1,0 +1,10 @@
+$ bun test test/ui.test.ts   (M2 code, new test)
+(fail) MCP Apps wiring > initialize declares the resources capability
+(fail) MCP Apps wiring > search_events and match_artists link the UI resource; the others do not
+(fail) MCP Apps wiring > resources/list lists exactly the one UI resource
+(fail) MCP Apps wiring > resources/read returns the HTML with its CSP
+(fail) MCP Apps wiring > an unknown resource is a JSON-RPC error
+(fail) the HTML is self-contained > no external scripts, styles, fonts or imports
+(fail) the HTML is self-contained > the image allow-list in the page equals the declared CSP resourceDomains
+ 1 pass
+ 7 fail
