@@ -7540,3 +7540,29 @@ constant feeding both surfaces.
 **Verified:** `cd mcp && bun test test/` gave 25 pass and 0 fail on synthetic fixtures built with the real DataFeed builder. `tsc -p mcp` is clean. The official MCP SDK client connected and called tools against the local server. `wrangler deploy --dry-run` bundles to 25 KiB. Root tests/security plus the build-deps, dependency-audit and path-guard tests gave 890 pass. Not deployed, and not run against the live feed (no network to agentathens.com from the session).
 
 **Open items:** Owner: deploy the Worker and route mcp.agentathens.com. Add `mcp/` tests to CI through an issue, since that change touches `.github/**`. Add a Cloudflare rate limit. Next steps: Wikidata P1902 (Spotify artist ID) lookup for exact Spotify matching, then MCP Apps event cards, then directory listings.
+
+### Session 236 — MCP server spec 002, M1–M4: live-feed correctness, Spotify IDs, MCP Apps cards, directory kit — 2026-10-27/28
+
+(Numbered 236 because the main checkout's uncommitted log already holds S233–S235 for other work. The M0 entry above, which arrived in the owner's patch, also says "233". Renumber when the branches meet.)
+
+**Plan:** Execute `specs/002-mcp-server/spec.md` M1–M4 autonomously, on top of the M0 server, with TDD, a gate per milestone, and an independent review at the end.
+
+**What happened:** The spec's start commit `93c0f5076` and branch `claude/mcp-server` existed nowhere: not local, not in a worktree, not on origin. The owner supplied `format-patch` files, which were applied with `git am` in a new worktree `agent-athens-mcp` cut from origin/main. The main checkout's uncommitted work was left alone.
+
+- **M1.** `lang: "en"` overlays English records on the el feed, because the en feed hid Greek-only events. Added a live smoke script and a feed contract (569 el / 171 en elements, 0 violations). The SDK client and the inspector both work against the server. Limits are pinned, and the body cap now counts bytes, which fixes an 80 KB Greek-text bypass. M1.6 applies the site's presumption windows, because a stale feed offered a 1 Sep tour date as "tonight".
+- **M2.** Wikidata P1902 gives a Spotify ID for 34 of the 50 QIDs. `match_artists` takes `spotify_id`, ranked first. A sourced note shows that neither Claude's nor ChatGPT's Spotify integration exposes listening data, per primary sources.
+- **M3.** MCP Apps on the stable spec 2026-01-26, with strings checked against the downloaded file. One self-contained view with an image CSP limited to agentathens.com. Playwright 1.55.1 runs on the cached Chromium. axe found a theatre-colour contrast failure, which was fixed. Screenshots revealed year-ambiguous date ranges and portrait-cropped landscape images; both were fixed.
+- **M4.** Directory kit, with five prompts run against the live feed, verified Anthropic requirements, and OpenAI's checkout-link rule flagged. Privacy draft, not published. Draft issues for CI and llms.txt, not applied.
+- **Review.** The independent reviewer found no blockers. Four should-fix items were fixed test-first or recorded for the owner.
+
+**Verified:** Final `mcp/` gate on `91f367dcc`: 75 pass, 0 fail; typecheck exit 0; bundle 47.87 KiB; e2e 11 pass; axe 0 violations; `bun audit` clean. Root `bun run test` after each milestone failed only the baseline's deadman-watchdog test. Typecheck exit 0 throughout. Nothing was deployed, and no protected path was touched (0 of 56 files match).
+
+**Learnings:** Run a new consumer of the feed against the live feed early: three fixes came from looking at live output and screenshots, not from the fixture suite. See the ledger entries for 2026-10-28.
+
+**Open items:**
+- The feed has been stale since 2026-10-06, which blocks directory submission.
+- Only 2 of 569 events carry a performer, so artist matching is thin.
+- Owner decisions: ChatGPT checkout-link rule against the Tickets button; whether bundling `config/lifecycle-presumption.json` is acceptable under §2.3; the icon export; the OpenAI domain token route.
+- Delete the stray untracked `mcp/src/probe-worker.ts` and `mcp/src/ui/probe.html`.
+- Memoise in-flight feed fetches.
+- Site bug: the generated tile double-escapes `&amp;quot;`.

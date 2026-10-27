@@ -780,4 +780,83 @@ It confirmed as compliant:
 | 12 | nit: a cold isolate can start up to 40 feed fetches for one 20-message batch | Open item: memoise the in-flight fetch per language. The Cloudflare rate-limit rule also bounds it |
 | 13 | nit: `axe-core` comes from the root's `pa11y`, not from `mcp/package.json` | Documented in M3.3; acceptable for a dev-only test |
 
+### Final gate, after the review fixes, on `91f367dcc`
+
+`mcp/`, on an export of the commit:
+
+```
+$ bun test test/        → 75 pass, 0 fail (7 files)
+$ tsc --noEmit -p .     → typecheck exit 0
+$ wrangler --dry-run    → Total Upload: 47.87 KiB / gzip: 15.90 KiB
+$ bun run e2e           → 11 pass, 0 fail; axe violations (all impacts): []
+$ bun audit             → No vulnerabilities found
+```
+
+Root:
+
+```
+$ bun run typecheck → typecheck exit 0
+$ bun run test
+ 5379 pass
+ 212 skip
+ 1 fail
+Ran 5592 tests across 299 files. [493.38s]
+(fail) deadman-watchdog.ts — the database is read through the untrusted-DB reader > a normal database → the same signals as a direct read (enrich age, row count), no refusal
+```
+
+The failing set is a subset of the baseline after every milestone: M1, M2, M3
+and final.
+
 ## Blockers and owner actions
+
+**No stop condition fired.** No protected-path change was needed, no check
+failed three times, the feed was reachable, and the MCP Apps stable spec
+agrees with this document. Finding 4 (bundled config versus §2.3) is the one
+place a reviewer read a §2 commitment differently; it is left to the owner.
+
+**Before submitting to the directories:**
+
+1. **Get the feed fresh again.** `/api/events.json` was last written on
+   2026-10-06; see the input-pipeline audit.
+2. **Deploy:** `cd mcp && bunx wrangler@4 login && bun run deploy`. Then add
+   the `mcp.agentathens.com` route and the Cloudflare rate-limit rule
+   (`mcp/README.md` § Limits).
+3. **Publish the privacy page** from `privacy-page-draft.md`, after filling in
+   the Cloudflare logging paragraph.
+4. **Make a 512×512 icon**, with the letter as a path (kit §5).
+5. **Decide on ChatGPT's checkout-link rule** versus the Tickets button
+   (kit §6).
+6. **Retake the carousel screenshots** after step 1:
+   `cd mcp && EVIDENCE_DIR=../specs/002-mcp-server/evidence LIVE=1 bun run e2e`.
+
+**Other decisions and housekeeping:**
+
+- **§2.3 reading:** is the bundled `config/lifecycle-presumption.json`
+  acceptable? If yes, redeploy the Worker after any change to it.
+- **Draft issues:** open `issues/001-ci-for-mcp.md` and
+  `issues/002-advertise-mcp-endpoint.md`, or drop them.
+- **Untracked probe files:** delete `mcp/src/probe-worker.ts` and
+  `mcp/src/ui/probe.html`.
+- **Session numbering:** the M0 patch's session-log entry is "Session 233",
+  which collides with the main checkout's local S233–S235. This session is
+  logged as 236.
+
+**Pipeline items seen through the server.** They are outside spec 002 and not
+fixed here:
+
+- performer coverage: 2 of 569 events;
+- one row per day for a running exhibition (WATER);
+- DJ nights typed as theatre;
+- duplicate listings (AUTECHRE);
+- the generated tile's double-escaped `&amp;quot;`;
+- 86% of events have no neighborhood.
+
+## Summary
+
+| Milestone | Status | Key evidence |
+|---|---|---|
+| M1 Ready to ship | done (+M1.6) | live smoke and contract OK; SDK test and inspector OK; limits pinned with mutation runs |
+| M2 Exact artist matching | done | 34 of 50 QIDs have a Spotify ID; four confidence levels tested; Spotify note in docs |
+| M3 Event cards | done | stable spec strings recorded; e2e 11 pass; axe 0 violations; screenshots |
+| M4 Directories | done; submission blocked by the stale feed | kit, privacy draft, two draft issues |
+| §7.4 review | done | no blockers; should-fix items fixed or recorded |
