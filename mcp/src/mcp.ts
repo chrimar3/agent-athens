@@ -5,7 +5,7 @@
  * → client calls. That is all a read-only catalogue needs, and it runs on any
  * runtime that speaks Web Request/Response (Cloudflare Workers, Bun, Deno).
  */
-import { CATEGORIES, type FeedSource, type Lang } from './feed';
+import { CATEGORIES, overlayEnglish, type FeedSnapshot, type FeedSource, type Lang } from './feed';
 import { getEvent, listVenues, matchArtists, searchEvents, ToolInputError, WHEN, athensToday } from './tools';
 
 export const SERVER_INFO = { name: 'agent-athens', title: 'Agent Athens', version: '0.1.0' };
@@ -111,12 +111,25 @@ const rpcResult = (id: JsonRpcId, result: unknown) => ({ jsonrpc: '2.0' as const
 
 export interface ServerDeps { feed: FeedSource; now?: () => Date }
 
+// Keyed on the cached en snapshot, so the overlay is rebuilt only when a feed refreshes.
+const englishViews = new WeakMap<FeedSnapshot, { el: FeedSnapshot; view: FeedSnapshot }>();
+
+async function snapshotFor(l: Lang, feed: FeedSource): Promise<FeedSnapshot> {
+  if (l === 'el') return feed('el');
+  const [el, en] = await Promise.all([feed('el'), feed('en')]);
+  const hit = englishViews.get(en);
+  if (hit && hit.el === el) return hit.view;
+  const view = overlayEnglish(el, en);
+  englishViews.set(en, { el, view });
+  return view;
+}
+
 async function callTool(name: string, args: any, deps: ServerDeps) {
   const today = athensToday(deps.now?.() ?? new Date());
   const l: Lang = args?.lang === 'el' ? 'el' : 'en';
   if (args?.lang != null && args.lang !== 'el' && args.lang !== 'en') throw new ToolInputError('lang must be "en" or "el"');
   const { lang: _l, ...rest } = args ?? {};
-  const snap = await deps.feed(l);
+  const snap = await snapshotFor(l, deps.feed);
   switch (name) {
     case 'search_events': return searchEvents(snap, rest, today);
     case 'get_event': return getEvent(snap, rest);

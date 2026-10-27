@@ -4,7 +4,7 @@
   "@type": "DataFeed",
   "name": "Agent Athens — Cultural Events",
   "description": "Cultural events in Athens, Greece. Updated daily.",
-  "dateModified": "2026-10-27T10:24:52.432Z",
+  "dateModified": "2026-10-27T21:42:16.692Z",
   "dataFeedElement": [
     {
       "@context": "https://schema.org",
@@ -570,6 +570,6 @@
     }
   ],
   "meta": {
-    "lastUpdate": "2026-10-27T10:24:52.432Z"
+    "lastUpdate": "2026-10-27T21:42:16.692Z"
   }
 }

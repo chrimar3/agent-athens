@@ -154,6 +154,30 @@ describe('MCP over HTTP', () => {
   });
 });
 
+describe('lang "en" keeps Greek-only events', () => {
+  const GREEK_ONLY = 'Ο Βυσσινόκηπος';
+  const call = async (name: string, args: object) =>
+    (await rpc({ jsonrpc: '2.0', id: 9, method: 'tools/call', params: { name, arguments: args } })).body.result;
+
+  test('fixture precondition: the event is in the el feed and missing from the en feed', () => {
+    expect(snap.el.events.some((e) => e.name === GREEK_ONLY)).toBe(true);
+    expect(snap.en.events.some((e) => e.name === GREEK_ONLY)).toBe(false);
+  });
+  test('search_events lang en returns it, with its Greek name', async () => {
+    const r = await call('search_events', { lang: 'en', category: 'theatre', limit: 50 });
+    expect(r.structuredContent.events.map((e: any) => e.name)).toContain(GREEK_ONLY);
+    expect(r.structuredContent.total).toBe(searchEvents(snap.el, { category: 'theatre', limit: 50 }, TODAY).total);
+  });
+  test('an event in both feeds uses the English record', async () => {
+    const r = await call('search_events', { lang: 'en', query: 'Tinariwen' });
+    expect(r.structuredContent.events[0].description).toContain('English fixture description');
+  });
+  test('get_event lang en finds it by id', async () => {
+    const id = snap.el.events.find((e) => e.name === GREEK_ONLY)!.id;
+    expect((await call('get_event', { lang: 'en', id })).structuredContent.found).toBe(true);
+  });
+});
+
 describe('httpFeedSource', () => {
   test('caches and serves the last good snapshot when a refresh fails', async () => {
     let calls = 0;

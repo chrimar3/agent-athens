@@ -174,6 +174,19 @@ export function parseFeed(doc: any, lang: Lang): FeedSnapshot {
   return { lang, dateModified: doc.dateModified, events, byId: new Map(events.map((e: IndexedEvent) => [e.id, e])) };
 }
 
+/**
+ * The en feed lists only events that have an English description, so on its
+ * own it hides every Greek-only event. The English view is the el feed with
+ * the en record swapped in wherever one exists for the same id.
+ */
+export function overlayEnglish(el: FeedSnapshot, en: FeedSnapshot): FeedSnapshot {
+  const events = el.events.map((e) => en.byId.get(e.id) ?? e);
+  for (const e of en.events) if (!el.byId.has(e.id)) events.push(e);
+  // The older of the two timestamps: the view is only as fresh as its stalest part.
+  const stamps = [el.dateModified, en.dateModified].filter((x): x is string => !!x).sort();
+  return { lang: 'en', dateModified: stamps[0], events, byId: new Map(events.map((e) => [e.id, e])) };
+}
+
 export type FeedSource = (lang: Lang) => Promise<FeedSnapshot>;
 
 /**

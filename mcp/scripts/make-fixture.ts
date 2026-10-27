@@ -42,6 +42,9 @@ const events: Event[] = [
   ev({ id: 'fx-theatre', title: 'Ρωμαίος και Ιουλιέτα', startDate: '2026-11-20T20:30:00', type: 'theater', venue: onassis,
        price: { type: 'with-ticket', amount: 15, currency: 'EUR' }, ticketUrl: 'https://www.more.com/gr-el/tickets/theater/romeo-fixture/' }),
   ev({ id: 'fx-free', title: 'Open Jazz Jam', startDate: '2026-11-02T20:00:00', type: 'concert', venue: gazarte, price: { type: 'open' } }),
+  // No English description, so the real builder leaves it out of the en feed.
+  ev({ id: 'fx-greek-only', title: 'Ο Βυσσινόκηπος', startDate: '2026-11-12T20:00:00', type: 'theater', venue: benaki,
+       price: { type: 'with-ticket', amount: 12, currency: 'EUR' }, fullDescriptionEn: undefined }),
 ];
 
 for (const locale of ['el', 'en'] as const) {
