@@ -19,6 +19,14 @@ database access.
 | `list_venues` | Venues with events in the next 30 days, busiest first. |
 | `match_artists` | Takes artists the user likes (names or `{name, wikidata}`) and returns upcoming events. It matches by Wikidata QID first, then by name across Greek and Latin spellings, then by a mention in the title, which is flagged. |
 
+In hosts that support [MCP Apps](https://github.com/modelcontextprotocol/ext-apps)
+(stable spec 2026-01-26), `search_events` and `match_artists` results show as
+cards with "Agent Athens page" and "Tickets" buttons. The view is one
+self-contained HTML file (`src/ui/events.html`), served as the resource
+`ui://agent-athens/events.html`. Event images load only from agentathens.com;
+other hosts get a placeholder, so no third party sees the viewer. Hosts without
+Apps support get the same text and `structuredContent` as before.
+
 Personalisation happens in the assistant: it turns what it knows about the
 user (memory, a connected music app) into filters or an artist list. The
 server stores nothing about users. Every result carries the event's
@@ -37,7 +45,14 @@ bun run dev                     # same, against the live site's feed
 bun run fixture                 # rebuild fixtures with the real DataFeed builder
 bun run scripts/smoke.ts        # all four tools against the live feed: counts and samples
 bun run scripts/feed-contract.ts   # does the live feed still have the shape toRecord() reads?
+bun run scripts/examples.ts     # the directory kit's example prompts against the live feed
+bun run scripts/fetch-spotify-ids.ts   # refresh data/performer-ids.json from Wikidata (build time only)
+bun run e2e                     # the card view in Chromium inside a stub MCP Apps host, plus axe
 ```
+
+`bun run e2e` uses Playwright with the Chromium build already in the
+Playwright cache; it never downloads a browser. Point `PLAYWRIGHT_CHROMIUM` at
+another Chrome or Chromium binary if that cache is missing.
 
 `lang: "en"` is the Greek feed with each English record laid over it, because
 `/api/en/events.json` only lists events that have an English description.

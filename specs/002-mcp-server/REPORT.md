@@ -525,6 +525,119 @@ of these contradicts spec 002, so the stop condition does not fire.
 - **Deprecated flat key** `_meta["ui/resourceUri"]`: not sent, following the
   deprecation notice at line 347.
 
+### M3.1 Resources and tool links — done
+
+`initialize` now declares `resources: { listChanged: false }`. `tools/list`
+gives `search_events` and `match_artists` the field
+`_meta: { ui: { resourceUri: "ui://agent-athens/events.html" } }`;
+`get_event` and `list_venues` have no `_meta`. `resources/list` returns that
+one resource. `resources/read` returns `{ contents: [{ uri, mimeType:
+"text/html;profile=mcp-app", text: <html>, _meta: { ui: { csp: {
+resourceDomains: ["https://agentathens.com"] }, prefersBorder: false } } }] }`.
+An unknown URI returns JSON-RPC error `-32002`, the core MCP code for
+"resource not found". Tool results are unchanged.
+
+`test/ui.test.ts` pins all of this. It also checks that the HTML loads no
+external script, stylesheet, font or `@import`, makes no network calls, and
+that its `IMAGE_ORIGINS` constant equals the declared `resourceDomains`.
+RED on M2 code (`evidence/m3.1-red.txt`): 1 pass, 7 fail. The one pass is the
+text-fallback test, which pins M0 behaviour on purpose. GREEN: `bun test
+test/` → 68 pass, 0 fail.
+
+**Why only agentathens.com is in the CSP.** In the live el feed, 416 of 569
+images are on agentathens.com. The rest are on athinorama.gr (98), images.ra.co
+(37), more.com (8), snfcc.snfccmedia.com (6) and images.cometogether.live (4).
+Allowing those hosts would show every viewer's IP address to them, so those
+cards get a placeholder instead (§2.4).
+
+### M3.2 The view — done
+
+`mcp/src/ui/events.html` is one file, imported as text
+(`with { type: 'text' }`). Bun reads it as a string, and wrangler uploads it
+as a Text module with the Worker. The bundle is 47.08 KiB with the HTML. It:
+
+- uses the design-system tokens copied from `src/styles/design-system.css`:
+  colours, the Manrope stack falling back to system fonts, the type scale,
+  spacing and radii;
+- talks to the host only over the spec bridge: `ui/initialize`, then
+  `ui/notifications/initialized`; it renders on `ui/notifications/tool-result`,
+  opens links through `ui/open-link`, reports `ui/notifications/size-changed`,
+  and answers `ui/resource-teardown` and `ping`;
+- accepts messages only from `window.parent`;
+- builds the DOM with `textContent` only, because feed text is untrusted; it
+  renders only `https:` links, and loads an image only when its origin is in
+  `IMAGE_ORIGINS`;
+- for `match_artists` results, shows why each event matched, flagging
+  `title_mention` as "may be a tribute or support act".
+
+**Contrast fix found by axe.** Theatre's category colour `#ef2c46`, used as
+12px text on `--bg-elevated`, is 4.45:1, below WCAG AA. The category label now
+uses `--text-secondary`, and the category colour moves to a decorative dot.
+
+### M3.3 Verification — done
+
+`mcp/e2e/ui.e2e.ts`, run with `bun run e2e`, uses Playwright 1.55.1 with the
+Chromium build already cached (1187, Chrome 140). Each run:
+
+- serves the view with the CSP a host must build from `_meta.ui.csp` (spec
+  lines 275–286), inside a stub host page;
+- answers `ui/initialize`, then posts a real `tools/call` result produced by
+  this server;
+- stubs agentathens.com images and blocks every other host, so it needs no
+  network.
+
+```
+$ bun run e2e
+(pass) handshake follows the spec: ui/initialize, then ui/notifications/initialized
+(pass) one event: name, date, venue, price, both buttons
+(pass) zero events: an empty state, no cards
+(pass) fifty events render as fifty cards
+(pass) missing price and missing image degrade to text and a placeholder
+(pass) images from hosts outside the CSP are never requested
+(pass) feed text is rendered as text, never as HTML
+(pass) buttons open links through ui/open-link
+(pass) match_artists results show why each event matched
+(pass) axe: no serious or critical violations (one card and fifty)
+axe violations (all impacts): []
+ 10 pass
+ 0 fail
+```
+
+The first axe run failed:
+`color-contrast, serious, 2 nodes: #ef2c46 on #151515 = 4.45 (expected 4.5:1)`.
+The M3.2 contrast fix addressed it, and axe now reports **zero violations at
+any impact level** (axe-core 4.11.4, already in the root `node_modules` via
+`pa11y`).
+
+Mutation runs (`src/ui/events.html` restored byte-identical):
+
+```
+--- mutant: event name via innerHTML
+(fail) event cards view > feed text is rendered as text, never as HTML
+--- mutant: image allow-list bypassed
+(fail) event cards view > images from hosts outside the CSP are never requested
+```
+
+The innerHTML mutant run also failed the handshake test once. Three clean runs
+afterwards each gave 10 pass and 0 fail.
+
+**Screenshots** (`evidence/m3-cards-360.png`, `evidence/m3-cards-1024.png`) were
+taken with `EVIDENCE_DIR=… LIVE=1 bun run e2e`, from a live `search_events`
+`this_weekend` result: Sat 31 Oct – Sun 1 Nov, "Showing 6 of 109 events". Real
+agentathens.com images load. ØTTA's image is on another host, so it shows the
+placeholder.
+
+**Playwright and `bun audit`.** Playwright 1.55.0 is the version that matches
+the cached Chromium 1187, and it carries a high advisory (GHSA-7mvr-c777-76hp:
+browser downloads without certificate checks). Every fixed release expects a
+newer Chromium, which would mean downloading browsers. The run therefore pins
+**1.55.1** and launches the cached 1187 build with `executablePath`.
+`bun audit` → `No vulnerabilities found`.
+
+**Site bug seen in a screenshot, not fixed here.** The site-generated tile image
+for "ΕΛΕΩΝΟΡΑ ΖΟΥΓΑΝΕΛΗ "ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ"" shows a double-escaped
+`&amp;quot;` in its text. This is pipeline work (`src/generators/event-tile.ts`).
+
 ## M4: Ready for the directories
 
 ## Independent review (§7.4)
