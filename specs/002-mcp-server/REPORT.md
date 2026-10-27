@@ -221,6 +221,57 @@ copy, not bugs in the server:
   festival, M0 treats a missing end as ongoing. Other categories end on their
   start day.
 
+### M1.4 Protocol conformance — done
+
+Dev dependencies, in `mcp/package.json` only and pinned exact:
+`@modelcontextprotocol/sdk` 1.32.1 and `wrangler` 4.149.0. Both were published
+at least two weeks before this run; the newest releases were hours old.
+`mcp/bun.lock` is committed. The root `package.json` is untouched.
+
+`bun audit` first reported 4 high and 4 moderate advisories, all in `undici`
+7.29.1, which wrangler pulls in through miniflare. Wrangler only ships the fixed
+undici (7.30.1) from 4.153.0, published one day before this run. Instead,
+`mcp/package.json` overrides undici to 7.30.1, a patch release published 12
+days before this run:
+
+```
+$ bun audit
+No vulnerabilities found
+```
+
+`bundle-check` now calls the pinned `wrangler` instead of `bunx wrangler@4`,
+which would fetch whatever is newest. The `deploy` script is the owner's and
+is left as it was.
+
+`test/sdk-client.test.ts` starts `Bun.serve` on the fixture feed, connects the
+official `Client` over `StreamableHTTPClientTransport` (real HTTP), lists the
+tools, calls each of the four, and checks that bad arguments return a tool
+error. It passed on its first run, so mutation runs are its RED (see
+`evidence/m1.4-protocol.txt`):
+
+```
+--- mutant 1: initialize answers protocolVersion '1999-01-01'
+error: Server's protocol version is not supported: 1999-01-01
+ 0 pass
+--- mutant 2: responses sent as content-type text/plain
+error: Streamable HTTP error: Unexpected content type: text/plain
+ 0 pass
+ 1 fail
+restored-identical
+```
+
+Inspector CLI against `PORT=8787 bun run dev`, which serves the live feed:
+
+```
+$ npx @modelcontextprotocol/inspector@2.10.1 --cli http://localhost:8787/mcp --transport http --method tools/list
+exit 0 — search_events, get_event, list_venues, match_artists (all readOnlyHint=true)
+$ … --method tools/call --tool-name search_events --tool-arg when=this_weekend --tool-arg lang=en --tool-arg limit=2
+exit 0 — isError=false window={"from":"2026-10-31","to":"2026-11-01","timezone":"Europe/Athens"} total=124 returned=2
+```
+
+The inspector printed `EBADENGINE` warnings: it asks for Node ≥ 22.19, and this
+Mac has 22.16. Both calls still exited 0.
+
 ## M2: Exact artist matching
 
 ## M3: Event cards (MCP Apps)
