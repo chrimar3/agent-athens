@@ -280,8 +280,11 @@
     app.appendChild(foot);
   }
 
-  // ── size reporting and handshake ──
-  if (typeof ResizeObserver === "function") {
+  // ── handshake, then size reporting ──
+  // Size notifications start only after ui/notifications/initialized: a host
+  // slower than one frame would otherwise receive one mid-handshake.
+  function reportSize() {
+    if (typeof ResizeObserver !== "function") return;
     new ResizeObserver(function () {
       const r = document.documentElement.getBoundingClientRect();
       notify("ui/notifications/size-changed", { width: Math.ceil(r.width), height: Math.ceil(r.height) });
@@ -294,6 +297,7 @@
   }).then(function (res) {
     if (res && res.hostContext) applyContext(res.hostContext);
     notify("ui/notifications/initialized");
+    reportSize();
   }).catch(function () { /* no host answered: stay on the loading text */ });
 </script>
 </body>

@@ -619,7 +619,13 @@ Mutation runs (`src/ui/events.html` restored byte-identical):
 ```
 
 The innerHTML mutant run also failed the handshake test once. Three clean runs
-afterwards each gave 10 pass and 0 fail.
+afterwards each gave 10 pass and 0 fail. **Correction (PR #40):** that was not
+noise. It was a real race in the view. It started its `ResizeObserver` before
+the handshake, so on a host slower than one frame,
+`ui/notifications/size-changed` arrived between `ui/initialize` and
+`ui/notifications/initialized`. I made the stub host answer after 150 ms,
+which made the failure deterministic (RED), then moved size reporting to after
+`initialized`. GREEN: three runs, each 11 pass and 0 fail.
 
 **Screenshots** (`evidence/m3-cards-360.png`, `evidence/m3-cards-1024.png`) were
 taken with `EVIDENCE_DIR=… LIVE=1 bun run e2e`, from a live `search_events`

@@ -47,8 +47,9 @@ const HOST = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>
     if (ev.source !== view.contentWindow) return;
     const m = ev.data; window.received.push(m);
     const reply = (result) => view.contentWindow.postMessage({ jsonrpc: '2.0', id: m.id, result }, '*');
-    if (m.method === 'ui/initialize') reply({ protocolVersion: '2026-01-26', hostInfo: { name: 'stub-host', version: '0' },
-      hostCapabilities: { openLinks: {} }, hostContext: { theme: 'dark', locale: 'en-GB', timeZone: 'Europe/Athens', displayMode: 'inline' } });
+    // A real host can take longer than a frame to answer; the view must still wait for the handshake.
+    if (m.method === 'ui/initialize') setTimeout(() => reply({ protocolVersion: '2026-01-26', hostInfo: { name: 'stub-host', version: '0' },
+      hostCapabilities: { openLinks: {} }, hostContext: { theme: 'dark', locale: 'en-GB', timeZone: 'Europe/Athens', displayMode: 'inline' } }), 150);
     if (m.method === 'ui/open-link') reply({});
     if (m.method === 'ui/notifications/initialized' && window.result)
       view.contentWindow.postMessage({ jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: window.result }, '*');
@@ -157,7 +158,7 @@ describe('event cards view', () => {
     const e = { ...r.structuredContent.events[0], image: 'https://images.example.org/x.jpg' };
     const { page, view, requests } = await show({ ...r, structuredContent: { ...r.structuredContent, events: [e] } });
     expect(await view.locator('li.card .placeholder').count()).toBe(1);
-    expect(requests.some((u) => u.includes('images.example.org'))).toBe(false);
+    expect(requests.some((u) => new URL(u).hostname === 'images.example.org')).toBe(false);
     await page.close();
   });
 
