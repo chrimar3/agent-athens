@@ -6,6 +6,9 @@
  * fields. Anything the feed omits (no price, no performer) stays absent.
  */
 import { looseKey } from './normalize';
+// Build-time copy of the site's rule for events with no stated end, so both
+// sides presume the same run length (src/utils/event-lifecycle.ts).
+import presumption from '../../config/lifecycle-presumption.json';
 
 export type Lang = 'el' | 'en';
 
@@ -48,7 +51,7 @@ export interface EventRecord {
 /** Internal: record plus precomputed match keys. */
 export interface IndexedEvent extends EventRecord {
   _startDay: string;
-  _endDay: string | null;   // null = run with no stated end (ongoing)
+  _endDay: string | null;   // stated end, else presumed end (see presumedEnd)
   _haystack: string;        // looseKey of name + venue + performer + description
   _titleKey: string;
   _performerKeys: string[]; // looseKeys of performer name + English Wikipedia title
@@ -89,6 +92,19 @@ function enWikiTitle(sameAs: string[]): string | undefined {
     }
   }
   return undefined;
+}
+
+/** Feed category → the site's EventType key in lifecycle-presumption.json. */
+const SITE_TYPE: Partial<Record<Category, string>> = { theatre: 'theater', exhibition: 'exhibition', festival: 'festival' };
+
+/** Last day a run with no stated end is presumed open, or null when the category is not a run. */
+function presumedEnd(category: Category, startDay: string): string | null {
+  const type = SITE_TYPE[category];
+  if (!type || !presumption.runImplyingTypes.includes(type)) return null;
+  const days = (presumption.presumed_run_days as Record<string, number>)[type] ?? presumption.presumed_run_days._default;
+  const d = new Date(`${startDay}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
 }
 
 function asArray(v: unknown): string[] {
@@ -154,10 +170,11 @@ export function toRecord(raw: any): IndexedEvent | null {
   return {
     ...rec,
     _startDay: rec.start.slice(0, 10),
-    // A stated end wins. No end: single-occurrence → its start day; an
-    // EventScheduled run (exhibition, theatre) → ongoing within the site's
-    // presumption window (the feed drops it once that window passes).
-    _endDay: rec.end ? rec.end.slice(0, 10) : rec.category === 'exhibition' || rec.category === 'theatre' || rec.category === 'festival' ? null : rec.start.slice(0, 10),
+    // A stated end wins. No end: a run (theatre, exhibition, festival) lasts
+    // the site's presumption window from its start; anything else ends on its
+    // start day. The window is applied here too because a stale feed still
+    // carries runs the site would already have dropped.
+    _endDay: rec.end ? rec.end.slice(0, 10) : presumedEnd(rec.category, rec.start.slice(0, 10)) ?? rec.start.slice(0, 10),
     _haystack: looseKey([rec.name, rec.venue.name, rec.venue.neighborhood ?? '', performer?.name ?? '', rec.description].join(' ')),
     _titleKey: looseKey(rec.name),
     _performerKeys: [...new Set(performerKeys)],

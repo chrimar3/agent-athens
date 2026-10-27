@@ -59,6 +59,14 @@ describe('search_events', () => {
     const r = searchEvents(snap.en, { when: 'this_weekend', category: 'music' }, TODAY);
     expect(r.events.map((e) => e.name)).toEqual(['Rotting Christ', 'Αλκίνοος Ιωαννίδης']);
   });
+  test('a run with no stated end lasts the site presumption window, not forever', () => {
+    // Fixture precondition: "Ρωμαίος και Ιουλιέτα" is theatre, starts 2026-11-20, no end.
+    const romeo = snap.en.events.find((e) => e.name === 'Ρωμαίος και Ιουλιέτα')!;
+    expect([romeo.category, romeo.start.slice(0, 10), romeo.end]).toEqual(['theatre', '2026-11-20', undefined]);
+    const on = (day: string) => searchEvents(snap.en, { date_from: day, date_to: day, category: 'theatre' }, TODAY).events.some((e) => e.name === romeo.name);
+    expect(on('2027-01-04')).toBe(true);  // start + 45 days (config/lifecycle-presumption.json: theater)
+    expect(on('2027-01-05')).toBe(false);
+  });
   test('a running exhibition overlaps a later window', () => {
     const r = searchEvents(snap.en, { date_from: '2026-12-10', date_to: '2026-12-12', category: 'exhibition' }, TODAY);
     expect(r.total).toBe(1);

@@ -304,7 +304,113 @@ byte-identical.
 Rate limiting is documented in `mcp/README.md` § Limits as a Cloudflare
 dashboard rule. Nothing was built for it.
 
+### M1.6 Runs with no stated end — fix added during M4.1 testing
+
+This is not one of the spec's task ids. It is an M1 defect ("correct on the
+real feed") that only showed up when the M4.1 example prompts ran against the
+live feed. "What theatre is on tonight?" listed "ΕΙΡΗΝΗ περιοδεια" at Θέατρο
+Βράχων, a single tour date on 2026-09-01. M0 treated every theatre, exhibition
+or festival listing with no `endDate` as running forever. It relied on the
+feed dropping old rows, and a feed that is 21 days stale does not drop them.
+
+The site already has a rule for this: `config/lifecycle-presumption.json`,
+read by `resolveEffectiveEnd()` in `src/utils/event-lifecycle.ts`. A run with
+no end lasts its start + 45 days for theater, 90 for exhibition and 30 for
+festival. `mcp/src/feed.ts` now imports that JSON at build time and applies the
+same windows. There is one source of truth, and `config/` is only read. Change
+outside `mcp/`: none. The Worker bundle includes a copy of the JSON.
+
+```
+RED (theatre run starting 2026-11-20, no end, searched on 2027-01-05):
+Expected: false
+Received: true
+(fail) search_events > a run with no stated end lasts the site presumption window, not forever
+ 29 pass
+ 1 fail
+GREEN: bun test test/ → 60 pass, 0 fail
+mutant (theatre with no end treated as ongoing again):
+(fail) search_events > a run with no stated end lasts the site presumption window, not forever
+ 29 pass
+ 1 fail
+restored-identical
+```
+
+On the live feed, "theatre, today" fell from 96 to 86 events, and the 2026-09-01
+date of "ΕΙΡΗΝΗ" is gone. Limitation: its 2026-09-26 tour stop at Κατράκειο
+has no end either, so it stays "on" until 2026-11-10. The site applies the
+same rule. The real fix is a stated end in the data, not a stricter rule here.
+
 ## M2: Exact artist matching
+
+### M2.1 Spotify IDs from Wikidata — done
+
+`mcp/scripts/fetch-spotify-ids.ts` reads only `performers[*].sameAs` links of
+the form `https://www.wikidata.org/wiki/Q…` in `config/performer-sameAs.json`,
+which it opens read-only. It sends `SELECT ?item ?spotify WHERE { VALUES ?item
+{ … } ?item wdt:P1902 ?spotify . }` to `https://query.wikidata.org/sparql` in
+batches of at most 200, with the User-Agent `AgentAthensMCP/0.1
+(https://agentathens.com; build-time Spotify artist ID lookup for the Agent
+Athens MCP server)`. It refuses any value that is not a 22-character base62
+artist ID, and writes `mcp/data/performer-ids.json` as `{ _meta: { source,
+query, retrieved_at, qids_queried, count }, byQid: { Q…: { spotify: [...] } } }`.
+`count` is computed from `byQid`, and a test pins that.
+
+The real config caches failed lookups as `null`: 341 of its 394 entries. The
+first live run crashed on them. The synthetic test config gained a `null`
+entry, the test failed for that reason, and then the script was fixed
+(`evidence/m2.1-spotify-ids.txt`).
+
+```
+$ bun run scripts/fetch-spotify-ids.ts
+QIDs queried 50, with a Spotify ID 34, Spotify IDs 34
+```
+
+**34 of the 50 QIDs have a Spotify artist ID on Wikidata.** I checked two
+against a different Wikidata endpoint, `Special:EntityData`, and both match
+the file: Rotting Christ Q938889 → `7FhkwcO8Jd7BRWdllBpXBJ`, and Moby Q14045 →
+`3OsRAKCvk37zwYcnzRf5XF`. The data file is committed.
+
+### M2.2 `match_artists` by `spotify_id` — done
+
+Artists may now be `{ name?, wikidata?, spotify_id? }`. A `spotify_id` resolves
+through the file to its QIDs. When the event performer's QID is among them, the
+match has confidence `"spotify_id"`. Ranking is spotify_id > wikidata > name >
+title_mention. An ID the file does not know falls back to the name, so the
+server instructions tell the model to send `{name, spotify_id}` together. A
+malformed ID is an input error whose message says what an artist ID looks
+like.
+
+Tests (`test/spotify-match.test.ts`) use a synthetic index with one obviously
+fake ID (`FixtureSpotifyId000001`). They cover all four confidence levels in
+one call and check their order, the ID winning over a non-matching spelling,
+the fallback to the name, an unknown ID with no name, and a malformed ID. Two
+more tests read real IDs from the committed file. One checks the file is well
+formed and that `count` equals its entries. The other sends a real Spotify ID
+(Rotting Christ's) through HTTP using the server's default index, and asserts
+its precondition that the file has that QID.
+
+```
+## RED (M1 code, new test file)
+SyntaxError: Export named 'spotifyIndex' not found in module '…/mcp/src/tools.ts'.
+## GREEN
+$ bun test test/
+ 59 pass
+ 0 fail
+## mutant: spotify_id ranked last (rank 4)
+(fail) match_artists by spotify_id > all four confidence levels, ranked spotify_id > wikidata > name > title_mention
+ 8 pass
+ 1 fail
+## mutant: spotify_id lookup ignored
+ 5 pass
+ 4 fail
+restored-identical
+```
+
+Bundle with the data file: `Total Upload: 31.19 KiB / gzip: 10.46 KiB`.
+
+**What this buys today is small.** Only 2 live events carry a performer, both
+already past (M1.2), so no Spotify ID matches a current event yet. The
+mechanism is in place for when the pipeline links more performers.
 
 ## M3: Event cards (MCP Apps)
 
