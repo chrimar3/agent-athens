@@ -78,8 +78,8 @@ afterAll(async () => {
   server?.stop(true);
 });
 
-async function show(result: object, width = 1024): Promise<{ page: Page; view: Frame; requests: string[] }> {
-  const page = await browser.newPage({ viewport: { width, height: 900 } });
+async function show(result: object, width = 1024, height = 900): Promise<{ page: Page; view: Frame; requests: string[] }> {
+  const page = await browser.newPage({ viewport: { width, height } });
   const requests: string[] = [];
   page.on('request', (r) => requests.push(r.url()));
   // Offline by default; with LIVE=1, agentathens.com images (the CSP's one host) load for real.
@@ -141,6 +141,14 @@ describe('event cards view', () => {
     expect(await view.locator('li.card img').count()).toBe(0);
     expect(await view.locator('li.card .placeholder').count()).toBe(1);
     expect(await view.getByRole('link', { name: /Tickets/ }).count()).toBe(0);
+    await page.close();
+  });
+
+  test('a run ending in another year shows that year', async () => {
+    const r = await search({ query: 'Rotting Christ' });
+    const e = { ...r.structuredContent.events[0], start: '2026-09-01', end: '2027-07-31' };
+    const { page, view } = await show({ ...r, structuredContent: { ...r.structuredContent, events: [e] } });
+    expect(await view.locator('li.card').innerText()).toContain('2027');
     await page.close();
   });
 
@@ -208,5 +216,23 @@ describe.if(!!process.env.EVIDENCE_DIR)('evidence screenshots', () => {
       await page.close();
     }
     console.log(`screenshots: ${live ? 'live search_events this_weekend' : 'fixture'} result, ${r.structuredContent.events.length} cards`);
+  });
+
+  // Claude's directory wants 3–5 PNGs, at least 1000 px wide, cropped to the app response,
+  // each paired with its prompt: one per directory-kit example, at 1200 px.
+  test.if(!!process.env.LIVE)('directory carousel, one per example prompt', async () => {
+    const { EXAMPLES } = await import('../scripts/examples');
+    const live = httpFeedSource('https://agentathens.com');
+    const dir = process.env.EVIDENCE_DIR!;
+    for (const [i, ex] of EXAMPLES.entries()) {
+      const r = await rpc(live, 'tools/call', { name: ex.tool, arguments: { ...ex.args, limit: ex.tool === 'search_events' ? 4 : undefined } }, () => new Date());
+      const { page, view } = await show(r, 1200, 4000);
+      await page.waitForLoadState('networkidle');
+      // The view's own content height, with its padding: an element shot of <main> clips the edges.
+      const height = await view.evaluate(() => Math.ceil(document.documentElement.getBoundingClientRect().height));
+      await page.screenshot({ path: join(dir, `directory-${i + 1}.png`), clip: { x: 0, y: 0, width: 1200, height } });
+      console.log(`directory-${i + 1}.png  "${ex.prompt}"`);
+      await page.close();
+    }
   });
 });

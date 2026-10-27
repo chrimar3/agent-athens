@@ -60,12 +60,13 @@
   .meta { color: var(--text-secondary); font-size: var(--type-small); margin: 0; }
   .notice { color: var(--status-warning); font-size: var(--type-small); margin: 0 0 var(--space-sm-md); }
   ul.events { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-sm-md); grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); }
-  .card { display: grid; grid-template-columns: 96px 1fr; gap: var(--space-sm-md); padding: var(--space-sm-md); background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); }
-  .thumb { width: 96px; height: 128px; border-radius: var(--radius-sm); overflow: hidden; background: var(--bg-surface); position: relative; }
+  .card { display: flex; flex-direction: column; overflow: hidden; background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); }
+  /* Feed images are landscape: 1200×630 share cards and wide photos. */
+  .thumb { width: 100%; aspect-ratio: 1200 / 630; overflow: hidden; background: var(--bg-surface); position: relative; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .thumb .placeholder { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: var(--space-sm); border-top: 4px solid var(--cat, var(--color-other)); }
   .thumb .placeholder span { font-size: var(--type-ui); font-weight: var(--font-weight-semibold); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
-  .body { min-width: 0; display: flex; flex-direction: column; gap: var(--space-xs); }
+  .body { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: var(--space-xs); padding: var(--space-sm-md); }
   /* Category colours are too dark for 12px text on --bg-elevated (theatre red is 4.45:1), so the colour goes on a dot. */
   .cat { display: inline-flex; align-items: center; gap: var(--space-xs); font-size: var(--type-ui); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); }
   .cat::before { content: ""; width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--cat, var(--color-other)); }
@@ -79,10 +80,6 @@
   .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
   .empty { color: var(--text-secondary); padding: var(--space-md) 0; margin: 0; }
   footer { margin-top: var(--space-sm-md); }
-  @media (max-width: 400px) {
-    .card { grid-template-columns: 72px 1fr; }
-    .thumb { width: 72px; height: 96px; }
-  }
 </style>
 </head>
 <body>
@@ -156,12 +153,17 @@
     const h = safeHttps(u);
     return h && IMAGE_ORIGINS.indexOf(new URL(h).origin) !== -1 ? h : null;
   }
+  function athensYear(d) {
+    return new Intl.DateTimeFormat("en", { timeZone: "Europe/Athens", year: "numeric" }).format(d);
+  }
   function when(start) {
     if (typeof start !== "string") return "";
     const dateOnly = /^\d{4}-\d{2}-\d{2}$/.test(start);
     const d = new Date(dateOnly ? start + "T12:00:00Z" : start);
     if (isNaN(d.getTime())) return start;
     const opts = { timeZone: "Europe/Athens", weekday: "short", day: "numeric", month: "short" };
+    // Without the year, a run to next July reads "1 Sept – 31 Jul".
+    if (athensYear(d) !== athensYear(new Date())) opts.year = "numeric";
     if (!dateOnly) { opts.hour = "2-digit"; opts.minute = "2-digit"; }
     return new Intl.DateTimeFormat(locale, opts).format(d);
   }
