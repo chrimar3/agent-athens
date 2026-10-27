@@ -634,11 +634,111 @@ newer Chromium, which would mean downloading browsers. The run therefore pins
 **1.55.1** and launches the cached 1187 build with `executablePath`.
 `bun audit` → `No vulnerabilities found`.
 
+**Fixes from the directory screenshots** (commit `6d160bba9`, after M4.1
+work):
+
+- **Year-ambiguous ranges.** A run ending next July read "Tue, 1 Sept – Sat,
+  31 Jul". Dates outside the current Athens year now show the year. The test
+  came first: RED `Received: "…Tue, 1 Sept – Sat, 31 Jul…"`, then GREEN.
+- **Cropped image text.** Feed images are landscape: 1200×630 share cards and
+  1200×515 photos. The portrait thumbnail cut the share cards' text, so the
+  image now sits on top of the card at 1200:630.
+
+After both fixes: e2e 11 pass (13 with evidence mode), axe
+`violations (all impacts): []`, unit 68 pass, bundle 47.58 KiB.
+
 **Site bug seen in a screenshot, not fixed here.** The site-generated tile image
 for "ΕΛΕΩΝΟΡΑ ΖΟΥΓΑΝΕΛΗ "ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ"" shows a double-escaped
 `&amp;quot;` in its text. This is pipeline work (`src/generators/event-tile.ts`).
 
+### M2 and M3 gates
+
+Root gate on `8d6038259` (end of M2): `typecheck exit 0`; `5379 pass, 212
+skip, 1 fail` — the same baseline deadman-watchdog test.
+
+`mcp/` gate on an export of `75b930d53` (end of M3):
+
+```
+$ bun test test/        → 68 pass, 0 fail (7 files)
+$ tsc --noEmit -p .     → typecheck exit 0
+$ wrangler --dry-run    → Total Upload: 47.38 KiB / gzip: 15.74 KiB (the HTML ships as a Text module)
+$ bun run e2e           → 10 pass, 0 fail
+$ bun audit             → No vulnerabilities found
+```
+
 ## M4: Ready for the directories
+
+### M4.1 Directory kit — done (see the precondition)
+
+`specs/002-mcp-server/directory-kit.md` contains:
+
+- name and endpoint;
+- short and long descriptions in English and Greek;
+- the tool table, generated from `TOOLS` rather than typed;
+- the MCP Apps resource and its CSP;
+- the data-source and privacy statement;
+- a support-contact placeholder;
+- the icon and directory requirements (from research, §5–§6);
+- five example prompts with real output.
+
+The example prompts are in `mcp/scripts/examples.ts`, so they can be run again;
+the output from 2026-10-28 is in `evidence/m4.1-examples.txt`. All five
+returned results (`examples: OK`, exit 0): 11, 6, 86 and 5 events, and 1
+`title_mention` match.
+
+**Precondition the kit puts first: do not submit on a stale feed.** Running
+the examples exposed the M1.6 defect (fixed). They also exposed data-quality
+problems that a reviewer would see. These are in the pipeline, not the server:
+
+- the 22-day-old feed;
+- the WATER exhibition as one row per day;
+- a DJ night typed as theatre.
+
+The kit marks each one next to the example where it appears.
+
+**Directory requirements (kit §6).** A research subagent read the primary
+pages. I then fetched the two that matter most myself:
+`claude.com/docs/connectors/building/submission` and OpenAI's
+`plugins/plugin-guidelines.md`. Findings that need the owner:
+
+- **Ticket links conflict with ChatGPT's listing policy.** It says plugins may
+  not "Link directly to a checkout or other transactional page". `ticket_url`
+  and the Tickets button point at seller pages. This is a policy decision, and
+  the code is unchanged; the options are in kit §6.
+- **OpenAI's route is now "plugins"** at platform.openai.com/plugins. It needs
+  a terms-of-service URL, a domain-verification token served at
+  `/.well-known/openai-apps-challenge` (not built yet, because the token is
+  issued at submission), 5 positive and 3 negative test cases, and a video.
+- **Anthropic wants 3–5 carousel PNGs**, at least 1000 px wide.
+  `EVIDENCE_DIR=… LIVE=1 bun run e2e` now writes `directory-1.png` to
+  `directory-5.png` at 1200 px, one per example prompt. They must be retaken
+  after the feed is fresh.
+- **Icon.** No 512 px square icon exists. The site's `favicon.svg` draws its
+  letter as `<text>`. Kit §5 has the export recommendation and the contrast
+  check.
+
+### M4.2 Privacy page draft — done
+
+`specs/002-mcp-server/privacy-page-draft.md`, in English with a Greek summary.
+It is not published. Each claim was checked against the code:
+
+- `git grep` finds no `console.*` in the request path. The only one is the dev
+  server's startup line.
+- There is no KV, D1, Cache, cookie or storage use.
+- `wrangler.toml` turns on no observability.
+
+The Cloudflare logging paragraph is a placeholder that the owner fills in from
+the deployed settings.
+
+### M4.3 Draft issues — done
+
+- `issues/001-ci-for-mcp.md`: adds a pinned, read-only `mcp` CI job (tests,
+  typecheck, dry-run bundle, audit), with notes on adding the browser test.
+- `issues/002-advertise-mcp-endpoint.md`: adds `llms.txt` and homepage lines,
+  in English and Greek, with the generator location. Precondition: the endpoint
+  is deployed and the feed is fresh.
+
+Neither change was applied.
 
 ## Independent review (§7.4)
 

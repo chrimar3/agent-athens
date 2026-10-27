@@ -1,0 +1,51 @@
+$ bun run scripts/examples.ts
+today (Athens) 2026-10-28
+
+1. "What concerts are on in Athens this weekend?"
+   search_events {"when":"this_weekend","category":"music","limit":5}
+   window 2026-10-31..2026-11-01, feed_updated 2026-10-06T06:02:14.618Z
+   total 11, returned 5
+   - 2026-10-31 | The Cure Party - Halloween Edition | Temple | ticket, price not listed | https://agentathens.com/events/af39561d-temple-the-cure-party-halloween-edition/
+   - 2026-10-31 | SMUT x Polygonia B2B DJ HI-C x PLO Man | SMUT Athens | ticket, price not listed | https://agentathens.com/events/8404ff23-smut-athens-smut-x-polygonia-b2b-dj-hi-c-x-plo-man/
+   - 2026-10-31 | ØTTA in ATHENS (Hotties album tour) | Oddity | ticket, price not listed | https://agentathens.com/events/728e4795-oddity-tta-in-athens-hotties-album-tour/
+   - 2026-10-31T20:00:00+02:00 | Orchestra Popolare La Notte della Taranta | Μέγαρο Μουσικής Αθηνών | ticket, price not listed | https://agentathens.com/events/0759ee66-megaro-mousikis-athinon-orchestra-popolare-la-notte-della-taranta/
+   - 2026-10-31T20:30:00+02:00 | Tasos Rosopoulos: Songs About a Return Contemporary Music Days | ΚΠΙΣΝ | 10 EUR | https://agentathens.com/en/events/fba386f6-kpisn-tasos-rosopoulos-songs-about-a-return-contemporary-music-day/
+
+2. "Any exhibitions with free entry in Athens over the next month?"
+   search_events {"category":"exhibition","open_only":true,"when":"next_30_days","limit":5}
+   window 2026-10-28..2026-11-26, feed_updated 2026-10-06T06:02:14.618Z
+   total 6, returned 5
+   - 2026-04-28 | Barbara Kruger: Untitled (Pride and Contempt) | ΚΠΙΣΝ | open entry | https://agentathens.com/en/events/4d931f3a-kpisn-barbara-kruger-untitled-pride-and-contempt/
+   - 2026-09-20 | Mustafah Abdulaziz | WATER | ΚΠΙΣΝ | open entry | https://agentathens.com/events/5cbc5262-kpisn-mustafah-abdulaziz-water/
+   - 2026-09-21 | Mustafah Abdulaziz | WATER | ΚΠΙΣΝ | open entry | https://agentathens.com/events/ddb2d89b-kpisn-mustafah-abdulaziz-water/
+   - 2026-09-22 | Mustafah Abdulaziz | WATER | ΚΠΙΣΝ | open entry | https://agentathens.com/events/0e7f1f8f-kpisn-mustafah-abdulaziz-water/
+   - 2026-09-23 | Mustafah Abdulaziz | WATER | ΚΠΙΣΝ | open entry | https://agentathens.com/en/events/ad7616f7-kpisn-mustafah-abdulaziz-water/
+
+3. "Τι θέατρο παίζεται απόψε στην Αθήνα;"
+   search_events {"when":"today","category":"theatre","lang":"el","limit":5}
+   window 2026-10-28..2026-10-28, feed_updated 2026-10-06T06:02:14.618Z
+   total 86, returned 5
+   - 2026-08-13T21:00:00+03:00 | Ανεξάρτητα κράτη | Βεάκειο Δημοτικό Θέατρο | ticket, price not listed | https://agentathens.com/events/4b069d57-veakeio-dimotiko-theatro-anexartita-krati/
+   - 2026-09-13 | NEPENTHE 4 Year Anniversary at Alsos Theater with The Bausa and Yulia Niko b2b Ede | Άλσος | ticket, price not listed | https://agentathens.com/events/1e2627bb-alsos-nepenthe-4-year-anniversary-at-alsos-theater-with-the-bausa-/
+   - 2026-09-13T10:30:00+03:00 | Ο Του-του και η Τσαφ-τσουφ | Olvio | ticket, price not listed | https://agentathens.com/events/4db1a409-olvio-o-tou-tou-kai-i-tsaf-tsouf/
+   - 2026-09-13T11:30:00+03:00 | Α μπε μπα μπλε | Olvio | ticket, price not listed | https://agentathens.com/events/b93aee92-olvio-a-mpe-mpa-mple/
+   - 2026-09-13T12:30:00+03:00 | Ο λύκος και τα επτά κατσικάκια | Olvio | ticket, price not listed | https://agentathens.com/events/cee45826-olvio-o-lykos-kai-ta-epta-katsikakia/
+
+4. "What's coming up at Onassis Stegi?"
+   search_events {"venue":"Onassis Stegi","when":"next_30_days","limit":5}
+   window 2026-10-28..2026-11-26, feed_updated 2026-10-06T06:02:14.618Z
+   total 5, returned 5
+   - 2026-10-29 | Athens Palestine Film Festival | Onassis Stegi | ticket, price not listed | https://agentathens.com/en/events/0ede0dc1-onassis-stegi-athens-palestine-film-festival/
+   - 2026-11-12 | Οιδίποδας | Robert Icke | Onassis Stegi | ticket, price not listed | https://agentathens.com/en/events/dbc7d935-onassis-stegi-robert-icke/
+   - 2026-11-20 | ArteKino Festival 2026 | Onassis Stegi | ticket, price not listed | https://agentathens.com/en/events/e60869a1-onassis-stegi-artekino-festival-2026/
+   - 2026-09-01 | Αρχείο Καβάφη: Ένα αρχείο ανοιχτό σε όλους | Onassis Stegi | ticket, price not listed | https://agentathens.com/events/b702d953-onassis-stegi-archeio-kavafi-ena-archeio-anoichto-se-olous/
+   - 2026-10-04 | Onassis Masterclass με τον Romain Gavras | Onassis Stegi | ticket, price not listed | https://agentathens.com/events/23f46a5a-onassis-stegi-onassis-masterclass-romain-gavras/
+
+5. "I'm a big fan of The Cure. Is there anything for me in Athens?"
+   match_artists {"artists":["The Cure"]}
+   window 2026-10-28..2027-04-25, feed_updated (not in match_artists)
+   matches 1, unmatched []
+   - [title_mention] 2026-10-31 | The Cure Party - Halloween Edition | Temple | https://agentathens.com/events/af39561d-temple-the-cure-party-halloween-edition/
+
+examples: OK
+exit 0
