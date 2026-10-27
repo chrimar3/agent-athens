@@ -9,6 +9,7 @@
     "test": "bun test test/",
     "typecheck": "tsc --noEmit -p .",
     "fixture": "bun run scripts/make-fixture.ts",
-    "deploy": "bunx wrangler@4 deploy"
+    "deploy": "bunx wrangler@4 deploy",
+    "bundle-check": "bunx wrangler@4 deploy --dry-run --outdir .wrangler/dry-run"
   }
 }
