@@ -1,0 +1,35 @@
+$ bun run scripts/smoke.ts
+origin           https://agentathens.com
+today (Athens)   2026-10-27
+feed updated     el 2026-10-06T06:02:14.618Z  en 2026-10-06T06:02:14.684Z  (21 days before today)
+events           el 569  en-only feed 171  with an en record 171
+not ended today  308
+per category     {"music":314,"theatre":193,"exhibition":6,"cinema":2,"comedy":4,"dance":0,"festival":10,"performing_arts":2,"education":11,"other":27}
+performer total  2  with performer.wikidata 2
+
+search_events    lang en, next 30 days: total 207, returned 3
+  2026-10-27  MOOSE "WELCOME TO K" LIVE ΑΘΗΝΑ // 27.10.2026 // GAGARIN  @ Gagarin 205  https://agentathens.com/events/c6faed28-gagarin-205-moose-quot-welcome-to-k-quot-live-27-10-2026-gagarin/
+  2026-10-27  Νήσων Τέκνα – LIVE «Ανέμελα στα πέλαγα!» / Αθήνα Edition  @ Ράδιο  https://agentathens.com/events/b7a25d6f-radio-live-edition/
+  2026-10-27  Yanamaste x SMUT x ALL NIGHT LONG  @ SMUT Athens  https://agentathens.com/en/events/0d70d6f5-smut-athens-yanamaste-x-smut-x-all-night-long/
+search_events    lang en, this_weekend 2026-10-31..2026-11-01: total 124
+
+get_event        c6faed28-gagarin-205-moose-quot-welcome-to-k-quot-live-27-10-2026-gagarin → found, description 56 chars, url https://agentathens.com/events/c6faed28-gagarin-205-moose-quot-welcome-to-k-quot-live-27-10-2026-gagarin/
+
+list_venues      next 30 days: 83 venues; top 5:
+  26  Μέγαρο Μουσικής Αθηνών  [theatre, music, other, festival, education]
+  20  ΚΠΙΣΝ  [exhibition, theatre, festival, music]
+  5  Olvio  [theatre]
+  5  Onassis Stegi  [other, theatre, cinema, festival]
+  5  Temple  [music]
+
+match_artists    input (from the live feed): ["The Gathering",{"wikidata":"Q687651"},"Autechre",{"wikidata":"Q247237"}]
+  any date:     5 matches, unmatched []
+    wikidata      Q687651 → 2026-09-24T20:00:00+03:00 The Gathering (NL) live in Greece https://agentathens.com/en/events/5c3d4270-pollaploi-choroi-the-gathering-nl-live-in-greece/
+    wikidata      Q247237 → 2026-10-03T20:00:00+03:00 AUTECHRE https://agentathens.com/en/events/e6a75256-universe-autechre/
+    name          The Gathering → 2026-09-24T20:00:00+03:00 The Gathering (NL) live in Greece https://agentathens.com/en/events/5c3d4270-pollaploi-choroi-the-gathering-nl-live-in-greece/
+    name          Autechre → 2026-10-03T20:00:00+03:00 AUTECHRE https://agentathens.com/en/events/e6a75256-universe-autechre/
+    title_mention Autechre → 2026-10-03T20:00:00+03:00 PLISSKËN presents Autechre https://agentathens.com/events/3e4df773-universe-plissken-presents-autechre/
+  default window 2026-10-27..2027-04-24: 0 matches
+
+smoke: OK — all four tools answered
+exit 0

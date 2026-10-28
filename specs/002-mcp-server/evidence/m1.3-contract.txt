@@ -1,0 +1,60 @@
+## mutant: off-site url check removed
+(fail) feed contract > duplicate ids and off-site urls are violations [0.92ms]
+ 3 pass
+ 1 fail
+## mutant: duplicate-id check removed
+(fail) feed contract > duplicate ids and off-site urls are violations [0.40ms]
+ 3 pass
+ 1 fail
+## restored, byte-identical
+
+$ bun test test/contract.test.ts
+ 4 pass
+ 0 fail
+
+$ bun run scripts/feed-contract.ts
+
+https://agentathens.com/api/events.json
+  elements 569, dateModified 2026-10-06T06:02:14.618Z, violations 0
+  missing (count / 569, * = over 5%):
+    name                                   0  0.0%
+    url                                    0  0.0%
+    startDate                              0  0.0%
+    @type                                  0  0.0%
+    description                            0  0.0%
+  * endDate                              123  21.6%
+    eventStatus                            0  0.0%
+    isAccessibleForFree                    0  0.0%
+    location.name                          0  0.0%
+    location.address.streetAddress         0  0.0%
+    location.containedInPlace.name         0  0.0%
+  * location.geo                          33  5.8%
+  * offers                               397  69.8%
+  * offers.price                         397  69.8%
+  * offers.url                           414  72.8%
+    image                                  0  0.0%
+  * performer                            567  99.6%
+
+https://agentathens.com/api/en/events.json
+  elements 171, dateModified 2026-10-06T06:02:14.684Z, violations 0
+  missing (count / 171, * = over 5%):
+    name                                   0  0.0%
+    url                                    0  0.0%
+    startDate                              0  0.0%
+    @type                                  0  0.0%
+    description                            0  0.0%
+  * endDate                               48  28.1%
+    eventStatus                            0  0.0%
+    isAccessibleForFree                    0  0.0%
+    location.name                          0  0.0%
+    location.address.streetAddress         0  0.0%
+    location.containedInPlace.name         0  0.0%
+    location.geo                           1  0.6%
+  * offers                               119  69.6%
+  * offers.price                         119  69.6%
+  * offers.url                           119  69.6%
+    image                                  0  0.0%
+  * performer                            169  98.8%
+
+feed-contract: OK
+exit 0

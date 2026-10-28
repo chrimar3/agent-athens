@@ -1,0 +1,19 @@
+# Root baseline (spec §7.1)
+# Tree: 3e9a48454 = M0 (7cdcbe6a9, applied from 93c0f5076's patch) + spec commit; root src/tests/scripts identical to M0.
+# Run 2026-10-27 in worktree agent-athens-mcp. Another session ran the same suite in the main checkout at the same time.
+
+## bun run typecheck
+$ tsc --noEmit
+typecheck exit 0
+
+## bun run test — summary
+ 5378 pass
+ 212 skip
+ 2 fail
+Ran 5592 tests across 299 files. [580.44s]
+error: script "test" exited with code 1
+test exit 1
+
+## failing tests
+(fail) push-gate — behavior (real blocks extracted from the script, run in fixture repos) > TAMPER: an agent-instruction file is REFUSED even when PIPELINE_ALLOWLIST lists it, naming why
+(fail) deadman-watchdog.ts — the database is read through the untrusted-DB reader > a normal database → the same signals as a direct read (enrich age, row count), no refusal

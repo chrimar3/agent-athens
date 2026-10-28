@@ -1,0 +1,27 @@
+## RED: test/spotify-ids.test.ts before the script existed
+error: Cannot find module '../scripts/fetch-spotify-ids' from '…/mcp/test/spotify-ids.test.ts'
+ 0 pass
+
+## RED 2: the real config caches failed lookups as null; the synthetic config gained `E: null`
+$ bun -e '…performer-sameAs.json…'
+entries 394 null 341 no sameAs 0
+$ bun test test/spotify-ids.test.ts
+TypeError: null is not an object (evaluating 'p.sameAs')
+(fail) fetch-spotify-ids > QIDs come only from wikidata.org sameAs links, deduplicated and in numeric order
+ 4 pass
+ 1 fail
+
+## GREEN
+$ bun test test/spotify-ids.test.ts
+ 5 pass
+ 0 fail
+
+## Live run (query.wikidata.org, read-only, one batch: 50 QIDs ≤ 200)
+$ bun run scripts/fetch-spotify-ids.ts
+QIDs queried 50, with a Spotify ID 34, Spotify IDs 34
+wrote …/mcp/data/performer-ids.json
+exit 0
+
+## Independent spot check (Special:EntityData JSON, a different endpoint from SPARQL)
+Q938889 entity-api: Rotting Christ P1902=["7FhkwcO8Jd7BRWdllBpXBJ"] | file: ["7FhkwcO8Jd7BRWdllBpXBJ"]
+Q14045 entity-api: Moby P1902=["3OsRAKCvk37zwYcnzRf5XF"] | file: ["3OsRAKCvk37zwYcnzRf5XF"]
