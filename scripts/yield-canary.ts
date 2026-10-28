@@ -65,8 +65,8 @@
  * baseline catches both.
  */
 import { Database } from 'bun:sqlite';
-import { existsSync } from 'fs';
-import { join, resolve } from 'path';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { dirname, join, resolve } from 'path';
 import { ACTIVE_SOURCE_IDS } from '../src/config/active-source-ids';
 import { loadQuarantine } from '../src/utils/quarantine';
 
@@ -74,6 +74,7 @@ const ROOT = resolve(import.meta.dir, '..');
 const DEFAULTS = {
   dbPath: join(ROOT, 'data', 'events.db'),
   quarantinePath: join(ROOT, 'config', 'quarantined-sources.json'),
+  verdictPath: join(ROOT, 'data', 'yield-canary-latest.json'),
   threshold: 0.6,
   windowDays: 30,
   // How far back to look for ANY nonzero yield. Longer than the window on
@@ -406,7 +407,8 @@ export interface RunOptions {
   /** How far back to look for any nonzero yield (the dark rule). Default 90. */
   lookbackDays?: number;
   dryRun: boolean;
-  sink: IssueSink;
+  /** null = no GitHub credentials in this environment: evaluate, report, file nothing. */
+  sink: IssueSink | null;
   /** YYYY-MM-DD the run is judged against; defaults to the Europe/Athens date. */
   today?: string;
   /** Comparison day older than this (in days) = stale pipeline. Default 2. */
@@ -439,6 +441,10 @@ export interface RunResult {
   created: Array<{ source: string; title: string }>;
   /** Filled only in dry-run: what live mode would have filed (before dedupe). */
   wouldCreate: Array<{ source: string; title: string; body: string }>;
+  /** Per-source filing failures. They never abort the run or hide a verdict. */
+  deliveryErrors: Array<{ source: string; error: string }>;
+  /** True when there was no sink, so failing sources were reported but not filed. */
+  deliverySkipped: boolean;
   /**
    * Non-null when the newest full pipeline day is older than maxAgeDays (or
    * there is none). Every yield here is "data compared against data": if the
@@ -477,7 +483,10 @@ export async function runCanary(opts: RunOptions): Promise<RunResult> {
     comparisonDay === null || (ageDays !== null && ageDays > maxAgeDays)
       ? { latestRunDate: comparisonDay, today, ageDays, maxAgeDays }
       : null;
-  const result: RunResult = { yields, tripped, dark, quarantined, suppressed: [], created: [], wouldCreate: [], stale };
+  const result: RunResult = {
+    yields, tripped, dark, quarantined, suppressed: [], created: [], wouldCreate: [], stale,
+    deliveryErrors: [], deliverySkipped: false,
+  };
 
   for (const y of [...tripped, ...dark]) {
     const isDark = y.status === 'dark';
@@ -485,6 +494,10 @@ export async function runCanary(opts: RunOptions): Promise<RunResult> {
     const body = isDark ? darkIssueBody(y) : issueBody(y);
     if (opts.dryRun) {
       result.wouldCreate.push({ source: y.source, title, body });
+      continue;
+    }
+    if (opts.sink === null) {
+      result.deliverySkipped = true;
       continue;
     }
     // Dedupe on the prefix, not the exact title: the numbers change daily and
@@ -499,12 +512,10 @@ export async function runCanary(opts: RunOptions): Promise<RunResult> {
       await opts.sink.create(title, body, DEFAULTS.label);
       result.created.push({ source: y.source, title });
     } catch (e) {
-      // The GitHub failure must not hide the yield drop it was reporting.
+      // The GitHub failure must not hide the yield drop it was reporting, nor
+      // the next source's: record it and keep going.
       const inner = e instanceof CanaryError ? e.message.replace(/^yield-canary: FAILED — /, '').replace(/ — try: .*$/, '') : (e as Error).message;
-      throw new CanaryError(
-        `${inner} while filing "${title}" (${y.source} latest=${y.latest} mean=${fmt(y.mean ?? 0)} threshold=${y.threshold})`,
-        'run `gh auth status`; re-run with --dry-run to see the would-be issues without GitHub; the yield drop itself is still real',
-      );
+      result.deliveryErrors.push({ source: y.source, error: inner });
     }
   }
   return result;
@@ -534,16 +545,35 @@ function failureLine(r: RunResult): string {
         .join('; ')}`,
     );
   }
+  if (r.deliveryErrors.length > 0) {
+    parts.push(`delivery failed (no issue filed): ${r.deliveryErrors.map((d) => `${d.source}: ${d.error}`).join('; ')}`);
+  }
   return new CanaryError(
     parts.join(' | '),
-    r.stale
+    r.deliveryErrors.length > 0
+      ? 'run `gh auth status` (or set GH_TOKEN); the verdicts above stand — see data/yield-canary-latest.json'
+      : r.stale
       ? 'check the daily pipeline actually ran (tail logs/deploy-cadence.log; launchctl list | grep agent-athens), then re-run; --max-age-days=N widens the limit'
       : 'scrape the source by hand (bun run scripts/scrape-all.ts --source <id>) and compare against src/scrapers/; if it is retired, quarantine it in config/quarantined-sources.json with since/reason; see the "Yield canary: <source>" issue(s)',
   ).message;
 }
 
-function parseArgs(argv: string[]): { dbPath: string; quarantinePath: string; threshold: number; windowDays: number; lookbackDays: number; maxAgeDays: number; dryRun: boolean } {
-  const usage = 'use --db=PATH --quarantine=PATH --threshold=0.6 --window-days=30 --lookback-days=90 --max-age-days=2 --dry-run';
+/** Machine-readable verdict of one run, written whether or not anything could be filed. */
+export function verdictJson(r: RunResult, today: string, mode: 'github' | 'skipped' | 'dry-run'): string {
+  return JSON.stringify({
+    generatedAt: new Date().toISOString(),
+    today,
+    comparisonDay: r.yields[0]?.latestRunDate ?? null,
+    failing: r.tripped.length > 0 || r.dark.length > 0 || r.stale !== null,
+    stale: r.stale,
+    sources: r.yields.map((y) => ({ source: y.source, status: y.status, latest: y.latest, mean: y.mean ?? null, samples: y.samples, lastNonzeroDate: y.lastNonzeroDate ?? null })),
+    quarantined: r.quarantined,
+    delivery: { mode, created: r.created, suppressed: r.suppressed, errors: r.deliveryErrors },
+  }, null, 2) + '\n';
+}
+
+function parseArgs(argv: string[]): { dbPath: string; quarantinePath: string; verdictPath: string; threshold: number; windowDays: number; lookbackDays: number; maxAgeDays: number; dryRun: boolean } {
+  const usage = 'use --db=PATH --quarantine=PATH --verdict=PATH --threshold=0.6 --window-days=30 --lookback-days=90 --max-age-days=2 --dry-run';
   // Digits only: Number('1e3'), Number('0x10') and Number('+5') are all
   // integers. At most 6 digits: a 400-digit value is Infinity, and an infinite
   // --max-age-days would switch the staleness check off.
@@ -551,10 +581,11 @@ function parseArgs(argv: string[]): { dbPath: string; quarantinePath: string; th
     if (!/^\d{1,6}$/.test(raw) || Number(raw) < 1) throw new CanaryError(`bad ${flag} value "${raw}" (need a positive integer, digits only, at most 6 digits)`, usage);
     return Number(raw);
   };
-  const o = { dbPath: DEFAULTS.dbPath, quarantinePath: DEFAULTS.quarantinePath, threshold: DEFAULTS.threshold, windowDays: DEFAULTS.windowDays, lookbackDays: DEFAULTS.lookbackDays, maxAgeDays: DEFAULTS.maxAgeDays, dryRun: false };
+  const o = { dbPath: DEFAULTS.dbPath, quarantinePath: DEFAULTS.quarantinePath, verdictPath: DEFAULTS.verdictPath, threshold: DEFAULTS.threshold, windowDays: DEFAULTS.windowDays, lookbackDays: DEFAULTS.lookbackDays, maxAgeDays: DEFAULTS.maxAgeDays, dryRun: false };
   for (const arg of argv) {
     if (arg.startsWith('--db=')) o.dbPath = resolve(arg.slice('--db='.length));
     else if (arg.startsWith('--quarantine=')) o.quarantinePath = resolve(arg.slice('--quarantine='.length));
+    else if (arg.startsWith('--verdict=')) o.verdictPath = resolve(arg.slice('--verdict='.length));
     else if (arg.startsWith('--lookback-days=')) {
       const v = positiveInt('--lookback-days', arg.slice('--lookback-days='.length));
       o.lookbackDays = v;
@@ -585,7 +616,13 @@ if (import.meta.main) {
     // registry quarantines nothing, so a broken config widens monitoring rather
     // than silently narrowing it.
     const quarantined = Object.keys(loadQuarantine(args.quarantinePath).sources);
-    const r = await runCanary({ ...args, today, activeSources: ACTIVE_SOURCE_IDS, quarantined, sink: new GhIssueSink() });
+    // The scrape container carries no GitHub token by design: evaluate and
+    // report there, file nothing. Outside it gh may authenticate from its own
+    // keyring, so no env token does not mean no credentials.
+    const canFile = Boolean(
+      process.env.GH_TOKEN || process.env.GITHUB_TOKEN || process.env.YIELD_CANARY_GH || process.env.AA_CONTAINER !== '1',
+    );
+    const r = await runCanary({ ...args, today, activeSources: ACTIVE_SOURCE_IDS, quarantined, sink: canFile ? new GhIssueSink() : null });
     const insufficient = r.yields.filter((y) => y.status === 'insufficient').map((y) => `${y.source}(${y.samples} samples, latest ${y.latest})`);
     const dark = r.dark.map((y) => `${y.source}(no yield since ${y.lastNonzeroDate})`);
     const latestDate = r.yields[0]?.latestRunDate ?? 'none';
@@ -599,6 +636,16 @@ if (import.meta.main) {
         (r.stale ? `, STALE (${r.stale.ageDays ?? 'no'} days old, limit ${r.stale.maxAgeDays})` : '') +
         ` (threshold ${args.threshold}, window ${args.windowDays}d, lookback ${args.lookbackDays}d)`,
     );
+    for (const y of r.yields) {
+      console.log(`yield-canary: ${y.source} ${y.status} latest=${y.latest} mean=${y.mean === null || y.mean === undefined ? 'n/a' : fmt(y.mean)} samples=${y.samples}` + (y.lastNonzeroDate ? ` last-nonzero=${y.lastNonzeroDate}` : ''));
+    }
+    // After the verdict lines, so a write failure can never hide them.
+    try {
+      mkdirSync(dirname(args.verdictPath), { recursive: true });
+      writeFileSync(args.verdictPath, verdictJson(r, today, args.dryRun ? 'dry-run' : canFile ? 'github' : 'skipped'));
+    } catch (e) {
+      console.error(`yield-canary: could not write the verdict file ${args.verdictPath} (${(e as Error).message}) — the verdicts above stand`);
+    }
     if (r.tripped.length === 0 && r.dark.length === 0 && !r.stale) process.exit(0);
 
     if (args.dryRun) {
@@ -607,6 +654,7 @@ if (import.meta.main) {
         console.log(w.body.split('\n').map((l) => `    ${l}`).join('\n'));
       }
     } else {
+      if (r.deliverySkipped) console.log('yield-canary: delivery skipped — no GH_TOKEN/GITHUB_TOKEN in this environment; verdicts are in the verdict file');
       for (const c of r.created) console.log(`created: ${c.title}`);
       for (const s of r.suppressed) console.log(`already open: an issue titled "${issueTitlePrefix(s)}…" exists — not re-filed`);
     }

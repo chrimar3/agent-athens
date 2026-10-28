@@ -36,6 +36,7 @@ import { renderSearchOverlay, renderSearchScript } from './templates/search-over
 import { buildSiteOrganizationGraphMember } from './utils/schema-geo';
 import { validateAllPages, printSchemaSummary } from './validators/schema-completeness';
 import { buildCompletenessReport, printBucketSummary, printHardStopSummary, writeCompletenessReport, type AriaAggregate } from './validators/completeness-reporter';
+import { nearTermSection } from './utils/near-term-coverage';
 import { buildDataFeed, writeDataFeed } from './generators/datafeed';
 import { renderHomepageCapsule, renderHubNavGrid, renderTimeChips } from './templates/homepage';
 import type { CapsuleStats, HubNavItem } from './templates/homepage';
@@ -1442,10 +1443,23 @@ async function main() {
   // Per-EventType bucket breakdown (Sprint 2 Component D + C + B-2)
   const completenessReport = buildCompletenessReport(schemaResults, pageableEvents, ariaAggregate, ratchetState);
   printBucketSummary(completenessReport);
-  writeCompletenessReport(
-    completenessReport,
-    join(import.meta.dir, '../data/build-completeness.json'),
-  );
+  const completenessPath = join(import.meta.dir, '../data/build-completeness.json');
+  let previousCompleteness: unknown = null;
+  try {
+    previousCompleteness = JSON.parse(readFileSync(completenessPath, 'utf8'));
+  } catch (e) {
+    // A missing report is a first build; anything else disables the ratchet for this build and must say so.
+    if ((e as NodeJS.ErrnoException)?.code !== 'ENOENT') {
+      console.warn(`   ⚠️  Could not read the previous build-completeness.json (${(e as Error).message}) — near-term ratchet has no baseline this build`);
+    }
+  }
+  const nearTerm = nearTermSection(previousCompleteness, upcomingEvents, DateTime.now().setZone('Europe/Athens').toISODate()!);
+  completenessReport.nearTerm = nearTerm;
+  console.log(`   📅 Shown rows ${nearTerm.from}…${nearTerm.to}: ${nearTerm.total} (${Object.entries(nearTerm.bySource).sort((a, b) => b[1] - a[1]).map(([s, n]) => `${s} ${n}`).join(', ') || 'none'})`);
+  if (nearTerm.droppedToZero.length > 0) {
+    console.warn(`   ⚠️  Near-term coverage dropped to 0 since the previous build: ${nearTerm.droppedToZero.join(', ')} — check scrape_stats for these sources (bun run scripts/health-check.ts)`);
+  }
+  writeCompletenessReport(completenessReport, completenessPath);
 
   // S110f hard-stop firing report
   printHardStopSummary();

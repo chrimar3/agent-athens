@@ -14,6 +14,7 @@
 
 import type { SchemaValidationSummary } from './schema-completeness';
 import type { Event, EventType } from '../types';
+import type { NearTermSection } from '../utils/near-term-coverage';
 import { generateEventSlug } from '../generators/event-page';
 import { normalizeVenueKey } from '../ticketing/venue-registry';
 import { writeJsonApiIfChangedSync } from '../utils/write-if-changed';
@@ -157,6 +158,9 @@ export interface CompletenessReport {
   // gated without re-deriving it. `coverage:full` = asserted on every applicable
   // node; `coverage:partial` = type-conditional. severity mirrors the gate.
   fieldValidation: Record<string, { coverage: 'full' | 'partial'; severity: 'fail' | 'warn' | 'info' }>;
+  // Shown rows happening in the next 7 days per source, ratcheted against the
+  // previous report (input-pipeline audit, Phase 2). Set by generate-site.
+  nearTerm?: NearTermSection;
 }
 
 type Verdict = 'pass' | 'warn' | 'fail';

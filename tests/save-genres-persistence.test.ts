@@ -15,7 +15,7 @@
 import { describe, test, expect, beforeEach, afterEach } from 'bun:test';
 import { Database } from 'bun:sqlite';
 import { normalizeGenres } from '../src/db/database';
-import { saveEvents } from '../scripts/scrape-all';
+import { saveEvents, recordSaveCounts } from '../scripts/scrape-all';
 
 // Exact production DDL for the events table, captured via:
 //   sqlite3 data/events.db ".schema events"
@@ -200,5 +200,36 @@ describe('saveEvents persists previously-dropped events (the fix)', () => {
     expect(result.failed).toBe(0);
     const row = db.prepare('SELECT genres FROM events WHERE id = ?').get('test-genres-valid') as { genres: string };
     expect(row.genres).toBe('["jazz"]');
+  });
+});
+
+// Audit B6: scrape_stats.events_new / events_updated were written as hard-coded
+// zeros before the save ran, so a frozen source (more.com re-fetching the same
+// 40 items for ten days) looked exactly like a healthy one.
+describe('save outcomes reach scrape_stats (events_new / events_updated)', () => {
+  test('saveEvents reports "new" for an unseen id and "updated" for a re-scrape of it', () => {
+    const db = createProdSchemaDB();
+    const seen: string[] = [];
+    const onOutcome = (e: any, outcome: 'new' | 'updated') => seen.push(`${e.id}:${outcome}`);
+    saveEvents([makeScrapedEvent({ id: 'b6-a', genres: '[]' })], false, db, onOutcome);
+    saveEvents([makeScrapedEvent({ id: 'b6-a', genres: '[]' }), makeScrapedEvent({ id: 'b6-b', title: 'Another Concert Probe', genres: '[]' })], false, db, onOutcome);
+    expect(seen).toEqual(['b6-a:new', 'b6-a:updated', 'b6-b:new']);
+  });
+
+  test('recordSaveCounts writes the per-source counts onto that run\'s own scrape_stats rows only', () => {
+    const db = new Database(':memory:');
+    db.run(`CREATE TABLE scrape_stats (id INTEGER PRIMARY KEY AUTOINCREMENT, source TEXT NOT NULL, scraped_at TEXT NOT NULL,
+      events_found INTEGER DEFAULT 0, events_new INTEGER DEFAULT 0, events_updated INTEGER DEFAULT 0,
+      duration_ms INTEGER, success INTEGER DEFAULT 1, error_message TEXT)`);
+    const ins = db.prepare(`INSERT INTO scrape_stats (source, scraped_at, events_found) VALUES (?, ?, ?)`);
+    ins.run('more', '2026-10-01T05:00:00Z', 40);                       // an older run: must stay untouched
+    const moreId = Number(ins.run('more', '2026-10-27T05:00:00Z', 40).lastInsertRowid);
+    const raId = Number(ins.run('ra', '2026-10-27T05:00:00Z', 89).lastInsertRowid);
+    recordSaveCounts(new Map([['more', moreId], ['ra', raId]]), new Map([['more', { new: 0, updated: 40 }], ['ra', { new: 12, updated: 70 }]]), db);
+    expect(db.query(`SELECT source, events_new n, events_updated u FROM scrape_stats ORDER BY id`).all()).toEqual([
+      { source: 'more', n: 0, u: 0 },
+      { source: 'more', n: 0, u: 40 },
+      { source: 'ra', n: 12, u: 70 },
+    ]);
   });
 });

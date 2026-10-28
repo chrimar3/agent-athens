@@ -59,43 +59,74 @@ export function categoryToType(rawCategory: string): EventType {
   }
 }
 
-export async function scrapeMegaron(): Promise<ScrapedEvent[]> {
-  info(SOURCE_ID, 'Starting Megaron Mousikis scrape');
-  const events: ScrapedEvent[] = [];
+export interface MegaronFetchOptions {
+  fetchImpl?: typeof fetch;
+  /** Wait before each retry; attempts = delaysMs.length + 1. */
+  delaysMs?: number[];
+  sleep?: (ms: number) => Promise<void>;
+}
 
-  try {
-    const calendarUrl = `${BASE_URL}/el/events`;
-    info(SOURCE_ID, `Loading: ${calendarUrl}`);
+const CARD_MARKER = /class="tease tease--event-calendar"/;
 
-    const response = await fetch(calendarUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-        'Accept': 'text/html,application/xhtml+xml',
-        'Accept-Language': 'el-GR,el;q=0.9,en;q=0.8'
+/**
+ * GET the /el/events listing, retrying 5xx, 429 and network errors with
+ * backoff. Throws on the last failure or on any other non-2xx status.
+ */
+export async function fetchMegaronListing(opts: MegaronFetchOptions = {}): Promise<string> {
+  const fetchImpl = opts.fetchImpl ?? fetch;
+  const delays = opts.delaysMs ?? [5_000, 15_000];
+  const sleep = opts.sleep ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
+  const calendarUrl = `${BASE_URL}/el/events`;
+
+  for (let attempt = 0; ; attempt++) {
+    let failure: string;
+    try {
+      info(SOURCE_ID, `Loading: ${calendarUrl}${attempt ? ` (retry ${attempt}/${delays.length})` : ''}`);
+      const response = await fetchImpl(calendarUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+          'Accept': 'text/html,application/xhtml+xml',
+          'Accept-Language': 'el-GR,el;q=0.9,en;q=0.8'
+        }
+      });
+      if (response.ok) return await response.text();
+      failure = `HTTP ${response.status}`;
+      if (response.status < 500 && response.status !== 429) {
+        throw new Error(`megaron: listing returned ${failure} (not retried) — check ${calendarUrl}`);
       }
-    });
-
-    if (!response.ok) {
-      logError(SOURCE_ID, `Failed to fetch calendar: ${response.status}`);
-      return events;
+    } catch (error) {
+      if (error instanceof Error && error.message.startsWith('megaron:')) throw error;
+      failure = String(error);
     }
-
-    const html = await response.text();
-    const deduped = parseMegaronListing(html);
-    info(SOURCE_ID, `Completed: ${deduped.length} events`);
-    return deduped;
-  } catch (error) {
-    logError(SOURCE_ID, `Scrape failed: ${error}`);
+    if (attempt >= delays.length) {
+      throw new Error(`megaron: listing failed after ${attempt + 1} attempts (last: ${failure}) — the site may be down; rerun later with --source megaron`);
+    }
+    await sleep(delays[attempt]);
   }
+}
 
-  return events;
+/**
+ * Throws when the listing cannot be fetched or carries no event cards at all
+ * (the page structure changed), so scrape_stats records success=0 instead of
+ * an empty success. A listing whose cards are all past-dated returns [].
+ */
+export async function scrapeMegaron(opts: MegaronFetchOptions = {}): Promise<ScrapedEvent[]> {
+  info(SOURCE_ID, 'Starting Megaron Mousikis scrape');
+  const html = await fetchMegaronListing(opts);
+  const cardCount = html.split(CARD_MARKER).length - 1;
+  if (cardCount === 0) {
+    throw new Error('megaron: listing loaded but 0 event cards parsed — the card markup (tease--event-calendar) may have changed; inspect https://www.megaron.gr/el/events');
+  }
+  const deduped = parseMegaronListing(html);
+  info(SOURCE_ID, `Completed: ${deduped.length} events from ${cardCount} cards`);
+  return deduped;
 }
 
 /** Parse the /el/events listing HTML into one ScrapedEvent per card (deduped by URL + date). */
 export function parseMegaronListing(html: string): ScrapedEvent[] {
     const events: ScrapedEvent[] = [];
     // Split by event card class to get individual card sections
-    const cards = html.split(/class="tease tease--event-calendar"/);
+    const cards = html.split(CARD_MARKER);
 
     for (let i = 1; i < cards.length; i++) {
       const card = cards[i];
