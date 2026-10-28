@@ -2,8 +2,8 @@
 
 *Status: draft for the owner (spec 002, M4.2). **Not published.** Adding a page
 to agentathens.com is a site-wide change and the owner's decision. Before
-publishing, check each statement against the deployed Worker's settings,
-especially the Cloudflare logging line, which depends on the dashboard.
+publishing, check each statement against the deployed Netlify site's settings,
+especially the hosting paragraph, which depends on the dashboard.
 Proposed URL: `https://agentathens.com/privacy/mcp/` (or a section of an
 existing privacy page).*
 
@@ -40,12 +40,13 @@ the search. Specifically:
 - **We do not track you.** Links to Agent Athens and to ticket sellers carry no
   tracking parameters.
 
-The connector runs on Cloudflare. Like any website host, Cloudflare processes
-the technical details of each request, such as IP address and time, to deliver
-it and protect it from abuse. *[Owner: describe here the Cloudflare logging
-and analytics settings actually enabled for the Worker, with a link to
-Cloudflare's privacy policy. If Workers Logs or Logpush are turned on, say
-what they keep and for how long.]*
+The connector runs on Netlify. Like any website host, Netlify processes the
+technical details of each request, such as IP address and time, to deliver it
+and protect it from abuse. That includes a rate limit, for which Netlify counts
+requests per IP address over a one-minute window. *[Owner: describe the Netlify logging
+and analytics settings actually enabled for the `mcp.agentathens.com` site,
+with a link to Netlify's privacy policy. If log drains are on, say what they
+keep and for how long.]*
 
 ### Event cards and images
 

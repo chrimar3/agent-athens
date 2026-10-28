@@ -7257,6 +7257,10 @@ First manual deploy exited 0 through a pipe while the platform recorded state=er
 
 # Decisions
 
+## 2026-10-28 — MCP server hosted as a separate Netlify site, not a Cloudflare Worker (S236, owner)
+
+The domain's DNS is on Netlify (NS1). A Cloudflare Worker could only take `mcp.agentathens.com` if DNS for the whole domain moved, so the owner amended spec 002 §2.2: a separate Netlify site with base directory `mcp/`, and never a function on the main site, which stays static. The per-IP rate limit lives in the function's own `config.rateLimit`, which every Netlify plan supports and which `netlify.toml` cannot set. The card view ships as a generated TypeScript module, so no host depends on an undocumented text-import loader. The Cloudflare Worker entry is kept as an alternative host.
+
 ## 2026-10-28 — MCP server: stateless Apps, own-domain images, site rules by import (S236)
 
 The MCP server always sends `_meta.ui.resourceUri` and the full text and `structuredContent`. Being stateless (spec 002 §2.1), it cannot gate `tools/list` on the client's `io.modelcontextprotocol/ui` capability, which the stable spec (2026-01-26) only says SHOULD be done. The card view's CSP allows images from `https://agentathens.com` only. Other image hosts (athinorama, ra.co, more.com) would see every viewer's IP address, so those cards show a placeholder. Where the server needs a site rule, such as the presumption windows, it imports the site's config JSON at build time rather than copying the numbers. Dev-tool advisories are resolved without bleeding-edge releases: `undici` is overridden to 7.30.1 under wrangler 4.149.0, and Playwright is pinned to 1.55.1 on the cached Chromium. The ChatGPT checkout-link rule against the Tickets button is left to the owner (`specs/002-mcp-server/directory-kit.md` §6).

@@ -41,7 +41,9 @@ actions and the same read-only token as the existing job:
         working-directory: mcp
       - run: bun run typecheck
         working-directory: mcp
-      # wrangler --dry-run: bundles the Worker, needs no Cloudflare credentials.
+      # Generated view module in sync, then both hosts' bundles. No credentials needed.
+      - run: bun run bundle-check:netlify
+        working-directory: mcp
       - run: bun run bundle-check
         working-directory: mcp
       - run: bun audit

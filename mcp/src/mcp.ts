@@ -8,7 +8,7 @@
 import { CATEGORIES, overlayEnglish, type FeedSnapshot, type FeedSource, type Lang } from './feed';
 import { getEvent, listVenues, matchArtists, searchEvents, spotifyIndex, ToolInputError, WHEN, athensToday, type SpotifyIndex } from './tools';
 import performerIds from '../data/performer-ids.json';
-import eventsHtml from './ui/events.html' with { type: 'text' };
+import { EVENTS_HTML } from './ui/events-html';
 
 export const SERVER_INFO = { name: 'agent-athens', title: 'Agent Athens', version: '0.1.0' };
 const PROTOCOL_VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26'];
@@ -31,8 +31,6 @@ const UI_MIME = 'text/html;profile=mcp-app';
 const UI_META = { ui: { resourceUri: UI_URI } };
 // Event images on other hosts would show the viewer's IP to them; those cards get a placeholder.
 const UI_CSP = { resourceDomains: ['https://agentathens.com'] };
-// bun-types declares *.html imports as HTMLBundle; with { type: 'text' } they are strings in Bun and in wrangler.
-const EVENTS_HTML = eventsHtml as unknown as string;
 const RESOURCES = [{ uri: UI_URI, name: 'events', title: 'Agent Athens event cards', description: 'Cards for search_events and match_artists results.', mimeType: UI_MIME }];
 
 export const TOOLS = [

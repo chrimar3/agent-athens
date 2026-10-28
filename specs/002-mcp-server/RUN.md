@@ -50,7 +50,7 @@ Finish with §8: an independent subagent review of the whole diff against §2 an
 ## 4. Owner steps after the run
 
 1. Read `REPORT.md`, then review the draft PR. Merging needs a second approver per CONTRIBUTING.
-2. Deploy the Worker: `cd mcp && bunx wrangler@4 login && bun run deploy`. Add the `mcp.agentathens.com` route in `wrangler.toml` and a Cloudflare rate-limit rule on `/mcp`.
+2. Deploy the server as its own Netlify site: follow `mcp/README.md` § Deploy (Netlify). Use base directory `mcp`, then add the domain `mcp.agentathens.com`. The rate limit ships in the function, so there is nothing to set in a dashboard.
 3. Connect it in Claude, ChatGPT and Gemini (mcp/README.md § Connect it). Try the five prompts from `directory-kit.md`.
 4. Decide on the draft issues in `issues/`: the `llms.txt` and homepage mention, CI for `mcp/`, and the privacy page.
 5. Submit to the directories with `directory-kit.md`.

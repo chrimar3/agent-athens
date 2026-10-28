@@ -1,0 +1,13 @@
+# Netlify site for mcp.agentathens.com: a separate site with base directory
+# "mcp", not the main agentathens.com site (which stays function-free).
+# The only code is netlify/functions/mcp.mts; its route and rate limit are in
+# that file's `config`, because Netlify does not accept function rate limits
+# in this file.
+
+[build]
+  # Nothing to build: src/ui/events-html.ts is generated and committed.
+  # The publish directory must not contain the source files.
+  publish = "public"
+
+[functions]
+  node_bundler = "esbuild"
