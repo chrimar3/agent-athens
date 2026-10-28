@@ -5,7 +5,9 @@
  * recorded as success=1 with 0 events for 19 days. scrape-all's main() records
  * success=0 + error_message only when the scraper REJECTS — so that is the
  * contract pinned here, under the exact container condition (every DNS lookup
- * fails). No network: DNS is mocked, fetch is a throwing fake.
+ * fails). No network: DNS is mocked, fetch is a throwing fake. The guard runs
+ * outside proxy mode here (AA_CONTAINER cleared), so it still resolves names
+ * and meets the mocked ESERVFAIL even when this file runs inside the container.
  */
 import { afterAll, beforeAll, describe, expect, mock, test } from 'bun:test';
 
@@ -22,7 +24,9 @@ const scrapeAll = await import('../scripts/scrape-all');
 const realFetch = globalThis.fetch;
 const realSleep = Bun.sleep;
 let fetchCalls: string[] = [];
+const realContainerFlag = process.env.AA_CONTAINER;
 beforeAll(() => {
+  delete process.env.AA_CONTAINER;
   globalThis.fetch = (async (input: any) => {
     fetchCalls.push(String(input));
     throw new Error('fake network: unreachable');
@@ -30,6 +34,7 @@ beforeAll(() => {
   (Bun as any).sleep = async () => {}; // athinorama backs off 2 s + 4 s between attempts
 });
 afterAll(() => {
+  if (realContainerFlag !== undefined) process.env.AA_CONTAINER = realContainerFlag;
   globalThis.fetch = realFetch;
   (Bun as any).sleep = realSleep;
 });

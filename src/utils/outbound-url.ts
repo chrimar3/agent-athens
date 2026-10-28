@@ -15,6 +15,15 @@
  * Residual risk: fetch() resolves the host again after the check, so a DNS
  * answer that changes between the two lookups is not caught on the fetch()
  * path. The curl path pins the checked address with --resolve.
+ *
+ * Inside the pipeline container (proxyMode) the guard does not resolve names
+ * at all: the sealed network has no resolver, and every request leaves
+ * through the egress proxy, which resolves the name itself and refuses
+ * non-public destinations (docker/egress/squid.conf). There squid is the
+ * ONLY post-DNS private-range check; the guard keeps every check it can make
+ * without DNS (scheme, credentials, IP literals, local-only names) on every
+ * hop. An injected resolver is always used, so tests behave the same inside
+ * the container. Owner decision 2026-10-26 (ledger), issue O1.
  */
 
 import { isIP, isIPv4, isIPv6 } from 'node:net';
@@ -173,6 +182,23 @@ export function isBlockedAddress(ip: string): boolean {
 // URL validation
 // ---------------------------------------------------------------------------
 
+/**
+ * True inside the pipeline container (docker/Dockerfile sets AA_CONTAINER=1,
+ * docker/compose.yaml the proxy variables). There the network has no
+ * resolver and every request leaves through the egress proxy.
+ */
+export function proxyMode(env: Record<string, string | undefined> = process.env): boolean {
+  return env.AA_CONTAINER === '1' && !!(env.HTTPS_PROXY || env.https_proxy);
+}
+
+/** Host names that never mean a public web site (squid.conf aa_local_names is a subset). */
+const LOCAL_SUFFIXES = ['.localhost', '.local', '.localdomain', '.internal', '.lan', '.home.arpa', '.intranet', '.corp'];
+
+/** "localhost", a single-label name or a local-only suffix. `host` is lowercased, without a trailing dot. */
+function isLocalHostName(host: string): boolean {
+  return host === 'localhost' || !host.includes('.') || LOCAL_SUFFIXES.some((s) => host.endsWith(s));
+}
+
 const systemResolver: Resolver = async (hostname) => {
   const records = await lookup(hostname, { all: true, verbatim: true });
   return records.map((r) => r.address);
@@ -205,9 +231,10 @@ export async function assertPublicUrl(
   if (isIP(host)) {
     addresses = [host];
   } else {
-    if (host === 'localhost' || host.endsWith('.localhost')) {
+    if (isLocalHostName(host)) {
       throw new OutboundUrlError('blocked-address', `host ${host} is local`);
     }
+    if (!opts.resolver && proxyMode()) return { url, addresses: [] };
     try {
       addresses = await (opts.resolver ?? systemResolver)(host);
     } catch (e) {
@@ -351,7 +378,9 @@ export interface CurlOptions {
 
 /**
  * curl argv that connects only to `pinnedAddress` (already validated), speaks
- * only http/https, does not follow redirects, and bounds size and time.
+ * only http/https, does not follow redirects, and bounds size and time. An
+ * empty `pinnedAddress` (proxy mode: nothing was resolved) means no pin; curl
+ * then connects through the proxy from the environment.
  */
 export function buildCurlArgs(url: URL, pinnedAddress: string, opts: CurlOptions = {}): string[] {
   const port = url.port || (url.protocol === 'https:' ? '443' : '80');
@@ -366,7 +395,7 @@ export function buildCurlArgs(url: URL, pinnedAddress: string, opts: CurlOptions
     '--max-filesize', String(maxBytes),
     '--max-time', String(seconds),
   ];
-  if (!isIP(host)) args.push('--resolve', `${host}:${port}:${pinned}`);
+  if (!isIP(host) && pinnedAddress) args.push('--resolve', `${host}:${port}:${pinned}`);
   if (opts.dumpHeaders) args.push('-D', '-');
   for (const [k, v] of Object.entries(opts.headers ?? {})) args.push('-H', `${k}: ${v}`);
   args.push('--', url.href);
@@ -392,7 +421,7 @@ export async function safeCurlText(
   const maxBytes = opts.maxBytes ?? OUTBOUND_DEFAULTS.maxBytes;
   const timeoutMs = opts.timeoutMs ?? OUTBOUND_DEFAULTS.timeoutMs;
   const spawn = opts.spawn ?? ((args: string[]) => Bun.spawn(args, { stdout: 'pipe', stderr: 'ignore' }) as unknown as SpawnedProcess);
-  const proc = spawn(buildCurlArgs(url, addresses[0], { ...opts, maxBytes, timeoutMs }));
+  const proc = spawn(buildCurlArgs(url, addresses[0] ?? '', { ...opts, maxBytes, timeoutMs }));
 
   const controller = new AbortController();
   const timer = setTimeout(() => { controller.abort(); proc.kill(); }, timeoutMs + 1000);
@@ -443,8 +472,6 @@ export function sameOriginUrl(href: string | null | undefined, origin: string): 
   return url.href;
 }
 
-/** Host names that never mean a public web site. */
-const LOCAL_SUFFIXES = ['.localhost', '.local', '.localdomain', '.internal', '.lan', '.home.arpa', '.intranet', '.corp'];
 /** Schemes that stay inside the browser process (no network request leaves it). */
 const IN_PROCESS_SCHEMES = new Set(['data:', 'blob:', 'about:']);
 
@@ -469,9 +496,7 @@ export function quickBlockReason(input: string): string | null {
   const host = url.hostname.replace(/^\[|\]$/g, '').toLowerCase().replace(/\.$/, '');
   if (!host) return 'no host';
   if (isIP(host)) return isBlockedAddress(host) ? `address ${host} is not public` : null;
-  if (host === 'localhost' || !host.includes('.') || LOCAL_SUFFIXES.some(s => host.endsWith(s))) {
-    return `host ${host} is local`;
-  }
+  if (isLocalHostName(host)) return `host ${host} is local`;
   return null;
 }
 

@@ -1,16 +1,20 @@
 /**
  * Outbound URL guard for fetches of URLs that came from scraped or emailed data.
  *
- * No network: every test injects a resolver and a fetch implementation. The
- * fake fetch follows redirects itself unless called with redirect:'manual',
- * like the real fetch, so an unguarded caller would visit the redirect target.
+ * No network: every test injects a resolver and a fetch implementation, except
+ * the "inside the container" tests, which run the real guard in a child
+ * process whose DNS always fails. The fake fetch follows redirects itself
+ * unless called with redirect:'manual', like the real fetch, so an unguarded
+ * caller would visit the redirect target.
  */
 import { describe, test, expect } from 'bun:test';
+import { join } from 'node:path';
 import {
   OutboundUrlError,
   assertPublicUrl,
   buildCurlArgs,
   isBlockedAddress,
+  proxyMode,
   safeCurlText,
   safeFetch,
   type OutboundErrorCode,
@@ -333,5 +337,147 @@ describe('curl path', () => {
   test('safeCurlText returns text for a public target', async () => {
     const spawn = () => ({ stdout: new Response('<html>ok</html>').body!, exited: Promise.resolve(0), kill() {} });
     expect(await safeCurlText('https://www.more.com/', { resolver, spawn })).toBe('<html>ok</html>');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Inside the container (proxy mode, owner decision 2026-10-26, issue O1)
+// ---------------------------------------------------------------------------
+
+// The real guard, run in a child process where every node:dns lookup fails
+// with ESERVFAIL, as on the sealed network. Every other test in this file
+// injects a resolver, which is how the 19-day outage got past them.
+const CONTAINER_ENV = { AA_CONTAINER: '1', HTTPS_PROXY: 'http://egress:3128' };
+const PROBE = join(import.meta.dir, 'fixtures', 'guard-under-container-dns.ts');
+
+type ProbeCase = { kind: 'assert' | 'hostCheck' | 'curl'; input: string } | { kind: 'fetch'; input: string; routes: Record<string, { status: number; location?: string }> };
+
+function underContainerDns(env: Record<string, string>, cases: ProbeCase[]): { lookups: number; results: any[] } {
+  const r = Bun.spawnSync([process.execPath, 'run', PROBE, JSON.stringify(cases)], {
+    env: { PATH: process.env.PATH ?? '', HOME: process.env.HOME ?? '', ...env },
+    stdout: 'pipe',
+    stderr: 'pipe',
+  });
+  if (r.exitCode !== 0) throw new Error(`probe exited ${r.exitCode}: ${r.stderr.toString()}`);
+  return JSON.parse(r.stdout.toString().trim().split('\n').pop()!);
+}
+
+describe('proxyMode', () => {
+  test('is on only with AA_CONTAINER=1 and an HTTPS proxy', () => {
+    expect(proxyMode({ AA_CONTAINER: '1', HTTPS_PROXY: 'http://egress:3128' })).toBe(true);
+    expect(proxyMode({ AA_CONTAINER: '1', https_proxy: 'http://egress:3128' })).toBe(true);
+    expect(proxyMode({ HTTPS_PROXY: 'http://egress:3128' })).toBe(false);
+    expect(proxyMode({ AA_CONTAINER: '1' })).toBe(false);
+    expect(proxyMode({ AA_CONTAINER: '1', HTTPS_PROXY: '' })).toBe(false);
+    expect(proxyMode({ AA_CONTAINER: 'true', HTTPS_PROXY: 'http://egress:3128' })).toBe(false);
+  });
+});
+
+describe('inside the container: the guard leaves DNS to the egress proxy', () => {
+  test('a public name passes without any DNS lookup', () => {
+    const out = underContainerDns(CONTAINER_ENV, [{ kind: 'assert', input: 'https://www.halfnote.gr/' }]);
+    expect(out.results[0]).toEqual({ ok: true, href: 'https://www.halfnote.gr/', addresses: [] });
+    expect(out.lookups).toBe(0);
+  });
+
+  test('every DNS-free refusal still holds, with the same codes', () => {
+    const cases: Array<[string, OutboundErrorCode]> = [
+      ['http://127.0.0.1/', 'blocked-address'],
+      ['http://[::1]/', 'blocked-address'],
+      ['http://[::ffff:127.0.0.1]/', 'blocked-address'],
+      ['http://169.254.169.254/latest/meta-data/', 'blocked-address'],
+      ['http://10.1.2.3:8080/', 'blocked-address'],
+      ['http://0x7f000001/', 'blocked-address'],
+      ['http://localhost:3000/', 'blocked-address'],
+      ['http://foo.internal/', 'blocked-address'],
+      ['http://host.docker.internal/', 'blocked-address'],
+      ['http://printer.local/', 'blocked-address'],
+      ['http://nas.home.arpa/', 'blocked-address'],
+      ['http://router.lan/', 'blocked-address'],
+      ['http://egress:3128/', 'blocked-address'],
+      ['http://user:pw@www.halfnote.gr/', 'credentials'],
+      ['file:///etc/passwd', 'scheme'],
+      ['not a url', 'invalid-url'],
+    ];
+    const out = underContainerDns(CONTAINER_ENV, cases.map(([input]) => ({ kind: 'assert', input })));
+    expect(out.results.map((r) => r.code)).toEqual(cases.map(([, code]) => code));
+    expect(out.lookups).toBe(0);
+  });
+
+  test('the browser host check passes a public name and refuses a local one, without DNS', () => {
+    const out = underContainerDns(CONTAINER_ENV, [
+      { kind: 'hostCheck', input: 'https://www.snfcc.org/el/events' },
+      { kind: 'hostCheck', input: 'http://169.254.169.254/' },
+      { kind: 'hostCheck', input: 'http://metadata.google.internal/' },
+    ]);
+    expect(out.results[0].reason).toBeNull();
+    expect(out.results[1].reason).toMatch(/non-public|local/);
+    expect(out.results[2].reason).toMatch(/local/);
+    expect(out.lookups).toBe(0);
+  });
+
+  test('curl goes through the proxy: no --resolve pin', () => {
+    const out = underContainerDns(CONTAINER_ENV, [{ kind: 'curl', input: 'https://www.more.com/gr-el/' }]);
+    expect(out.results[0].ok).toBe(true);
+    expect(out.results[0].args).not.toContain('--resolve');
+    expect(out.results[0].args.join(' ')).not.toContain('undefined');
+    expect(out.results[0].args.slice(-2)).toEqual(['--', 'https://www.more.com/gr-el/']);
+    expect(out.lookups).toBe(0);
+  });
+
+  test('every redirect hop is still checked: a redirect to the metadata address is not followed', () => {
+    const out = underContainerDns(CONTAINER_ENV, [{
+      kind: 'fetch',
+      input: 'https://www.halfnote.gr/',
+      routes: { 'https://www.halfnote.gr/': { status: 302, location: 'http://169.254.169.254/latest/meta-data/' } },
+    }]);
+    expect(out.results[0].code).toBe('blocked-address');
+    expect(out.results[0].visited).toEqual(['https://www.halfnote.gr/']);
+  });
+
+  test('a redirect to a local-only name is not followed either', () => {
+    const out = underContainerDns(CONTAINER_ENV, [{
+      kind: 'fetch',
+      input: 'https://www.halfnote.gr/',
+      routes: { 'https://www.halfnote.gr/': { status: 301, location: 'http://host.docker.internal:8080/' } },
+    }]);
+    expect(out.results[0].code).toBe('blocked-address');
+    expect(out.results[0].visited).toEqual(['https://www.halfnote.gr/']);
+  });
+});
+
+describe('outside proxy mode nothing changes', () => {
+  for (const [label, env] of [
+    ['no AA_CONTAINER', { HTTPS_PROXY: 'http://egress:3128' }],
+    ['no proxy variable', { AA_CONTAINER: '1' }],
+  ] as const) {
+    test(`${label}: the guard resolves the host, and ESERVFAIL is still a dns error`, () => {
+      const out = underContainerDns(env, [{ kind: 'assert', input: 'https://www.halfnote.gr/' }]);
+      expect(out.results[0].code).toBe('dns');
+      expect(out.results[0].message).toContain('ESERVFAIL');
+      expect(out.lookups).toBe(1);
+    });
+  }
+
+  test('an injected resolver is always used, even in proxy mode (tests run inside the container too)', async () => {
+    const saved = { AA_CONTAINER: process.env.AA_CONTAINER, HTTPS_PROXY: process.env.HTTPS_PROXY };
+    process.env.AA_CONTAINER = '1';
+    process.env.HTTPS_PROXY = 'http://egress:3128';
+    try {
+      let calls = 0;
+      const resolver: Resolver = async () => { calls++; return ['10.0.0.5']; };
+      await expectOutboundError(assertPublicUrl('https://internal.example.com/', { resolver }), 'blocked-address');
+      expect(calls).toBe(1);
+    } finally {
+      for (const [k, v] of Object.entries(saved)) {
+        if (v === undefined) delete process.env[k];
+        else process.env[k] = v;
+      }
+    }
+  });
+
+  test('buildCurlArgs still pins a checked address, and omits --resolve only when given none', () => {
+    expect(buildCurlArgs(new URL('https://www.more.com/'), '1.2.3.4').join(' ')).toContain('--resolve www.more.com:443:1.2.3.4');
+    expect(buildCurlArgs(new URL('https://www.more.com/'), '')).not.toContain('--resolve');
   });
 });
