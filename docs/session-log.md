@@ -7602,18 +7602,6 @@ constant feeding both surfaces.
 
 **Open items:** Owner: O1 (proxy-mode guard), O2 (publish window + CLI-sourced deploy id), O3, O4, O5, O6, Benaki 5-row purge (`DELETE FROM events WHERE source='benaki'` after review; all past-dated, end ≤ 2026-05-24), whether to list `scripts/__tests__` in the test floor, quarantine-or-rebuild Benaki (will now report 0 = CRITICAL). Agent: A2 for megaron/cometogether after O1; health-check UTC day-boundary follow-up; Phase 3 (C2/C3). Branch not committed or pushed.
 
-### Session 236 — Instruction files: trim CLAUDE.md, fix the ledger pointer, de-duplicate AGENTS.md — 2026-10-27 → 2026-10-28
-
-**Plan:** Owner asked whether the CLAUDE.md files constrain the model. Measure them, draft a trimmed version as a proposal (`.claude/CLAUDE.md` is protected), then apply on the owner's go-ahead.
-
-**What happened:** Measured: parent `CLAUDE.md` 972 words, `.claude/CLAUDE.md` 1,072, but both sent every session to `.claude/notes/ledger.md` ("START HERE", "Ground every session in"), which is about 189,000 words (Mistakes about 49,000). Proposal in `specs/claude-md-trim-2026-10/` (README has the reasoning and the owner's open decisions). Owner said "apply": installed both drafts (parent 972 → 497 words; project file kept every rule, now 1,119 words with a "search it, don't read it" ledger section); `.claude/worker.md` step 2 now reads the newest Mistakes block and searches by heading; `AGENTS.md` (untracked hand copy for Codex, which still documented the bare `bun test && git push`) replaced by a symlink to `.claude/CLAUDE.md` after the one Claude-specific line was made agent-neutral. Originals that git cannot restore are in `specs/claude-md-trim-2026-10/*.original.md`. Another session committed `d8d972aa1` to this branch at 00:42 during the apply; the instruction-file edits were not in it.
-
-**Verified:** Both installed files byte-identical to the drafts (`cmp`). The two `tests/security/test-discovery.test.ts` assertions on CLAUDE.md pass by grep; 38 project facts and 12 parent lessons checked present by string match. Ledger commands run against the live ledger (newest block 93 lines before the 00:42 commit, 105 after). `docker/integrity-check.sh` read: root symlinks are not alarmed (only symlinks in run-writable folders and `.git/objects`; `tracked_changes` covers tracked files only). `bun run test`: 5546 pass, 96 skip, 7 fail — the same 7 as S235 (6 og:url parity tests need `dist/festivals.html`/`greek-music.html`; 1 deadman untrusted-DB test, `enrich=3.0h`); neither file references the instruction files. Not verified: a run of the failing pair with the original instruction files (swap declined), and whether sessions perform better with the trimmed files.
-
-**Learnings:** See ledger 2026-10-28 (Mistakes). A pointer inside an instruction file has a size; re-measure what it points at.
-
-**Open items:** Owner: the brakes listed in `specs/claude-md-trim-2026-10/README.md` (commit/push only when asked, halt-when-uncertain in unattended runs, protected paths, after-session logging); optional rewording of the three `.claude/commands/pre-*-check.md` ledger lines. Committed on `claude/input-pipeline-phase1-2` at the owner's request (not pushed); the parent `CLAUDE.md` sits outside this repo and is not under version control.
-
 ### Session 233 — Read-only MCP server over the events feed — 2026-10-27
 
 (Numbered after S232; renumber if local entries land in between.)
@@ -7651,3 +7639,15 @@ constant feeding both surfaces.
 - Delete the stray untracked `mcp/src/probe-worker.ts` and `mcp/src/ui/probe.html`.
 - Memoise in-flight feed fetches.
 - Site bug: the generated tile double-escapes `&amp;quot;`.
+
+### Session 237 — Instruction files: trim CLAUDE.md, fix the ledger pointer, de-duplicate AGENTS.md — 2026-10-27 → 2026-10-28
+
+**Plan:** Owner asked whether the CLAUDE.md files constrain the model. Measure them, draft a trimmed version as a proposal (`.claude/CLAUDE.md` is protected), then apply on the owner's go-ahead.
+
+**What happened:** Measured: parent `CLAUDE.md` 972 words, `.claude/CLAUDE.md` 1,072, but both sent every session to `.claude/notes/ledger.md` ("START HERE", "Ground every session in"), which is about 189,000 words (Mistakes about 49,000). Proposal in `specs/claude-md-trim-2026-10/` (README has the reasoning and the owner's open decisions). Owner said "apply": installed both drafts (parent 972 → 497 words; project file kept every rule, now 1,119 words with a "search it, don't read it" ledger section); `.claude/worker.md` step 2 now reads the newest Mistakes block and searches by heading; `AGENTS.md` (untracked hand copy for Codex, which still documented the bare `bun test && git push`) replaced by a symlink to `.claude/CLAUDE.md` after the one Claude-specific line was made agent-neutral. Originals that git cannot restore are in `specs/claude-md-trim-2026-10/*.original.md`. Another session committed `d8d972aa1` to this branch at 00:42 during the apply; the instruction-file edits were not in it.
+
+**Verified:** Both installed files byte-identical to the drafts (`cmp`). The two `tests/security/test-discovery.test.ts` assertions on CLAUDE.md pass by grep; 38 project facts and 12 parent lessons checked present by string match. Ledger commands run against the live ledger (newest block 93 lines before the 00:42 commit, 105 after). `docker/integrity-check.sh` read: root symlinks are not alarmed (only symlinks in run-writable folders and `.git/objects`; `tracked_changes` covers tracked files only). `bun run test`: 5546 pass, 96 skip, 7 fail — the same 7 as S235 (6 og:url parity tests need `dist/festivals.html`/`greek-music.html`; 1 deadman untrusted-DB test, `enrich=3.0h`); neither file references the instruction files. Not verified: a run of the failing pair with the original instruction files (swap declined), and whether sessions perform better with the trimmed files.
+
+**Learnings:** See ledger 2026-10-28 (Mistakes, S237). A pointer inside an instruction file has a size; re-measure what it points at.
+
+**Open items:** Owner: the brakes listed in `specs/claude-md-trim-2026-10/README.md` (commit/push only when asked, halt-when-uncertain in unattended runs, protected paths, after-session logging); optional rewording of the three `.claude/commands/pre-*-check.md` ledger lines. Committed on `claude/input-pipeline-phase1-2` at the owner's request (not pushed); the parent `CLAUDE.md` sits outside this repo and is not under version control.

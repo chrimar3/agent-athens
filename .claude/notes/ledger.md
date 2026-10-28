@@ -8,6 +8,15 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 
 # Mistakes
 
+## 2026-10-28 — Instruction files: an unsized pointer and a drifted copy (S237)
+
+| What | Why | Fix |
+|---|---|---|
+| `.claude/CLAUDE.md` sent every session to this ledger ("Anything → § Mistakes ← START HERE", "Ground every session in ledger.md"), and `.claude/worker.md` said "read the ledger before writing anything" | The pointer was written when the ledger was small; by 2026-10-27 it was about 189,000 words (Mistakes about 49,000), so a session either ignored it or spent its context on history | Both now say: read the newest block (`sed -n '/^# Mistakes/,/^## Database/p'`), then search by heading for the area being touched |
+| `AGENTS.md`, a hand copy of `.claude/CLAUDE.md` for Codex (untracked since 2026-09-25), still documented `bun test && git push origin main` | The `bun run test` fix reached CLAUDE.md only, and `tests/security/test-discovery.test.ts` reads only CLAUDE.md, so nothing caught the copy; a bare `bun test` also runs test files planted in container-written folders | `AGENTS.md` is a symlink to `.claude/CLAUDE.md`; its one Claude-specific line is now agent-neutral. Original kept in `specs/claude-md-trim-2026-10/AGENTS.original.md` |
+| Committing a resolved merge failed with `fatal: could not open '.git/MERGE_HEAD'`; the reflog showed `reset: moving to HEAD` at the commit time | The pre-commit hook (`scripts/precommit-tsc.sh`) runs `git stash push --keep-index --include-untracked`; the stash resets the tree, which deletes `MERGE_HEAD`, so the commit is no longer a merge. The staged resolution survives | In this checkout, commit a merge with `git commit --no-verify` and run `bunx tsc --noEmit` by hand first, or have the hook skip when `MERGE_HEAD` exists (protected path: owner change) |
+| The same conflict was resolved twice: here, and by another session on PR #41 (`8e7095fb6`, 11:57) while the 9-minute suite ran | Nothing marks a branch's conflict as claimed; the app offered its own resolve-conflicts action for the same PR | Fetch and compare with the remote before committing a merge; here the remote merge was adopted (`git reset --soft` to it, a fast-forward) and only the renumbering was committed on top |
+
 ## 2026-10-28 — MCP server meets the live feed (S236, spec 002)
 
 | What | Why | Fix |
@@ -19,13 +28,6 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 | The fetch script crashed on its first real run | The synthetic config modelled the documented shape; the real file has 341 `null` entries | Add the `null` case to the fixture first, then fix. Run new scripts on the real input before trusting a green suite |
 | A theatre label failed WCAG AA | Category colour `#ef2c46` as 12px text on `#151515` is 4.45:1 | Text in `--text-secondary`, colour moved to a decorative dot |
 | Evidence screenshots used the fixture date | Passing `undefined` to mean "real clock" triggers a JS default parameter | Pass `() => new Date()` explicitly |
-
-## 2026-10-28 — Instruction files: an unsized pointer and a drifted copy (S236)
-
-| What | Why | Fix |
-|---|---|---|
-| `.claude/CLAUDE.md` sent every session to this ledger ("Anything → § Mistakes ← START HERE", "Ground every session in ledger.md"), and `.claude/worker.md` said "read the ledger before writing anything" | The pointer was written when the ledger was small; by 2026-10-27 it was about 189,000 words (Mistakes about 49,000), so a session either ignored it or spent its context on history | Both now say: read the newest block (`sed -n '/^# Mistakes/,/^## Database/p'`), then search by heading for the area being touched |
-| `AGENTS.md`, a hand copy of `.claude/CLAUDE.md` for Codex (untracked since 2026-09-25), still documented `bun test && git push origin main` | The `bun run test` fix reached CLAUDE.md only, and `tests/security/test-discovery.test.ts` reads only CLAUDE.md, so nothing caught the copy; a bare `bun test` also runs test files planted in container-written folders | `AGENTS.md` is a symlink to `.claude/CLAUDE.md`; its one Claude-specific line is now agent-neutral. Original kept in `specs/claude-md-trim-2026-10/AGENTS.original.md` |
 
 ## 2026-10-27 — Phase 2 "make failure loud": what bit while fixing it (S235)
 
