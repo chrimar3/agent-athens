@@ -8,6 +8,15 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 
 # Mistakes
 
+## 2026-10-28 — Open-issues sweep: empty-DB creation reproduced, a hook that eats merge state (S237)
+
+| What | Why | Fix |
+|---|---|---|
+| The RED run of the new mark-duplicates tests created a 4 KB empty `data/events.db` in the worktree | Before the fix the script ignored `--db=` and opened its anchored path with `new Database()`, which creates the file; the worktree had no events.db (gitignored) — the 2026-06-30 empty-DB class, reproduced | `existsSync` check + `--db=PATH`; any test of a script that anchors its DB path must first make the script honour an override, or run it in a cwd/worktree whose anchored path cannot be created. The db-guard hook then refuses to delete the stray file (by design): the owner removes it |
+| `git commit` in a scratch worktree twice discarded an in-progress merge (`MERGE_HEAD` missing) | The pre-commit hook runs `git stash push --keep-index --include-untracked`; a `node_modules` **symlink** is a file, so `.gitignore`'s `node_modules/` (directories only) does not ignore it, the stash is non-empty, and stashing during a merge drops the merge state | In a scratch worktree with a `node_modules` symlink: type-check the staged tree yourself, then `git commit --no-verify` (the documented bypass); or leave no untracked files before committing a merge |
+| An issue's "half-done" list was two-thirds already done | `generate-schema.ts` per-event stderr and its router were fixed after #10 was filed | Re-check each listed item with a mutation run before working it; report the stale items instead of re-doing them |
+| Another session's commit (S236, protected `.claude/CLAUDE.md`/`worker.md`) landed on this session's PR branch | Two sessions shared one checkout and one branch | Resolve PR conflicts in a worktree from the **remote** PR head, so unpushed local commits are never pushed by accident; say so when the remote branch moved |
+
 ## 2026-09-24 — Security loop: host, container and review boundaries (security loop, rounds 0–9)
 
 | What | Why | Fix |
