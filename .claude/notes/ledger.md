@@ -8,6 +8,12 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 
 # Mistakes
 
+## 2026-10-29 — Cloud routines: the analyst read a file the pipeline no longer writes
+
+| What | Why | Fix |
+|---|---|---|
+| The nightly triage analyst stopped at its staleness check every night from 2026-09-25 to 2026-10-28 (about 24 s per run), commenting on #11 and filing nothing; the worker and deep-analyst routines were disabled and had never run | Security loop round 3 moved the pipeline's commits off main onto `refs/heads/pipeline-data` (`scripts/daily-automated.sh`, `PIPELINE_DATA_BRANCH`), but `.claude/analyst-triage.md` and `analyst-deep.md` still read `data/scoreboard.json` from the main clone. Each decision was sound alone; nothing checked them together. The pipeline outage hid it: both causes produce the same stale file | Both prompts fetch `pipeline-data` explicitly and read the scoreboard from `origin/pipeline-data`; `tests/agent-scoreboard-source.test.ts` reads the branch name from the pipeline script, so renaming the branch without updating the prompts fails CI. When a scheduled agent "does nothing", check its run duration first: a run that ends in seconds every night is stopping at a gate |
+
 ## 2026-10-28 — Instruction files: an unsized pointer and a drifted copy (S237)
 
 | What | Why | Fix |
