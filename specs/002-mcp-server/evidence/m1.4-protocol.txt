@@ -1,0 +1,31 @@
+$ bun test test/sdk-client.test.ts
+ 4 pass
+ 0 fail
+Ran 4 tests across 1 file. [90.00ms]
+
+## inspector (npx @modelcontextprotocol/inspector@2.10.1 --cli http://localhost:8787/mcp --transport http), server: PORT=8787 bun run dev (live feed)
+--method tools/list  → exit 0
+  search_events  readOnlyHint=true
+  get_event  readOnlyHint=true
+  list_venues  readOnlyHint=true
+  match_artists  readOnlyHint=true
+--method tools/call --tool-name search_events --tool-arg when=this_weekend --tool-arg lang=en --tool-arg limit=2  → exit 0
+  isError=false window={"from":"2026-10-31","to":"2026-11-01","timezone":"Europe/Athens"} total=124 returned=2
+  2026-10-31  The Cure Party - Halloween Edition  https://agentathens.com/events/af39561d-temple-the-cure-party-halloween-edition/
+  2026-10-31  ΕΛΕΩΝΟΡΑ ΖΟΥΓΑΝΕΛΗ "ΣΤΑΥΡΟΣ ΤΟΥ ΝΟΤΟΥ"  https://agentathens.com/events/a9c4aa4b-stavros-tou-notou-quot-quot/
+
+## mutation runs (the SDK test passed on its first run, so these are its RED; src/mcp.ts restored byte-identical after each)
+--- mutant 1: initialize answers protocolVersion '1999-01-01'
+error: Server's protocol version is not supported: 1999-01-01
+ 0 pass
+--- mutant 2: responses sent as content-type text/plain
+error: Streamable HTTP error: Unexpected content type: text/plain
+ 0 pass
+ 1 fail
+restored-identical
+
+## dev dependencies (mcp/package.json only; pinned exact, versions ≥ 2 weeks old)
+$ bun audit   (wrangler 4.149.0 pulls undici 7.29.1 through miniflare: 4 high, 4 moderate)
+8 vulnerabilities (4 high, 4 moderate)
+$ bun audit   (after "overrides": { "undici": "7.30.1" })
+No vulnerabilities found

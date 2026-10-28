@@ -1012,6 +1012,25 @@ describe.skipIf(process.platform === 'win32')('docker/aa-run.sh dist/ access and
     expect(existsSync(join(state, 'evidence'))).toBe(true);
   });
 
+  test('once the owner clears a quarantine, the next run starts clean: the checked snapshot is not verified again against later git work', () => {
+    const pre = join(state, 'state/agent-athens-enrichment.pre');
+    const snap = Bun.spawnSync(['bash', join(repo, 'docker/integrity-check.sh'), 'snapshot', pre], {
+      cwd: repo,
+      env: { PATH: process.env.PATH ?? '', HOME: home, AA_STATE_DIR: state },
+    });
+    expect(snap.exitCode).toBe(0);
+    writeFileSync(join(repo, 'CLAUDE.md'), 'planted\n');
+    expect(run(['enrichment']).code).toBe(6);
+    expect(existsSync(pre)).toBe(false);
+    // The owner reviews, deletes the marker, and pulls (a new FETCH_HEAD).
+    rmSync(join(state, 'QUARANTINE'));
+    writeFileSync(join(repo, '.git/FETCH_HEAD'), 'x\t\tbranch main of origin\n');
+    const r = run(['enrichment']);
+    expect(r.code).toBe(0);
+    expect(r.out).not.toContain('unfinished earlier run');
+    expect(existsSync(join(state, 'QUARANTINE'))).toBe(false);
+  });
+
   test('under a quarantine only the restore check shell may run (AA_RESTORE_UNDER_QUARANTINE=1), nothing else', () => {
     writeFileSync(join(state, 'QUARANTINE'), 'Quarantined: fixture\n');
     expect(run(['shell', '-c', 'true']).code).toBe(5);

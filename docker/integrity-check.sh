@@ -140,6 +140,13 @@ quarantine() {  # $1 reason, $2 pre-run HEAD ("" = do not run git), $3 planted p
     qdir="$STATE_DIR/evidence/$ts"
     mkdir -p "$qdir"
     printf '%s\njob=%s\npre_head=%s\n' "$1" "$JOB" "${2:-not-run}" > "$qdir/REASON"
+    # The run's snapshot has now been checked: keep it with the evidence. Left
+    # in place, the next run would take it for an unfinished run's and check
+    # the repo against it again, by then including the owner's own pulls and
+    # merges since — a second, false quarantine (2026-10-05).
+    if [ "$MODE" = verify ] && [ -n "$STATE_FILE" ] && [ -f "$STATE_FILE" ]; then
+        mv "$STATE_FILE" "$qdir/snapshot.pre" 2>/dev/null || true
+    fi
     if [ -n "${3:-}" ]; then
         mkdir -p "$qdir/planted"
         # Moved with their path (data/x/CLAUDE.md -> planted/data/x/CLAUDE.md);

@@ -1,0 +1,24 @@
+{
+  "name": "agent-athens-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Read-only MCP server over the Agent Athens events feed",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/dev.ts",
+    "test": "bun test test/",
+    "typecheck": "tsc --noEmit -p .",
+    "fixture": "bun run scripts/make-fixture.ts",
+    "deploy": "bunx wrangler@4 deploy",
+    "bundle-check": "wrangler deploy --dry-run --outdir .wrangler/dry-run",
+    "e2e": "bun test ./e2e/ui.e2e.ts --timeout 30000"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "playwright": "1.55.1",
+    "wrangler": "4.149.0"
+  },
+  "overrides": {
+    "undici": "7.30.1"
+  }
+}

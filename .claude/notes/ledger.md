@@ -8,6 +8,18 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 
 # Mistakes
 
+## 2026-10-28 — MCP server meets the live feed (S236, spec 002)
+
+| What | Why | Fix |
+|---|---|---|
+| The spec's starting commit and branch existed nowhere: not local, not in a worktree, not on origin | M0 was built in a cloud session and never pushed; the brief stated it as done | Verify the premise (`git cat-file`, `git ls-remote`) before any work. The owner supplied `format-patch` files, applied with `git am` in a fresh worktree |
+| `lang: "en"` hid every Greek-only event | `/api/en/events.json` lists only events with `fullDescriptionEn` | English view = the el feed with en records overlaid by id |
+| The 64 KB body limit let about 80 KB of Greek through | `text.length` counts UTF-16 units, after buffering the whole body; chunked requests have no content-length | Count bytes while streaming, and cancel the read at the cap |
+| A tour date from 1 Sep was offered as "theatre tonight" on 28 Oct | The server treated runs with no end as ongoing and relied on the feed to drop them; a stale feed does not | Import `config/lifecycle-presumption.json` and apply the site's own windows |
+| The fetch script crashed on its first real run | The synthetic config modelled the documented shape; the real file has 341 `null` entries | Add the `null` case to the fixture first, then fix. Run new scripts on the real input before trusting a green suite |
+| A theatre label failed WCAG AA | Category colour `#ef2c46` as 12px text on `#151515` is 4.45:1 | Text in `--text-secondary`, colour moved to a decorative dot |
+| Evidence screenshots used the fixture date | Passing `undefined` to mean "real clock" triggers a JS default parameter | Pass `() => new Date()` explicitly |
+
 ## 2026-10-28 — Instruction files: an unsized pointer and a drifted copy (S236)
 
 | What | Why | Fix |
@@ -1415,6 +1427,18 @@ _(Recovered 2026-05-27 in S160 from `stash@{0}` — written during S159, strande
 ---
 
 # Patterns
+
+## 2026-10-28 — Consumers of the public feed: test on live data early (S236)
+
+A new consumer of `/api/events.json` passes on fixtures built by the real `buildDataFeed()` and still misbehaves on live data: a stale feed, runs with no end, one row per day for one exhibition, mistyped events, and landscape images in a portrait slot. Run it against the live feed and look at the output (example prompts, screenshots) before calling a milestone done; three of this session's fixes came from doing that.
+
+**Commit one task from a file holding two.** Run `git diff -U1 FILE | awk '/^@@/{h++} h<N{print}'` and pass the result to `git apply --cached`. Then gate the exact staged tree: export it with `git checkout-index -a --prefix=DIR/` or `git archive HEAD`, symlink in `node_modules`, and run the tests there.
+
+**Retrofitted pins.** Copy the file aside and compare `shasum` before and after. Apply the mutant with `sed` and `grep -c` it, so you know the mutation happened. Run the tests, then restore the copy and check the `shasum` matches.
+
+**Playwright with a cached browser.** If the version that matches the cached Chromium carries an advisory, pin the fixed version and pass `launch({ executablePath })` to the cached build. That needs no download and gives a clean audit.
+
+**Research from spec text.** A subagent can find and download the spec, but grep the downloaded file yourself before coding from it.
 
 ## 2026-10-27 — Making scraper failure loud (S235)
 
@@ -7230,6 +7254,10 @@ First manual deploy exited 0 through a pipe while the platform recorded state=er
 ---
 
 # Decisions
+
+## 2026-10-28 — MCP server: stateless Apps, own-domain images, site rules by import (S236)
+
+The MCP server always sends `_meta.ui.resourceUri` and the full text and `structuredContent`. Being stateless (spec 002 §2.1), it cannot gate `tools/list` on the client's `io.modelcontextprotocol/ui` capability, which the stable spec (2026-01-26) only says SHOULD be done. The card view's CSP allows images from `https://agentathens.com` only. Other image hosts (athinorama, ra.co, more.com) would see every viewer's IP address, so those cards show a placeholder. Where the server needs a site rule, such as the presumption windows, it imports the site's config JSON at build time rather than copying the numbers. Dev-tool advisories are resolved without bleeding-edge releases: `undici` is overridden to 7.30.1 under wrangler 4.149.0, and Playwright is pinned to 1.55.1 on the cached Chromium. The ChatGPT checkout-link rule against the Tickets button is left to the owner (`specs/002-mcp-server/directory-kit.md` §6).
 
 ## 2026-10-26 — Proxy-mode outbound guard; Phases 1+2 together; schedule after the publish fix (S235)
 

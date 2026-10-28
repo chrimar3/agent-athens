@@ -1,0 +1,28 @@
+## RED on the M0 handler (new test: a streamed body of about 80 KB in Greek, no content-length)
+$ bun test test/limits.test.ts
+Expected: 413
+Received: 200
+(fail) body size > a streamed body over 64 KB in bytes but not in characters is 413 [0.60ms]
+ 7 pass
+ 1 fail
+
+## GREEN after readCapped()
+$ bun test test/limits.test.ts
+ 8 pass
+ 0 fail
+
+## Mutation runs for the limits that already existed in M0 (src/mcp.ts and src/tools.ts restored byte-identical afterwards)
+--- body limit 65 KB
+(fail) body size > a body over 64 KB with a content-length is 413
+(fail) body size > a streamed body over 64 KB (no content-length) is 413
+ 6 pass
+ 2 fail
+--- batch limit 21
+(fail) batch size > a batch of 21 is 400
+ 7 pass
+ 1 fail
+--- artist limit 201
+(fail) artist list size > 201 artists are a tool error
+ 7 pass
+ 1 fail
+restored-identical

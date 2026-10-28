@@ -1,0 +1,22 @@
+## RED (M1 code, new test file)
+$ bun test test/spotify-match.test.ts
+SyntaxError: Export named 'spotifyIndex' not found in module '/Users/chrism/Project with Claude/AgentAthens/agent-athens-mcp/mcp/src/tools.ts'.
+ 0 pass
+ 1 fail
+ 1 error
+
+## GREEN
+$ bun test test/
+ 59 pass
+ 0 fail
+
+## mutant: spotify_id ranked last (rank 4)
+1
+(fail) match_artists by spotify_id > all four confidence levels, ranked spotify_id > wikidata > name > title_mention
+ 8 pass
+ 1 fail
+## mutant: spotify_id lookup ignored
+1
+ 5 pass
+ 4 fail
+restored-identical

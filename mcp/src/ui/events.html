@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Athens events</title>
+<!--
+  MCP Apps view (ext-apps spec 2026-01-26) for search_events and match_artists.
+  Self-contained: no external scripts, styles or fonts. Event images load only
+  from IMAGE_ORIGINS, which must equal the resource's _meta.ui.csp.resourceDomains.
+  Colours, type and spacing are copied from src/styles/design-system.css.
+-->
+<style>
+  :root {
+    --bg-primary: #0d0d0d;
+    --bg-elevated: #151515;
+    --bg-surface: #1e1e1e;
+    --text-primary: #f0f0f0;
+    --text-secondary: #a0a0a0;
+    --text-tertiary: #959595;
+    --accent-primary: #f5e642;
+    --border-subtle: rgba(240, 240, 240, 0.15);
+    --border-default: rgba(240, 240, 240, 0.40);
+    --focus-ring: #58A6FF;
+    --text-on-bright: #0d0d0d;
+    --status-warning: #FBBF24;
+    --color-concert: #f5e642;
+    --color-exhibition: #7eb8f7;
+    --color-cinema: #b87ef7;
+    --color-theater: #ef2c46;
+    --color-dance: #ec407a;
+    --color-performance: #f5a742;
+    --color-workshop: #7ef7b8;
+    --color-comedy: #ffca28;
+    --color-festival: #f5e642;
+    --color-other: #78909c;
+    --font-primary: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --type-h3: 1.25rem;
+    --type-body: 1rem;
+    --type-small: 0.875rem;
+    --type-ui: 0.75rem;
+    --leading-snug: 1.15;
+    --leading-normal: 1.55;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-sm-md: 12px;
+    --space-md: 16px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-full: 999px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg-primary); color: var(--text-primary); }
+  body { font-family: var(--font-primary); font-size: var(--type-body); line-height: var(--leading-normal); padding: var(--space-md); }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-sm); margin-bottom: var(--space-sm-md); }
+  h1 { font-size: var(--type-body); font-weight: var(--font-weight-bold); margin: 0; }
+  .meta { color: var(--text-secondary); font-size: var(--type-small); margin: 0; }
+  .notice { color: var(--status-warning); font-size: var(--type-small); margin: 0 0 var(--space-sm-md); }
+  ul.events { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-sm-md); grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); }
+  .card { display: flex; flex-direction: column; overflow: hidden; background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); }
+  /* Feed images are landscape: 1200×630 share cards and wide photos. */
+  .thumb { width: 100%; aspect-ratio: 1200 / 630; overflow: hidden; background: var(--bg-surface); position: relative; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb .placeholder { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: var(--space-sm); border-top: 4px solid var(--cat, var(--color-other)); }
+  .thumb .placeholder span { font-size: var(--type-ui); font-weight: var(--font-weight-semibold); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
+  .body { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: var(--space-xs); padding: var(--space-sm-md); }
+  /* Category colours are too dark for 12px text on --bg-elevated (theatre red is 4.45:1), so the colour goes on a dot. */
+  .cat { display: inline-flex; align-items: center; gap: var(--space-xs); font-size: var(--type-ui); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); }
+  .cat::before { content: ""; width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--cat, var(--color-other)); }
+  h2 { font-size: var(--type-h3); font-weight: var(--font-weight-bold); line-height: var(--leading-snug); margin: 0; overflow-wrap: anywhere; }
+  .line { font-size: var(--type-small); color: var(--text-secondary); margin: 0; overflow-wrap: anywhere; }
+  .price { color: var(--text-primary); font-weight: var(--font-weight-medium); }
+  .badge { align-self: flex-start; font-size: var(--type-ui); font-weight: var(--font-weight-medium); padding: 2px var(--space-sm); border-radius: var(--radius-full); border: 1px solid var(--border-default); color: var(--text-primary); }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: auto; padding-top: var(--space-sm); }
+  .btn { display: inline-block; font: inherit; font-size: var(--type-small); font-weight: var(--font-weight-semibold); text-decoration: none; padding: 6px var(--space-sm-md); border-radius: var(--radius-full); border: 1px solid var(--border-default); color: var(--text-primary); background: transparent; cursor: pointer; }
+  .btn.primary { background: var(--accent-primary); border-color: var(--accent-primary); color: var(--text-on-bright); }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .empty { color: var(--text-secondary); padding: var(--space-md) 0; margin: 0; }
+  footer { margin-top: var(--space-sm-md); }
+</style>
+</head>
+<body>
+<main id="app" aria-live="polite"><p class="empty">Loading events…</p></main>
+<script>
+  "use strict";
+  const IMAGE_ORIGINS = ["https://agentathens.com"];
+  const CAT_COLOUR = {
+    music: "--color-concert", theatre: "--color-theater", exhibition: "--color-exhibition", cinema: "--color-cinema",
+    comedy: "--color-comedy", dance: "--color-dance", festival: "--color-festival", performing_arts: "--color-performance",
+    education: "--color-workshop", other: "--color-other",
+  };
+  const CAT_LABEL = {
+    music: "Music", theatre: "Theatre", exhibition: "Exhibition", cinema: "Cinema", comedy: "Comedy", dance: "Dance",
+    festival: "Festival", performing_arts: "Performance", education: "Talk / workshop", other: "Event",
+  };
+  let locale = "en-GB";
+
+  // ── bridge: JSON-RPC 2.0 over postMessage to the host (window.parent) ──
+  let nextId = 1;
+  const pending = new Map();
+  function post(msg) { window.parent.postMessage(msg, "*"); }
+  function request(method, params) {
+    const id = nextId++;
+    post({ jsonrpc: "2.0", id: id, method: method, params: params });
+    return new Promise(function (resolve, reject) { pending.set(id, { resolve: resolve, reject: reject }); });
+  }
+  function notify(method, params) { post({ jsonrpc: "2.0", method: method, params: params }); }
+
+  window.addEventListener("message", function (ev) {
+    if (ev.source !== window.parent) return;
+    const msg = ev.data;
+    if (!msg || msg.jsonrpc !== "2.0") return;
+    if (msg.id !== undefined && pending.has(msg.id) && !msg.method) {
+      const p = pending.get(msg.id);
+      pending.delete(msg.id);
+      if (msg.error) p.reject(msg.error); else p.resolve(msg.result);
+      return;
+    }
+    switch (msg.method) {
+      case "ui/notifications/tool-result": render(msg.params); break;
+      case "ui/notifications/host-context-changed": applyContext(msg.params); break;
+      case "ui/resource-teardown":
+      case "ping":
+        if (msg.id !== undefined) post({ jsonrpc: "2.0", id: msg.id, result: {} });
+        break;
+    }
+  });
+
+  function applyContext(ctx) {
+    if (ctx && typeof ctx.locale === "string") {
+      try { new Intl.DateTimeFormat(ctx.locale); locale = ctx.locale; } catch (e) { /* keep the default */ }
+    }
+  }
+
+  function openLink(url) {
+    request("ui/open-link", { url: url }).catch(function () { /* the host refused; nothing else to do */ });
+  }
+
+  // ── rendering (DOM nodes and textContent only: feed text is untrusted) ──
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function safeHttps(u) {
+    try { const x = new URL(u); return x.protocol === "https:" ? x.href : null; } catch (e) { return null; }
+  }
+  function allowedImage(u) {
+    const h = safeHttps(u);
+    return h && IMAGE_ORIGINS.indexOf(new URL(h).origin) !== -1 ? h : null;
+  }
+  function athensYear(d) {
+    return new Intl.DateTimeFormat("en", { timeZone: "Europe/Athens", year: "numeric" }).format(d);
+  }
+  function when(start) {
+    if (typeof start !== "string") return "";
+    const dateOnly = /^\d{4}-\d{2}-\d{2}$/.test(start);
+    const d = new Date(dateOnly ? start + "T12:00:00Z" : start);
+    if (isNaN(d.getTime())) return start;
+    const opts = { timeZone: "Europe/Athens", weekday: "short", day: "numeric", month: "short" };
+    // Without the year, a run to next July reads "1 Sept – 31 Jul".
+    if (athensYear(d) !== athensYear(new Date())) opts.year = "numeric";
+    if (!dateOnly) { opts.hour = "2-digit"; opts.minute = "2-digit"; }
+    return new Intl.DateTimeFormat(locale, opts).format(d);
+  }
+  function price(p) {
+    if (!p) return "Price not listed";
+    if (p.access === "open") return "Open entry";
+    if (typeof p.amount === "number") {
+      try { return new Intl.NumberFormat(locale, { style: "currency", currency: p.currency || "EUR" }).format(p.amount); }
+      catch (e) { return p.amount + " " + (p.currency || ""); }
+    }
+    return "Ticket, price not listed";
+  }
+  function linkButton(label, url, primary, eventName) {
+    const a = el("a", primary ? "btn primary" : "btn", label);
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.setAttribute("aria-label", label + ": " + eventName);
+    a.addEventListener("click", function (ev) { ev.preventDefault(); openLink(url); });
+    return a;
+  }
+
+  function card(e, match) {
+    const li = el("li", "card");
+    const colour = CAT_COLOUR[e.category] || CAT_COLOUR.other;
+    li.style.setProperty("--cat", "var(" + colour + ")");
+
+    const thumb = el("div", "thumb");
+    const img = allowedImage(e.image);
+    if (img) {
+      const i = el("img");
+      i.src = img;
+      i.alt = "";
+      i.loading = "lazy";
+      i.addEventListener("error", function () { i.remove(); thumb.appendChild(placeholder(e)); });
+      thumb.appendChild(i);
+    } else {
+      thumb.appendChild(placeholder(e));
+    }
+    li.appendChild(thumb);
+
+    const body = el("div", "body");
+    body.appendChild(el("span", "cat", CAT_LABEL[e.category] || CAT_LABEL.other));
+    body.appendChild(el("h2", null, e.name || "Untitled event"));
+    if (match) {
+      const why = match.confidence === "title_mention"
+        ? "Title mentions " + match.artist + " (may be a tribute or support act)"
+        : "Match for " + match.artist;
+      body.appendChild(el("span", "badge", why));
+    }
+    const ends = e.end && e.end.slice(0, 10) !== String(e.start).slice(0, 10) ? " – " + when(e.end.slice(0, 10)) : "";
+    body.appendChild(el("p", "line", when(e.start) + ends));
+    const venue = e.venue && e.venue.name ? e.venue.name + (e.venue.neighborhood ? ", " + e.venue.neighborhood : "") : "";
+    if (venue) body.appendChild(el("p", "line", venue));
+    const pr = el("p", "line");
+    pr.appendChild(el("span", "price", price(e.price)));
+    body.appendChild(pr);
+
+    const actions = el("div", "actions");
+    const page = safeHttps(e.url);
+    if (page) actions.appendChild(linkButton("Agent Athens page", page, true, e.name || ""));
+    const tix = safeHttps(e.ticket_url);
+    if (tix) actions.appendChild(linkButton("Tickets", tix, false, e.name || ""));
+    body.appendChild(actions);
+    li.appendChild(body);
+    return li;
+  }
+  function placeholder(e) {
+    const ph = el("div", "placeholder");
+    ph.setAttribute("aria-hidden", "true");
+    ph.appendChild(el("span", null, CAT_LABEL[e.category] || CAT_LABEL.other));
+    return ph;
+  }
+
+  function dataOf(result) {
+    if (result && result.structuredContent) return result.structuredContent;
+    try { return JSON.parse(result.content[0].text); } catch (e) { return null; }
+  }
+
+  function render(result) {
+    const app = document.getElementById("app");
+    app.replaceChildren();
+    const data = dataOf(result);
+    if (!data || result.isError) {
+      app.appendChild(el("p", "empty", "No events to show."));
+      return;
+    }
+    const isMatch = Array.isArray(data.matches);
+    const rows = isMatch ? data.matches.map(function (m) { return { e: m.event, m: m }; })
+                         : (data.events || []).map(function (e) { return { e: e, m: null }; });
+
+    const header = el("header");
+    let title;
+    if (isMatch) title = rows.length === 1 ? "1 match" : rows.length + " matches";
+    else if (typeof data.total === "number" && data.total > rows.length) title = "Showing " + rows.length + " of " + data.total + " events";
+    else title = rows.length === 1 ? "1 event" : rows.length + " events";
+    header.appendChild(el("h1", null, title));
+    if (data.window && data.window.from) {
+      const range = data.window.from === data.window.to ? when(data.window.from) : when(data.window.from) + " – " + when(data.window.to);
+      header.appendChild(el("p", "meta", range));
+    }
+    app.appendChild(header);
+
+    if (rows.length === 0) {
+      app.appendChild(el("p", "empty", isMatch ? "None of these artists has an upcoming event in Athens." : "No events match."));
+    } else {
+      const ul = el("ul", "events");
+      rows.forEach(function (r) { ul.appendChild(card(r.e, r.m)); });
+      app.appendChild(ul);
+    }
+    const foot = el("footer");
+    const updated = data.feed_updated ? " Listings updated " + when(String(data.feed_updated).slice(0, 10)) + "." : "";
+    foot.appendChild(el("p", "meta", "Data: Agent Athens (agentathens.com)." + updated));
+    app.appendChild(foot);
+  }
+
+  // ── handshake, then size reporting ──
+  // Size notifications start only after ui/notifications/initialized: a host
+  // slower than one frame would otherwise receive one mid-handshake.
+  function reportSize() {
+    if (typeof ResizeObserver !== "function") return;
+    new ResizeObserver(function () {
+      const r = document.documentElement.getBoundingClientRect();
+      notify("ui/notifications/size-changed", { width: Math.ceil(r.width), height: Math.ceil(r.height) });
+    }).observe(document.documentElement);
+  }
+  request("ui/initialize", {
+    protocolVersion: "2026-01-26",
+    appInfo: { name: "agent-athens-events", version: "0.1.0" },
+    appCapabilities: { availableDisplayModes: ["inline"] },
+  }).then(function (res) {
+    if (res && res.hostContext) applyContext(res.hostContext);
+    notify("ui/notifications/initialized");
+    reportSize();
+  }).catch(function () { /* no host answered: stay on the loading text */ });
+</script>
+</body>
+</html>

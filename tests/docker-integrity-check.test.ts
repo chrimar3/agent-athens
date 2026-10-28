@@ -57,6 +57,16 @@ describe('integrity-check.sh', () => {
     expect(git('branch', '--list', 'quarantine/*').out).toContain('quarantine/');
   });
 
+  test('a quarantine keeps the checked snapshot with the evidence, so the next run does not check the repo against it again', () => {
+    expect(snapshot().code).toBe(0);
+    writeFileSync(join(repo, '.git/FETCH_HEAD'), `${git('rev-parse', 'HEAD').out.trim()}\t\tbranch 'main' of x\n`);
+    const r = verify();
+    expect(r.code).toBe(1);
+    expect(existsSync(join(state, 'pre'))).toBe(false);
+    const [ev] = readdirSync(join(state, 'evidence'));
+    expect(readFileSync(join(state, 'evidence', ev, 'snapshot.pre'), 'utf8')).toContain('checks=');
+  });
+
   test('a new file at the repo root is quarantined and moved out', () => {
     expect(snapshot().code).toBe(0);
     writeFileSync(join(repo, 'CLAUDE.md'), 'planted instructions\n');

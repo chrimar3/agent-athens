@@ -1,0 +1,181 @@
+{
+  "_meta": {
+    "source": "Wikidata Query Service (https://query.wikidata.org/sparql), property P1902",
+    "query": "SELECT ?item ?spotify WHERE { VALUES ?item { $QIDS } ?item wdt:P1902 ?spotify . }",
+    "retrieved_at": "2026-10-27T21:50:45.094Z",
+    "qids_queried": 50,
+    "count": 34
+  },
+  "byQid": {
+    "Q14045": {
+      "spotify": [
+        "3OsRAKCvk37zwYcnzRf5XF"
+      ]
+    },
+    "Q157041": {
+      "spotify": [
+        "5LfGQac0EIXyAN8aUwmNAQ"
+      ]
+    },
+    "Q158895": {
+      "spotify": [
+        "4pQN0GB0fNEEOfQCaWotsY"
+      ]
+    },
+    "Q181341": {
+      "spotify": [
+        "4svpOyfmQKuWpHLjgy4cdK"
+      ]
+    },
+    "Q189991": {
+      "spotify": [
+        "3AA28KZvwAUcZuOKwyblJQ"
+      ]
+    },
+    "Q192668": {
+      "spotify": [
+        "1RM5gp0RFfjpJhCYFPB30p"
+      ]
+    },
+    "Q201669": {
+      "spotify": [
+        "2yJwXpWAQOOl5XFzbCxLs9"
+      ]
+    },
+    "Q217360": {
+      "spotify": [
+        "1moxjboGR7GNWYIMWsRjgG"
+      ]
+    },
+    "Q240767": {
+      "spotify": [
+        "165ZgPlLkK7bf5bDoFc6Sb"
+      ]
+    },
+    "Q247237": {
+      "spotify": [
+        "6WH1V41LwGDGmlPUhSZLHO"
+      ]
+    },
+    "Q262317": {
+      "spotify": [
+        "2sf2owtFSCvz2MLfxmNdkb"
+      ]
+    },
+    "Q336640": {
+      "spotify": [
+        "20vuBdFblWUo2FCOvUzusB"
+      ]
+    },
+    "Q484427": {
+      "spotify": [
+        "7bu3H8JO7d0UbMoVzbo70s"
+      ]
+    },
+    "Q486825": {
+      "spotify": [
+        "2xiIXseIJcq3nG7C8fHeBj"
+      ]
+    },
+    "Q504090": {
+      "spotify": [
+        "71vVmHeNgCVSa5SVmfvscU"
+      ]
+    },
+    "Q687651": {
+      "spotify": [
+        "2kO6zjt4a1OIqxOERhliEX"
+      ]
+    },
+    "Q718484": {
+      "spotify": [
+        "2C6iZmtoFnK4N0nUEkxpng"
+      ]
+    },
+    "Q740159": {
+      "spotify": [
+        "3o2dn2O0FCVsWDFSh8qxgG"
+      ]
+    },
+    "Q863397": {
+      "spotify": [
+        "3PfJE6ebCbCHeuqO4BfNeA"
+      ]
+    },
+    "Q938889": {
+      "spotify": [
+        "7FhkwcO8Jd7BRWdllBpXBJ"
+      ]
+    },
+    "Q1051182": {
+      "spotify": [
+        "4UXJsSlnKd7ltsrHebV79Q"
+      ]
+    },
+    "Q1246237": {
+      "spotify": [
+        "0Y4inQK6OespitzD6ijMwb"
+      ]
+    },
+    "Q1380313": {
+      "spotify": [
+        "7Myq3CtZhjHHJKsEpArIOm"
+      ]
+    },
+    "Q1406448": {
+      "spotify": [
+        "6bUJpbekaIlq2fT5FMV2mQ"
+      ]
+    },
+    "Q2622788": {
+      "spotify": [
+        "0MLS36KiWWqehtNvT8GLUZ"
+      ]
+    },
+    "Q6102198": {
+      "spotify": [
+        "4pyw1ZlB03snQmZeFhpjwj"
+      ]
+    },
+    "Q12308641": {
+      "spotify": [
+        "2HkAI0YrEcgoR8QdaURqhO"
+      ]
+    },
+    "Q19200857": {
+      "spotify": [
+        "7EgAHTw2PMP7a1tAEtue89"
+      ]
+    },
+    "Q20164937": {
+      "spotify": [
+        "7rqJQQxuUOCk052MK5kLsH"
+      ]
+    },
+    "Q99471944": {
+      "spotify": [
+        "3snxFc5YoFDKPFaWOLgfWu"
+      ]
+    },
+    "Q111031092": {
+      "spotify": [
+        "4db4Me3jYREori8RkMl1r1"
+      ]
+    },
+    "Q116001155": {
+      "spotify": [
+        "33cGsymGVdgZ5Qr5ppW8fg"
+      ]
+    },
+    "Q131375146": {
+      "spotify": [
+        "0ywXBvMabVdbaY3UtsnBN8"
+      ]
+    },
+    "Q133871329": {
+      "spotify": [
+        "4xhGnzy0l7emjfvzK867iN"
+      ]
+    }
+  }
+}
