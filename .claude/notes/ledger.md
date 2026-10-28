@@ -8,6 +8,13 @@ Sections: [Mistakes](#mistakes) · [Patterns](#patterns) · [Decisions](#decisio
 
 # Mistakes
 
+## 2026-10-28 — Instruction files: an unsized pointer and a drifted copy (S236)
+
+| What | Why | Fix |
+|---|---|---|
+| `.claude/CLAUDE.md` sent every session to this ledger ("Anything → § Mistakes ← START HERE", "Ground every session in ledger.md"), and `.claude/worker.md` said "read the ledger before writing anything" | The pointer was written when the ledger was small; by 2026-10-27 it was about 189,000 words (Mistakes about 49,000), so a session either ignored it or spent its context on history | Both now say: read the newest block (`sed -n '/^# Mistakes/,/^## Database/p'`), then search by heading for the area being touched |
+| `AGENTS.md`, a hand copy of `.claude/CLAUDE.md` for Codex (untracked since 2026-09-25), still documented `bun test && git push origin main` | The `bun run test` fix reached CLAUDE.md only, and `tests/security/test-discovery.test.ts` reads only CLAUDE.md, so nothing caught the copy; a bare `bun test` also runs test files planted in container-written folders | `AGENTS.md` is a symlink to `.claude/CLAUDE.md`; its one Claude-specific line is now agent-neutral. Original kept in `specs/claude-md-trim-2026-10/AGENTS.original.md` |
+
 ## 2026-10-27 — Phase 2 "make failure loud": what bit while fixing it (S235)
 
 | What | Why | Fix |
