@@ -663,6 +663,8 @@ describe('.github/path-guard.json — the shipped glob list', () => {
     '.claude/CLAUDE.md',
     '.claude/worker.md',
     '.claude/analyst-triage.md',
+    '.claude/analyst-deep.md',
+    '.claude/verifier.md',
     'scripts/hooks/db-guard.ts',
     'bunfig.toml',
     'tests/preload/prod-db-guard.preload.ts',
