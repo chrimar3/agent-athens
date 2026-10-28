@@ -27,8 +27,8 @@
  * @see specs/dedup-diagnostic.md (population analysis)
  */
 
-import { readFileSync, appendFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync, appendFileSync, existsSync } from 'fs';
+import { join, resolve } from 'path';
 import { Database } from 'bun:sqlite';
 import {
   findDuplicateGroups,
@@ -44,9 +44,21 @@ import { prepareEventsWrite } from './lib/url-columns';
 // CLI + Config
 // ============================================================================
 
+// Rule 5: every failure path exits 1 with ONE stderr line the retrier can act on.
+function fail(what: string, tryNext: string): never {
+  console.error(`mark-duplicates: FAILED — ${what} — try: ${tryNext}`);
+  process.exit(1);
+}
+
 const cliArgs = process.argv.slice(2);
+// A typo must not fall through to a default: --exectue silently ran a dry run.
+const unknownArgs = cliArgs.filter((a) => !['--execute', '--verbose'].includes(a) && !a.startsWith('--db='));
+if (unknownArgs.length > 0) {
+  fail(`unknown argument(s): ${unknownArgs.join(' ')}`, '--execute and/or --verbose [--db=PATH]');
+}
 const executeMode = cliArgs.includes('--execute');
 const verbose = cliArgs.includes('--verbose');
+const dbArg = cliArgs.find((a) => a.startsWith('--db='));
 
 const SAFETY_THRESHOLD = 0.2; // Abort if > 20% of eligible events land in groups
 
@@ -58,7 +70,7 @@ const TIER_RANK: Record<string, number> = {
 };
 
 const PROJECT_DIR = join(import.meta.dir, '..');
-const DB_PATH = join(PROJECT_DIR, 'data', 'events.db');
+const DB_PATH = dbArg ? resolve(dbArg.slice('--db='.length)) : join(PROJECT_DIR, 'data', 'events.db');
 const VENUES_PATH = join(PROJECT_DIR, 'config', 'athens-venues.json');
 const HOLD_PATH = join(PROJECT_DIR, 'specs', 'dedup-hold.md');
 
@@ -127,14 +139,19 @@ function main() {
 
   const venueConfig: VenueEntry[] = JSON.parse(readFileSync(VENUES_PATH, 'utf-8')).venues;
 
+  // bun:sqlite would CREATE an empty events.db here instead of failing (the
+  // 2026-06-30 empty-DB incident class), so existence is checked first.
+  if (!existsSync(DB_PATH)) {
+    fail(`database not found at ${DB_PATH}`, 'run from the repo root, or pass --db=PATH to an existing events.db');
+  }
   const db = new Database(DB_PATH);
   db.run('PRAGMA journal_mode = WAL');
 
   // Guard: refuse to run against an un-migrated DB
   const cols = db.prepare("SELECT name FROM pragma_table_info('events')").all() as { name: string }[];
   if (!cols.some((c) => c.name === 'merged_into')) {
-    console.error('ABORT: events.merged_into missing — run scripts/run-migrations.ts first.');
-    process.exit(1);
+    db.close();
+    fail('events.merged_into is missing (un-migrated DB)', 'bun run scripts/run-migrations.ts, then rerun');
   }
 
   // Eligibility: same window as merge-duplicates.ts, minus already-merged rows
@@ -156,12 +173,12 @@ function main() {
 
   // Blast-radius safety check
   if (events.length > 0 && grouped / events.length > SAFETY_THRESHOLD) {
-    console.error(
-      `SAFETY ABORT: ${grouped}/${events.length} events in groups ` +
-        `(${((grouped / events.length) * 100).toFixed(1)}% > ${SAFETY_THRESHOLD * 100}%)`
-    );
     db.close();
-    process.exit(1);
+    fail(
+      `SAFETY ABORT: ${grouped}/${events.length} events in groups ` +
+        `(${((grouped / events.length) * 100).toFixed(1)}% > ${SAFETY_THRESHOLD * 100}%)`,
+      'inspect the groups with a dry run on a copy of the DB; a matcher change is the usual cause',
+    );
   }
 
   const byId = new Map(events.map((e) => [e.id as string, e]));
@@ -289,7 +306,8 @@ function main() {
       db.run('COMMIT');
     } catch (error) {
       db.run('ROLLBACK');
-      console.error(`Error marking group (survivor ${plan.survivor.id}):`, error);
+      // stdout: Rule 5 reserves stderr for the single FAILED line below.
+      console.log(`Error marking group (survivor ${plan.survivor.id}): ${error}`);
       errors++;
     }
   }
@@ -310,6 +328,13 @@ function main() {
   const total = (db.prepare('SELECT COUNT(*) AS n FROM events').get() as { n: number }).n;
   console.log(`Row count after run: ${total}`);
   db.close();
+  if (errors > 0) {
+    fail(`${errors} group(s) could not be marked (rolled back; ${marked} losers marked)`, 'the "Error marking group" lines above name the survivors; rerun after fixing them');
+  }
 }
 
-main();
+try {
+  main();
+} catch (err) {
+  fail(err instanceof Error ? err.message : String(err), 'rerun without --execute to check the DB is readable; the message names the failing step');
+}

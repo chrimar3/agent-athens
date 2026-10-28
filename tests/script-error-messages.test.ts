@@ -18,9 +18,9 @@
  *     these cases — they run past every guard.
  *
  * The production DB is never opened: scripts whose DB path is anchored to
- * import.meta.dir (mark-duplicates, price-acquisition-chain, health-check, …)
- * have no safe CLI failure path yet and are deliberately NOT covered here —
- * see the follow-up issue.
+ * import.meta.dir (price-acquisition-chain, health-check, …) have no safe CLI
+ * failure path yet and are deliberately NOT covered here — see issue #10.
+ * mark-duplicates is covered through its --db=PATH override (issue #10).
  */
 import { describe, test, expect, beforeAll, afterAll } from 'bun:test';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from 'fs';
@@ -170,6 +170,44 @@ describe('run-enrichment-pipeline.ts', () => {
   });
   test('--save without --id → FAILED line names --id', () => {
     expect(expectRule5(run(S, ['--save'], noDbDir), S)).toContain('--id');
+  });
+
+  // Issue #10, batch-1 half-done paths: the four --id failures printed an
+  // error and returned, so the process exited 0. Seeded temp DB (its own, since
+  // --save writes a failure mark); the row 'rule5-ok' exists but has no
+  // full_description.
+  describe('--id failure paths exit non-zero (issue #10)', () => {
+    let idDir: string;
+    beforeAll(() => {
+      idDir = seedSchemaCwd('aa-rule5-enrich-id-', false);
+      // --save reads the queue first; schema.sql does not create it.
+      const db = new Database(join(idDir, 'data', 'events.db'));
+      db.exec(readFileSync(join(ROOT, 'src', 'db', 'migrations', '002-enrichment-queue-table.sql'), 'utf-8'));
+      db.close();
+    });
+    afterAll(() => { rmSync(idDir, { recursive: true, force: true }); });
+
+    test('fixture precondition: rule5-ok exists and has no full_description', () => {
+      const db = new Database(join(idDir, 'data', 'events.db'), { readonly: true });
+      const row = db.query(`SELECT full_description FROM events WHERE id = 'rule5-ok'`).get() as { full_description: string | null } | null;
+      const queue = db.query(`SELECT name FROM sqlite_master WHERE type='table' AND name='enrichment_queue'`).get();
+      db.close();
+      expect(row).not.toBeNull();
+      expect(row!.full_description).toBeNull();
+      expect(queue).not.toBeNull();
+    });
+    test('--validate --id=<unknown> → FAILED line names the id', () => {
+      expect(expectRule5(run(S, ['--validate', '--id=no-such-event'], idDir), S)).toContain('no-such-event');
+    });
+    test('--validate --id=<event without a description> → FAILED line says so', () => {
+      expect(expectRule5(run(S, ['--validate', '--id=rule5-ok'], idDir), S)).toContain('no description');
+    });
+    test('--save --id=<unknown> → FAILED line names the id, before reading stdin', () => {
+      expect(expectRule5(run(S, ['--save', '--id=no-such-event'], idDir), S)).toContain('no-such-event');
+    });
+    test('--save with an empty description on stdin → FAILED line says it is too short', () => {
+      expect(expectRule5(run(S, ['--save', '--id=rule5-ok'], idDir), S)).toContain('too short');
+    });
   });
 
   test('a mistyped FLAG NAME is refused like a mistyped value (--count-10, --dry_run, --bogus), before the DB is opened', () => {
@@ -328,8 +366,9 @@ describe('cleanup-old-images.ts', () => {
  *   try { main() } catch            cleanup-old-images
  *   process.on('uncaughtException') filter-athens-only, remove-duplicates
  *
- * Routers reached only over the network or with credentials (scrape-all,
- * ping-indexnow, ingest-emails) have no side-effect-free trigger and are not
+ * ping-indexnow's router is reached with a config that parses to null (issue
+ * #10). Routers reached only over the network or with credentials
+ * (scrape-all, ingest-emails) have no side-effect-free trigger and are not
  * covered here.
  */
 describe('top-level error routers (not the argument guards)', () => {
@@ -340,6 +379,16 @@ describe('top-level error routers (not the argument guards)', () => {
     ['filter-athens-only.ts', ['--dry-run']],
     ['remove-duplicates.ts', ['--dry-run']],
   ];
+  // Issue #10: valid JSON that is not an object passes the parse guard and
+  // throws at the first field access, before sitemaps or the network. Retrofit
+  // pin: the router already existed, so its RED is the mutation run.
+  test('ping-indexnow.ts: config parses to null → the main().catch router emits ONE Rule 5 line, exit 1', () => {
+    const nullConfig = join(configDir, 'indexnow-null.json');
+    writeFileSync(nullConfig, 'null');
+    const line = expectRule5(run('ping-indexnow.ts', ['--dry-run'], ROOT, { INDEXNOW_CONFIG: nullConfig }), 'ping-indexnow.ts');
+    expect(line).toContain('null');
+  });
+
   for (const [script, args] of cases) {
     test(`${script}: unreadable DB throws past the guards → ONE Rule 5 line, exit 1`, () => {
       const line = expectRule5(run(script, args, badDbDir), script);
@@ -348,6 +397,68 @@ describe('top-level error routers (not the argument guards)', () => {
       expect(readFileSync(join(badDbDir, 'data', 'events.db'), 'utf-8')).toBe('not a database');
     });
   }
+});
+
+// Issue #10, batch 2: mark-duplicates.ts (`--execute` marks losers; the
+// highest blast radius of the uncovered scripts). Every case runs in DRY-RUN
+// mode against a temp DB passed with --db=, so neither data/events.db nor
+// specs/dedup-hold.md (written only on --execute) can be touched.
+describe('mark-duplicates.ts (issue #10)', () => {
+  const S = 'mark-duplicates.ts';
+  let dir: string;
+  let unmigrated: string;
+  let dupes: string;
+  let notSqlite: string;
+  beforeAll(() => {
+    dir = mkdtempSync(join(tmpdir(), 'aa-rule5-markdup-'));
+    unmigrated = join(dir, 'unmigrated.db');
+    const u = new Database(unmigrated);
+    u.exec(`CREATE TABLE events (id TEXT PRIMARY KEY, title TEXT)`);
+    u.close();
+    // Two copies of one event: 2 of 2 eligible rows land in one group (100% > the 20% safety limit).
+    dupes = join(dir, 'dupes.db');
+    const d = new Database(dupes);
+    d.exec(readFileSync(join(ROOT, 'src', 'db', 'schema.sql'), 'utf-8'));
+    const ins = d.prepare(
+      `INSERT INTO events (id, title, description, start_date, venue_name, type, genres, url, price_type, source, location_status, created_at, updated_at)
+       VALUES (?, 'Rule Five Duplicate Concert', 'd', '2099-03-01T21:00:00', 'Gazarte', 'concert', '[]', ?, 'with-ticket', ?, 'verified_athens', datetime('now'), datetime('now'))`,
+    );
+    ins.run('dup-a', 'https://example.test/a', 'more');
+    ins.run('dup-b', 'https://example.test/b', 'ra');
+    d.close();
+    notSqlite = join(dir, 'not-sqlite.db');
+    writeFileSync(notSqlite, 'not a database');
+  });
+  afterAll(() => { rmSync(dir, { recursive: true, force: true }); });
+
+  test('--db=<missing file> → FAILED line names the path, and no file is created', () => {
+    const missing = join(dir, 'absent.db');
+    expect(expectRule5(run(S, [`--db=${missing}`]), S)).toContain(missing);
+    expect(existsSync(missing)).toBe(false);
+  });
+  test('an unknown flag (--exectue) is refused before the DB is opened', () => {
+    expect(expectRule5(run(S, ['--exectue', `--db=${dupes}`]), S)).toContain('--exectue');
+  });
+  test('an un-migrated DB (no merged_into) → FAILED line names the migration to run', () => {
+    expect(expectRule5(run(S, [`--db=${unmigrated}`]), S)).toContain('run-migrations');
+  });
+  test('fixture precondition: both duplicate rows are eligible', () => {
+    const d = new Database(dupes, { readonly: true });
+    const n = (d.query(`SELECT COUNT(*) n FROM events WHERE merged_into IS NULL`).get() as { n: number }).n;
+    d.close();
+    expect(n).toBe(2);
+  });
+  test('the blast-radius SAFETY ABORT is one Rule 5 line, and nothing is marked', () => {
+    expect(expectRule5(run(S, [`--db=${dupes}`]), S)).toContain('SAFETY ABORT');
+    const d = new Database(dupes, { readonly: true });
+    const marked = (d.query(`SELECT COUNT(*) n FROM events WHERE merged_into IS NOT NULL`).get() as { n: number }).n;
+    d.close();
+    expect(marked).toBe(0);
+  });
+  test('an unreadable DB throws past the guards → the router emits ONE Rule 5 line', () => {
+    expect(expectRule5(run(S, [`--db=${notSqlite}`]), S)).toContain('not a database');
+    expect(readFileSync(notSqlite, 'utf-8')).toBe('not a database');
+  });
 });
 
 /**

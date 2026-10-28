@@ -204,8 +204,7 @@ async function saveDescription(db: Database, eventId: string): Promise<void> {
       .get(eventId) as EventForEnrichment | undefined;
 
     if (!eventFromDb) {
-      console.error(`\n❌ Event not found: ${eventId}`);
-      return;
+      fail(`event not found: ${eventId}`, 'bun run scripts/run-enrichment-pipeline.ts --prompts to list ids, then --save --id=<id>');
     }
 
     console.log(`\n📝 Saving description for: ${eventFromDb.title}`);
@@ -225,9 +224,8 @@ async function saveDescription(db: Database, eventId: string): Promise<void> {
   const description = cleanDescription(rawDescription);
 
   if (!description || description.length < 50) {
-    console.error('\n❌ Description too short or empty');
     markFailed(db, eventId, 'Description too short');
-    return;
+    fail(`description for ${eventId} is too short or empty (${description.length} chars, minimum 50)`, 'pipe the full description on stdin, e.g. --save --id=<id> < description.txt');
   }
 
   // Get event for validation
@@ -330,13 +328,11 @@ function validateEvent(db: Database, eventId: string): void {
     .get(eventId) as (EventForEnrichment & { full_description: string; enrichment_tier: string }) | undefined;
 
   if (!event) {
-    console.error(`\n❌ Event not found: ${eventId}`);
-    return;
+    fail(`event not found: ${eventId}`, 'check the id with --prompts or --stats, then --validate --id=<id>');
   }
 
   if (!event.full_description) {
-    console.error(`\n❌ Event has no description: ${event.title}`);
-    return;
+    fail(`event ${eventId} has no description to validate ("${event.title}")`, `save one first: --save --id=${eventId}`);
   }
 
   console.log(`\n🔍 Validating: ${event.title}\n`);
