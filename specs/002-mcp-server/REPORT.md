@@ -813,6 +813,75 @@ Ran 5592 tests across 299 files. [493.38s]
 The failing set is a subset of the baseline after every milestone: M1, M2, M3
 and final.
 
+## Hosting change: a separate Netlify site (owner decision, 2026-10-28)
+
+**Why.** agentathens.com's DNS is on Netlify (`dig NS` gives
+`dns1–4.p09.nsone.net`). A Cloudflare Worker can only take
+`mcp.agentathens.com` if the whole domain's DNS moves to Cloudflare. The
+owner amended spec §2.2 to "a separate Netlify site, never a function on the
+main site". The main site's static-only guarantee and its protected
+`netlify.toml` / `netlify/**` are untouched.
+
+**Netlify's documentation, read 2026-10-28:**
+
+| Fact | Page |
+|---|---|
+| Modern functions: `export default async (req: Request, context) => Response`, plus `export const config` with `path` (a string or an array) | `docs.netlify.com/build/functions/get-started/`, `/optional-configuration/` |
+| Rate limiting "in all plans", in the function's `config.rateLimit` (`windowLimit`, `windowSize` "Maximum is 180" seconds, `aggregateBy: ["ip", "domain"]`); answers 429; "cannot be defined in the `netlify.toml`" | `docs.netlify.com/manage/security/secure-access-to-sites/rate-limiting/` |
+| Synchronous limit 60 s; memory 1024 MB; buffered payload 6 MB; functions directory defaults to `<base directory>/netlify/functions` | `docs.netlify.com/build/functions/configuration/` |
+| Runtime: Node.js, by default the build's version, with a fallback of Node 24 | `/optional-configuration/` |
+| Bundling of `.html` text imports | not documented, so not relied on |
+
+**What changed:**
+
+- `mcp/netlify/functions/mcp.mts`: the function's default export calls
+  `handleHttp`. Its `config` sets `path: ["/", "/mcp"]` and a rate limit of
+  300 requests per 60 s per IP.
+- `mcp/netlify.toml`: publish directory `public` (sources are not
+  published) and `node_bundler = "esbuild"`.
+- The view is now the generated module `src/ui/events-html.ts`
+  (`bun run build:ui`), imported by both hosts. This removes the text-import
+  dependence and the `HTMLBundle` type cast.
+- The Cloudflare Worker entry stays as an alternative host.
+
+**Tests, written first:**
+
+- `test/ui-module.test.ts`: RED `Cannot find module '../src/ui/events-html'`.
+  Mutant: editing the HTML without regenerating → `0 pass 1 fail`.
+- `test/netlify.test.ts`: RED `Cannot find module '../netlify/functions/mcp.mts'`.
+  Mutants: a 200 s window → `4 pass 1 fail`; only `/mcp` routed →
+  `4 pass 1 fail`.
+
+**Bundle check.** `bun run bundle-check:netlify` bundles the function with
+esbuild (Node, ESM), as Netlify's bundler does, then loads the bundle and
+makes one MCP call through it:
+
+```
+bundled 8 modules into …/.netlify-check/mcp.mjs (46.92 KiB):
+  src/normalize.ts
+  ../config/lifecycle-presumption.json
+  src/feed.ts
+  src/tools.ts
+  data/performer-ids.json
+  src/ui/events-html.ts
+  src/mcp.ts
+  netlify/functions/mcp.mts
+bundle-check:netlify: OK — the bundle answers resources/read (14710 characters of HTML) and exports its config
+```
+
+**Not verified until the first deploy:**
+
+- whether Netlify's own build accepts the function: the spec forbids me to run
+  `netlify` commands, so the deploy log is the proof;
+- whether Netlify bundles `../config/lifecycle-presumption.json`, which sits
+  outside the base directory (local esbuild does);
+- whether the function runs under Node. It uses only web APIs, but I didn't
+  execute it under Node here, because repo scripts run on Bun.
+
+**The rate-limit number is a guess.** 300 requests per minute per IP is
+deliberately generous. Assistants call connectors from their own servers, so
+one IP carries many users. Tune it from real traffic.
+
 ## Blockers and owner actions
 
 **No stop condition fired.** No protected-path change was needed, no check
@@ -824,9 +893,10 @@ place a reviewer read a §2 commitment differently; it is left to the owner.
 
 1. **Get the feed fresh again.** `/api/events.json` was last written on
    2026-10-06; see the input-pipeline audit.
-2. **Deploy:** `cd mcp && bunx wrangler@4 login && bun run deploy`. Then add
-   the `mcp.agentathens.com` route and the Cloudflare rate-limit rule
-   (`mcp/README.md` § Limits).
+2. **Deploy as a separate Netlify site** (base directory `mcp`), then add the
+   domain `mcp.agentathens.com`. See `mcp/README.md` § Deploy (Netlify). The
+   rate limit ships in the function. *(Updated after the hosting change; this
+   step originally said Cloudflare.)*
 3. **Publish the privacy page** from `privacy-page-draft.md`, after filling in
    the Cloudflare logging paragraph.
 4. **Make a 512×512 icon**, with the letter as a path (kit §5).

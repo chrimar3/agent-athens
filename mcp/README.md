@@ -4,11 +4,17 @@ A read-only [MCP](https://modelcontextprotocol.io) server over the public feed
 (`/api/events.json`, `/api/en/events.json`). One server works in Claude,
 ChatGPT and Gemini: each of them speaks MCP over Streamable HTTP.
 
-It runs as its own Cloudflare Worker (`mcp.agentathens.com`), **not** on the
-Netlify site. The site stays static files plus headers, with no functions
-(pinned by `tests/security/no-click-redirect.test.ts`). The Worker only reads
-the public feed, the same JSON any crawler gets, so it needs no secrets and no
-database access.
+It runs as its own Netlify site (`mcp.agentathens.com`, base directory
+`mcp/`), **not** as part of the main agentathens.com site. The main site stays
+static files plus headers, with no functions (pinned by
+`tests/security/no-click-redirect.test.ts`). The server only reads the public
+feed, the same JSON any crawler gets, so it needs no secrets and no database
+access.
+
+The code is web-standard `Request` → `Response` with no runtime dependencies,
+so it has three thin entry points: `netlify/functions/mcp.mts` (production),
+`src/worker.ts` (Cloudflare Workers, an alternative host) and `src/dev.ts`
+(local, Bun).
 
 ## Tools
 
@@ -39,7 +45,9 @@ cd mcp
 bun install                     # dev tools only: the MCP SDK client (tests) and wrangler
 bun test test/                  # synthetic fixture feed, plus the SDK client over real HTTP
 bun run typecheck
-bun run bundle-check            # wrangler --dry-run; prints the Worker bundle size
+bun run bundle-check:netlify    # esbuild-bundles the Netlify function and makes one MCP call through the bundle
+bun run bundle-check            # the same for the Cloudflare Worker (wrangler --dry-run)
+bun run build:ui                # after editing src/ui/events.html: regenerates src/ui/events-html.ts
 FEED_FILE=test/fixtures/events.en.json bun run dev   # http://localhost:8787/mcp
 bun run dev                     # same, against the live site's feed
 bun run fixture                 # rebuild fixtures with the real DataFeed builder
@@ -64,16 +72,31 @@ the tests break if the feed's shape changes. The repo's CI does not run these
 tests yet, because adding them would change a protected path (`.github/**`);
 that needs an issue.
 
-## Deploy
+## Deploy (Netlify)
 
-```bash
-cd mcp
-bunx wrangler@4 login
-bun run deploy                  # → https://agent-athens-mcp.<account>.workers.dev/mcp
-```
+A second Netlify site, separate from the main one, built from this repository:
 
-For `mcp.agentathens.com`, add the custom-domain route in `wrangler.toml`.
-That needs the domain's DNS on Cloudflare, or a CNAME to the Worker.
+1. In Netlify: **Add new project → Import an existing project → GitHub →
+   `chrimar3/agent-athens`**.
+2. Set **Base directory** to `mcp`. Leave the build command empty;
+   `mcp/netlify.toml` sets the publish directory (`public`) and the function
+   bundler. Choose the branch to deploy, `main` once PR #40 is merged.
+3. Deploy. The site answers at `https://<project>.netlify.app/mcp`. Check it:
+   `npx @modelcontextprotocol/inspector@2.10.1 --cli https://<project>.netlify.app/mcp --transport http --method tools/list`.
+4. **Domain management → Add a domain → `mcp.agentathens.com`.** The domain's
+   DNS is already on Netlify, so the record and the HTTPS certificate are set
+   up there.
+
+The per-IP rate limit (§ Limits) ships in the function's own `config`; there is
+nothing to set in the dashboard. Pushes that touch only the main site rebuild
+this site too. In the project's build settings you can skip those builds with
+an ignore command that checks for changes under `mcp/` and
+`config/lifecycle-presumption.json`, which the function bundles.
+
+**Alternative host: Cloudflare Workers.** `bunx wrangler@4 login && bun run
+deploy` gives `https://agent-athens-mcp.<account>.workers.dev/mcp`. A
+Cloudflare custom domain such as `mcp.agentathens.com` only works when the
+domain's DNS is on Cloudflare; today it is on Netlify.
 
 ## Connect it
 
@@ -92,11 +115,10 @@ The server itself refuses:
 | JSON-RPC batch of more than 20 messages | HTTP 400 |
 | `match_artists` with more than 200 artists | tool error (`isError: true`) |
 
-**Rate limiting is not built into the Worker.** It is a Cloudflare rule, set in
-the dashboard before the endpoint goes public: Security → WAF → Rate limiting
-rules → Create rule. Match `http.host eq "mcp.agentathens.com" and
-http.request.uri.path eq "/mcp"`, count by IP, and block for a short period
-when a client goes over the limit. Pick the numbers from real traffic; a
-conversation makes a handful of tool calls, so a limit far above that only
-stops scripts. The Worker keeps no per-user state, so this rule is the only
-place a limit per client can live.
+**Rate limiting** is Netlify's, set in the function's `config.rateLimit`: 300
+requests per 60 seconds per IP address. Netlify answers HTTP 429 above that,
+and may take up to 10 seconds to start blocking a client. Assistants call
+remote connectors from their own servers, so one IP can carry many users. The
+limit is generous so that it stops scripts, not conversations. Tune it from
+real traffic. On Cloudflare there is no equivalent in code; use a WAF
+rate-limiting rule there.

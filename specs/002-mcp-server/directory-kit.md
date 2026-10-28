@@ -11,10 +11,10 @@ take an afternoon. Fill every `[Owner: …]` placeholder before submitting.*
    are "updated daily", and reviewers will try "this weekend" prompts. Submit
    only after the daily pipeline is running again and `feed_updated` in a
    `search_events` result is from today or yesterday.
-2. **Deploy the Worker and point `mcp.agentathens.com` at it.** See `RUN.md`
-   § Owner steps. Add the Cloudflare rate-limit rule (`mcp/README.md` § Limits).
+2. **Deploy the Netlify site and add `mcp.agentathens.com` to it.** See
+   `mcp/README.md` § Deploy (Netlify). The rate limit ships in the function.
 3. **Publish a privacy page.** The draft is `privacy-page-draft.md`. Fill in
-   the Cloudflare logging paragraph from the deployed settings.
+   the hosting paragraph from the deployed Netlify settings.
 4. **Run the examples in §4 again against the deployed endpoint** and check
    that the output still looks like §4.
 
@@ -73,7 +73,7 @@ to say that a `title_mention` match may be a tribute act.
 
 > **Data source.** Agent Athens' public event feed (`https://agentathens.com/api/events.json` and `/api/en/events.json`), licensed CC BY 4.0. The server reads only that feed. It has no database and does no scraping of its own.
 >
-> **Privacy.** The server stores nothing about users: no accounts, no profiles, no cookies, no saved searches. Its code writes no logs. Requests pass through Cloudflare, which processes standard request metadata to deliver and protect the service; no logging beyond Cloudflare's defaults is enabled. *[Owner: confirm against the deployed Worker.]* Links carry no tracking parameters. Event images load only from agentathens.com. Full policy: *[Owner: privacy page URL]*.
+> **Privacy.** The server stores nothing about users: no accounts, no profiles, no cookies, no saved searches. Its code writes no logs. The server is hosted on Netlify, which processes standard request metadata to deliver and protect the service (including a per-IP rate limit); no logging beyond Netlify's defaults is enabled. *[Owner: confirm against the deployed site's settings.]* Links carry no tracking parameters. Event images load only from agentathens.com. Full policy: *[Owner: privacy page URL]*.
 
 **Support contact:** *[Owner: support email or URL]*
 
@@ -263,7 +263,7 @@ come from a research subagent's reading of the pages listed, so treat them as
   each (use §4 prompts 1, 3 and 5); website, support, privacy and **terms of
   service** URLs, all required.
 - **Domain verification:** serve the token OpenAI gives as plain text at
-  `https://mcp.agentathens.com/.well-known/openai-apps-challenge`. The Worker
+  `https://mcp.agentathens.com/.well-known/openai-apps-challenge`. The server
   does not serve that path today. It is a three-line change in
   `mcp/src/mcp.ts`, best made once the token exists.
 - **Review package:** five positive and three negative test cases, run before

@@ -7,9 +7,10 @@
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "types": ["bun-types"],
     "typeRoots": ["../node_modules/@types", "../node_modules"]
   },
-  "include": ["src/**/*", "test/**/*"]
+  "include": ["src/**/*", "test/**/*", "netlify/**/*"]
 }

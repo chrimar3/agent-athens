@@ -17,7 +17,7 @@ It reads the public feed `/api/events.json` and nothing else.
 These are already decided. Do not reopen them.
 
 1. **One remote MCP server over Streamable HTTP, stateless, JSON responses only.** There is no plugin per LLM.
-2. **A separate Cloudflare Worker**, never a Netlify function. The site stays static files plus headers (`tests/security/no-click-redirect.test.ts`).
+2. **A separate Netlify site for `mcp.agentathens.com`**, never a function on the main site. The main site stays static files plus headers (`tests/security/no-click-redirect.test.ts`). *Amended 2026-10-28 by the owner. It originally read "A separate Cloudflare Worker, never a Netlify function". The domain's DNS is on Netlify, so a Worker cannot take the subdomain without moving DNS for the whole domain. The Cloudflare Worker entry point stays in `mcp/` as an alternative host.*
 3. **The public feed is the only data source.** No database access and no scraping. Fields the feed omits stay omitted.
 4. **The server stores nothing about users.** Personalisation belongs to the assistant: its memory, and other connectors such as Spotify. The server answers filters and artist lists.
 5. **Read-only tools** (`readOnlyHint: true`). No tool writes anything anywhere.
@@ -46,7 +46,7 @@ The server is correct on the real feed, not only on the fixtures.
 - **M1.4 Protocol conformance.**
   - The official `@modelcontextprotocol/sdk` client connects, lists tools and calls each tool, through a test in `mcp/test/`. The SDK is a dev dependency of `mcp/` only.
   - `npx @modelcontextprotocol/inspector --cli` succeeds against `bun run dev`.
-- **M1.5 Abuse limits.** Body over 64 KB → 413. Batch over 20 → 400. Over 200 artists → tool error. Each case has its own test. Rate limiting is a Cloudflare dashboard rule: document it in the README, do not build it.
+- **M1.5 Abuse limits.** Body over 64 KB → 413. Batch over 20 → 400. Over 200 artists → tool error. Each case has its own test. Rate limiting: a per-IP limit is set in the Netlify function's own `config.rateLimit`, which every Netlify plan supports. It is configuration, not code to build (amended 2026-10-28; originally "a Cloudflare dashboard rule").
 - **Gate.**
   - `mcp/`: `bun test test/` and `bun run typecheck` pass.
   - `bun run bundle-check` (wrangler `--dry-run`) bundles under 100 KiB.
@@ -103,7 +103,7 @@ The owner can submit to Anthropic's and OpenAI's directories in an afternoon.
   - the name, short and long descriptions in English and Greek;
   - five example prompts, each tested against the live feed, with real output pasted in;
   - the tool list with annotations;
-  - the data source and privacy statement (no user data stored, no logs beyond Cloudflare defaults);
+  - the data source and privacy statement (no user data stored, no logs beyond the host's defaults);
   - the support contact as a placeholder the owner fills in;
   - the icon requirements.
 - **M4.2** A draft text for a privacy page. Do not publish it. Adding a page to the site is a site-wide change and the owner decides that (§4).
@@ -144,7 +144,7 @@ Write the blocker in REPORT.md, commit, and end the session, in any of these cas
 - The live feed is unreachable for 15 minutes, or its shape contradicts §3 M1.3 in a way that needs a site change.
 - The MCP Apps spec contradicts this document.
 - A choice would change a commitment in §2.
-- Anything needs credentials: Cloudflare, Wikidata write, Spotify, OpenAI, Anthropic.
+- Anything needs credentials: Netlify, Cloudflare, Wikidata write, Spotify, OpenAI, Anthropic.
 
 ## 5. Non-goals
 

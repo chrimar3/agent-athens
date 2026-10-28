@@ -11,10 +11,13 @@
     "fixture": "bun run scripts/make-fixture.ts",
     "deploy": "bunx wrangler@4 deploy",
     "bundle-check": "wrangler deploy --dry-run --outdir .wrangler/dry-run",
-    "e2e": "bun test ./e2e/ui.e2e.ts --timeout 30000"
+    "e2e": "bun test ./e2e/ui.e2e.ts --timeout 30000",
+    "build:ui": "bun run scripts/build-ui.ts",
+    "bundle-check:netlify": "bun run scripts/netlify-bundle-check.ts"
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "1.32.1",
+    "esbuild": "0.28.2",
     "playwright": "1.55.1",
     "wrangler": "4.149.0"
   },
