@@ -433,9 +433,17 @@ public HTTPS site works through it and that nothing gets out around it.
   could not be reviewed when this was written. The build fails if
   `bun`, `netlify` or `claude` does not run afterwards. A version bump that
   adds an install script needs a look at that list.
-- DNS lookups from the internal network go to Docker's resolver; depending on
-  the Docker version it may forward them, so data could leak out encoded in
-  DNS names.
+- DNS lookups from the internal network get no answer on Docker Engine 26 and
+  later (this Mac ran 29.8 on 2026-10-28): Docker's resolver no longer
+  forwards them (CVE-2024-29018), so `getaddrinfo` fails with `ESERVFAIL`
+  and DNS is not a way out. On an older engine it may forward them, and data
+  could leak out encoded in DNS names. Only the egress proxy resolves names.
+  The outbound guard (`src/utils/outbound-url.ts`) therefore does not resolve
+  names inside the container ("proxy mode": `AA_CONTAINER=1` plus a proxy
+  variable). It still refuses bad schemes, credentials in URLs, private IP
+  literals and local-only names on every redirect hop. Squid's
+  `aa_private_dst` and `aa_local_names` rules are then the only check of
+  where a name actually points.
 - Between jobs the wrapper stops the proxy only when no other pipeline
   container is running; a job starting in the same second can lose its proxy
   and fail (the next scheduled run works).
