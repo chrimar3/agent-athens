@@ -6,9 +6,11 @@
  * interception that refuses non-http(s) schemes and local/private targets.
  *
  * No network: globalThis.fetch is a recording fake, DNS is mocked, curl is a
- * fake spawn.
+ * fake spawn. The guard runs outside proxy mode here (AA_CONTAINER cleared),
+ * so it resolves names through the mocked DNS even when this file runs inside
+ * the container; proxy mode has its own tests in outbound-url.test.ts.
  */
-import { afterAll, afterEach, beforeEach, describe, expect, mock, test } from 'bun:test';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, mock, test } from 'bun:test';
 import { readdirSync, readFileSync } from 'fs';
 import vm from 'node:vm';
 import { join } from 'path';
@@ -42,7 +44,9 @@ type Route = { status?: number; headers?: Record<string, string>; body?: string 
 let visited: string[] = [];
 let routes: Record<string, Route> = {};
 const realFetch = globalThis.fetch;
+const realContainerFlag = process.env.AA_CONTAINER;
 
+beforeAll(() => { delete process.env.AA_CONTAINER; });
 beforeEach(() => {
   visited = [];
   routes = {};
@@ -64,7 +68,10 @@ beforeEach(() => {
   }) as typeof fetch;
 });
 afterEach(() => { globalThis.fetch = realFetch; });
-afterAll(() => { mock.restore(); });
+afterAll(() => {
+  if (realContainerFlag !== undefined) process.env.AA_CONTAINER = realContainerFlag;
+  mock.restore();
+});
 
 describe('mocked DNS is in effect', () => {
   test('a name resolving to a private address is refused', async () => {
